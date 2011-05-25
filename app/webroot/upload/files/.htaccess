@@ -1,0 +1,4 @@
+Options -Indexes
+RewriteEngine on
+RewriteCond %{REQUEST_URI} \.php [NC]
+RewriteRule .* / [L,R]

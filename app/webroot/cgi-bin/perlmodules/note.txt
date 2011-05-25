@@ -1,0 +1,6 @@
+The cgi-bin/perlmodules folder is empty by default, but it's there so that if
+your server is missing any of the Perl modules that FileChucker needs (or that
+it can optionally use), then you have a ready-made place to put them:
+FileChucker will automatically search this folder when attempting to load its
+Perl modules.
+
