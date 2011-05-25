@@ -1,0 +1,10 @@
+# Not needed on most servers:
+#
+#DirectoryIndex index.shtml index.php index.html index.htm
+#Options +Includes
+#AddType text/html .shtml
+#AddOutputFilter INCLUDES .shtml
+
+# Sometimes needed for Safari's sake:
+#
+#Header set Connection close
