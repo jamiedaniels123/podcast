@@ -210,7 +210,7 @@
             <?php echo $this->Form->error('Podcast.user_id'); ?>
         </div>
     <?php endif; ?>
-    <?php if( $this->Permission->isItunesUser() ) : ?>
+    <?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
         <?php echo $this->element('../podcasts/_form_itunes'); ?>
     <?php endif; ?>
 </div>

@@ -277,6 +277,22 @@ class PodcastsController extends AppController {
         $this->redirect( $this->referer() );
     }
 
+
+    /*
+     * @name : rss
+     * @description : Generate a very simple RSS feed.
+     * @updated : 26th May 2011
+     * @by : Charles Jackson
+     */
+    function rss() {
+
+        if( $this->RequestHandler->isRss() ) {
+
+            $podcasts = $this->Podcast->find('all', array('limit' => 20, 'order' => 'Podcast.created DESC'));
+            return $this->set( compact('podcasts') );
+        }
+    }
+
     /*
      * @name : __updated
      * @description : Internal method called by the add and edit methods, both user and administrator.
@@ -315,6 +331,8 @@ class PodcastsController extends AppController {
             $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
         }
     }
+
+
 
     /*
      * ADMIN FUNCTIONALITY

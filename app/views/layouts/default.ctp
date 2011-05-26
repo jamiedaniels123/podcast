@@ -15,6 +15,7 @@
         echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
 
         echo $this->Html->meta('icon');
+        echo $this->Html->meta('rss', '/podcasts/rss.rss');
         echo $this->Html->css('cake.generic');
         echo $this->Html->css('jquery-ui');
         echo $scripts_for_layout;
