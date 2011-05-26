@@ -1,4 +1,3 @@
-/app/config
+/app/config/database.php
+/.htaccess
 /app/tmp
-/plugins
-/vendors
