@@ -40,9 +40,9 @@ class PermissionComponent extends Object {
             return true;
 
         // Only podcast containers have member groups so check they exist before we call the routine
-        if( isSet( $data['MembersGroups'] ) && is_array( $data['MembersGroups'] ) ) {
+        if( isSet( $data['MemberGroups'] ) && is_array( $data['MemberGroups'] ) ) {
 
-            if( $this->__inMemberGroup( $data['MembersGroups'] ) )
+            if( $this->__inMemberGroup( $data['MemberGroups'] ) )
                 return true;
         }
 
@@ -189,7 +189,7 @@ class PermissionComponent extends Object {
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
-    function __inMemberGroup( $members = array() ) {
+    function __inMemberGroup( $member_groups = array() ) {
 
         foreach( $member_groups as $member_group ) {
 

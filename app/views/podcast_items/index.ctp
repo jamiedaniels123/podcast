@@ -14,7 +14,5 @@
         of podcasts. Embeding tracks from Podcasts restricted to the OU (SAMS only) will only work on OU sites and when a user has logged in.
     </p>
     <?php echo $this->element('../podcast_items/_index'); ?>
-    <?php if( $this->Permission->isOwner( $this->data['Podcast']['user_id'] ) || $this->Permission->isModerator( $this->data['Moderators'] ) ) :?>
-        <?php echo $this->element('../podcast_items/_add'); ?>
-    <?php endif; ?>
+    <?php echo $this->element('../podcast_items/_add'); ?>
 </fieldset>

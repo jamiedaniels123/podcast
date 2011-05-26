@@ -36,8 +36,13 @@ class PodcastItem extends AppModel {
         )
     );
 
-
-    function createFromUrlVariables( $podcast_id, $url = array() ) {
+    /*
+     * @name : createFromUrlVariables
+     * @description : Called from the ADD method directly after a successful filechucker upload
+     * @updated : 25th May 2011
+     * @by : Charles Jackson
+     */
+    function createFromUrlVariables( $url = array(), $podcast_id = null ) {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['filename'] = $url['f1name'];

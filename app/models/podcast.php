@@ -130,7 +130,8 @@ class Podcast extends AppModel {
         'PodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
-            'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename'
+            'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.created_when'
         ),
         'PodcastModerators' => array(
             'className' => 'UserPodcasts',

@@ -26,7 +26,7 @@
                 <li>WAV (.wav)</li>
                 <li>AIF (.aif)</li>
                 <li>AAC (.m4a)</li>
-                <li>AMR (.amr) <em>Narrow Band Only (AMR-NB)</li>
+                <li>AMR (.amr) <em>Narrow Band Only (AMR-NB)</em></li>
             </ul>
             <h4>Documents</h4>
             <ul>
@@ -35,5 +35,6 @@
         </div>
     </div>
     <div class="clear"></div>
+    <?php //virtual("/upload/call_fc.php?podcast_id=".$podcast_id); ?>
     <?php require(WWW_ROOT . "/upload/call_fc.php"); ?>
 </fieldset>

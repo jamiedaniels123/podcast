@@ -625,3 +625,21 @@ div.clear {
 fieldset.podcast_items img.correct, fieldset.podcast_items img.incorrect {
     height: 25px;
 }
+
+form#theuploadform {
+    background-color: #f4f4f4;
+    border: 1px solid #999999;
+    width: 100%;
+    display: block;
+    clear: both;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+form#theuploadform input[type="button"] {
+    width: 150px;
+}
+
+form#theuploadform input[type="file"] {
+    width: 300px;
+}

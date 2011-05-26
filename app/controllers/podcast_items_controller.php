@@ -31,55 +31,21 @@ class PodcastItemsController extends AppController {
      */
     function index( $podcast_id ) {
 
-        if( (int)$podcast_id )
+        $this->PodcastItem->Podcast->recursive = 3;
+
+        if( (int)$podcast_id ) {
+
             $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
 
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array(), 'error');
-            $this->redirect( array( 'url' => '/' ) );
-
-        } else {
-
-            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id ) );
-        }
-    }
-    
-    /*
-     * @name : add
-     * @desscription : Displays a filechucker.cgi form that enables peeps to upload a media file
-     * add a row to the podcast_items table. Also includes a list of all current media items associated with the
-     * podcast ID passed as a parameter
-     * @name : Charles Jackson
-     * @by : 13thth May 2011
-     */
-    function add( $podcast_id ) {
-
-        if ( isSet( $this->params['url']['complete_upload'] ) ) {
-
-            $this->PodcastItem->create();
-            $this->data = $this->PodcastItem->createFromUrlVariables( $podcast_id, $this->params['url'] );
-            $this->PodcastItem->set( $this->data );
-
-            if( $this->PodcastItem->save() ) {
-
-                // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
-                // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
-                $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array(), 'success');
-                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
-
-            } else {
-
-                $this->Session->setFlash('Could not upload your podcast media. Please try again.', 'default', array(), 'error');
-            }
+            // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
+            // in the session.
+            $this->Session->write('Podcast.podcast_id', $podcast_id);
+            $this->Session->write('Podcast.admin', false);
         }
 
-        if( (int)$podcast_id )
-            $this->data = $this->PodcastItem->Podcast->find( 'first', array( 'conditions' => array( 'Podcast.id' => $podcast_id, 'Podcast.user_id' => $this->Session->read('Auth.User.id') ) ) );
+        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
 
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array(), 'error');
+            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
 
         } else {
@@ -96,11 +62,13 @@ class PodcastItemsController extends AppController {
      */
     function view( $id = null ) {
 
+        $this->PodcastItem->recursive = 3;
+        
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->PodcastItem->findById( $id );
 
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) ) {
+        if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
             $this->Session->setFlash( 'Could not find your chosen media. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -156,6 +124,59 @@ class PodcastItemsController extends AppController {
     }
 
     /*
+     * @name : add
+     * @description : Called by the filechucker script directly after a successful upload. It is used by both
+     * users and administrators and will create a row on the podcast items table using parameters passed an session information.
+     * @updated : 26th May 2011
+     * @by : Charles Jackson
+     */
+    function add() {
+
+        $this->autoRender = false;
+
+        if ( $this->Session->check('Podcast.podcast_id') && isSet( $this->params['url'] ) ) {
+
+            $this->PodcastItem->create();
+            $this->data = $this->PodcastItem->createFromUrlVariables( $this->params['url'], $this->Session->read('Podcast.podcast_id') );
+            $this->PodcastItem->set( $this->data );
+
+            if( $this->PodcastItem->save() ) {
+
+                // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
+                // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
+                $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array( 'class' => 'success' ) );
+
+                // We need to redirect based on session information that is set within the index and admin_index methods.
+                if( $this->Session->read('Podcast.admin') ) {
+
+                    $this->redirect( array('admin' => true, 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
+
+                } else {
+
+                    $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
+                }
+                exit();
+
+            }
+        }
+
+        $this->Session->setFlash('Could not upload your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
+
+        // We need to redirect based on session information that is set within the index and admin_index methods.
+        if( $this->Session->read('Podcast.admin') ) {
+
+            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
+
+        } else {
+
+            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
+        }
+        exit();
+
+
+    }
+
+    /*
      * @name : __updated
      * @description : Internal method called by the add and edit methods, both user and administrator.
      * @updated : 9th May 2011
@@ -208,51 +229,27 @@ class PodcastItemsController extends AppController {
      */
     function admin_index( $podcast_id ) {
 
-        if( (int)$podcast_id )
+        $this->PodcastItem->Podcast->recursive = 3;
+        
+        if( (int)$podcast_id ) {
+
             $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
+            
+            // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
+            // in the session.
+            $this->Session->write('Podcast.podcast_id', $podcast_id);
+            $this->Session->write('Podcast.admin', true);
+        }
 
         if( empty( $this->data ) ) {
 
-            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array(), 'error');
-            $this->redirect( array( 'url' => '/' ) );
+            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->redirect( $this->referer() );
 
         } else {
 
             $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id ) );
         }
-    }
-
-    /*
-     * @name : admin_add
-     * @desscription : Displays a filechucker.cgi form that enables administrators to upload a media file
-     * add a row to the podcast_items table. Also includes a list of all current media items associated with the
-     * podcast ID passed as a parameter
-     * @name : Charles Jackson
-     * @by : 13thth May 2011
-     */
-    function admin_add( $podcast_id ) {
-
-        $this->autoRender = false;
-        
-        if ( isSet( $this->params['url']['complete_upload'] ) ) {
-
-            $this->PodcastItem->create();
-            $this->data = $this->PodcastItem->createFromUrlVariables( $podcast_id, $this->params['url'] );
-            $this->PodcastItem->set( $this->data );
-
-            if( $this->PodcastItem->save() ) {
-
-                // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
-                // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
-                $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array(), 'success');
-                $this->redirect( array('admin' => true, 'controller' => 'podcast_items', 'action' => 'admin_edit', $this->PodcastItem->getLastInsertId() ) );
-
-            }
-        }
-        
-        $this->Session->setFlash('Could not upload your podcast media. Please try again.', 'default', array(), 'error');
-        $this->redirect( array( 'url' => '/' ) );
-
     }
 
     /*

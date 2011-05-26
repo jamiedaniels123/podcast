@@ -1,7 +1,6 @@
 <fieldset>
     <legend>Media</legend>
     <input type="hidden" id="PodcastId" name="data[Podcast][id]" value="<?php echo $this->data['Podcast']['id']; ?>">
-    <input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
     <input type="hidden" id="PodcastTitle" name="data[Podcast][title]" value="<?php echo $this->data['Podcast']['title']; ?>">
     <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
     <div class="input text">
@@ -66,17 +65,19 @@
         <label for="PodcastItemAutoPublishFlag">Automatically Publish?</label>
         <?php echo $this->Form->error('PodcastItem.auto_publish_flag'); ?>
     </div>
-    <fieldset>
-        <legend>iTunes Explicit</legend>
-        <div class="input radio">
-            <input type="radio" value="yes" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'yes' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">Yes</label>
-            <input type="radio" value="no" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'no' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">No</label>
-            <input type="radio" value="clean" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'clean' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">Clean</label>
-        </div>
-    </fieldset>
+    <?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
+        <fieldset>
+            <legend>iTunes Explicit</legend>
+            <div class="input radio">
+                <input type="radio" value="yes" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'yes' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+                <label for="PodcastItemExplicit">Yes</label>
+                <input type="radio" value="no" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'no' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+                <label for="PodcastItemExplicit">No</label>
+                <input type="radio" value="clean" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'clean' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+                <label for="PodcastItemExplicit">Clean</label>
+            </div>
+        </fieldset>
+    <?php endif; ?>
     <div class="input file">
         <label for="PodcastItemTranscript">Transcript</label>
         <input type="file" id="PodcastItemTranscript" name="data[PodcastItem][transcript]">

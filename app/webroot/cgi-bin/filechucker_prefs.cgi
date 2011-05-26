@@ -2316,7 +2316,7 @@ $PREF{custom_sql_command}{'02'}				= "";
 # All the relevant information will be passed on the query-string to your
 # redirection URL, including any error-state information.
 #
-$PREF{after_upload_redirect_to}				= $ENV{'HTTP_REFERER'}.'?complete_upload=true';
+$PREF{after_upload_redirect_to}				= '/podcast_items/add';
 $PREF{pass_original_querystring_through}		= 'yes';
 $PREF{pass_default_data_on_redirect}			= 'yes';
 $PREF{pass_filenames_on_redirect}			= 'yes';

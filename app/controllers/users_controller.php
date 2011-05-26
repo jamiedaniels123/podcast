@@ -26,12 +26,6 @@ class UsersController extends AppController {
         
         $this->errors = $this->User->invalidFields();
         $this->set('errors', $this->errors );
-
-        // Get all the nodes
-        $this->PermissionGroup = ClassRegistry::init('PermissionGroup');
-        $this->permission_groups = $this->PermissionGroup->find('list', array( 'order' => 'PermissionGroup.title' ) );
-        $this->permission_groups = $this->PermissionGroup->removeDuplicates( $this->permission_groups, $this->data, 'PermissionGroups' );
-        $this->set('permission_groups', $this->permission_groups );
     }
 
     /*

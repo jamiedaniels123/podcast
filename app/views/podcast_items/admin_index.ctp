@@ -16,3 +16,6 @@
     <?php echo $this->element('../podcast_items/_index'); ?>
     <?php echo $this->element('../podcast_items/_add'); ?>
 </fieldset>
+<pre>
+    <?php print_r( $this->data ); ?>
+</pre>
