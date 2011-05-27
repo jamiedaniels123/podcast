@@ -55,6 +55,12 @@ class Podcast extends AppModel {
                 'message' => 'If entered, you must provide a valid web address.'
             )
         ),
+        'private' => array(
+            'Rule1' => array(
+                'rule' => 'privateUntilPublishedMedia',
+                'message' => 'This collection must remain private until you associated published media.'
+            )
+        ),
         'title' => array(
             'Rule1' => array(
                 'rule' => 'notempty',
@@ -63,18 +69,19 @@ class Podcast extends AppModel {
             )
         ),
         'summary' => array(
-            'Rule1' => array(
-                'rule' => 'notempty',
-                'allowEmpty' => true,
-                'message' => 'Please provide a short description for your feed.'
-            )
+            'rule' => 'ifPodcast',
+            'message' => 'If you wish to convert this collection into a podcast you must provide a short description.'
         ),
         'link' => array(
             'Rule1' => array(
                 'rule' => 'url',
                 'allowEmpty' => true,
                 'message' => 'Please provide a valid web address for the feed.'
-            )
+            ),
+            'Rule2' => array(
+                'rule' => 'ifPodcast',
+                'message' => 'If you wish to convert this collection into a podcast you must provide a valid URL.'
+            ),
         ),
         'owner_email' => array(
             'Rule1' => array(
@@ -91,9 +98,15 @@ class Podcast extends AppModel {
             )
         ),
         'Nodes' => array(
-            'rule' => array('multiple', array( 'min' => 1, 'max' => 4 ) ),
-            'allowEmpty' => true,
-            'message' => 'Please select between 1 and 4 nodes.'
+            'Rule1' => array(
+                'rule' => array('multiple', array( 'min' => 1, 'max' => 4 ) ),
+                'allowEmpty' => true,
+                'message' => 'Please select between 1 and 4 nodes.'
+            ),
+            'Rule2' => array(
+                'rule' => 'ifPodcast'
+                'message' => 'If you wish to convert this collection into a podcast you must select at least 1 node.'
+            )
         ),
         'Categories' => array(
             'rule' => array('multiple', array( 'min' => 1, 'max' => 3 ) ),
@@ -211,6 +224,44 @@ class Podcast extends AppModel {
             'fields' => 'UserPodcast.id,UserPodcast.user_id'
         )
     );
+
+    /*
+     * @name : ifPodcast
+     * @description : Custom validation method called from the validation array. If the user has chosen to
+     * turn this row into a podcast, signified by the podcast_flag field being equal to 1 (true), then the field must
+     * be populated.
+     * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
+     * @updated : 27th May 2011
+     * @by : Charles Jackson
+     */
+    function ifPodcast( $check = array() ) {
+
+        // It is not a podcast so no need for field to be populated.
+        if( $this->data['Podcast']['podcast_flag'] == true ) {
+
+            // get the value of the field being passed
+            $value = array_shift( $check );
+
+            if( empty( $value ) )
+                return false;
+        }
+
+        return true;
+    }
+
+    /*
+     * @name : privateUntilPublishedMedia
+     * @description : A podcast must remain private untill it has associated published media. Thi method is
+     * called by the valiidation array and return a count of published media.
+     * @updated : 27th May 2011
+     * @by : Charles Jackson
+     */
+    function privateUntilPublishedMedia( $check = array() ) {
+
+        return true;
+    }
+
+    
     /*
      * @name : beforeValidate
      * @description : A current CakePHP limitation of validating HBTM data requires us to copy
