@@ -83,7 +83,7 @@ class Podcast extends AppModel {
                 'message' => 'If entered, you must provide a valid email address.'
             )
         ),
-        'user_id' => array(
+        'owner_id' => array(
             'Rule1' => array(
                 'rule' => 'numeric',
                 'allowEmpty' => false,
@@ -115,7 +115,7 @@ class Podcast extends AppModel {
         ),
         'Owner' => array(
             'className' => 'User',
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'owner_id',
             'fields' => 'Owner.id, Owner.full_name'
         )
 
@@ -482,7 +482,7 @@ class Podcast extends AppModel {
                         'UserUserGroups.user_id' => $user_id
                         ),
                     array(
-                        'Podcast.user_id' => $user_id
+                        'Podcast.owner_id' => $user_id
                         )
                     )
                 )

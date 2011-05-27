@@ -93,7 +93,7 @@ class PodcastsController extends AppController {
             $data = $this->data;
 
             // Assign the podcast to the current user.
-            $this->data['Podcast']['user_id'] = $this->Session->read('Auth.User.id');
+            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
@@ -175,7 +175,7 @@ class PodcastsController extends AppController {
             if( $this->Podcast->validates() ) {
 
                 // OK, it validates but have they confirmed change of ownership.
-                if( ( isSet( $this->data['Podcast']['confirmed'] ) && ( $this->data['Podcast']['confirmed'] == false ) ) && ( isSet( $this->data['Podcast']['current_owner_id'] ) && ( $this->data['Podcast']['current_owner_id'] != $this->data['Podcast']['user_id'] ) ) ) {
+                if( ( isSet( $this->data['Podcast']['confirmed'] ) && ( $this->data['Podcast']['confirmed'] == false ) ) && ( isSet( $this->data['Podcast']['current_owner_id'] ) && ( $this->data['Podcast']['current_owner_id'] != $this->data['Podcast']['owner_id'] ) ) ) {
 
                     $this->data = $this->Podcast->rebuild( $this->data );
                     $this->data['Podcast']['confirmed'] = true;

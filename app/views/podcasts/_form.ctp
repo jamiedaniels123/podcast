@@ -194,20 +194,20 @@
         </div>
     </div>
     <div class="clear"></div>
-    <?php if( isSet( $this->params['admin'] ) || ( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) && ( $this->Permission->isOwner( $this->data['Podcast']['user_id'] ) || ( isSet( $this->data['Podcast']['current_owner_id'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) ) : ?>
+    <?php if( isSet( $this->params['admin'] ) || ( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) && ( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || ( isSet( $this->data['Podcast']['current_owner_id'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) ) : ?>
         <div class="input text">
-            <label for="PodcastUserId">Podcast Owner</label>
-            <?php if( isSet( $this->data['Podcast']['current_user_id'] ) ) : ?>
+            <label for="PodcastOwnerId">Podcast Owner</label>
+            <?php if( isSet( $this->data['Podcast']['current_owner_id'] ) ) : ?>
                 <input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
                 <input type="hidden" name="data[Podcast][confirmed]" value="<?php echo isSet( $this->data['Podcast']['confirmed'] ) ? '1' : '0'; ?>" id="PodcastConfirmed" />
             <?php endif; ?>
-            <select name="data[Podcast][user_id]" id="PodcastOwnerId">
+            <select name="data[Podcast][owner_id]" id="PodcastOwnerId">
                 <option value="">Please select</option>
                 <?php foreach( $all_users as $user_id => $name ) : ?>
-                    <option value="<?php echo $user_id; ?>" <?php echo $this->data['Podcast']['user_id'] == $user_id ? 'selected="true"' : ''; ?>><?php echo $name; ?></option>
+                    <option value="<?php echo $user_id; ?>" <?php echo $this->data['Podcast']['owner_id'] == $user_id ? 'selected="true"' : ''; ?>><?php echo $name; ?></option>
                 <?php endforeach; ?>
             </select>
-            <?php echo $this->Form->error('Podcast.user_id'); ?>
+            <?php echo $this->Form->error('Podcast.owner_id'); ?>
         </div>
     <?php endif; ?>
     <?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
