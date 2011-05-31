@@ -104,7 +104,7 @@ class Podcast extends AppModel {
                 'message' => 'Please select between 1 and 4 nodes.'
             ),
             'Rule2' => array(
-                'rule' => 'ifPodcast'
+                'rule' => 'ifPodcast',
                 'message' => 'If you wish to convert this collection into a podcast you must select at least 1 node.'
             )
         ),
@@ -278,6 +278,17 @@ class Podcast extends AppModel {
                 $this->data[$this->alias][$k] = $this->data[$k];
         }
 
+        // OK, now empty the date fields if they contain a null date.
+        foreach( $this->data['Podcast'] as $key => $value ) {
+
+            if( in_array( $key, array('publish_itunes_date','update_itunes_date','target_itunesu_date','production_date','rights_date', 'metadata_date' ) ) ) {
+
+                if( (int)$value == false ) {
+                    $this->data['Podcast'][$key] = null;
+                }
+            }
+
+        }
         return true;
     }
 
@@ -517,27 +528,20 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id ) {
+     function getUserPodcasts( $user_id = null, $filter = null ) {
 
-        
+       $this->recursive = -1;
+
+        $list = array();
+        $conditions = $this->buildConditions(  $user_id );
+        $conditions = $this->buildFilters( $filter, $conditions );
+
+
         $data = $this->find('all',array(
             'fields'=>array(
                 'DISTINCT(Podcast.id)'
                 ),
-            'conditions'=> array(
-                array('OR' => array(
-                    array(
-                        'UserPodcasts.user_id' => $user_id
-                        ),
-                    array(
-                        'UserUserGroups.user_id' => $user_id
-                        ),
-                    array(
-                        'Podcast.owner_id' => $user_id
-                        )
-                    )
-                )
-            ),
+            'conditions'=> $conditions,
             'joins' => array(
                 array(
                     'table'=>'user_podcasts',
@@ -575,6 +579,66 @@ class Podcast extends AppModel {
         }
 
         return $list;
+     }
+
+    /*
+     * @name : buildConditions
+     * @description :
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function buildConditions( $user_id = false ) {
+
+        $conditions = array(
+            array('OR' => array(
+                array(
+                    'UserPodcasts.user_id' => $user_id
+                    ),
+                array(
+                    'UserUserGroups.user_id' => $user_id
+                    ),
+                array(
+                    'Podcast.owner_id' => $user_id
+                    )
+                )
+            )
+        );
+        
+        return $conditions;
+    }
+
+    function buildFilters( $filter, $conditions = array() ) {
+
+        switch( $filter ) {
+            case PUBLIC_ITUNEU_PODCAST:
+                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions[0]['Podcast.itunesu_site'] = 'public';
+                break;
+            case UNPUBLISHED_ITUNEU_PODCAST:
+                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions[0]['Podcast.itunesu_site'] = 'public';
+                $conditions[0]['Podcast.publish_itunes_u'] = 'N';
+                $conditions[0]['Podcast.openlearn_epub'] = 'N';
+                break;
+            case PUBLISHED_ITUNEU_PODCAST:
+                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions[0]['Podcast.itunesu_site'] = 'public';
+                $conditions[0]['Podcast.publish_itunes_u'] = 'Y';
+                break;
+            case OPENLEARN_PODCAST:
+                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions[0]['Podcast.itunesu_site'] = 'public';
+                $conditions[0]['Podcast.openlearn_epub'] = 'Y';
+                break;
+            case PRIVATE_ITUNEU_PODCAST:
+                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions[0]['Podcast.itunesu_site'] = 'private';
+                break;
+            case DELETED_PODCAST:
+                $conditions[0]['Podcast.deleted'] = 1;
+        }
+
+        return $conditions;
      }
 }
 ?>

@@ -47,5 +47,8 @@
 </body>
 </html>
 <pre>
+<?php print_r( $this->params ); ?>
+</pre>
+<pre>
     <?php print_r( $this->data ); ?>
 </pre>

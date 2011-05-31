@@ -71,9 +71,21 @@ class PodcastsController extends AppController {
      */
     function index() {
 
+        $id_numbers = array();
+        
+        // Unset this join else we will get duplicate rows on the various joins.
         unset( $this->Podcast->hasOne['UserPodcast'] );
+        
+
+        // Have they posted the filter form?
+        if( isSet( $this->data['Podcast']['filter'] ) == false )
+            $this->data['Podcast']['filter'] = null;
+
+        $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast']['filter'] );
+
         $this->Podcast->recursive = 2;
-        $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id') ) ) );
+        $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
+
     }
 
     /*
@@ -233,7 +245,7 @@ class PodcastsController extends AppController {
             } else {
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
-                $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['user_id'];
+                $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
             }
         }
     }
@@ -250,9 +262,9 @@ class PodcastsController extends AppController {
         $this->recursive = -1;
 
         if( $id )
-            $this->data = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $id, 'Podcast.user_id' => $this->Session->read('Auth.User.id' ) ) ) );
+            $this->data = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $id, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
-        // If we did no find the podcast that redirect to the referer.
+        // If we did not find the podcast that redirect to the referer.
         if( empty( $this->data ) || $this->Permission->toDelete( $this->data ) == false ) {
 
             $this->Session->setFlash('We could not find the collection you were looking for.', 'default', array( 'class' => 'error' ) );
@@ -260,16 +272,18 @@ class PodcastsController extends AppController {
         } else {
 
             // Delete the podcast
-            $this->Podcast->delete( $id );
+            $this->data['Podcast']['deleted'] = true;
+            $this->Podcast->set( $this->data );
 
-            // Remove any associated media.
-            if( strlen( trim( $this->data['Podcast']['custom_id'] ) ) && is_dir( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['custom_id'] ) ) {
-                $this->Image->recursiveRemoveFolder( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+            if( $this->Podcast->save() == false ) {
 
-            } elseif( strlen( trim( $this->data['Podcast']['id'] ) ) && is_dir( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['id'] ) ) {
-
-                $this->Image->recursiveRemoveFolder( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['id'] );
+                echo "<pre>";
+                    print_r( $this->Podcast->invalidFields( $this->data ) );
+                echo "</pre>";
+                die();
             }
+
+            // @TODO - Post to a URL that creates a HTACCESS file in the root folder of the associated media.
 
             $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
@@ -349,7 +363,21 @@ class PodcastsController extends AppController {
     function admin_index() {
 
         unset( $this->Podcast->hasOne['UserPodcast'] );
-        $this->data['Podcasts'] = $this->paginate('Podcast');
+        // Have they posted the filter form?
+        if( isSet( $this->data['Podcast']['filter'] ) ) {
+
+            $conditions = $this->Podcast->buildFilters( $this->data['Podcast']['filter'] );
+
+            $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+
+        } else {
+
+            // Create a null PodcastFilter to prevent an unwanted notice in the view
+            $this->data['Podcast']['filter'] = null;
+            $this->data['Podcasts'] = $this->paginate('Podcast');
+        }
+
+        
     }
 
 

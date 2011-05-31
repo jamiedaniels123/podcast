@@ -3,6 +3,7 @@
     <p>
         Below is a list of all podcasts on the system.
     </p>
+    <?php echo $this->element('../podcasts/_filter'); ?>
     <p>
         <?php
             echo $this->Paginator->counter(array(
@@ -13,10 +14,10 @@
     <table cellpadding="0" cellspacing="0">
     <tr>
         <th>Image</th>
+        <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
 	<th><?php echo $this->Paginator->sort('title');?></th>
-        <th><?php echo $this->Paginator->sort('Categories','categories.id');?></th>
-        <th><?php echo $this->Paginator->sort('iTunes U Categories','categories.id');?></th>
         <th><?php echo $this->Paginator->sort('created');?></th>
+        <th><?php echo $this->Paginator->sort('Status','deleted');?></th>
         <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
 	<th class="actions"><?php __('Actions');?></th>
     </tr>
@@ -35,21 +36,17 @@
                     <?php echo $this->Attachment->getPodcastThumbnail( $podcast ); ?>
                 </td>
                 <td>
+                    <?php echo $podcast['Owner']['full_name']; ?>
+                </td>
+                <td>
                     <?php echo $podcast['Podcast']['title']; ?>
                 </td>
                 <td>
-                   <?php foreach( $podcast['Categories'] as $category ) : ?>
-                        <div><?php echo $category['category'] ?></div>
-                    <?php endforeach; ?>
-                </td>
-                <td>
-                   <?php foreach( $podcast['iTuneCategories'] as $category ) : ?>
-                        <div><?php echo $category['code_title'] ?></div>
-                    <?php endforeach; ?>
-                </td>
-                <td>
-                    <?php echo $podcast['Podcast']['created'] ? $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ) : $this->Time->getPrettyShortDate( $podcast['Podcast']['created_when'] ); ?>
+                    <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                  </td>
+                <td>
+                    <?php echo (int)$podcast['Podcast']['deleted'] ? 'Deleted' : 'Active'; ?>
+                </td>
                 <td>
                     <?php echo count( $podcast['PodcastItems'] ); ?>
                 </td>
