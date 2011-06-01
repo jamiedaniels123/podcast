@@ -2,7 +2,7 @@
 
 class AppController extends Controller {
 
-    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler' );
+    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder' );
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object' );
 
@@ -16,4 +16,7 @@ class AppController extends Controller {
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
         }
     }
+
+
+
 }
