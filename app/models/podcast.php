@@ -234,7 +234,6 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function ifPodcast( $check = array() ) {
-        print_r( $check );
         // It is not a podcast so no need for field to be populated.
         if( $this->data['Podcast']['podcast_flag'] == true ) {
 

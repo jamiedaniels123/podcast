@@ -1,6 +1,7 @@
 /app/config/database.php
 /app/config/core.php
 /.htaccess
+/.gitignore
 /app/tmp
 /.project
 /.buildpath
