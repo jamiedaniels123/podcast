@@ -153,19 +153,23 @@ class UserGroupsController extends AppController {
         $this->autoRender = false;
         $this->recursive = -1;
 
+        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+        // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
+        // was posted.
         if( $id )
-            $this->data = $this->UserGroup->findById( $id );
+            $this->data['UserGroup']['Checkbox'][$id] = 'On';
+
+        foreach( $this->data['UserGroup']['Checkbox'] as $key => $value ) {
+
+            $this->usergroup = $this->UserGroup->findById( $key );
 
         // If we did no find the UserGroup or they have no permission that redirect to the referer.
-        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
+            if( !empty( $this->usergroup ) && $this->Permission->toUpdate( $this->usergroup ) == true ) {
 
-            $this->Session->setFlash( 'We could not find the user group you were looking for.', 'default', array( 'class' => 'error' ) );
-
-        } else {
-
-            // Delete the usergroup
-            $this->UserGroup->delete( $id );
-            $this->Session->setFlash( 'We successfully deleted the user group.', 'default', array( 'class' => 'success' ) );
+                // Delete the usergroup
+                $this->UserGroup->delete( $this->usergroup['UserGroup']['id'] );
+                $this->Session->setFlash( 'We successfully deleted the user group.', 'default', array( 'class' => 'success' ) );
+            }
         }
 
         $this->redirect( $this->referer() );
@@ -324,20 +328,24 @@ class UserGroupsController extends AppController {
 
         $this->autoRender = false;
         $this->recursive = -1;
-        
+
+        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+        // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
+        // was posted.
         if( $id )
-            $this->data = $this->UserGroup->findById( $id );
+            $this->data['UserGroup']['Checkbox'][$id] = 'On';
 
-        // If we did no find the UserGroup that redirect to the referer.
-        if( empty( $this->data ) ) {
+        foreach( $this->data['UserGroup']['Checkbox'] as $key => $value ) {
+
+            $this->usergroup = $this->UserGroup->findById( $key );
+
+            // If we did no find the UserGroup that redirect to the referer.
+            if( !empty( $this->usergroup ) ) {
 			
-            $this->Session->setFlash( 'We could not find the user group you were looking for.', 'default', array( 'class' => 'error' ) );
-            
-        } else {
-
-            // Delete the usergroup
-            $this->UserGroup->delete( $id );
-            $this->Session->setFlash( 'We successfully deleted the user group.', 'default', array( 'class' => 'success' ) );
+                // Delete the usergroup
+                $this->UserGroup->delete( $this->usergroup['UserGroup']['id'] );
+                $this->Session->setFlash( 'We successfully deleted the user group.', 'default', array( 'class' => 'success' ) );
+            }
         }
         
         $this->redirect( $this->referer() );

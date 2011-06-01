@@ -71,6 +71,24 @@ jQuery(document).ready(function($) {
         return false;
     });
 
+    // Will toggle the notification checkboxes from ticked to unticked
+    jQuery('.toggler').click( function(e) {
+
+        e.preventDefault();
+        var status = jQuery(this).attr('data-status');
+        if( status == 'ticked' ) {
+
+            unTickCheckboxes();
+            jQuery(this).attr('data-status', 'unticked');
+
+        } else {
+
+            tickCheckboxes();
+            jQuery(this).attr('data-status', 'ticked');
+        }
+
+
+    });
 });
 
 // Will show or hide the podcast container div depending
@@ -105,4 +123,25 @@ function show_hide_itune_elements() {
     }
 }
 
+// Will tick all the checkboxes on the dashboard, at time of publication the only
+// checkboxes are those associated with the podcast listing.
+function tickCheckboxes() {
 
+    jQuery('input[type="checkbox"]').each(function(index) {
+
+        jQuery(this).attr('checked',true);
+
+    });
+
+}
+
+// Will untick all the checkboxes on the dashboard, at time of publication the only
+// checkboxes are those associated with the podcast listing.
+function unTickCheckboxes() {
+
+    jQuery('input[type="checkbox"]').each(function(index) {
+
+        jQuery(this).attr('checked',false);
+
+    });
+}

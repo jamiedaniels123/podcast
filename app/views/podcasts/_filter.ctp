@@ -9,7 +9,7 @@
             <option value="<?php echo PRIVATE_ITUNEU_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == PRIVATE_ITUNEU_PODCAST ? 'selected="selected"' : ''; ?>>Private iTunes U</option>
             <option value="<?php echo OPENLEARN_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == OPENLEARN_PODCAST ? 'selected="selected"' : ''; ?>>Open Learn</option>
             <?php if( $this->Permission->isAdminRouting() ) : ?>
-                <option value="<?php echo DELETED_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == DELETED_PODCAST ? 'selected="selected"' : ''; ?>>Other Users Podcasts</option>
+                <option value="<?php echo DELETED_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == DELETED_PODCAST ? 'selected="selected"' : ''; ?>>Deleted Podcasts</option>
             <?php endif; ?>
         </select>
     </div>
