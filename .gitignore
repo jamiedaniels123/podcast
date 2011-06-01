@@ -2,3 +2,6 @@
 /app/config/core.php
 /.htaccess
 /app/tmp
+/.project
+/.buildpath
+/.settings/org.eclipse.php.core.prefs
