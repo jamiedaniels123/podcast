@@ -1,8 +1,10 @@
 <fieldset class="podcasts index">
     <legend>Your Podcasts</legend>
     <p>
-        Below is a list of all podcasts on the system to which you have access.
+        Below is a list of all podcasts on the system to which you have access. You can filter using the options below and
+        sort by column headings.
     </p>
+    <?php echo $this->element('../podcasts/_filter'); ?>
     <p>
         <?php
             echo $this->Paginator->counter(array(
@@ -41,7 +43,7 @@
                     <?php echo $podcast['Podcast']['title']; ?>
                 </td>
                 <td>
-                    <?php echo $podcast['Podcast']['created'] ? $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ) : $this->Time->getPrettyShortDate( $podcast['Podcast']['created_when'] ); ?>
+                    <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                 </td>
                 <td class="actions">
                     <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">view</a>

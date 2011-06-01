@@ -49,7 +49,7 @@ class User extends AppModel {
             'foreignKey' => 'user_id',
             'associationForeignKey' => 'podcast_id',
             'unique' => true,
-            'fields' => 'UserPodcasts.id, UserPodcasts.user_id, UserPodcasts.title, UserPodcasts.summary, UserPodcasts.image, UserPodcasts.created'
+            'fields' => 'UserPodcasts.id, UserPodcasts.owner_id, UserPodcasts.title, UserPodcasts.summary, UserPodcasts.image, UserPodcasts.created'
         )
     );
 
@@ -57,7 +57,7 @@ class User extends AppModel {
 
         'Podcasts' => array(
             'className' => 'Podcast',
-            'foreignKey' => 'user_id',
+            'foreignKey' => 'owner_id',
             'fields' => array('Podcasts.id', 'Podcasts.title')
         )
     );

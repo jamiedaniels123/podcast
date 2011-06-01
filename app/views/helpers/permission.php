@@ -115,5 +115,19 @@ class PermissionHelper extends AppHelper {
 
         return false;
     }
+
+    /*
+     * @name : isAdminRouting
+     * @description : Checks to see if the current URL is an admin page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isAdminRouting() {
+
+        if( isSet( $this->params['admin'] ) && ( $this->params['admin'] == true ) )
+            return true;
+        
+        return false;
+    }
 }
 ?>
