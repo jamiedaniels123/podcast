@@ -253,5 +253,28 @@ class UsersController extends AppController {
         }
     }
 
+    /*
+     * @name : admin_reset
+     * @description : Enables an administrator to update the value of terms on the users table to
+     * "false" forcing every user to agree to the terms and conditions when they next attempt to
+     * login.
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function admin_reset() {
+
+        $this->data = $this->User->find('all');
+
+        foreach( $this->data as $user ) {
+
+            $user['User']['terms'] = false;
+            $this->User->set( $user );
+            $this->User->save();
+        }
+
+        $this->Session->setFlash( 'Terms and conditions have been reset. Users willl be forced to agree next time they login.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );
+    }
+
 }
 ?>
