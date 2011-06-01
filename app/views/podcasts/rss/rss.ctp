@@ -2,7 +2,7 @@
 $channelData = array(
     'title' => 'Podcast',
     'link' => 'http://www.example.com',
-    'description' => $podcast['Podcast']['summary'],
+    'description' => 'blah',
     'language' => 'en-uk'
 );
 
@@ -18,8 +18,7 @@ foreach( $podcasts as $podcast ) {
                 'controller' => 'podcasts',
                 'action' => 'view', $podcast['Podcast']['id']
             ),
-            'description' => $podcast['Podcast']['summary'],
-            'pubDate' => $podcast['Podcast']['created']
+            'description' => $podcast['Podcast']['summary']
         )
     );
 }

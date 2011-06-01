@@ -16,4 +16,3 @@ class Category extends AppModel {
         )
     );
 }
-?>

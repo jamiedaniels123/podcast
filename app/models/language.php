@@ -7,4 +7,3 @@ class Language extends AppModel {
 
 
 }
-?>

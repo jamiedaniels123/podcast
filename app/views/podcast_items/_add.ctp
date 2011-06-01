@@ -35,6 +35,5 @@
         </div>
     </div>
     <div class="clear"></div>
-    <?php //virtual("/upload/call_fc.php?podcast_id=".$podcast_id); ?>
-    <?php require(WWW_ROOT . "/upload/call_fc.php"); ?>
+    <?php require(WWW_ROOT."upload/call_fc.php"); ?>
 </fieldset>

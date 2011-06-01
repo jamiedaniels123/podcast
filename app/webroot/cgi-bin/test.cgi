@@ -4,8 +4,9 @@ print "testing...\n";
 use CGI;
 use CGI::Carp 'fatalsToBrowser';
 
-#print qq`Perl_version: $]\n`;
-#print qq`CGI::VERSION: $CGI::VERSION\n`;
+#print qq`\$] (Perl version): $]\n`;
+#print qq`\$CGI::VERSION: $CGI::VERSION\n`;
+#print qq`\nEnvironment Variables:\n\n`;
 
 foreach my $var (sort keys %ENV)
 {
