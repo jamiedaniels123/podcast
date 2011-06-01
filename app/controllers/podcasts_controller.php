@@ -106,6 +106,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+            $this->data['Podcast']['private'] = 'Y';
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
@@ -261,33 +262,28 @@ class PodcastsController extends AppController {
         $this->autoRender = false;
         $this->recursive = -1;
 
+        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+        // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
+        // was posted.
         if( $id )
-            $this->data = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $id, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
+            $this->data['Podcast']['Checkbox'][$id] = 'On';
 
-        // If we did not find the podcast that redirect to the referer.
-        if( empty( $this->data ) || $this->Permission->toDelete( $this->data ) == false ) {
+        foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $this->Session->setFlash('We could not find the collection you were looking for.', 'default', array( 'class' => 'error' ) );
-
-        } else {
+            $this->podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
             // Delete the podcast
-            $this->data['Podcast']['deleted'] = true;
-            $this->Podcast->set( $this->data );
+            $this->podcast['Podcast']['deleted'] = true;
+            $this->Podcast->set( $this->podcast );
 
-            if( $this->Podcast->save() == false ) {
-
-                echo "<pre>";
-                    print_r( $this->Podcast->invalidFields( $this->data ) );
-                echo "</pre>";
-                die();
-            }
+            $this->Podcast->save();
 
             // @TODO - Post to a URL that creates a HTACCESS file in the root folder of the associated media.
 
             $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
         }
+        
         $this->redirect( $this->referer() );
     }
 
@@ -397,12 +393,18 @@ class PodcastsController extends AppController {
             $data = array();
             $data = $this->data;
 
+            // Assign the podcast to the current user.
+            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+            $this->data['Podcast']['private'] = 'Y';
+
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
             // Create the PodcastModerators that are saved using a hasMany relationship
             $this->data = $this->Podcast->createPodcastModerators( $this->data );
             // Create the ModeratorUserGroups that are saved using a hasMany relationship
             $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
+
+
 
             $this->Podcast->set( $this->data );
 
@@ -514,32 +516,58 @@ class PodcastsController extends AppController {
 
         $this->autoRender = false;
         $this->recursive = -1;
-        
-        if( $id )
-            $this->data = $this->Podcast->findById( $id );
 
-        // If we did no find the podcast that redirect to the referer.
+        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+        // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
+        // was posted.
+        if( $id )
+            $this->data['Podcast']['Checkbox'][$id] = 'On';
+
+        foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
+
+            $this->podcast = $this->Podcast->findById( $key );
+        
+            // If we did no find the podcast that redirect to the referer.
+            if( empty( $this->podcast ) == false ) {
+
+                // Delete the podcast
+                $this->Podcast->delete( $this->podcast['Podcast']['id'] );
+                // @TODO : Remove any associated media.
+
+                $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+            }
+        }
+        
+        $this->redirect( $this->referer() );
+    }
+
+    /*
+     * @name : admin_restore
+     * @description : Will update the value of the 'deleted' column on any podcast to zero therefore restoring the
+     * collection.
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function admin_restore( $id = null ) {
+
+        $this->autoRender = false;
+        $this->podcast = $this->Podcast->findById( $id );
+
         if( empty( $this->data ) ) {
-			
-            $this->Session->setFlash('We could not find the collection you were looking for.', 'default', array( 'class' => 'error' ) );
-            
+
+            $this->Session->setFlash('We could not identify the collection you are trying to restore.', 'default', array( 'class' => 'error' ) );
+
         } else {
 
-            // Delete the podcast
-            $this->Podcast->delete( $id );
-            
-            // Remove any associated media.
-            if( strlen( trim( $this->data['Podcast']['custom_id'] ) ) && is_dir( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['custom_id'] ) ) {
-                $this->Image->recursiveRemoveFolder( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+            $this->data['Podcast']['deleted'] = 0;
+            $this->Podcast->set( $this->data );
+            $this->Podcast->save();
 
-            } elseif( strlen( trim( $this->data['Podcast']['id'] ) ) && is_dir( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['id'] ) ) {
+            //@TODO : restore the data.
+            $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
-                $this->Image->recursiveRemoveFolder( WWW_ROOT.FEEDS_LOCATION.$this->data['Podcast']['id'] );
-            }
-
-            $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
-            
         }
+
         $this->redirect( $this->referer() );
     }
 }

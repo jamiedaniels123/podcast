@@ -6,6 +6,69 @@ class Podcast extends AppModel {
     
     var $validate = array(
 
+        'title' => array(
+            'Rule1' => array(
+                'rule' => 'notempty',
+                'allowEmpty' => false,
+                'message' => 'Please provide a title for your feed.'
+            )
+        ),
+        'summary' => array(
+            'rule' => array('ifPodcast'),
+            'message' => 'If you wish to convert this collection into a podcast you must provide a short description.'
+        ),
+        'link' => array(
+            'Rule1' => array(
+                'rule' => array('ifPodcast'),
+                'message' => 'If you wish to convert this collection into a podcast you must provide a valid URL.'
+            ),
+            'Rule2' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'Please provide a valid web address for the feed.'
+            )
+        ),
+        'owner_email' => array(
+            'Rule1' => array(
+                'rule' => array( 'email', true),
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid email address.'
+            )
+        ),
+        'owner_id' => array(
+            'Rule1' => array(
+                'rule' => 'numeric',
+                'allowEmpty' => false,
+                'message' => 'You must select an owner for this podcast.'
+            )
+        ),
+        'Nodes' => array(
+            'Rule1' => array(
+                'rule' => array('ifPodcast'),
+                'message' => 'If you wish to convert this collection into a podcast you must select at least 1 node.'
+            ),
+            'Rule2' => array(
+                'rule' => array('multiple', array( 'min' => 1, 'max' => 4 ) ),
+                'allowEmpty' => true,
+                'message' => 'Please select between 1 and 4 nodes.'
+            )
+        ),
+        'Categories' => array(
+            'rule' => array('multiple', array( 'min' => 1, 'max' => 3 ) ),
+            'allowEmpty' => true,
+            'message' => 'Please select between 1 and 3 iTunes categories.'
+        ),
+        'private' => array(
+            'Rule1' => array(
+                'rule' => array('privateUntilPublishedMedia'),
+                'message' => 'This collection must remain private until you publish associated media.'
+            )
+        ),
+        'iTuneCategories' => array(
+            'rule' => array('multiple', array( 'min' => 1, 'max' => 3 ) ),
+            'allowEmpty' => true,
+            'message' => 'You cannot select more than 3 iTunes U categories.'
+        ),
         'publish_itunes_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
@@ -55,69 +118,6 @@ class Podcast extends AppModel {
                 'message' => 'If entered, you must provide a valid web address.'
             )
         ),
-        'private' => array(
-            'Rule1' => array(
-                'rule' => 'privateUntilPublishedMedia',
-                'message' => 'This collection must remain private until you associated published media.'
-            )
-        ),
-        'title' => array(
-            'Rule1' => array(
-                'rule' => 'notempty',
-                'allowEmpty' => false,
-                'message' => 'Please provide a title for your feed.'
-            )
-        ),
-        'summary' => array(
-            'rule' => 'ifPodcast',
-            'message' => 'If you wish to convert this collection into a podcast you must provide a short description.'
-        ),
-        'link' => array(
-            'Rule1' => array(
-                'rule' => 'url',
-                'allowEmpty' => true,
-                'message' => 'Please provide a valid web address for the feed.'
-            ),
-            'Rule2' => array(
-                'rule' => 'ifPodcast',
-                'message' => 'If you wish to convert this collection into a podcast you must provide a valid URL.'
-            ),
-        ),
-        'owner_email' => array(
-            'Rule1' => array(
-                'rule' => array( 'email', true),
-                'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid email address.'
-            )
-        ),
-        'owner_id' => array(
-            'Rule1' => array(
-                'rule' => 'numeric',
-                'allowEmpty' => false,
-                'message' => 'You must select an owner for this podcast.'
-            )
-        ),
-        'Nodes' => array(
-            'Rule1' => array(
-                'rule' => array('multiple', array( 'min' => 1, 'max' => 4 ) ),
-                'allowEmpty' => true,
-                'message' => 'Please select between 1 and 4 nodes.'
-            ),
-            'Rule2' => array(
-                'rule' => 'ifPodcast',
-                'message' => 'If you wish to convert this collection into a podcast you must select at least 1 node.'
-            )
-        ),
-        'Categories' => array(
-            'rule' => array('multiple', array( 'min' => 1, 'max' => 3 ) ),
-            'allowEmpty' => true,
-            'message' => 'Please select between 1 and 3 iTunes categories.'
-        ),
-        'iTuneCategories' => array(
-            'rule' => array('multiple', array( 'min' => 1, 'max' => 3 ) ),
-            'allowEmpty' => true,
-            'message' => 'You cannot select more than 3 iTunes U categories.'
-        )
     );
 
     var $belongsTo = array(
@@ -131,7 +131,6 @@ class Podcast extends AppModel {
             'foreignKey' => 'owner_id',
             'fields' => 'Owner.id, Owner.full_name'
         )
-
     );
 
     var $hasMany = array(
@@ -235,7 +234,7 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function ifPodcast( $check = array() ) {
-
+        print_r( $check );
         // It is not a podcast so no need for field to be populated.
         if( $this->data['Podcast']['podcast_flag'] == true ) {
 
@@ -251,14 +250,21 @@ class Podcast extends AppModel {
 
     /*
      * @name : privateUntilPublishedMedia
-     * @description : A podcast must remain private untill it has associated published media. Thi method is
-     * called by the valiidation array and return a count of published media.
+     * @description : A podcast must remain private untill it has associated published media. This method is
+     * called by the validation array and returns a count of published media.
      * @updated : 27th May 2011
      * @by : Charles Jackson
      */
     function privateUntilPublishedMedia( $check = array() ) {
 
-        return true;
+        // get the value of the field being passed
+        $private = array_shift( $check );
+        if( $private == 'Y' )
+            return true;
+
+        $this->PodcastItem = ClassRegistry::init('PodcastItem');
+
+        return $this->PodcastItem->find( 'count', array('conditions' => array('PodcastItem.podcast_id' => $this->data['Podcast']['id'], 'PodcastItem.published_flag' => 1 ) ) );
     }
 
     
@@ -583,7 +589,8 @@ class Podcast extends AppModel {
 
     /*
      * @name : buildConditions
-     * @description :
+     * @description : Exploited from the "/podcasts/index" URL, it defines the rules that only retrieve
+     * podcasts belonging to the currently logged in user.
      * @updated : 31st May 2011
      * @by : Charles Jackson
      */
@@ -601,12 +608,20 @@ class Podcast extends AppModel {
                     'Podcast.owner_id' => $user_id
                     )
                 )
-            )
+            ),
+            'Podcast.deleted' => 0
         );
         
         return $conditions;
     }
 
+    /*
+     * @name : buildFilters
+     * @description : Exploited from the "/podcasts/index" and "/admin/podcasts/index" URL, it builds the filters
+     * that can be selected via the dropdown.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
     function buildFilters( $filter, $conditions = array() ) {
 
         switch( $filter ) {
