@@ -5,4 +5,3 @@ class PodcastLink extends AppModel {
     var $validate = array();
 
 }
-?>

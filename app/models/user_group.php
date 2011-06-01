@@ -233,4 +233,3 @@ class UserGroup extends AppModel {
      }
 
 }
-?>

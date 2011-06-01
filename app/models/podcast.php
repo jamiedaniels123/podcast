@@ -656,5 +656,3 @@ class Podcast extends AppModel {
         return $conditions;
      }
 }
-?>
-

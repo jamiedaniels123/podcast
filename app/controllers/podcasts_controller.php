@@ -296,9 +296,11 @@ class PodcastsController extends AppController {
      */
     function rss() {
 
+        $podcasts = null;
+        
         if( $this->RequestHandler->isRss() ) {
 
-            $podcasts = $this->Podcast->find('all', array('limit' => 20, 'order' => 'Podcast.created DESC'));
+            $podcasts = $this->Podcast->find( 'all', array('limit' => 20, 'order' => 'Podcast.created DESC' ) );
             return $this->set( compact('podcasts') );
         }
     }
@@ -310,6 +312,7 @@ class PodcastsController extends AppController {
      * @by : Charles Jackson
      */
     function __update() {
+        
         // Try to upload the associated images. If successful the upload component will return the name of the uploaded file
         // else it will return false.
         $this->data['Podcast']['image'] = $this->Image->uploadPodcastImage( $this->data, 'image' );
@@ -341,8 +344,6 @@ class PodcastsController extends AppController {
             $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
         }
     }
-
-
 
     /*
      * ADMIN FUNCTIONALITY
@@ -571,4 +572,3 @@ class PodcastsController extends AppController {
         $this->redirect( $this->referer() );
     }
 }
-?>

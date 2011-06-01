@@ -35,8 +35,12 @@
 
         Router::parseExtensions('rss');
 
-Router::connect('/podcasts/rss', array('controller' => 'podcasts',
-                                     'action' => 'rss',
-                                     'url' => array('ext' => 'rss')
-                                ) );
+        Router::connect('/podcasts/rss', array(
+            'controller' => 'podcasts',
+            'action' => 'rss',
+            'url' => array(
+                'ext' => 'rss'
+                )
+            )
+        );
 

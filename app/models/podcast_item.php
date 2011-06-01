@@ -49,4 +49,3 @@ class PodcastItem extends AppModel {
         return $this->data;
     }
 }
-?>
