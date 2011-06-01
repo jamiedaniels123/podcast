@@ -32,7 +32,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary'
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id'
         )
     );
 

@@ -1,8 +1,8 @@
 <?php 
 $channelData = array(
-    'title' => 'Podcast',
-    'link' => 'http://www.example.com',
-    'description' => 'blah',
+    'title' => 'Podcasts',
+    'link' => 'http://podcasts.open.ac.uk',
+    'description' => 'This is an example RSS feed containing all podcasts on the application',
     'language' => 'en-uk'
 );
 

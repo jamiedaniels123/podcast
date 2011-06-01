@@ -126,7 +126,7 @@ class PodcastItemsController extends AppController {
     /*
      * @name : add
      * @description : Called by the filechucker script directly after a successful upload. It is used by both
-     * users and administrators and will create a row on the podcast items table using parameters passed an session information.
+     * users and administrators and will create a row on the podcast items table using parameters passed and session information.
      * @updated : 26th May 2011
      * @by : Charles Jackson
      */
@@ -140,26 +140,35 @@ class PodcastItemsController extends AppController {
             $this->data = $this->PodcastItem->createFromUrlVariables( $this->params['url'], $this->Session->read('Podcast.podcast_id') );
             $this->PodcastItem->set( $this->data );
 
+            $this->Podcast->begin();
+
             if( $this->PodcastItem->save() ) {
 
-                // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
-                // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
-                $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array( 'class' => 'success' ) );
+                $this->data = $this->PodcastItem->findById( $this->PodcastItem->getLastInsertId() );
+                
+                if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
-                // We need to redirect based on session information that is set within the index and admin_index methods.
-                if( $this->Session->read('Podcast.admin') ) {
+                    $this->Podcast->commit();
+                    
+                    // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
+                    // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
+                    $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array( 'class' => 'success' ) );
 
-                    $this->redirect( array('admin' => true, 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
+                    // We need to redirect based on session information that is set within the index and admin_index methods.
+                    if( $this->Session->read('Podcast.admin') ) {
 
-                } else {
+                        $this->redirect( array('admin' => true, 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
 
-                    $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
+                    } else {
+
+                        $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
+                    }
+                    exit();
                 }
-                exit();
-
             }
         }
 
+        $this->Podcast->rollback();
         $this->Session->setFlash('Could not upload your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
 
         // We need to redirect based on session information that is set within the index and admin_index methods.
@@ -172,8 +181,6 @@ class PodcastItemsController extends AppController {
             $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
         }
         exit();
-
-
     }
 
     /*

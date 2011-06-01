@@ -272,16 +272,23 @@ class PodcastsController extends AppController {
 
             $this->podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
+            $this->Podcast->begin();
+
             // Delete the podcast
             $this->podcast['Podcast']['deleted'] = true;
             $this->Podcast->set( $this->podcast );
-
             $this->Podcast->save();
 
-            // @TODO - Post to a URL that creates a HTACCESS file in the root folder of the associated media.
+            if( $this->Folder->deleteByHtaccess( $this->podcast ) ) {
+            
+                $this->Podcast->commit();
+                $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
-            $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+            } else {
 
+                $this->Podcast->rollback();
+                $this->Session->setFlash('We could not delete all associated media. Please alert an administrator.', 'default', array( 'class' => 'error' ) );
+            }
         }
         
         $this->redirect( $this->referer() );
