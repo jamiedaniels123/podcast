@@ -1,14 +1,12 @@
 <?php
-
-//$DOCROOT = $DOCUMENT_ROOT ? $DOCUMENT_ROOT : $_SERVER['DOCUMENT_ROOT'];
-$DOCROOT = WWW_ROOT;
+$DOCROOT = @$DOCUMENT_ROOT ? @$DOCUMENT_ROOT : $_SERVER['DOCUMENT_ROOT'];
 #
 # On Windows servers, you may need to set $DOCROOT manually.  Check the
 # PATH_TRANSLATED environment variable to see what the path should be.
 # You can run the  phpinfo()  function to see that variable's value.
 
 # Change only these first 2 lines, to match the path & name of your CGI script:
-$cgi_script_full  = "$DOCROOT/cgi-bin/filechucker.cgi";
+$cgi_script_full  = "$DOCROOT/webroot/cgi-bin/filechucker.cgi";
 $cgi_script_local = "/cgi-bin/filechucker.cgi";
 
 if(!(file_exists($cgi_script_full)))
