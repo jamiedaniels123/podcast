@@ -15,4 +15,13 @@ class Category extends AppModel {
             'unique' => true
         )
     );
+
+
+    var $hasOne = array(
+
+        'ParentCategory' => array(
+            'className' => 'Category',
+            'foreignKey' => 'parent_id'
+        )
+    );
 }

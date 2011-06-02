@@ -296,23 +296,6 @@ class PodcastsController extends AppController {
 
 
     /*
-     * @name : rss
-     * @description : Generate a very simple RSS feed.
-     * @updated : 26th May 2011
-     * @by : Charles Jackson
-     */
-    function rss() {
-
-        $podcasts = null;
-        
-        if( $this->RequestHandler->isRss() ) {
-
-            $podcasts = $this->Podcast->find( 'all', array('limit' => 20, 'order' => 'Podcast.created DESC' ) );
-            return $this->set( compact('podcasts') );
-        }
-    }
-
-    /*
      * @name : __updated
      * @description : Internal method called by the add and edit methods, both user and administrator.
      * @updated : 9th May 2011

@@ -75,3 +75,5 @@ DEFINE('PRIVATE_ITUNEU_PODCAST', 5 );
 DEFINE('DELETED_PODCAST', 6 );
 
 DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
+DEFINE('FEED_URL', 'http://podcast.open.ac.uk/feeds/');
+DEFINE('DEFAULT_AUTHOR', 'The Open University');
