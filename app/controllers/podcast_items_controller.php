@@ -92,10 +92,9 @@ class PodcastItemsController extends AppController {
 
             $this->data = $this->PodcastItem->unsetAttachments( $this->data );
 
-            // Upload the attachments here...
             $this->PodcastItem->set( $this->data );
 
-            if(  $this->PodcastItem->save()  ) {
+            if(  $this->PodcastItem->saveAll()  ) {
 
                 // Now copy back the original including array elements and
                 // save again with attachment elements.

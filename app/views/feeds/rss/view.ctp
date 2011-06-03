@@ -9,32 +9,32 @@ $documentData = array(
 );
 
 $channelData = array(
-    'title' => $podcast['Podcast']['title'],
+    'title' => $this->BespokeRss->clean( $this->data['Podcast']['title'] ),
     'link' => 'http://podcasts.open.ac.uk',
-    'description' => $podcast['Podcast']['summary'],
-    'copyright' => $podcast['Podcast']['copyright'],
+    'description' => $this->BespokeRss->clean( $this->data['Podcast']['summary'] ),
+    'copyright' => $this->data['Podcast']['copyright'],
     'language' => 'en-uk',
     'lastBuildDate' => date('r'),
     'generator' => 'OU Podcast System by KMi',
     'docs' => 'http://blogs.law.harvard.edu/tech/rss',
     'atom:link' => '?',
     'image' => array(
-        'url' => $podcast['Podcast']['custom_id'].'/'.$podcast['Podcast']['image'],
-        'title' => $podcast['Podcast']['title'],
-        'link' => $podcast['Podcast']['link']
+        'url' => $this->data['Params']['media_server'].FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.$this->data['Podcast']['image'],
+        'title' => $this->BespokeRss->clean( $this->data['Podcast']['title'] ),
+        'link' => $this->BespokeRss->clean( $this->data['Podcast']['link'] )
     ),
-    'media:title' => $podcast['Podcast']['title'],
-    'media:description' => $podcast['Podcast']['summary'],
-    'media:keywords' => $podcast['Podcast']['keywords'],
+    'media:title' => $this->BespokeRss->clean( $this->data['Podcast']['title'] ),
+    'media:description' => $this->BespokeRss->clean( $this->data['Podcast']['summary'] ),
+    'media:keywords' => $this->BespokeRss->clean( $this->data['Podcast']['keywords'] ),
     'media:thumbnail' => null,
-    'itunes:subtitle' => $podcast['Podcast']['summary'],
-    'itunes:summary' => $podcast['Podcast']['summary'],
-    'itunes:keywords' => $podcast['Podcast']['keywords'],
-    'itunes:author' => $podcast['Podcast']['author'],
-    'itunes:explicit' => $podcast['Podcast']['explicit'],
+    'itunes:subtitle' => $this->BespokeRss->clean( $this->data['Podcast']['summary'] ),
+    'itunes:summary' => $this->BespokeRss->clean( $this->data['Podcast']['summary'] ),
+    'itunes:keywords' => $this->BespokeRss->clean( $this->data['Podcast']['keywords'] ),
+    'itunes:author' => $this->BespokeRss->clean( $this->data['Podcast']['author'] ),
+    'itunes:explicit' => $this->BespokeRss->clean( $this->data['Podcast']['explicit'] ),
     'itunes:owner' => array(
-        'itunes:name' => $podcast['Podcast']['contact_name'],
-        'itunes:email' => $podcast['Podcast']['contact_email']
+        'itunes:name' => $this->BespokeRss->clean( $this->data['Podcast']['contact_name'] ),
+        'itunes:email' => $this->BespokeRss->clean( $this->data['Podcast']['contact_email'] )
     )
 );
 
@@ -44,7 +44,7 @@ $channelData = array(
 $this->set('documentData', $documentData );
 $this->set('channelData',$channelData);
 
-foreach( $podcast['PodcastItems'] as $podcast_item ) {
+foreach( $this->data['PodcastItems'] as $podcast_item ) {
     echo $rss->item(
         array(),
         array(
@@ -52,15 +52,15 @@ foreach( $podcast['PodcastItems'] as $podcast_item ) {
             'description' => $podcast_item['summary'],
             'media:title' => $podcast_item['title'],
             'media:description' => $podcast_item['summary'],
-            'media:keywords' => $podcast['Podcast']['keywords'],
-            'media:thumbnail' => $podcast['Podcast']['custom_id'].'/'.$podcast['Podcast']['image'],
+            'media:keywords' => $this->data['Podcast']['keywords'],
+            'media:thumbnail' => $this->data['Podcast']['custom_id'].'/'.$this->data['Podcast']['image'],
             'itunes:summary' => $podcast_item['summary'],
-            'itunes:keywords' => $podcast['Podcast']['keywords'],
-            'itunes:author' => $podcast['Podcast']['author'],
+            'itunes:keywords' => $this->data['Podcast']['keywords'],
+            'itunes:author' => $this->data['Podcast']['author'],
             'itunes:explicit' => $podcast_item['explicit'],
             'itunes:subtitle' => $podcast_item['summary'],
             'itunesu: category itunesu:code="?"',
-            'link' => $podcast['Podcast']['link'],
+            'link' => $this->data['Podcast']['link'],
             'guid' => 'lllllllllllllllllll',
             'pubDate' => $podcast_item['created']
         )

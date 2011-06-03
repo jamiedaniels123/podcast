@@ -5,7 +5,7 @@ class FeedsController extends AppController {
     var $name = 'Feeds';
 
     /*
-     * @name : itunes
+     * @name : view
      * @description : Generate a very simple RSS feed that is echoed out to screen and catpured by the calling routine
      * and written to a flat file.
      * @updated : 26th May 2011
@@ -16,7 +16,12 @@ class FeedsController extends AppController {
         $this->Podcast = ClassRegistry::init('Podcast');
         $this->Podcast->recursive = 2;
 
-        $this->data = $this->Podcast->findById( $id );
+        $this->data = $this->Podcast->findById( $id, array(
+            'conditions' => array(
+                'Podcast.rss_url IS NULL'
+                )
+            )
+        );
 
         if( empty( $this->data ) ) {
 
@@ -26,14 +31,13 @@ class FeedsController extends AppController {
 
         } else {
 
-            $this->Podcast->data = $this->data;
-
-            $this->Feed->buildParameterArray( $id, $media_type, $rss_filename, $itunes_complete, $interlace );
-            $this->Feed->sanitizeForRSS();
-
-            $this->data = $this->Feed->data;
+            $this->data = $this->Feed->buildParameterArray( $this->data, $id, $media_type, $rss_filename, $itunes_complete, $interlace );
             
-            return $this->set( compact('podcast') );
+            $this->data = $this->Feed->sanitizeForRSS( $this->data );
+
+            //$this->data = $this->Feed->data;
+            
+            //return $this->set( compact('podcast') );
        }
     }
 }

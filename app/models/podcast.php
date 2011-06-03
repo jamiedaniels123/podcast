@@ -1,6 +1,9 @@
 <?php
 class Podcast extends AppModel {
 
+    const AVAILABLE = 9;
+    const YES = 'Y';
+    
     var $name = 'Podcast';
     var $backup_table = 'podcasts_backup';
     
@@ -258,7 +261,7 @@ class Podcast extends AppModel {
 
         // get the value of the field being passed
         $private = array_shift( $check );
-        if( $private == 'Y' )
+        if( $private == self::YES )
             return true;
 
         $this->PodcastItem = ClassRegistry::init('PodcastItem');
@@ -266,6 +269,50 @@ class Podcast extends AppModel {
         return $this->PodcastItem->find( 'count', array('conditions' => array('PodcastItem.podcast_id' => $this->data['Podcast']['id'], 'PodcastItem.published_flag' => 1 ) ) );
     }
 
+    /*
+     * @name : beforeSave
+     * @description : Magic method automatically called after validation and before data is saved.
+     * At time of publication I am using it to check the "explicit" value by reading through all associated
+     * media.
+     * @updated : 3rd June 2011
+     * @by : Charles Jackson
+     */
+    function beforeSave() {
+
+        $this->data['Podcast']['explicit'] = $this->__checkExplicitStatus();
+        return true;
+    }
+
+    /*
+     * @name : __checkExplicitStatus
+     * @description : Called directly before model data is saved, it read through all associated media
+     * and looks at the value of explicit. Depending upon results will set the appropriate value at
+     * podcast level.
+     * @updated : 3rd June 2011
+     * @by : Charles Jackson
+     */
+    function __checkExplicitStatus() {
+
+        $this->PodcastItem = ClassRegistry::init('PodcastItem');
+        $data = $this->PodcastItem->find('all', array(
+            'conditions' => array(
+                'PodcastItem.published_flag' => self::YES,
+                'PodcastItem.podcast_id' => $this->data['Podcast']['id'],
+                'PodcastItem.processed_state' => self::AVAILABLE
+                ),
+            'fields' => array(
+                'PodcastItem.explicit'
+                )
+            )
+        );
+
+        if( in_array( 'yes', $data ) )
+            return 'yes';
+        if( in_array( 'no', $data ) )
+            return 'no';
+
+        return 'clean';
+    }
     
     /*
      * @name : beforeValidate

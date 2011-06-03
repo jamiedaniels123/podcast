@@ -33,14 +33,16 @@ class Feed extends AppModel {
      * @updated : 2nd June 2011
      * @by : Charles Jackson
      */
-    function buildParameterArray( $id, $media_type, $rss_filename, $itunes_complete, $interlace ) {
-
+    function buildParameterArray( $data, $id, $media_type, $rss_filename, $itunes_complete, $interlace ) {
+        
         // Capture the parameters passed so we may use them in view based helpers.
-        $this->data['Params']['id'] = $id;
-        $this->data['Params']['media_type'] = $media_type;
-        $this->data['Params']['rss_filename'] = $rss_filename;
-        $this->data['Params']['itunes_complete'] = $itunes_complete;
-        $this->data['Params']['interlace'] = $interlace;
+        $data['Params']['id'] = $id;
+        $data['Params']['media_type'] = $media_type;
+        $data['Params']['rss_filename'] = $rss_filename;
+        $data['Params']['itunes_complete'] = $itunes_complete;
+        $data['Params']['interlace'] = $interlace;
+
+        return $data;
     }
 
     /*
@@ -51,13 +53,15 @@ class Feed extends AppModel {
      * @updated : 2nd June 2011
      * @by : Charles Jackson
      */
-    function sanitizeForRSS() {
+    function sanitizeForRSS( $data ) {
 
-        $this->__defineMediaDefaults();
+        $data = $this->__defineMediaDefaults( $data );
         
         // If the podcast is intended for iTunes clean the appropriate data.
-        if( $this->data['Podcast']['intended_itunesu_flag'] == strtoupper('Y') )
-            $this->__cleanItunesRSS();
+        if( $data['Podcast']['intended_itunesu_flag'] == strtoupper('Y') )
+            $data = $this->__cleanItunesRSS( $data );
+
+        return $data;
     }
 
     /*
@@ -66,20 +70,22 @@ class Feed extends AppModel {
      * @updated : 3rd June 2011
      * @by : Charles Jackson
      */
-    function __defineMediaDefaults() {
+    function __defineMediaDefaults( $data ) {
 
-        if( empty( $this->data['Params']['media_type'] ) ) {
+        if( empty( $data['Params']['media_type'] ) ) {
 
-            $this->data['Params']['media_server'] = DEFAULT_MEDIA_URL;
-            $this->data['Params']['media_path'] = $this->data['Params']['media_path'].'/';
-            $this->data['Params']['title_suffix'] = null;
+            $data['Params']['media_server'] = DEFAULT_MEDIA_URL;
+            $data['Params']['media_path'] = $data['Params']['media_path'].'/';
+            $data['Params']['title_suffix'] = null;
             
         } else {
 
-            $this->data['Params']['media_server'] = DEFAULT_ITUNES_MEDIA_URL;
-            $this->data['Params']['media_path'] = null;
-            $this->data['Params']['title_suffix'] = isSet( $this->itunes_title_suffix[$this->data['Params']['media_type']] ) ? $this->itunes_title_suffix[$this->data['Params']['media_type']] : null;
+            $data['Params']['media_server'] = DEFAULT_ITUNES_MEDIA_URL;
+            $data['Params']['media_path'] = null;
+            $data['Params']['title_suffix'] = isSet( $this->itunes_title_suffix[$data['Params']['media_type']] ) ? $this->itunes_title_suffix[$data['Params']['media_type']] : null;
         }
+
+        return $data;
     }
     
     /*
@@ -89,20 +95,20 @@ class Feed extends AppModel {
      * @updated : 2nd June 2011
      * @by : Charles Jackson
      */
-    function __cleanItunesRSS() {
+    function __cleanItunesRSS( $data ) {
 
         // If the feed is for iTunes check we have an author else
         // set the default author text string as defined in the bootstrap.
-        if( empty( $this->data['Podcast']['author'] ) )
-            $this->data['Podcast']['author'] = DEFAULT_AUTHOR;
+        if( empty( $data['Podcast']['author'] ) )
+            $data['Podcast']['author'] = DEFAULT_AUTHOR;
 
         // Interlacing determines if media transcripts are included at the end of a podcast
         // listing or they are listed directly after there media equivalent. We NEVER
         // interlace a podcast listed as private
-        if( $this->data['Podcast']['itunesu_site'] == strtoupper('PRIVATE') )
-            $this->data['Params']['interlace'] = false;
+        if( $data['Podcast']['itunesu_site'] == strtoupper('PRIVATE') )
+            $data['Params']['interlace'] = false;
 
-
+        return $data;
 
     }
 }

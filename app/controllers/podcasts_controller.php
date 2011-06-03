@@ -2,6 +2,7 @@
 
 class PodcastsController extends AppController {
 
+    const YES = 'Y';
     var $name = 'Podcasts';
     var $components = array( 'Image' );
     private $errors = array();
@@ -106,7 +107,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = 'Y';
+            $this->data['Podcast']['private'] = self::YES;
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
@@ -363,8 +364,6 @@ class PodcastsController extends AppController {
             $this->data['Podcast']['filter'] = null;
             $this->data['Podcasts'] = $this->paginate('Podcast');
         }
-
-        
     }
 
 
@@ -386,7 +385,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = 'Y';
+            $this->data['Podcast']['private'] = self::YES;
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
