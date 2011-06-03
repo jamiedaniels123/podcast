@@ -11,24 +11,28 @@ class FeedsController extends AppController {
      * @updated : 26th May 2011
      * @by : Charles Jackson
      */
-    function itunes( $id = null, $media_type = null, $reverse_order = null, $rss_filename, $itunes_complete = false, $interlace = true ) {
+    function view( $id = null, $media_type = null, $rss_filename = DEFAULT_RSS_FILENAME, $itunes_complete = false, $interlace = true ) {
 
-        $podcasts = null;
+        $this->Podcast = ClassRegistry::init('Podcast');
+        $this->Podcast->recursive = 2;
 
-       if( (int)$id == false || empty($media_type ) ) {
+        $this->data = $this->Podcast->findById( $id );
+
+        if( empty( $this->data ) ) {
 
             $this->Session->setFlash('We could not build the RSS you were looking for.', 'default', array( 'class' => 'error' ) );
             $this->redirect( array( 'controller' => 'users', 'action' => 'dashboard' ) );
+            exit();
 
-        } elseif( $this->RequestHandler->isRss() ) {
+        } else {
 
-            $this->Podcast = ClassRegistry::init('Podcast');
-            $this->Podcast->recursive = 2;
-            $podcast = $this->Podcast->findById( $id );
+            $this->Podcast->data = $this->data;
 
-            $podcast = $this->Feed->sanitizeForRSS( $podcast );
+            $this->Feed->buildParameterArray( $id, $media_type, $rss_filename, $itunes_complete, $interlace );
+            $this->Feed->sanitizeForRSS();
+
+            $this->data = $this->Feed->data;
             
-            $this->set('media_type', $media_type );
             return $this->set( compact('podcast') );
        }
     }

@@ -28,7 +28,7 @@ class Podcast extends AppModel {
                 'message' => 'Please provide a valid web address for the feed.'
             )
         ),
-        'owner_email' => array(
+        'contact_email' => array(
             'Rule1' => array(
                 'rule' => array( 'email', true),
                 'allowEmpty' => true,

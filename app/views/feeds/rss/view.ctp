@@ -33,8 +33,8 @@ $channelData = array(
     'itunes:author' => $podcast['Podcast']['author'],
     'itunes:explicit' => $podcast['Podcast']['explicit'],
     'itunes:owner' => array(
-        'itunes:name' => $podcast['Podcast']['owner_name'],
-        'itunes:email' => $podcast['Podcast']['owner_email']
+        'itunes:name' => $podcast['Podcast']['contact_name'],
+        'itunes:email' => $podcast['Podcast']['contact_email']
     )
 );
 
