@@ -2,6 +2,7 @@
 
 class PodcastsController extends AppController {
 
+    const YES = 'Y';
     var $name = 'Podcasts';
     var $components = array( 'Image' );
     private $errors = array();
@@ -106,7 +107,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = 'Y';
+            $this->data['Podcast']['private'] = self::YES;
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 
@@ -296,23 +297,6 @@ class PodcastsController extends AppController {
 
 
     /*
-     * @name : rss
-     * @description : Generate a very simple RSS feed.
-     * @updated : 26th May 2011
-     * @by : Charles Jackson
-     */
-    function rss() {
-
-        $podcasts = null;
-        
-        if( $this->RequestHandler->isRss() ) {
-
-            $podcasts = $this->Podcast->find( 'all', array('limit' => 20, 'order' => 'Podcast.created DESC' ) );
-            return $this->set( compact('podcasts') );
-        }
-    }
-
-    /*
      * @name : __updated
      * @description : Internal method called by the add and edit methods, both user and administrator.
      * @updated : 9th May 2011
@@ -380,8 +364,6 @@ class PodcastsController extends AppController {
             $this->data['Podcast']['filter'] = null;
             $this->data['Podcasts'] = $this->paginate('Podcast');
         }
-
-        
     }
 
 
@@ -403,7 +385,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = 'Y';
+            $this->data['Podcast']['private'] = self::YES;
 
             $this->data = $this->Podcast->unsetAttachments( $this->data );
 

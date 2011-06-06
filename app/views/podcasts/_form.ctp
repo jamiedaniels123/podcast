@@ -82,14 +82,14 @@
             <?php echo $this->Form->error('Podcast.keywords'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastOwnerName">Owner Name (RDD Feed)</label>
-            <input type="text" id="PodcastOwnerName" value="<?php echo $this->data['Podcast']['owner_name']; ?>" name="data[Podcast][owner_name]">
-            <?php echo $this->Form->error('Podcast.owner_name'); ?>
+            <label for="PodcastContactName">Contact Name (RDD Feed)</label>
+            <input type="text" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">
+            <?php echo $this->Form->error('Podcast.contact_name'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastOwnerEmail">Owner Email (RSS Feed)</label>
-            <input type="text" id="PodcastOwnerEmail" value="<?php echo $this->data['Podcast']['owner_email']; ?>" name="data[Podcast][owner_email]">
-            <?php echo $this->Form->error('Podcast.owner_email'); ?>
+            <label for="PodcastContactEmail">Contact Email (RSS Feed)</label>
+            <input type="text" id="PodcastContactEmail" value="<?php echo $this->data['Podcast']['contact_email']; ?>" name="data[Podcast][contact_email]">
+            <?php echo $this->Form->error('Podcast.contact_email'); ?>
         </div>
         <div class="clear"></div>
 
