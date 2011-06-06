@@ -56,7 +56,7 @@ class Feed extends AppModel {
     function sanitizeForRSS( $data ) {
 
         $data = $this->__defineMediaDefaults( $data );
-        
+        $data = $this->__buildCategories( $data );
         // If the podcast is intended for iTunes clean the appropriate data.
         if( $data['Podcast']['intended_itunesu_flag'] == strtoupper('Y') )
             $data = $this->__cleanItunesRSS( $data );
@@ -86,6 +86,18 @@ class Feed extends AppModel {
         }
 
         return $data;
+    }
+
+    /*
+     * @name : __buildCategories
+     * @description :
+     * @updated : 6th June 2011
+     * @by : Charles Jackson
+     */
+    function __buildCategories( $data ) {
+
+
+
     }
     
     /*

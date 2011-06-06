@@ -18,11 +18,14 @@ class FeedsController extends AppController {
 
         $this->data = $this->Podcast->findById( $id, array(
             'conditions' => array(
-                'Podcast.rss_url IS NULL'
+
                 )
             )
         );
-
+        echo "<pre>";
+            print_r( $this->data );
+        echo "</pre>";
+        die('end');
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash('We could not build the RSS you were looking for.', 'default', array( 'class' => 'error' ) );

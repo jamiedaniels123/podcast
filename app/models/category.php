@@ -17,7 +17,7 @@ class Category extends AppModel {
     );
 
 
-    var $hasOne = array(
+    var $belongsTo = array(
 
         'ParentCategory' => array(
             'className' => 'Category',
