@@ -36,6 +36,24 @@ class PodcastItem extends AppModel {
         )
     );
 
+    var $hasOne = array(
+
+        'Transcript' => array(
+            'className' => 'PodcastItemMedia',
+            'foreignKey' => 'podcast_item',
+            'conditions' => 'Transcript.media_type = "transcript"'
+        )
+    );
+
+    var $hasMany = array(
+
+        'PodcastMedia' => array(
+            'className' => 'PodcastItemMedia',
+            'foreignKey' => 'podcast_item',
+            'conditions' => 'PodcastMedia.media_type != "transcript"'
+        )
+    );
+
     /*
      * @name : createFromUrlVariables
      * @description : Called from the ADD method directly after a successful filechucker upload

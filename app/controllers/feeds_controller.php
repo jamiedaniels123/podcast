@@ -11,7 +11,7 @@ class FeedsController extends AppController {
      * @updated : 26th May 2011
      * @by : Charles Jackson
      */
-    function view( $id = null, $media_type = null, $rss_filename = DEFAULT_RSS_FILENAME, $itunes_complete = false, $interlace = true ) {
+    function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true ) {
 
         $this->Podcast = ClassRegistry::init('Podcast');
         $this->Podcast->recursive = 2;
@@ -22,10 +22,7 @@ class FeedsController extends AppController {
                 )
             )
         );
-        echo "<pre>";
-            print_r( $this->data );
-        echo "</pre>";
-        die('end');
+
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash('We could not build the RSS you were looking for.', 'default', array( 'class' => 'error' ) );
@@ -34,13 +31,18 @@ class FeedsController extends AppController {
 
         } else {
 
-            $this->data = $this->Feed->buildParameterArray( $this->data, $id, $media_type, $rss_filename, $itunes_complete, $interlace );
-            
-            $this->data = $this->Feed->sanitizeForRSS( $this->data );
+            if( $this->RequestHandler->isRss() ) {
+                
+                $this->Feed->captureParameters( $this->data, $id, $media_type, $rss_filename, $itunes_complete, $interlace );
+                $this->Feed->defineDataDefaults();
+                
+                $this->set( 'documentData', $this->Feed->getDocumentData() );
+                $this->set( 'channelData', $this->Feed->getChannelData() );
 
-            //$this->data = $this->Feed->data;
-            
-            //return $this->set( compact('podcast') );
-       }
+                
+                $this->set('podcast_items', $this->Feed->buildItemData() );
+
+            }
+        }
     }
 }

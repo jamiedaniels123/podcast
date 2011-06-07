@@ -6,7 +6,7 @@ class AppController extends Controller {
 
     var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder' );
 
-    var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'BespokeRss' );
+    var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object' );
 
     function beforeFilter() {
 
