@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!c:\perl\bin\perl.exe
 # 
 # filechucker.cgi
 #
