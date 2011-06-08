@@ -178,7 +178,7 @@ class Podcast extends AppModel {
         ),
         'Nodes' => array(
             'className' => 'Node',
-            'joinTable' => 'podcasts_Nodes',
+            'joinTable' => 'podcast_links',
             'foreignKey' => 'podcast_id',
             'associationForeignKey' => 'node_id',
             'order' => 'Nodes.title ASC',
