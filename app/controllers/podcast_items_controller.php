@@ -153,7 +153,7 @@ class PodcastItemsController extends AppController {
                     
                     // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
                     // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
-                    $this->Session->setFlash('Your podcast media has been successfully uploaded.', 'default', array( 'class' => 'success' ) );
+                    $this->Session->setFlash('Your podcast media has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
 
                     // We need to redirect based on session information that is set within the index and admin_index methods.
                     if( $this->Session->read('Podcast.admin') ) {
