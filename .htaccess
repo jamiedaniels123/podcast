@@ -3,4 +3,4 @@
    RewriteRule    ^$ app/webroot/    [L]
    RewriteRule    (.*) app/webroot/$1 [L]
 </IfModule>
-SetEnv HTTP_SAMS_USER 'jdd7'
+SetEnv HTTP_SAMS_USER 'cj3998'
