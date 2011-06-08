@@ -8,7 +8,7 @@ class Node extends AppModel {
 
         'Podcasts' => array(
             'className' => 'Podcast',
-            'joinTable' => 'podcasts_nodes',
+            'joinTable' => 'podcasts_links',
             'foreignKey' => 'node_id',
             'associationForeignKey' => 'podcast_id',
             'unique' => true
