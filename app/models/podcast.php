@@ -270,6 +270,7 @@ class Podcast extends AppModel {
 
         // get the value of the field being passed
         $private = array_shift( $check );
+
         if( $private == self::YES )
             return true;
 

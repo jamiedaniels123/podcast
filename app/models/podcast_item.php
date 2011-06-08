@@ -32,7 +32,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id'
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id'
         )
     );
 
@@ -64,6 +64,7 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['filename'] = $url['f1name'];
+        $this->data['PodcastItem']['published_flag'] = true;
         return $this->data;
     }
 }

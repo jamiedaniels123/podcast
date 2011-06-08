@@ -94,14 +94,16 @@ class PodcastItemsController extends AppController {
 
             $this->PodcastItem->set( $this->data );
 
-            if(  $this->PodcastItem->saveAll()  ) {
+            if(  $this->PodcastItem->save()  ) {
 
                 // Now copy back the original including array elements and
                 // save again with attachment elements.
                 $this->data = $data;
 
                 $this->__update();
-                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['Podcast']['id'] ) );
+
+
+                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
 
             } else {
 
@@ -139,7 +141,7 @@ class PodcastItemsController extends AppController {
             $this->data = $this->PodcastItem->createFromUrlVariables( $this->params['url'], $this->Session->read('Podcast.podcast_id') );
             $this->PodcastItem->set( $this->data );
 
-            $this->Podcast->begin();
+            $this->PodcastItem->begin();
 
             if( $this->PodcastItem->save() ) {
 
@@ -147,7 +149,7 @@ class PodcastItemsController extends AppController {
                 
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
-                    $this->Podcast->commit();
+                    $this->PodcastItem->commit();
                     
                     // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
                     // in the original URL else we will recreate a row on the database table if/everytime the user hits 'refresh'.
@@ -167,7 +169,7 @@ class PodcastItemsController extends AppController {
             }
         }
 
-        $this->Podcast->rollback();
+        $this->PodcastItem->rollback();
         $this->Session->setFlash('Could not upload your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
 
         // We need to redirect based on session information that is set within the index and admin_index methods.
