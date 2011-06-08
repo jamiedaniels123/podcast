@@ -79,6 +79,10 @@ DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
 DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
 DEFINE('FEEDS_FOLDER', 'feeds/');
 DEFINE('DEFAULT_AUTHOR', 'The Open University');
-DEFINE('DEFAULT_RSS_FILENAME','rss2.xml');
+DEFINE('DEFAULT_RSS2_FILENAME','rss2.xml');
 
+DEFINE('TRANSCRIPT', 'TRANSCRIPT');
+DEFINE('YOUTUBE', 'YOUTUBE');
+DEFINE('YES', 'Y');
+DEFINE('NO', 'N');
 

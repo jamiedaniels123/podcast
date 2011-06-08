@@ -146,7 +146,16 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.created_when'
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.created_when',
+            'order' => 'PodcastItems.publication_date DESC'
+        ),
+        'PublishedPodcastItems' => array(
+            'className' => 'PodcastItem',
+            'foreignKey' => 'podcast_id',
+            'fields' => 'PublishedPodcastItems.id, PublishedPodcastItems.podcast_id, PublishedPodcastItems.title, PublishedPodcastItems.summary, PublishedPodcastItems.filename,
+                PublishedPodcastItems.published_flag, PublishedPodcastItems.itunes_flag, PublishedPodcastItems.youtube_flag, PublishedPodcastItems.created, PublishedPodcastItems.created_when,
+                PublishedPodcastItems.author, PublishedPodcastItems.image_filename, PublishedPodcastItems.publication_date',
+            'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
         ),
         'PodcastModerators' => array(
             'className' => 'UserPodcasts',
