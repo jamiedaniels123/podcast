@@ -155,4 +155,20 @@ class AppModel extends Model {
 
         return $thumbnail_filename;
     }
+
+    /*
+     * @name : mediaFileExist
+     * @description : Checks to see if a remote  file exists
+     * @updated : 9th June 2011
+     * @by : Charles Jackson
+     */
+    function mediaFileExist( $url ) {
+
+        $header_response = get_headers($url, 1);
+        
+        if ( strpos( $header_response[0], "404" ) !== false )
+            return false;
+
+        return true;
+    }
 }

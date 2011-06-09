@@ -30,18 +30,21 @@ class FeedsController extends AppController {
             exit();
 
         } else {
-
-            if( $this->RequestHandler->isRss() ) {
                 
-                $this->Feed->captureParameters( $this->data, $id, $media_type, $rss_filename, $itunes_complete, $interlace );
-                $this->Feed->defineDataDefaults();
-                
-                $this->set( 'documentData', $this->Feed->getDocumentData() );
-                $this->set( 'channelData', $this->Feed->getChannelData() );
+            $this->Feed->captureParameters( $this->data, $id, $media_type, $rss_filename, $itunes_complete, $interlace );
+            $this->Feed->defineDataDefaults();
+            $this->Feed->buildItemData();
 
-                
-                $this->set('podcast_items', $this->Feed->buildItemData() );
+            $this->set( 'documentData', $this->Feed->getDocumentData() );
+            $this->set( 'channelData', $this->Feed->getChannelData() );
+            $this->set( 'podcast_items', $this->Feed->getPodcastItems() );
 
+            if( $this->RequestHandler->isRss() == false ) {
+
+                echo "<pre>";
+                    print_r( $this->Feed->getPodcastItems() );
+                echo "</pre>";
+                die('podcast items!');
             }
         }
     }

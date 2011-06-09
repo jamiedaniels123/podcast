@@ -27,7 +27,7 @@ class FolderComponent extends Object {
         if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
 
             unlink( FILE_REPOSITORY.$data['PodcastItem']['filename'] );
-            $this->Api->Transcode( $data );
+            //$this->Api->Transcode( $data );
             return true;
         }
 

@@ -1554,7 +1554,7 @@ $PREF{popup_status_window_javascript_code}		= qq`window.open(document.getElement
 # based upload progress bar for Safari users, because otherwise the progress
 # bar won't work in that browser.
 #
-$PREF{use_iframe_for_upload}				= 'no';
+$PREF{use_iframe_for_upload}				= 'yes';
 
 
 
