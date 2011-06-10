@@ -1,0 +1,87 @@
+/*
+2010.11.22 gdc53
+*/
+
+/* @begin general styles */
+body {margin:0 1%; background-color:#EBF4FB; background-image:url(http://www.open.ac.uk/includes/headers-footers/body-bg.png); background-repeat:repeat-x;}
+body.ou-blend {background-image:none; background-color:#fff;}
+body.ou-blend div#ou-org-footer div.ou-grid {background-image:url(http://www.open.ac.uk/includes/headers-footers/org-footer-bg.png); width:100%; height:auto; overflow:hidden; background-position:top right; background-repeat:no-repeat; min-height:200px;}
+body.ou-blend div#ou-org-footer  {background-image:url(http://www.open.ac.uk/includes/headers-footers/pageSquareShade3.gif); background-repeat:no-repeat; background-position:top center; padding-top:3em;}
+body.ou-bound {margin:0 6%;}
+body.ou-bound div#ou-org {max-width:72em; margin:0 auto;}
+div#ou-org-header, div#ou-org-footer {font-family: Tahoma,"Lucida Grande", Arial, Helvetica, sans-serif; color:#333; line-height:1.5em;font-size:small;}
+.ou-hide, div.ou-role-nav li.ou-hide {display: none;}
+a img {border:none;}
+div#ou-org-header, div#ou-org-footer {width:100%; height:auto; margin:0; padding:0; clear:both; overflow:hidden;}
+
+/* @end general styles */
+
+/* @begin org-header */
+
+div#ou-org-header {position:relative; min-height:90px;}
+a.ou-link-ou {position:absolute; top:1em; left:0; width:83px; height:56px; z-index:0;}
+a.ou-link-ou img {display:block; width:83px; height:56px;}
+
+div.ou-role-nav, div.ou-ia-nav {float:right; text-align:right; padding:0.9em 0.5em; margin-left:100px;}
+div.ou-role-nav ul, div.ou-role-nav form, div.ou-ia-nav ul {margin:0; padding:0; display:inline-block;}
+div.ou-role-nav li, div.ou-ia-nav li {margin:0; padding:0; list-style-type:none; display:inline;}
+
+div.ou-role-nav li.ou-hide, li#ou-person, li#ou-signout, li#ou-studenthome, li#ou-tutorhome, li#ou-intranet, li#ou-sponsor {display:none;}
+div.ou-role-nav {border:1px solid #ccc; border-top:none; background:url(http://www.open.ac.uk/includes/headers-footers/boxShade3.gif) repeat-x scroll center bottom #fff; font:0.85em Arial,Helvetica,sans-serif; padding-left:1em; -webkit-border-top-left-radius: 0px; -webkit-border-top-right-radius: 0px; -webkit-border-bottom-right-radius: 5px; -webkit-border-bottom-left-radius: 5px; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 5px; -moz-border-radius-bottomleft: 5px; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; -moz-box-shadow:0 3px 3px #eee; -webkit-box-shadow:0 3px 3px #eee; box-shadow:0 3px 3px #eee;}
+div.ou-role-nav a { text-decoration:none; color:#666; display:inline-block; margin-right:0.5em; padding-right:0.7em;}
+div.ou-role-nav li.ou-i10 a {border-right:none;}
+div.ou-role-nav a:hover {color:#000;}
+div.ou-role-nav input.text{width:8em;}
+div.ou-ia-nav, div.nav {clear:both; font-weight:bold; font-family:Arial, Helvetica, sans-serif; margin-top:0.5em; font-size:90%; width:70%;}
+div.ou-ia-nav li{padding: 0 0.2em;}
+div.ou-ia-nav li:last-child{margin-right:0; padding-right:0;}
+div.ou-ia-nav a{text-decoration:none; color:#333; display:inline-block; padding:0 0.5em; margin:0; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;}
+div.ou-ia-nav a:hover { background-color:#CFE4EE;}
+body.ou-neutral div.ou-ia-nav a:hover {background-color:#eee;}
+/*body.ou-ia-home div.ou-ia-nav li.ou-ia-home a,*/ body.ou-ia-study div.ou-ia-nav li.ou-ia-study a, body.ou-ia-research div.ou-ia-nav li.ou-ia-research a, body.ou-ia-community div.ou-ia-nav li.ou-ia-community a, body.ou-ia-about div.ou-ia-nav li.ou-ia-about a, body.ou-ia-learning div.ou-ia-nav li.ou-ia-learning a, body.ou-i7 div.ou-ia-nav li.ou-i7 a, body.ou-i8 div.ou-ia-nav li.ou-i8 a, div.ou-ia-nav a.ou-selected, div.ou-ia-nav li.ou-selected a {background-color:#296e8f; color:#fff;}
+body.ou-ia-home li.ou-ia-home, body.ou-ia-study li.ou-ia-study, body.ou-ia-study li.ou-ia-home, body.ou-ia-research li.ou-ia-research, body.ou-ia-research li.ou-ia-study, body.ou-ia-community li.ou-ia-community, body.ou-ia-community li.ou-ia-research, body.ou-ia-about li.ou-ia-about, body.ou-ia-about li.ou-ia-community {border-right-color:#fff;}
+body.ou-neutral.ou-ia-about div.ou-ia-nav li.ou-ia-about a {background-color:#333;}
+div#ou-org-header .ou-last {margin-right:0; padding-right:0; border-right:none;}
+li.ou-role-accessibility a {border-right:1px solid #ddd; padding-right:1em;}
+li.ou-role-contact a, li.ou-role-search a {border-left:1px solid #ddd; padding-left:1em;}
+li.ou-role-person {color:#000;}
+
+a.ou-skip {display:block; width:1px; height:1px; overflow:hidden; text-indent:-5000em;}
+a.ou-skip:focus, a.ou-skip:active {width:auto; height:auto; display:inline-block; text-indent:0; position:absolute; top:1em; left:1em; z-index:1; background-color:#fff; padding:1em; margin:0; background-color:#eee; border:2px solid #000; color:#000; text-decoration:none;}
+/* @end org-header */
+
+/* @begin org-footer */
+div#ou-org-footer .ou-c1of4, div#ou-org-footer .ou-c2of4, div#ou-org-footer .ou-c3of4, div#ou-org-footer .ou-c4of4 {float:left; margin:0 0 0 0; padding:0;}
+
+div#ou-org-footer div.ou-c1of4 ul, div#ou-org-footer div.ou-c2of4 ul, div#ou-org-footer div.ou-c3of4 {min-height:130px;}
+
+div#ou-org-footer {background-image:url(http://www.open.ac.uk/includes/headers-footers/org-footer-bg.png); background-position:top right; background-repeat:no-repeat; margin-top:2em; min-height:187px; min-height:200px; color:#333; padding-bottom:2em; color:#464646; float:left;}
+div#ou-org-footer a {text-decoration:none; color:#1F536B;}
+body.ou-blend div#ou-org-footer a {background-color:transparent;}
+div#ou-org-footer a:hover {color:#000; background-color:#EBF4FB;}
+#ou-org-footer ul {margin:0 0 0 0; padding:0 1.5em 0; background-image:url(http://www.open.ac.uk/includes/headers-footers/footerCol.png); background-position:top right; background-repeat:no-repeat;}
+#ou-org-footer li {margin:0; padding:0; list-style-type:none;}
+#ou-org-footer .ou-c1of4 {width:30%;}
+#ou-org-footer .ou-c2of4, #ou-org-footer .ou-c3of4 {width:20%;}
+#ou-org-footer .ou-c3of4 ul {background-image:none;}
+#ou-org-footer .ou-c4of4 {width:100%; clear:both;}
+li#ou-org-title {font-size:1.6em; line-height:150%; font-family:"Myriad Pro", Calibri, Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;}
+
+div#ou-org-footer div.ou-c3of4 li {display:none;}
+
+body.ou-ia-home div#ou-org-footer div.ou-c3of4 li.ou-ia-home,
+body.ou-ia-study div#ou-org-footer div.ou-c3of4 li.ou-ia-study,
+body.ou-ia-research div#ou-org-footer div.ou-c3of4 li.ou-ia-research,
+body.ou-ia-community div#ou-org-footer div.ou-c3of4 li.ou-ia-community,
+body.ou-ia-about div#ou-org-footer div.ou-c3of4 li.ou-ia-about,
+body.ou-ia-learning div#ou-org-footer div.ou-c3of4 li.ou-ia-learning {display:block;}
+
+#ou-org-footer li.ou-title {font-size:1.8em; font-family:'Myriad Pro', Calibri, Candara, Tahoma, 'Lucida Sans Unicode', Arial, Helvetica, sans-serif; margin-bottom:0.2em;}
+#ou-org-footer div.ou-c1of4 li.ou-copyright {font-size:smaller; color:#666;}
+#ou-org-footer li.ou-phone {font-size:1.2em; margin-top:1em;}
+#ou-org-footer li.ou-email {margin-top:0.2em;}
+
+div.ou-charter {display:none; width:50%; height:auto; float:left; clear:both; margin-left:1.5em; font-size:smaller;}
+body.ou-ia-home div.ou-charter {display:block;}
+
+/* @end org-header */
