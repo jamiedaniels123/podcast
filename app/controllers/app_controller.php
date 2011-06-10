@@ -19,6 +19,9 @@ class AppController extends Controller {
         }
     }
 
+    function getExtension( $filename = null ) {
 
+        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
+    }
 
 }

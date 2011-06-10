@@ -58,7 +58,13 @@ DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
 
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
-    if( isSet( $_SERVER['REDIRECT_HTTP_SAMS_USER'] ) ) {
+    if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
+
+        DEFINE('SAMS_EMAIL', $_SERVER['LOCAL_SAMS_USER'].'@open.ac.uk' );
+        DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
+        DEFINE('SAMS_NAME', 'Charles Jackson' );
+
+    } elseif( isSet( $_SERVER['REDIRECT_HTTP_SAMS_USER'] ) ) {
 
         DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
@@ -69,12 +75,6 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
         DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
-
-    } else {
-
-        DEFINE('SAMS_EMAIL', $_SERVER['LOCAL_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
-        DEFINE('SAMS_NAME', 'Charles Jackson' );
     }
 }
 

@@ -135,15 +135,15 @@ class AppModel extends Model {
         return ( $ext = 'pdf' );
     }
 
-    function getImageExtension( $image_filename = null ) {
+    function getExtension( $filename = null ) {
 
-        return substr( $image_filename, ( strpos( $image_filename, '.' ) + 1 ), strlen( $image_filename ) );
+        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
     function getStandardImageName( $image_filename = null ) {
 
         $standard_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
-        $standard_filename += '_std.'.$this->getImageExtension( $image_filename );
+        $standard_filename += '_std.'.$this->getExtension( $image_filename );
 
         return $standard_filename;
     }
@@ -151,7 +151,7 @@ class AppModel extends Model {
     function getThumbnailImageName( $image_filename = null ) {
 
         $thumbnail_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
-        $thumbnail_filename += '_thm.'.$this->getImageExtension( $image_filename );
+        $thumbnail_filename += '_thm.'.$this->getExtension( $image_filename );
 
         return $thumbnail_filename;
     }

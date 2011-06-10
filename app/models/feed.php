@@ -30,6 +30,7 @@ class Feed extends AppModel {
         'audio-m4a' => 'audio/', // iTunes U - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
         'audio-m4b' => 'audio/', // iTunes U - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
         'desktop' => 'desktop/', // iTunes U - desktop quality (640 wide) video only
+        'desktop-all' => 'desktop-all/',
         'hd' => 'hd/', // iTunes U - real HD video only
         'iphone' => 'iphone/', // iTunes U - iPhone (wifi) video only (H264 baseline encoded)
         'iphonecellular' => 'iphone/', // iTunes U - iPhone 3gp (Edge) video only (H264 encoding)
@@ -137,8 +138,8 @@ class Feed extends AppModel {
 
         $channelData = array(
             'title' => $this->data['Podcast']['title'],
-            'link' => parent::clean($this->data['Podcast']['link']),
-            'description' => parent::clean($this->data['Podcast']['summary']),
+            'link' => $this->data['Podcast']['link'],
+            'description' => $this->data['Podcast']['summary'],
             'copyright' => $this->data['Podcast']['copyright'],
             'language' => 'en-uk',
             'lastBuildDate' => str_replace('  ', ' ', date('r')),
@@ -158,9 +159,11 @@ class Feed extends AppModel {
         $channelData['media:title'] = parent::clean($this->data['Podcast']['title']);
         $channelData['media:description'] = parent::clean($this->data['Podcast']['summary']);
         $channelData['media:keywords'] = parent::clean($this->data['Podcast']['keywords']);
+
         if (!empty($this->podcast_image))
             $channelData['media:thumbnail url="' . parent::cleanAttribute($this->media_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_image . '"'] = null;
         // END - Yahoo specific elements
+
         // BEGIN - iTunes specific elements
         $channelData['itunes:subtitle'] = parent::clean($this->data['Podcast']['summary']);
         $channelData['itunes:summary'] = parent::clean($this->data['Podcast']['summary']);
@@ -235,7 +238,7 @@ class Feed extends AppModel {
             $this->podcast_image = $this->data['Podcast']['image'];
             $this->podcast_standard_image = parent::getStandardImageName($this->data['Podcast']['image']);
             $this->podcast_thumbnail_image = parent::getThumbnailImageName($this->data['Podcast']['image']);
-            $this->podcast_image_extension = parent::getImageExtension($this->data['Podcast']['image']);
+            $this->podcast_image_extension = parent::getExtension($this->data['Podcast']['image']);
         }
 
 
@@ -261,75 +264,80 @@ class Feed extends AppModel {
      * @by : Charles Jackson
      */
 
-    function buildItemData() {
+    function buildItemData( $podcast_item ) {
 
-        foreach ($this->data['PublishedPodcastItems'] as $podcast_item) {
-            
-            $this->podcast_item = $podcast_item;
-            
-            $item = array();
+        $this->podcast_item = $podcast_item;
 
-            if (( strtoupper($this->media_type) == YOUTUBE && strtoupper($this->podcast_item['youtube_flag'] == YES) )
-                    || ( strtoupper($this->media_type) != YOUTUBE )) {
+        $item = array();
 
-                // We only want to include this item if there are a flavour of media to match the users request.
-                if ($this->__setPodcastMedia() == false )
-                    continue;
+        if (( strtoupper($this->media_type) == YOUTUBE && strtoupper($this->podcast_item['youtube_flag'] == YES) )
+                || ( strtoupper($this->media_type) != YOUTUBE )) {
 
-                $this->__setPodcastItemDefaults();
+            // We only want to include this item if there are a flavour of media to match the users request.
+            if ($this->__setPodcastMedia() == false )
+                return false;
 
-                // We only want to include this media if a copy exists on the media box. Break out of the loop and
-                // start again if the media does not exist.
-                if( parent::mediaFileExist( $this->podcast_item_media_file_path.$this->podcast_item_media_file ) == false )
-                    continue;
+            $this->__setPodcastItemDefaults();
 
-                $item['title'] = parent::clean($this->podcast_item['title']);
-                $item['description'] = parent::clean($this->podcast_item['summary']);
+            // We only want to include this media if a copy exists on the media box. Break out of the loop and
+            // start again if the media does not exist.
+            if( parent::mediaFileExist( $this->podcast_item_media_file_path.$this->podcast_item_media_file ) == false )
+                return false;
 
-                // Yahoo specific
-                $item['media:title'] = parent::clean($this->podcast_item['title']);
-                $item['media:description'] = parent::clean($this->podcast_item['summary']);
-                $item['media:keywords'] = parent::clean($this->data['Podcast']['keywords']);
+            $item['title'] = parent::clean($this->podcast_item['title']);
+            $item['description'] = parent::clean($this->podcast_item['summary']);
 
-                if (parent::isPdf( $this->podcast_item['filename'] ) ) {
+            // Yahoo specific
+            $item['media:title'] = parent::clean($this->podcast_item['title']);
+            $item['media:description'] = parent::clean($this->podcast_item['summary']);
+            $item['media:keywords'] = parent::clean($this->data['Podcast']['keywords']);
 
-                    $item['media:thumbnail url="' . parent::cleanAttribute(DEFAULT_MEDIA_URL) . 'images/pdf-icon.png" width="400" height="294"'] = null;
+            if (parent::isPdf( $this->podcast_item['filename'] ) ) {
 
-                } elseif (!empty( $this->podcast_item['image_filename'])) {
+                $item['media:thumbnail url="' . parent::cleanAttribute(DEFAULT_MEDIA_URL) . 'images/pdf-icon.png" width="400" height="294"'] = null;
 
-                    $item['media:thumbnail url="' . parent::cleanAttribute($this->media_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . parent::getStandardImageName( $this->podcast_item['image_filename'] ) . '"'] = null;
+            } elseif (!empty( $this->podcast_item['image_filename'])) {
 
-                } else {
+                $item['media:thumbnail url="' . parent::cleanAttribute($this->media_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . parent::getStandardImageName( $this->podcast_item['image_filename'] ) . '"'] = null;
 
-                    $item['media:thumbnail url="' . parent::cleanAttribute($this->datamedia_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item['image_filename'] . '"'] = null;
-                }
+            } else {
 
-                // BEGIN - iTunes specific
-                $item['itunes:summary'] = parent::clean( $this->podcast_item['summary'] );
-                $item['itunes:keywords'] = parent::clean( $this->data['Podcast']['keywords'] );
-                $item['itunes:author'] = parent::clean( $this->podcast_item['author'] );
-                $item['itunes:explicit'] = ucfirst( $this->podcast_item['author'] );
-                $item['itunes:subtitle'] = parent::clean( $this->podcast_item['summary'] );
-                // END - iTunes specific
-
-                if ( ( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) &&
-                        ( in_array($this->media_type, array( 'ipod', 'ipod-all', 'audio', 'epub', '' ) ) ) ) {
-
-                    $item['itunes:category itunes:code="' . $this->data['iTuneCategories'][0]['code'] . '"'] = null;
-
-                }
-
-                if (!empty( $this->podcast_item['item_link'] ) )
-                    $item['link'] = parent::clean($this->podcast_item['item_link']);
-
-                $item['guid'] = parent::cleanAttribute($this->media_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item_image;
-                $item['pubDate'] = $this->podcast_item['publication_date'];
-
-                $item['enclosure url="' . parent::cleanAttribute($this->media_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item_media_path . $this->podcast_media['filename'] . '"'] = null;
+                $item['media:thumbnail url="' . parent::cleanAttribute($this->datamedia_server) . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item['image_filename'] . '"'] = null;
             }
+
+            // BEGIN - iTunes specific
+            $item['itunes:summary'] = parent::clean( $this->podcast_item['summary'] );
+            $item['itunes:keywords'] = parent::clean( $this->data['Podcast']['keywords'] );
+            $item['itunes:author'] = parent::clean( $this->podcast_item['author'] );
+            $item['itunes:explicit'] = ucfirst( $this->podcast_item['author'] );
+            $item['itunes:subtitle'] = parent::clean( $this->podcast_item['summary'] );
+            // END - iTunes specific
+
+            if ( ( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) &&
+                    ( in_array($this->media_type, array( 'ipod', 'ipod-all', 'audio', 'epub', '' ) ) ) ) {
+
+                $item['itunes:category itunes:code="' . $this->data['iTuneCategories'][0]['code'] . '"'] = null;
+
+            }
+
+            if (!empty( $this->podcast_item['item_link'] ) )
+                $item['link'] = parent::clean( $this->podcast_item['item_link'] );
+
+            $item['guid'] = $this->podcast_item_media_file_path.$this->podcast_item_media_file;
+
+            $item['pubDate'] = $this->podcast_item['publication_date'];
+
+            $item['enclosure']['url'] = parent::cleanAttribute( $this->podcast_item_media_file_path ) . parent::cleanAttribute( $this->podcast_media['filename'] );
+            //$item['media:content url="' . parent::cleanAttribute( $this->podcast_item_media_file_path ) . parent::cleanAttribute( $this->podcast_media['filename'] ) . '" length="'.filesize( parent::cleanAttribute( $this->podcast_item_media_file_path ) . parent::cleanAttribute( $this->podcast_media['filename'] ) ).'" type="'.$this->mime_types[parent::getExtension( $this->podcast_media['filename'] )].'"'] = null;
+
+            // OK, we are not processing an eBook or PDF transcript, add duration
+            if( in_array( strtolower( parent::getExtension( $this->podcast_media['filename'] ) ) , array('epub','pdf') ) == false )
+                $item['itunes:duration'] = $this->podcast_media['duration'];
 
             $this->podcast_items[] = $item;
         }
+
+        
 
     }
 
@@ -366,15 +374,14 @@ class Feed extends AppModel {
 
     function __setPodcastItemDefaults() {
 
-        $podcast_item_media_folder = isSet($this->media_folder[$this->podcast_media['media_type']]) ? $this->media_folder[$this->podcast_media['media_type']].'/' : '';
+        $podcast_item_media_folder = isSet($this->media_folder[$this->media_type]) ? $this->media_folder[$this->media_type] : '';
         $this->podcast_item_media_file = $this->podcast_media['filename'];
         $this->podcast_item_media_file_path = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.$podcast_item_media_folder;
-        $this->podcast_item_date_stamp = str_replace('  ', ' ', date('r', $this->podcast_media['publication_date']));
 
         $this->podcast_item_image = $this->podcast_item['image_filename'];
         $this->podcast_item_standard_image = parent::getStandardImageName( $this->podcast_item['image_filename'] );
         $this->podcast_item_thumbnail_image = parent::getThumbnailImageName( $this->podcast_item['image_filename'] );
-        $this->podcast_item_image_extension = parent::getImageExtension( $this->podcast_item['image_filename'] );
+        $this->podcast_item_image_extension = parent::getExtension( $this->podcast_item['image_filename'] );
     }
 
     /*
@@ -419,7 +426,7 @@ class Feed extends AppModel {
     function __buildAtomStrings() {
 
         $this->atom_string = '<atom:link rel="alternate" type="application/pdf" title="Transcript for '.$this->podcast_item['title'].'" href="'.$this->podcast_item_transcript_file_path.$this->podcast_item_transcript_file.'" length="'.$this->podcast_item_transcript_file_size.'" >';
-        $this->atom_string2 = '<a href="'.$this->podcast_item_transcript_file_path.$this->podcast_item_transcript_file.'">Transcript '.parent::clean( $this->podcast_item['title'] ).', PDF '.sprintf('%01.0f', ( $this->podcast_item_transcript_file_size/1024 ) ).'Kb</a>';
+        $this->atom_string2 = '<a href="'.$this->podcast_item_transcript_file_path.$this->podcast_item_transcript_file.'">Transcript '.parent::cleanAttribute( $this->podcast_item['title'] ).', PDF '.sprintf('%01.0f', ( $this->podcast_item_transcript_file_size/1024 ) ).'Kb</a>';
         return true;
     }
 
@@ -433,6 +440,25 @@ class Feed extends AppModel {
     function getPodcastItems() {
 
         return $this->podcast_items;
+    }
+
+
+    /*
+     * @name : interlaceTranscript
+     * @description : Checks to see if the value is $this->interlave is true and a transcript is available
+     * @updated : 10th June 2011
+     * @by : Charles Jackson
+     */
+    function interlaceTranscript() {
+
+        if(
+            ( $this->interlace ) &&
+            ( is_array( $this->data['Transcript'] ) && count( $this->data['Transcript'] ) ) ) {
+
+            return true;
+        }
+
+        return false;
     }
 
 }
