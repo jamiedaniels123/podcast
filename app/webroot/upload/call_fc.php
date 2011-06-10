@@ -6,8 +6,17 @@ $DOCROOT = @$DOCUMENT_ROOT ? @$DOCUMENT_ROOT : $_SERVER['DOCUMENT_ROOT'];
 # You can run the  phpinfo()  function to see that variable's value.
 
 # Change only these first 2 lines, to match the path & name of your CGI script:
-$cgi_script_full  = "$DOCROOT/webroot/cgi-bin/filechucker.cgi";
-$cgi_script_local = "/cgi-bin/filechucker.cgi";
+if( $_SERVER['SERVER_ADDR'] == '127.0.0.1' ) {
+
+    $cgi_script_full  = "$DOCROOT/webroot/cgi-bin/filechucker.cgi";
+    $cgi_script_local = "/cgi-bin/filechucker.cgi";
+
+} else {
+
+    $cgi_script_full  = "$DOCROOT/../cgi-bin/filechucker.cgi";
+    $cgi_script_local = "/cgi-bin/filechucker.cgi";
+
+}
 
 if(!(file_exists($cgi_script_full)))
 {

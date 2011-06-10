@@ -34,8 +34,9 @@
 ############################################################################
 
 
+# BH - 20110608 - added as Digest::SHA1 Perl module is not installed - as per instructions
 
-
+$PREF{use_md5_for_hashes} = 'yes';
 
 
 
@@ -82,18 +83,8 @@ $PREF{enable_debug}					= 'no';
 # You can adjust various other paths here too.
 #
 $PREF{uploaded_files_dir}				= '/webroot/upload/files';
-#$PREF{uploaded_files_dir}				= '/upload/files';
 $PREF{uploaded_files_dir_is_in_docroot}			= 'yes';
 $PREF{path_to_filelist_images}				= '/upload/fc_icons_etc/';
-
-
-
-# PREFs Section 02: Paths and Directories.
-############################################################################
-# If you've renamed FileChucker's top-level "upload" folder to something
-# else, then adjust this setting to match your new name/location for it.
-#
-$PREF{app_base_folder}					= '/upload';
 
 
 
@@ -313,22 +304,22 @@ $PREF{admin_usernames_list}				= '';
 #	$PREF{keep_userdir_on_url}		= 'yes';
 #	$PREF{enable_userdir_on_url}		= 'yes';
 #	$PREF{auto_create_userdirs}		= 'yes';
-#	$PREF{enable_subdirs}			= 'no';
+#	$PREF{enable_subdirs}			= 'yes';
 #
 # It will also auto-set these next ones, but these are more optional, so if you
 # want to change any of them, you can prevent them from being auto-set by
 # enabling the $PREF{override_default_serial_is_userdir_settings} option.
 #
-#	$PREF{error_if_userdir_not_supplied}			= 'yes';
-#	$PREF{groups_allowed_to_upload}				= 'public';
-#	$PREF{groups_allowed_to_view_download_page}		= 'public';
-#	$PREF{groups_allowed_to_download}			= 'public';
-#	$PREF{groups_allowed_to_delete_items}			= 'public';
-#	$PREF{hide_path_to_uploads_dir}				= 'yes';
-#	$PREF{display_dropdown_box_for_subdir_selection}	= 'no';
-#	$PREF{navigate_users_into_userdirs_automatically}	= 'yes';
-#	$PREF{hide_links_to_topmost_level_from_userdir_users}	= 'yes';
-#	$PREF{show_the_create_new_subdir_field_on_upload_form}	= 'no';
+#	$PREF{error_if_userdir_not_supplied}				= 'yes';
+#	$PREF{groups_allowed_to_upload}					= 'public';
+#	$PREF{groups_allowed_to_view_download_page}			= 'public';
+#	$PREF{groups_allowed_to_download}				= 'public';
+#	$PREF{groups_allowed_to_delete_items}				= 'public';
+#	$PREF{hide_path_to_uploads_dir}					= 'yes';
+#	$PREF{display_dropdown_box_for_subdir_selection}		= 'no';
+#	$PREF{navigate_users_into_userdirs_automatically}		= 'yes';
+#	$PREF{hide_links_to_topmost_level_from_userdir_users}		= 'yes';
+#	$PREF{show_the_create_new_subdir_field_on_upload_form}		= 'no';
 #
 # When one of your users first visits FileChucker, it will automatically
 # redirect them to the same page but with ?userdir=NNNNNNNNNN... on the URL.
@@ -377,9 +368,7 @@ $PREF{enable_perfile_passwords}				= 'no';
 
 # PREFs Section 03: Security.
 ############################################################################
-# Access controls:
-#
-# Whether you're using UserBase, or FileChucker's built-in password system,
+# Whether you're using UserBase or FileChucker's built-in password system,
 # the following "groups_allowed_to_*" PREFs control who can access what.
 # Each item must be set to a comma-separated list of group names.  If you're
 # not using UserBase, then the only possible groupnames are public, member,
@@ -404,6 +393,7 @@ $PREF{groups_allowed_to_download}			= 'public';
 $PREF{groups_allowed_to_view_items_in_viewer_mode}	= 'public';
 $PREF{groups_allowed_to_view_upload_info}		= 'public';
 $PREF{groups_allowed_to_view_administration_page}	= 'admin';
+$PREF{groups_allowed_to_view_all_prefs}			= 'admin';
 #
 $PREF{groups_allowed_to_view_upload_log_db}		= 'admin';
 $PREF{groups_allowed_to_edit_upload_log_db}		= 'admin';
@@ -865,6 +855,13 @@ $PREF{php_session_username_variable}			= 'username';
 $PREF{enforce_userdir_restrictions_on_upload_page}	= 'yes';
 
 
+
+
+
+
+
+
+
 # PREFs Section 05: Subdirectories.
 ############################################################################
 # In most cases this should be enabled.  For example if you want to use
@@ -888,7 +885,7 @@ $PREF{enable_subdirs}					= 'no';
 # at once) then set allow_multiple_levels_in_new_subdirs to 'yes'.
 #
 $PREF{only_allow_one_subdir_dropdown_per_upload}	= 'yes';
-$PREF{show_the_create_new_subdir_field_on_upload_form}	= 'yes';
+$PREF{show_the_create_new_subdir_field_on_upload_form}	= 'no';
 $PREF{only_allow_one_new_subdir_per_upload}		= 'yes';
 $PREF{max_num_of_subdir_levels}				= 5;
 $PREF{max_length_of_new_subdir_names}			= 25;
@@ -976,7 +973,7 @@ $PREF{serialize_new_folders}				= 'yes';
 # specified on the URL *must* include $PREF{uploaded_files_dir} on the front.
 #
 $PREF{display_dropdown_box_for_subdir_selection}	= 'yes';
-$PREF{hide_subdir_dropdown_when_passed_on_url}		= 'no';
+$PREF{hide_subdir_dropdown_when_passed_on_url}		= 'yes';
 
 
 
@@ -1134,7 +1131,7 @@ $PREF{upload_email_template_for_webmaster___filelist}	= qq`<p>File %%filenum%% o
 							%%%if-isimage%%% <br />\nDimensions (pixels): %%imagedims%%<br />\nDimensions (inches): %%imagedims_inches%%<br />\nResolution: %%imageres%% %%%end-isimage%%%
 							</p>\n`;
 
-$PREF{upload_email_template_for_webmaster___formfields}	= qq`<p><b>%%name%%:</b> %%value%%</p>\n`; # can also use %%label%%.
+$PREF{upload_email_template_for_webmaster___formfields}	= qq`<p><b>%%name%%:</b> %%value%%</p>\n`;
 
 $PREF{upload_email_template_for_webmaster___attachfiles}= 'no';
 
@@ -1178,7 +1175,7 @@ $PREF{upload_email_template_for_user___subject}		= "Upload confirmation from $EN
 
 $PREF{upload_email_template_for_user___filelist}	= qq`<p>File %%filenum%% of %%filecount%%:<br /><a href="%%linktofile%%">%%filename%%</a> (%%filesize%%)</p>\n`;
 
-$PREF{upload_email_template_for_user___formfields}	= qq`<p><b>%%name%%:</b> %%value%%</p>\n`; # can also use %%label%%.
+$PREF{upload_email_template_for_user___formfields}	= qq`<p><b>%%name%%:</b> %%value%%</p>\n`;
 
 $PREF{upload_email_template_for_user___attachfiles}	= 'no';
 
@@ -1250,7 +1247,7 @@ $PREF{upload_email_template_for_userbase_loggedin_address_admin___body}		= $PREF
 # etc.  You can also create per-theme titles, for example light_title,
 # round_title, etc, to give each theme/style a different title.
 #
-$PREF{title}						= '<div id="fctitle">FileChucker</div>';
+$PREF{title}						= '<div id="fctitle">&nbsp;</div>';
 $PREF{title_uploader}					= '%PREF{title}';
 $PREF{title_popupstatus}				= '%PREF{title}';
 $PREF{title_uploadcomplete}				= '%PREF{title}';
@@ -1283,10 +1280,8 @@ $PREF{allow_form_submissions_without_files}		= 'no';
 ############################################################################
 # Miscellaneous mostly-self-explanatory options:
 #
-$PREF{add_new_file_upload_fields_automatically}		= 'yes';
+$PREF{add_new_file_upload_fields_automatically}		= 'no';
 $PREF{show_add_another_file_link}			= 'no';
-$PREF{extra_HTML_output_just_before_file_fields}	= '';
-$PREF{extra_HTML_output_just_after_file_fields}		= '';
 
 
 
@@ -1352,7 +1347,7 @@ $PREF{file_upload_field_label}				= qq`File <span class="filei">%%i%%</span> of 
 # the title_for_template_file variable (or in some cases, with an
 # internally-set title).
 #
-$PREF{print_full_html_tags}				= 'yes'; # overridable by the more specific ones next.
+$PREF{print_full_html_tags}				= 'no'; # overridable by the more specific ones next.
 $PREF{print_full_html_tags_for_uploader}		= '';
 $PREF{print_full_html_tags_for_popupstatus}		= 'yes'; # this one must be "yes" in most cases.
 $PREF{print_full_html_tags_for_uploadcomplete}		= '';
@@ -1417,9 +1412,9 @@ $PREF{app_output_template} = qq`
 
 
 	%%%ifelse-onpage_uploader%%%
-		<div id="fcintro">Upload your files here.</div>
+		<div id="fcintro">Upload a media file.</div>
 	%%%else%%%
-		%%subtitle%%
+		
 	%%%endelse-onpage_uploader%%%
 
 
@@ -1428,15 +1423,17 @@ $PREF{app_output_template} = qq`
 
 	</div>
 
-	<div id="fcfooter"><div id="fcfooter-inner"><div id="fcfooter-text">
+	<!-- <div id="fcfooter"><div id="fcfooter-inner"><div id="fcfooter-text">
 	%%footer_links%%
-	</div></div></div>
+	</div></div></div> -->
 
 	</div> <!-- end #fc-container. -->
 
 	<div id="pb">%%powered_by%%</div>
 
 	</div> <!-- end #uploaderpage, #filelistpage, #defaultpage, etc. -->
+
+	%%debug%%
 
 	</div><!-- end id="fcwrapper" -->
 `;
@@ -1659,7 +1656,6 @@ $PREF{custom_js_code__uploadcomplete_page}		= qq``;
 # then you'll have to set $PREF{using_custom_file_elements} to 'yes'.  In
 # this case you'll also need to specify the number of custom file elements.
 # You MUST name your file elements exactly "uploadname1", "uploadname2", etc,
-# (or else adjust $PREF{filefield_namebase}, but the numbering must remain)
 # and they must have "id" attributes set to those same values.
 #
 # If your code includes your own upload button, then you must set
@@ -1681,7 +1677,6 @@ $PREF{custom_form_fields_bottom___code}			= qq``;
 $PREF{custom_form_fields_namelist}			= qq``;
 $PREF{using_custom_file_elements}			= 'no';
 $PREF{num_custom_file_elements}				= 5;
-$PREF{filefield_namebase}				= 'uploadname';
 
 
 
@@ -1700,8 +1695,8 @@ $PREF{upload_button}					= qq`<div id="uploadbuttonwrapper"><input type="button"
 # Extra formfields/textboxes (including email fields & drop-down lists):
 #
 # Allow the user to enter comments or information about the file(s) that
-# they are uploading.  This information can be emailed to you or saved in a
-# database.
+# they are uploading.  This information can be emailed to you as well as
+# saved on the server in a text file and/or a database.
 #
 # You should specify a _shortname PREF for each form field; this may contain
 # only letters, numbers, and underscores.  It is used for the "name" attribute
@@ -1960,18 +1955,16 @@ $PREF{upload_button}					= qq`<div id="uploadbuttonwrapper"><input type="button"
 #	$PREF{formfield_09_shortname}			= "giftwrapping";
 #	$PREF{formfield_09_position}			= 'bottom';
 
-$PREF{formfield_01}				= 'Video aspect ratio : ';
-$PREF{formfield_01_dropdown}			= '|||Auto|||Wide 16:9|||Standard 4:3';
-$PREF{formfield_01_required}			= 'no';
-$PREF{formfield_01_shortname}			= 'ratio';
 
-$PREF{formfield_02}				= 'Screencast : ';
-$PREF{formfield_02_dropdown}			= 'No|||Yes';
-$PREF{formfield_02_required}			= 'yes';
-$PREF{formfield_02_shortname}			= 'screencast';
+	$PREF{formfield_01}				= 'Video aspect ratio : ';
+	$PREF{formfield_01_dropdown}			= '|||Auto|||Wide 16:9|||Standard 4:3';
+	$PREF{formfield_01_required}			= 'no';
+	$PREF{formfield_01_shortname}			= 'ratio';
 
-
-
+	$PREF{formfield_02}				= 'Screencast : ';
+	$PREF{formfield_02_dropdown}			= 'No|||Yes';
+	$PREF{formfield_02_required}			= 'yes';
+	$PREF{formfield_02_shortname}			= 'screencast';
 
 
 
@@ -1982,7 +1975,7 @@ $PREF{formfield_02_shortname}			= 'screencast';
 # Allow the user to upload multiple files at the same time, up
 # to this limit.
 #
-$PREF{max_files_allowed}				= 1;
+$PREF{max_files_allowed}				= 5;
 $PREF{num_default_file_elements}			= 1;
 
 
@@ -1995,8 +1988,12 @@ $PREF{num_default_file_elements}			= 1;
 # is not more than your limit.  Note that one megabyte is 1024*1024*1; 
 # 5 MB is 1024*1024*5, etc.
 #
-$PREF{sizelimit_for_public}				= 1024*1024*1000;
-$PREF{sizelimit_for_members}				= 1024*1024*500;
+#$PREF{sizelimit_for_public}				= 1024*1024*100;
+   # BH 20110608 increased to 2 Gbytes
+$PREF{sizelimit_for_public}				= 1024*1024*2000;
+#$PREF{sizelimit_for_members}				= 1024*1024*500;
+   # BH 20110608 increased to 2 Gbytes
+$PREF{sizelimit_for_members}				= 1024*1024*2000;
 $PREF{sizelimit_for_admins}				= 1024*1024*2000;
 
 
@@ -2029,7 +2026,7 @@ $PREF{disallow_these_file_extensions}			= '.exe .php .php3 .php4 .php5 .phtml .c
 $PREF{allow_files_without_extensions}			= 'yes';
 $PREF{disallow_these_strings_within_filenames}		= '\.php \.asp \.cgi \.pl$ \.plx torrent dvdrip'; # can include regexes, so periods must be escaped.  must be in single quotes.
 #
-$TEXT{illegal_filename_message}				= qq`Filename or file type not allowed: %%filename%%`;
+$TEXT{illegal_filename_message}				= qq`This type of media ia not allowed, please refer to list of allowed formats : %%filename%%`;
 
 
 
@@ -2039,14 +2036,6 @@ $TEXT{illegal_filename_message}				= qq`Filename or file type not allowed: %%fil
 # and remove anything that's not in the set [0-9A-Za-z._-].
 #
 $PREF{clean_up_filenames}				= 'yes';
-$PREF{clean_up_foldernames}				= 'yes';
-
-
-
-
-
-
-
 
 
 # PREFs Section 09: Processing Uploads.
@@ -2332,7 +2321,6 @@ $PREF{custom_sql_command}{'02'}				= "";
 # All the relevant information will be passed on the query-string to your
 # redirection URL, including any error-state information.
 #
-#$PREF{after_upload_redirect_to}				= '';
 $PREF{after_upload_redirect_to}				= '/podcast_items/add';
 $PREF{pass_original_querystring_through}		= 'yes';
 $PREF{pass_default_data_on_redirect}			= 'yes';
@@ -3000,9 +2988,6 @@ $PREF{email_link_on_options_menu}			= 'Email Link To File';
 # version of that image, along with a link to download the original.  You 
 # can disable the $PREF{enable_individual_item_viewer_mode} setting if you
 # want the file-list/download links to just download the files instead.
-# And you can include any of your form field values within the
-# $PREF{viewer_mode_output_template} setting using the %%varname%% syntax,
-# where varname is the shortname of your form field.
 #
 $PREF{enable_individual_item_viewer_mode}		= 'yes';
 $PREF{resize_photos_in_viewer_mode}			= 'yes';
@@ -3093,10 +3078,10 @@ $PREF{send_copy_to_userEntered_email_address}		= 'yes';
 # Set $PREF{reconnect_to_db_after_upload} if your server reports "lost
 # connection to MySQL server..." after your uploads finish.
 #
-$PREF{database_hostname}				= '';
-$PREF{database_name}					= '';
-$PREF{database_username}				= '';
-$PREF{database_password}				= '';
+$PREF{database_hostname}				= 'localhost';
+$PREF{database_name}					= 'podcast';
+$PREF{database_username}				= 'root';
+$PREF{database_password}				= 'Po789km!';
 $PREF{reconnect_to_db_after_upload}			= 'yes';
 #
 # The following setting usually doesn't need to be adjusted.  If you're
@@ -3149,7 +3134,6 @@ $TEXT{Average_speed}						= qq`Average speed`;
 $TEXT{boolean_false_string}					= 'no';
 $TEXT{boolean_true_string}					= 'yes';
 $TEXT{but_there_were_errors}					= qq`but there were errors`;
-$TEXT{Buy_column_header_for_filelist}				= qq`Buy`;
 
 $TEXT{checkbox_yes}						= qq`yes`;
 $TEXT{checkbox_no}						= qq`no`;
@@ -3367,16 +3351,9 @@ $PREF{error_message_template}					= qq`<h2>Error</h2>\n<p>%%message%%</p>\n`;
 $PREF{titlebar_title___uploader}				= qq`Upload a file`;
 $PREF{titlebar_title___popupstatus}				= qq``; # not currently used.
 $PREF{titlebar_title___uploadcomplete}				= qq`Upload complete`;
-$PREF{titlebar_title___filelist}				= qq`FileChucker: Uploaded Files`;
+$PREF{titlebar_title___filelist}				= qq`Uploaded Files`;
 $PREF{titlebar_title___login}					= qq`Enter the password`;
 $PREF{titlebar_title___error}					= qq``; # not currently used.
-#
-$PREF{subtitle___uploader}					= qq`Upload a file`;
-$PREF{subtitle___popupstatus}					= qq``; # not currently used.
-$PREF{subtitle___uploadcomplete}				= qq``;
-$PREF{subtitle___filelist}					= qq`Uploaded Files`;
-$PREF{subtitle___login}						= qq``;
-$PREF{subtitle___error}						= qq``; # not currently used.
 #
 $PREF{formfield_template___text}				= qq`
 <div class="fcfieldwrap clearfixtb %%prefname%% singleline">
@@ -3428,8 +3405,8 @@ $PREF{filefield_template} = qq`
 
 <div id="firstfile" class="fcfieldwrap clearfixtb onesubgroup %%row_classname%% %%first_classname%% %%last_classname%%">
 	<div class="upform_pair">
-		<label class="upform_label" for="%PREF{filefield_namebase}%%i%%">%%file_upload_field_label%%</label>
-		<input type="file" %PREF{multiple_files_in_one_element} size="15" class="upform_field file %%required_classname%%" name="%PREF{filefield_namebase}%%i%%" id="%PREF{filefield_namebase}%%i%%" onchange="%%auto_add_more_files%%" />
+		<label class="upform_label" for="uploadname%%i%%">%%file_upload_field_label%%</label>
+		<input type="file" multiple="multiple" size="15" class="upform_field file %%required_classname%%" name="uploadname%%i%%" id="uploadname%%i%%" onchange="%%auto_add_more_files%%" />
 	</div>
 
 	%%%if-subdirs%%%
@@ -3460,67 +3437,6 @@ $PREF{filefield_template} = qq`
 
 `;
 
-
-
-# PREFs Section 14: Templates.
-############################################################################
-# You can create custom pages here.  The format is:
-#
-#	$PREF{custom_pages}{page_address}{type}
-#	$PREF{custom_pages}{page_address}{content}
-#	$PREF{custom_pages}{page_address}{groups_allowed_to_view}
-#
-# Replace "page_address" with whatever you want, and this will be how you 
-# access the page via URL.  For example, if you use literally "page_address"
-# then you would use this URL to access the page:
-#
-#	www.yoursite.com/cgi-bin/filechucker.cgi?cpage=page_address
-#
-# Set the type to either 'static' or 'database'.  The content can include
-# any text or HTML, as well as environment variables, other pref values, etc,
-# using the syntax explained in this FAQ item:
-#
-#	http://encodable.com/filechucker/faq/#externaldata
-#
-# Set groups_allowed_to_view to a comma-separated list of group names,
-# including any of the built-in groups (public, member, and admin) and/or
-# any custom groups you've created via UserBase, if you're using that.
-#
-# See the example pages below for more details.
-#
-# WARNING: for database custom pages, if you change one of your field types
-# (by adjusting its field_NN_type value), FileChucker *can* change the field
-# type; but changing the type of an existing field may cause MySQL to delete
-# or change any existing data in that field.  Because of this, FileChucker
-# will ignore any changes in your field type prefs unless you enable the
-# destroy_data_if_necessary setting to acknowledge this.
-#
-$PREF{custom_pages}{example_page}{type}				= 'static';
-$PREF{custom_pages}{example_page}{content}			= qq`<p>This is a test page. Your IP address is: %ENV{REMOTE_ADDR}.</p>\n`;
-$PREF{custom_pages}{example_page}{wide_page}			= 'no';
-$PREF{custom_pages}{example_page}{inpage_title}			= qq`<div id="fctitle">This Is A Test</div>`;
-$PREF{custom_pages}{example_page}{titlebar_title}		= 'This Is A Test';
-$PREF{custom_pages}{example_page}{groups_allowed_to_view}	= 'public';
-
-$PREF{custom_pages}{example_page_2}{type}			= 'database';
-$PREF{custom_pages}{example_page_2}{content}			= qq`%%database_viewer%%`;
-$PREF{custom_pages}{example_page_2}{wide_page}			= 'yes';
-$PREF{custom_pages}{example_page_2}{inpage_title}		= qq`<div id="fctitle">My Page Title</div>`;
-$PREF{custom_pages}{example_page_2}{titlebar_title}		= 'My Page Title';
-$PREF{custom_pages}{example_page_2}{groups_allowed_to_view}	= 'public';
-$PREF{custom_pages}{example_page_2}{groups_allowed_to_create}	= 'admin';
-$PREF{custom_pages}{example_page_2}{groups_allowed_to_edit}	= 'admin';
-$PREF{custom_pages}{example_page_2}{groups_allowed_to_delete}	= 'admin';
-$PREF{custom_pages}{example_page_2}{viewer_hidden_columns}	= 'id';
-$PREF{custom_pages}{example_page_2}{table_name}			= 'some_test_table';
-$PREF{custom_pages}{example_page_2}{create_table_if_necessary}	= 'yes';
-$PREF{custom_pages}{example_page_2}{destroy_data_if_necessary}	= 'no'; # see warning above!
-$PREF{custom_pages}{example_page_2}{field_01_name}		= 'Address';
-$PREF{custom_pages}{example_page_2}{field_01_type}		= 'VARCHAR(255) NOT NULL';
-$PREF{custom_pages}{example_page_2}{field_02_name}		= 'Phone_Number';
-$PREF{custom_pages}{example_page_2}{field_02_type}		= 'VARCHAR(12) NOT NULL';
-$PREF{custom_pages}{example_page_2}{field_03_name}		= 'Age';
-$PREF{custom_pages}{example_page_2}{field_03_type}		= 'INT NOT NULL';
 
 
 
@@ -3677,8 +3593,9 @@ $PREF{create_resized_copies_01__serialize_or_overwrite}	= 'overwrite';
 # resize within a reasonable amount of time.  These timeout settings let you
 # tell FileChucker when to give up.  The settings are in seconds.
 #
-$PREF{image_resizing_timeout}				= 8;
+$PREF{image_thumbnail_creation_timeout}			= 8;
 $PREF{video_thumbnail_creation_timeout}			= 8;
+$PREF{automatic_image_resizing_timeout}			= 20;
 
 
 
@@ -3718,7 +3635,6 @@ $PREF{css} = qq`
 /* #uploaderpage, #filelistpage, #defaultpage etc, are the outer containers for their respective pages. */
 #uploaderpage, #uploadcompletepage, #filelistpage, #defaultpage { margin: 15px auto; background: white; border: 1px solid #999; padding: 10px; }
 #uploaderpage #fctitle, #popupstatuspage #fctitle, #uploadcompletepage #fctitle, #filelistpage #fctitle, #defaultpage #fctitle { font-size: 200%; font-weight: bold; padding: 8px 0 15px 0; }
-#encsubtitle { font-size: 130%; font-weight: bold; color: #777; margin-bottom: 15px; }
 #uploaderpage, #uploadcompletepage { }
 #uploaderpage #fcintro { margin: 0px auto 25px auto; }
 #popupstatuspage { padding: 0; margin: 0 auto; }
@@ -3906,12 +3822,7 @@ form#itemactions { margin: 0; padding: 0; }
 
 #perfile-textboxes
 {
-	margin: 8px 0px;
-}
-#perfile-textboxes .fcfieldwrap
-{
-	padding: 0;
-	border: 0;
+	margin: 8px 20px;
 }
 
 #theuploadform textarea.upform_field
@@ -4058,7 +3969,7 @@ form#itemactions { margin: 0; padding: 0; }
 
 .version_info { font-style: italic; }
 
-#enc_server_info table, #enc_prefs_list table { text-align: left !important; }
+#enc_server_info table, #enc_prefs_list table { text-align: left; }
 
 .enc_tbl
 {
@@ -4074,7 +3985,6 @@ form#itemactions { margin: 0; padding: 0; }
 	width: 100%;
 	margin: 0;
 	font-size: 8pt;
-	text-align: center !important;
 }
 .enc_tbl table th
 {
@@ -4137,7 +4047,53 @@ form#itemactions { margin: 0; padding: 0; }
 {
 	background: #415b75;
 }
-
+.pagelinks
+{
+	/* font-size: 10pt; */
+	cursor: default;
+}
+.pagelinks .links
+{
+	display: inline-block;
+	background: #efefef;
+	padding: 5px;
+	margin-top: 10px;
+}
+.pagelinks .links span, .pagelinks .links a
+{
+	display: block;
+	float: left;
+	padding: 6px 11px;
+	border-right: 1px solid #ccc;
+}
+.pagelinks .links span.last, .pagelinks .links a.last
+{
+	border-right: 0;
+}
+.pagelinks .disabled
+{
+	cursor: default;
+	color: #999;
+}
+.pagelinks .current
+{
+	cursor: default;
+	color: #999;
+}
+#fcbody .pagelinks .links a
+{
+	color: #1E90FF;
+	color: #333;
+	text-decoration: none;
+}
+#fcbody .pagelinks .links a:hover
+{
+	background: #d5d9d3;
+	text-decoration: none;
+}
+.pagelinks .text
+{
+}
 .enc_tbl input.text
 {
 	width: 200px !important;
@@ -4190,76 +4146,6 @@ form#itemactions { margin: 0; padding: 0; }
 .enc_create_tbl td.button, .enc_edit_tbl td.button
 {
 	text-align: center;
-}
-
-
-.pagelinks
-{
-	/* font-size: 10pt; */
-	cursor: default;
-}
-.pagelinks .links
-{
-	display: inline-block;
-	margin-top: 10px;
-	background: #efefef;
-
-	/*
-	border: 1px solid #888;
-	border-top-color: #ccc;
-	border-left-color: #ccc;
-	*/
-
-	padding: 5px;
-}
-.pagelinks .links span, .pagelinks .links a
-{
-	display: block;
-	float: left;
-	padding: 6px 11px;
-	border-right: 1px solid #ccc;
-}
-.pagelinks .links span.last, .pagelinks .links a.last
-{
-	border-right: 0;
-}
-.pagelinks .disabled
-{
-	cursor: default;
-	color: #999;
-}
-.pagelinks .current
-{
-	cursor: default;
-	color: #999;
-}
-#fcbody .pagelinks .links a
-{
-	color: #1E90FF;
-	color: #333;
-	text-decoration: none;
-}
-#fcbody .pagelinks .links a:hover
-{
-	background: #d5d9d3;
-	text-decoration: none;
-}
-.pagelinks .text
-{
-	line-height: 16pt;
-	vertical-align: middle;
-}
-.pagelinks .bookend
-{
-	font-size: 16pt;
-	font-family: serif;
-	color: #676767;
-	margin: 0 5px;
-	vertical-align: top;
-}
-.pagelinks .disabled
-{
-	/* text-decoration: line-through !important; */
 }
 
 
@@ -4801,16 +4687,6 @@ $PREF{cut_serial_to_this_length_even_after_hashing}	= 0; # zero to disable.
 
 # PREFs Section Z:  Misc Settings Not Usually Needed.
 ############################################################################
-# As of early 2011, the Opera browser doesn't properly support selecting
-# multiple files within a single file element for upload.  If/when they fix
-# this, you can change this setting to 'no'.
-#
-$PREF{disable_multiple_files_in_one_element_for_opera}	= 'yes';
-
-
-
-# PREFs Section Z:  Misc Settings Not Usually Needed.
-############################################################################
 # FileChucker will always look for a file named filechucker_prefs.cgi to read
 # preference settings from.  But you can also create other prefs files in case
 # you want to run FileChucker with different settings depending on how it's 
@@ -4861,3 +4737,4 @@ $PREF{other_prefs_filenames_from_URL_can_contain_paths}	= 'no';
 #
 $PREF{other_prefs_files_are_in_docroot}			= 'no';
 
+$PREF{use_md5_for_hashes} = 'yes';

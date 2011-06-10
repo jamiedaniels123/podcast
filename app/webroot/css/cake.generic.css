@@ -23,20 +23,19 @@
 
 /** General Style Info **/
 body {
-	background: #003d4c;
-	color: #fff;
-	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
-	font-size:90%;
+	color: #1a1a1a;
+	font-family:Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
+	font-size:0.8em;
 	margin: 0;
 }
 a {
 	color: #003d4c;
-	text-decoration: underline;
-	font-weight: bold;
+	text-decoration: none;
+	font-weight: normal;
 }
 a:hover {
-	color: #367889;
-	text-decoration:none;
+	color: #000;
+	text-decoration:underline;
 }
 a img {
 	border:none;
@@ -47,23 +46,23 @@ h1, h2, h3, h4 {
 }
 h1 {
 	background:#fff;
-	color: #003d4c;
-	font-size: 100%;
+	font-size: 2.7em;
+	font-family:"Myriad Pro", Calibri, Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
 }
 h2 {
 	background:#fff;
-	color: #e32;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 190%;
+	font-family:"Myriad Pro", Calibri, Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
+	font-size: 1.5;
 }
 h3 {
-	color: #993;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 165%;
+	font-family:"Myriad Pro", Calibri, Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
+	font-size: 1.2;
+	font-weight: bold;
+	display:inline;
 }
 h4 {
-	color: #993;
 	font-weight: normal;
+	font-family:"Myriad Pro", Calibri, Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
 }
 ul, li {
 	margin: 0 12px;
@@ -77,14 +76,15 @@ ul, li {
 #header{
 	padding: 10px 20px;
 }
+
 #header h1 {
 	line-height:20px;
-	background: #003d4c url('../img/cake.icon.png') no-repeat left;
-	color: #fff;
-	padding: 0px 30px;
+	/*background: #003d4c url('../img/cake.icon.png') no-repeat left;*/
+	color: #1a1a1a;
+	padding: 0px 0px;
 }
 #header h1 a {
-	color: #fff;
+	color: #143748;
 	background: #003d4c;
 	font-weight: normal;
 	text-decoration: none;
@@ -133,20 +133,26 @@ table {
 	border-right:0;
 	clear: both;
 	color: #333;
-	margin-bottom: 10px;
+	margin: 15px 0;
 	width: 100%;
 }
 th {
 	border:0;
-	border-bottom:2px solid #555;
+	border-bottom:0px solid #555;
 	text-align: left;
 	padding:4px;
 }
+
 th a {
 	display: block;
 	padding: 2px 4px;
 	text-decoration: none;
 }
+
+td a {
+	font-size: 1.1em
+	}
+
 th a.asc:after {
 	content: ' ⇣';
 }
@@ -154,17 +160,20 @@ th a.desc:after {
 	content: ' ⇡';
 }
 table tr td {
-	background: #fff;
+	background: #e5f3fa;
 	padding: 6px;
 	text-align: left;
-	vertical-align: top;
-	border-bottom:1px solid #ddd;
+	vertical-align: center;
+	border-bottom: 5px solid #fff;
+	/*border-bottom:1px solid #ddd;*/
 }
 table tr:nth-child(2n) td {
-	background: #f5f5f5;
+	/*background: #f5f5f5;*/
+	background: #e5f3fa;
 }
 table .altrow td {
-	background: #f5f5f5;
+	/*background: #f5f5f5;*/
+	background: #e5f3fa;
 }
 td.actions {
 	text-align: center;
@@ -190,17 +199,40 @@ table td.actions a {
 div.paging {
 	background:#fff;
 	color: #ccc;
-	margin-top: 1em;
+	margin-top: 2.7em;
 	clear:both;
 }
-div.paging span.disabled {
+
+.page-controls {
+	margin-top:1em;
+	height: 20px;}
+
+div.paging .page-controls span span.disabled {
 	color: #ddd;
 	display: inline;
 }
-div.paging span.current {
+
+div.paging .page-controls span.previous {
+	vertical-align: middle;
+	padding: 0 0 2px 22px;
+	background:#FFF url(/img/back-disabled.png) left center no-repeat;
+}
+
+div.paging .page-controls span.next {
+	vertical-align: middle;
+	padding: 0 22px 2px 0px;
+	background:#FFF url(/img/next-disabled.png) right center no-repeat;
+}
+
+div.paging .page-controls span.current {
 	color: #c73e14;
 }
-div.paging span a {
+div.paging .page-controls span.next a {
+	background:#FFF url(/img/back.png) left center no-repeat;
+}
+
+div.paging .page-controls span.previous a {
+	background:#FFF url(/img/previous.png) right center no-repeat;
 }
 
 /** Scaffold View **/
@@ -226,20 +258,22 @@ dd {
 /** Forms **/
 form {
 	clear: both;
-	margin-right: 20px;
+	margin: 0px 20px 00px 0px;
 	padding: 0;
-	width: 95%;
+	width: 100%;
 }
 fieldset {
 	border: 1px solid #ccc;
 	margin-bottom: 1em;
 	padding: 16px 20px;
+	border-radius:6px;
 }
 fieldset legend {
-	background:#fff;
-	color: #e32;
-	font-size: 160%;
-	font-weight: bold;
+	/*background:#fff;*/
+	color: #1a1a1a;
+	font-size: 1.4em;
+	font-weight: normal;
+	padding: 0 0 0 0;
 }
 fieldset fieldset {
 	margin-top: 25px;
@@ -255,13 +289,15 @@ fieldset fieldset div {
 	margin: 0 20px;
 }
 form div {
-	margin-bottom: 1em;
-	padding: .5em;
-	vertical-align: text-top;
+	margin-bottom: 0em;
+	padding: 0 .5em;
+	vertical-align:middle;
 }
 form .input {
-	color: #444;
+	color: #1a1a1a;
+	line-height: 1.2em;
 }
+
 form .required {
 	font-weight: bold;
 }
@@ -282,21 +318,23 @@ label {
 }
 input, textarea {
 	clear: both;
-	font-size: 140%;
-	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
 	padding: 1%;
 	width:98%;
+	border:1px solid #1a1a1a;
+	background: #fff;
 }
 select {
 	clear: both;
-	font-size: 120%;
-	vertical-align: text-bottom;
+	vertical-align: middle;
+	border:1px solid #1a1a1a;
+	background: #fff;
+	padding: 0.2em;
 }
 select[multiple=multiple] {
 	width: 100%;
+	border:1px solid #1a1a1a;
 }
 option {
-	font-size: 120%;
 	padding: 0 3px;
 }
 input[type=checkbox] {
@@ -304,6 +342,7 @@ input[type=checkbox] {
 	float: left;
 	margin: 0px 6px 7px 2px;
 	width: auto;
+	border:1px solid #1a1a1a;
 }
 div.checkbox label {
 	display: inline;
@@ -318,21 +357,20 @@ div.radio label {
 }
 input[type=submit] {
 	display: inline;
-	font-size: 110%;
 	width: auto;
 }
 form .submit input[type=submit] {
-	background:#62af56;
+	/*background:#62af56;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
-	background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);
-	border-color: #2d6324;
-	color: #000;
+	background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);*/
+	border-color: #fff;
+	color: #1a1a1a;
 	text-shadow: #8cee7c 0px 1px 0px;
 }
 form .submit input[type=submit]:hover {
-	background:#4ca83d;
-	background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
-	background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
+	background:#fff;
+	/*background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
+	background-image: -moz-linear-gradient(top, #85e573, #4ca83d);*/
 }
 
 /** Notices and Errors **/
@@ -405,23 +443,24 @@ div.actions ul li a,
 td.actions a {
 	font-weight:normal;
 	padding: 4px 8px;
-	background:#e6e49f;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
-	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
-	color:#333;
-	border:1px solid #aaac62;
-	-webkit-border-radius:8px;
-	-moz-border-radius:8px;
-	border-radius:8px;
+	background:#418db1;
+	/*background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
+	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);*/
+	color:#fff;
+	border:0px solid #aaac62;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
 	text-decoration:none;
-	text-shadow: #fff 0px 1px 0px;
+	text-shadow: #000 0px 0px 0px;
 	min-width: 0;
 }
 input[type=submit]:hover,
 div.actions ul li a:hover,
 td.actions a:hover {
-	background: #f0f09a;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
+	background: #000;
+	color: #fff;
+	/*background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));*/
 }
 
 /** Related **/
@@ -534,7 +573,7 @@ div.code-coverage-results span.result-good {
 }
 
 input[type='text'],select,textarea {
-    background-color: #f4f4f4;
+    background-color: #fff;
 }
 
 input.datepicker {
@@ -543,7 +582,7 @@ input.datepicker {
 
 #header a, #header a:hover {
 
-    color: #ffffff;
+    color: #143748;
 }
 
 th.actions {

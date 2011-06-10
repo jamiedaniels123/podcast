@@ -1,6 +1,6 @@
 
 <form action="" method="post" id="PodcastFilter">
-    <div class="input select">
+    <div class="input select"><h3>View: </h3> 
         <select id="PodcastFilter" name="data[Podcast][filter]">
             <option value=""></option>
             <option value="<?php echo PUBLIC_ITUNEU_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == PUBLIC_ITUNEU_PODCAST ? 'selected="selected"' : ''; ?>>Public iTunes U</option>
@@ -12,6 +12,7 @@
                 <option value="<?php echo DELETED_PODCAST; ?>" <?php echo $this->data['Podcast']['filter'] == DELETED_PODCAST ? 'selected="selected"' : ''; ?>>Deleted Podcasts</option>
             <?php endif; ?>
         </select>
+        <button id="filter_button" type="submit" class="button white"><img src="/img/change-view.png" alt="Change view" class="icon" />Change view</button>
     </div>
-    <button id="filter_button" type="submit">filter</button>
+    
 </form>
