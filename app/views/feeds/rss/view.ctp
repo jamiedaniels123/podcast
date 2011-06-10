@@ -6,7 +6,7 @@ $this->set('channelData',$channelData );
 
 foreach( $podcast_items as $podcast_item ) :
 
-    echo $this->Rss->item(
+    echo $this->BespokeRss->item(
         array(),
         $podcast_item
     );

@@ -16,7 +16,7 @@ class FolderComponent extends Object {
 
     /*
      * @name : moveFileChuckerUpload
-     * @description : Move a file uploaded vis fileChucker into the specified folder.
+     * @description : Move a file uploaded via fileChucker into the specified folder.
      * @updated : 1st June 2011
      * @by : Charles Jackson
      */
@@ -27,6 +27,7 @@ class FolderComponent extends Object {
         if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
 
             unlink( FILE_REPOSITORY.$data['PodcastItem']['filename'] );
+            //$this->Api->Transcode( $data );
             return true;
         }
 

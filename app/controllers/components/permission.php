@@ -102,8 +102,8 @@ class PermissionComponent extends Object {
      * @updated : 24th May 2011
      * @by : Charles Jackson
      */
-    function startup( & $controller)
-    {
+    function startup( & $controller) {
+
        $this->controller = & $controller;
     }
     
