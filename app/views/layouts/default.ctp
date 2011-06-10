@@ -18,15 +18,24 @@
         echo $this->Html->meta('rss', '/podcasts/rss.rss');
         echo $this->Html->css('cake.generic');
         echo $this->Html->css('jquery-ui');
+		echo $this->Html->css('podcast-server');
+		echo $this->Html->css('ou-header');
         echo $scripts_for_layout;
         
     ?>
     
 </head>
 <body>
+
+    <!--display OU Header-->
+	<?php echo $this->element('header'); ?>
+    <!--/display OU Header-->
+    
     <div id="container">
+    
         <div id="header">
-            <h1>Podcasts</h1>
+            <h1>OU Podcast Server</h1>
+            <p>For the management of podcast collections</p>
             <?php if( $this->Session->check('Auth.User.id') ) : ?>
 
             <ol>
@@ -43,12 +52,12 @@
             &nbsp;
         </div>
     </div>
-    <?php echo $this->element('sql_dump'); ?>
+    
+    <!--display OU Footer-->
+	<?php echo $this->element('footer'); ?>
+    <!--/display OU Footer-->
+    
+	<?php echo $this->element('sql_dump'); ?>
+    
 </body>
 </html>
-<pre>
-<?php print_r( $this->params ); ?>
-</pre>
-<pre>
-    <?php print_r( $this->data ); ?>
-</pre>
