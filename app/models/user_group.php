@@ -201,7 +201,8 @@ class UserGroup extends AppModel {
       */
      function getUserUserGroups( $user_id ) {
 
-
+        $list = array();
+        
         $data = $this->find('all',array(
             'fields'=>array(
                 'DISTINCT(UserGroup.id)'
