@@ -149,6 +149,7 @@ class PodcastItemsController extends AppController {
                 
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
+                    $this->Api->transcodeMedia( $this->data['PodcastItem']['custom_id'], $this->data['PodcastItem']['filename'] );
                     $this->PodcastItem->commit();
                     
                     // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed

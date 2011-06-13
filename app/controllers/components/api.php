@@ -24,15 +24,24 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcode( $data ) {
+    function transcodeMedia( $path, $filename ) {
 
-        return true;
+        $this->params = array(
+            'data' => array(
+                'media_path' => $path,
+                'filename' => $filename
+            )
+        );
+
+        $this->response = json_decode( $this->__sendMessage('transcode-media', self::MEDIA_URL, $this->params ) );
+        return $this->response;
+
+
     }
     // returns a bool
     function fileExist( $path, $filename ) {
 
         $this->params = array(
-            'command' => 'checkFile',
             'data' => array(
                 'media_path' => $path,
                 'filename' => $filename
@@ -40,7 +49,7 @@ class ApiComponent extends Object {
         );
 
         $this->response = json_decode( $this->__sendMessage('checkFile', self::MEDIA_URL, $this->params ) );
-        return $this->response['data']['status'];
+        return (int)$this->response['data']['status'];
     }
 
     // NOTHING TO SEE HERE FOLKS
