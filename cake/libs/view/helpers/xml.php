@@ -110,6 +110,7 @@ class XmlHelper extends AppHelper {
  * @link http://book.cakephp.org/view/1475/elem
  */
 	function elem($name, $attrib = array(), $content = null, $endTag = true) {
+
 		$namespace = null;
 		if (isset($attrib['namespace'])) {
 			$namespace = $attrib['namespace'];
