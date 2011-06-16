@@ -1,9 +1,10 @@
-/app/config/database.php
-/app/config/core.php
-/app/webroot/upload/files
-/.htaccess
-/.gitignore
-/app/tmp
+app/config/database.php
+app/config/core.php
+app/webroot/upload/files/*
+.htaccess
+*.swp
+app/tmp/*
+app/webroot/rss/*
 /.project
 /.buildpath
 /.settings/org.eclipse.php.core.prefs
