@@ -10,3 +10,4 @@ app/webroot/rss/*
 /.buildpath
 /.settings/org.eclipse.php.core.prefs
 /app/webroot/rss
+/app/webroot/upload/call_fc.php
