@@ -34,3 +34,5 @@
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
         Router::parseExtensions('rss');
+
+        Router::connect( '/rss/*', array('controller' => 'feeds', 'action' => 'add', 'url' => array('ext' => 'rss') ) );

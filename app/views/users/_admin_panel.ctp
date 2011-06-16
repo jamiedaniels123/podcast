@@ -18,6 +18,9 @@
                 <li><a href="/admin/podcasts">Podcast Administration</a></li>
                 <li><a href="/admin/podcasts/add">Create New Podcast</a></li>
             </ul>
+            <ul>
+                <li><a href="/admin/feeds/preview">RSS Preview Tool</a></li>
+            </ul>
         </div>
     </div>
 </fieldset>

@@ -70,7 +70,8 @@ class FolderComponent extends Object {
 
                 if( !is_dir( $newfolderPath ) ) {
 
-                    mkdir($newfolderPath,0755,true);
+                    if(! mkdir($newfolderPath,0755,true) )
+                            die($newfolderPath);
                 }
             }
         }

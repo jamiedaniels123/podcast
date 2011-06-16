@@ -5,6 +5,27 @@ class Feed extends AppModel {
     var $name = 'Feed';
     var $useTable = false;
     var $validate = array();
+
+    // The following array defines the flavours of RSS we will attempt to create if available.
+    var $rss_flavours = array(
+
+        '3gp' => array('media_type' => '3gp', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'audio' => array('media_type' => 'audio', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'desktop' => array('media_type' => 'desktop', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'hd' => array('media_type' => 'hd', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'iphone' => array('media_type' => 'iphone', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'ipod' => array('media_type' => 'ipod', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'large' => array('media_type' => 'large', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'transcript' => array('media_type' => 'transcript', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'youtube' => array('media_type' => 'youtube', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false ),
+        'extra' => array('media_type' => 'extra', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'default' => array('media_type' => '', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false ),
+        'high' => array('media_type' => 'high', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false ),
+        'ipod-all' => array('media_type' => 'ipod-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'desktop-all' => array('media_type' => 'desktop-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true ),
+        'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true )
+    );
+
     var $itunes_title_suffix = array(
         '3gp' => 'Mobile Video',
         'audio-mp3' => 'Audio',
@@ -82,14 +103,11 @@ class Feed extends AppModel {
     var $podcast_item_thumbnail_image = null; // set within the method setPodcastItemImage
     var $podcast_item_image_extension = null; // set within the method setPodcastItemImage
 
-    var $podcast_item_transcript_file = null; // Full path to remote location including server, custom_id and media folder (not filename)
-    var $podcast_item_transcript_file_size = null;
-    var $podcast_item_transcript_file_path = null;
-
     var $atom_string = null;
 
     // The current flavour of media for the podcast item
     var $podcast_media = array();
+    var $podcast_transcript= array();
 
 
     /*
@@ -248,7 +266,7 @@ class Feed extends AppModel {
 
         // We only want to include this media if a copy exists on the media box. Break out of the loop and
         // start again if the media does not exist.
-        if( parent::mediaFileExist( $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_media_folder.$this->podcast_item['filename'] ) == false )
+        if( parent::mediaFileExist( $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_media_folder.$this->podcast_media['filename'] ) == false )
             return false;
 
         $item['title'] = $this->podcast_item['title'];
@@ -290,9 +308,9 @@ class Feed extends AppModel {
         if (!empty( $this->podcast_item['item_link'] ) )
             $item['link'] = $this->podcast_item['item_link'];
 
-        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item['filename'];
+        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
         $item['pubDate'] = $this->podcast_item['publication_date'];
-        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item['filename'];
+        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
 
         // OK, we are not processing an eBook or PDF transcript, add duration
         if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false )
@@ -320,34 +338,34 @@ class Feed extends AppModel {
         $item = array();
 
         $item['title'] = TRANSCRIPT_PREFIX.$this->podcast_item['title'];
-        $item['description'] = $this->podcast_item['summary'];
+        $item['description'] = TRANSCRIPT_PREFIX.$this->podcast_item['summary'];
 
         // Yahoo specific
         $item['media:title'] = TRANSCRIPT_PREFIX.$this->podcast_item['title'];
-        $item['media:description'] = $this->podcast_item['summary'];
-        $item['media:keywords'] = $this->podcast_item['keywords'];
+        $item['media:description'] = TRANSCRIPT_PREFIX.$this->podcast_item['summary'];
+        $item['media:keywords'] = $this->data['Podcast']['keywords'];
         //$item['media:thumbnail'] = $this->media_server.FEEDS_FOLDER.'images/pdf-icon.png';
 
         // Itunes specific
         $item['itunes:summary'] = $this->podcast_item['summary'];
-        $item['itunes:keywords'] = $this->podcast_item['keywords'];
+        $item['itunes:keywords'] = $this->data['Podcast']['keywords'];
         $item['itunes:author'] = strlen( trim( $this->podcast_item['author'] ) ) ? $this->podcast_item['Podcast']['author'] : DEFAULT_AUTHOR;
-        $item['itunes:explicit'] = ucfirst( $this->podcast_item['keywords'] );
+        $item['itunes:explicit'] = ucfirst( $this->podcast_item['explicit'] );
         $item['itunes:subtitle'] = TRANSCRIPT_PREFIX.$this->podcast_item['summary'];
-        $item['itunes:keywords'] = $this->podcast_item['keywords'];
+        $item['itunes:keywords'] = $this->data['Podcast']['keywords'];
         
         if( $this->itunes_complete )
             $item['itunes:order'] = $track_number;
 
         $item = $this->__setItunesItemCode( $item );
 
-        if (!empty( $this->podcast_item['Transcript']['item_link'] ) )
-            $item['link'] = $this->podcast_item['Transcript']['item_link'];
+        if (!empty( $this->podcast_item['item_link'] ) )
+            $item['link'] = $this->podcast_item['item_link'];
 
-        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].strtolower( TRANSCRIPT ).$this->podcast_item['Transcript']['filename'];
+        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
         // Remove 1 second from datestamp so as not to conflict with actual media.
-        $item['pubDate'] = ($this->podcast_item['Transcript']['publication_date'] - 1 );
-        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].strtolower( TRANSCRIPT ).$this->podcast_item['Transcript']['filename'];
+        $item['pubDate'] = ($this->podcast_item['publication_date'] - 1 );
+        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
 
         $this->podcast_items[] = $item;
     }
@@ -412,7 +430,7 @@ class Feed extends AppModel {
 
         if ( empty( $rss_filename ) ) {
 
-            $this->rss_filename = DEFAULT_RSS2_FILENAME;
+            $this->rss_filename = DEFAULT_RSS_FILENAME;
 
         } else {
 
@@ -497,7 +515,6 @@ class Feed extends AppModel {
             
             $this->podcast_path_and_image = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.$this->data['Podcast']['image'];
         }
-        
     }
 
     /*
@@ -591,19 +608,23 @@ class Feed extends AppModel {
     }
 
     /*
-     * @name : interlaceTranscript
-     * @description : Checks to see if the value is $this->interlave is true and a transcript is available. Returns a bool.
+     * @name : setTranscript
+     * @description : Checks to see if the value is $this->interlave is true and a transcript is available. If true,
+     * will assign the transcript to a class variable. Returns a bool.
      * @updated : 10th June 2011
      * @by : Charles Jackson
      */
-    function interlaceTranscript() {
+    function setTranscript() {
 
         if(
             ( $this->interlace ) &&
             ( isSet( $this->podcast_item['Transcript'] ) && is_array( $this->podcast_item['Transcript'] ) && count( $this->podcast_item['Transcript'] ) ) ) {
 
+            $this->podcast_transcript = $this->podcast_item['Transcript'];
             return true;
         }
+
+        $this->podcast_transcript = array(); // No transcript, null the array.
 
         return false;
     }
@@ -635,9 +656,23 @@ class Feed extends AppModel {
      * @updated : 7th June 20111
      * @by : Charles Jackson
      */
-
     function getPodcastItems() {
 
         return $this->podcast_items;
+    }
+
+
+    /*
+     * @name : writeRssFile
+     * @description : Writes a flat file
+     * @updated : 16th June 20111
+     * @by : Charles Jackson
+     */
+    function writeRssFile( $file_path_and_name, $data = array() ) {
+
+        $file = $file_path_and_name;
+        $fh = fopen($file, 'w') or die("Can't open RSS file for writing, see administrator ".$file_path_and_name );
+        fwrite($fh, $this->data);
+        fclose($fh);
     }
 }
