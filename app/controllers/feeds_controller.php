@@ -3,7 +3,9 @@
 class FeedsController extends AppController {
 
     var $name = 'Feeds';
-    
+
+
+
     /*
      * @name : beforeFilter
      * @description : The following methods can be accessed without logging in.
@@ -39,14 +41,10 @@ class FeedsController extends AppController {
 
             foreach( $this->Feed->rss_flavours as $flavour ) {
 
-                $this->data = file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/feeds/view/'.$id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'.rss');
+                $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
 
-                // The media_type can be empty but if not, append a slash '/' for the purposes of creating the path line.
-                if( !empty( $flavour['media_type'] ) )
-                    $flavour['media_type'] .= '/';
-
-                $this->Folder->create( $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'] );
-                $this->Feed->writeRssFile( FILE_REPOSITORY.$podcast['Podcast']['custom_id'].'/'.$flavour['media_type'].$flavour['rss_filename'], $this->data );
+                $this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+                $this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
             }
 
             $this->Session->setFlash('Your RSS feeds have been successfully generated and scheduled for transfer to the media server.', 'default', array( 'class' => 'success' ) );
@@ -80,6 +78,7 @@ class FeedsController extends AppController {
             )
         );
 
+        // We could not find a podcast using the ID passed as a parameter
         if( empty( $this->data ) ) {
 
             return false;
@@ -148,12 +147,11 @@ class FeedsController extends AppController {
 
         } else {
 
-            $this->data = file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/feeds/view/'.$this->data['Podcast']['id'].'/'.$this->data['Podcast']['media_type'].'/'.$this->Session->read('Auth.User.id').'_debug.rss'.'/'.$this->data['Podcast']['itunes_complete'].'/'.$this->data['Podcast']['interlace'].'.rss');
+            $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'] ) );
 
             // Create a filename prefixed with the current users ID so as not to overwrite another preview file.
-            $this->Feed->writeRssFile(WWW_ROOT.'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );
-            
-            $this->redirect('http://'.$_SERVER['SERVER_NAME'].'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml');
+            $this->Feed->writeRssFile( WWW_ROOT .'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );
+            $this->redirect( APPLICATION_URL . '/rss/'.$this->Session->read('Auth.User.id').'_debug.xml' );
         }
     }
 }

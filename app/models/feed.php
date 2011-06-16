@@ -675,4 +675,19 @@ class Feed extends AppModel {
         fwrite($fh, $data);
         fclose($fh);
     }
+
+    function buildParameters( $id, $flavour ) {
+        
+        return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'.rss');
+    }
+
+    function buildRssPath( $podcast, $flavour ) {
+
+        // The media_type can be empty but if not, append a slash '/' for the purposes of creating the path line.
+        if( !empty( $flavour['media_type'] ) )
+            $flavour['media_type'] .= '/';
+
+        return( $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'] );
+
+    }
 }
