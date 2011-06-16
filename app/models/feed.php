@@ -672,7 +672,7 @@ class Feed extends AppModel {
 
         $file = $file_path_and_name;
         $fh = fopen($file, 'w') or die("Can't open RSS file for writing, see administrator ".$file_path_and_name );
-        fwrite($fh, $this->data);
+        fwrite($fh, $data);
         fclose($fh);
     }
 }

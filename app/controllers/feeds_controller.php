@@ -14,7 +14,7 @@ class FeedsController extends AppController {
         if( $this->RequestHandler->isRss() )
             $this->helpers = array('BespokeRss');
         
-        $this->Auth->allow( 'add' );
+        $this->Auth->allow( 'view' );
         parent::beforeFilter();
     }
 
@@ -125,7 +125,8 @@ class FeedsController extends AppController {
             $this->set( 'channelData', $this->Feed->getChannelData() );
             $podcast_items = $this->Feed->getPodcastItems();
             $this->set( compact( 'podcast_items' ) );
-        }
+
+          }
     }
 
 
@@ -147,12 +148,12 @@ class FeedsController extends AppController {
 
         } else {
 
-            $this->data = file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/feeds/add/'.$this->data['Podcast']['id'].'/desktop-all.rss');
+            $this->data = file_get_contents('http://'.$_SERVER['SERVER_NAME'].'/feeds/view/'.$this->data['Podcast']['id'].'/'.$this->data['Podcast']['media_type'].'/'.$this->Session->read('Auth.User.id').'_debug.rss'.'/'.$this->data['Podcast']['itunes_complete'].'/'.$this->data['Podcast']['interlace'].'.rss');
 
             // Create a filename prefixed with the current users ID so as not to overwrite another preview file.
-            $this->Feed->writeRssFile('rss/'.$this->Session->read('Auth.id').'_debug.rss', $this->data );
+            $this->Feed->writeRssFile(WWW_ROOT.'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );
             
-            $this->redirect('rss/'.$this->Session->read('Auth.id').'_debug.rss');
+            $this->redirect('http://'.$_SERVER['SERVER_NAME'].'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml');
         }
     }
 }
