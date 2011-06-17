@@ -170,9 +170,9 @@ class PodcastItemsController extends AppController {
 						
                     } else {
 						
-						// The file did not transcode, delete the file. 
-						unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'];
-					}
+                        // The file did not transcode, delete the file.
+                        unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'];
+                    }
                 }
             }
         }

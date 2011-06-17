@@ -41,8 +41,7 @@ class FeedsController extends AppController {
 
             foreach( $this->Feed->rss_flavours as $flavour ) {
 
-				$this->data = $this->requestAction('/feeds/view/'.$this->Feed->buildParameters( $id, $flavour ) );
-                //$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
+                $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
 
                 $this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
                 $this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
