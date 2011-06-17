@@ -1,21 +1,23 @@
 <fieldset>
-<legend>Dashboard</legend>
+<!--<legend><span>Dashboard</span></legend>-->
 <div id="dashboard" class="wrapper">
-    <p>Hello <?php echo $this->Session->read('Auth.User.firstname'); ?>,</p>
-    <p>And welcome to your dashboard. On this page you will find ...</p>
+    <!--<p>Hello <?php echo $this->Session->read('Auth.User.firstname'); ?>,</p>
+    <p>And welcome to your dashboard. On this page you will find ...</p>-->
 
     <div class="float_right">
         <ul>
-            <li><a href="/podcasts">You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
-            <li><a href="/user_groups">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
+            <li style="list-style:none;"><a href="/podcasts" class="button white"><img src="/img/information.png" alt="Information" class="icon" />You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
+            <li style="list-style:none;"><a href="/user_groups" class="button white"><img src="/img/information.png" alt="Information" class="icon" />You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
         </ul>
     </div>
     <div class="float_left">
-        <ul>
-            <li><a href="/podcasts">Your Podcasts</a></li>
-            <li><a href="/podcasts/add">Create New Podcast</a></li>
-            <li><a href="/user_groups">Your User Groups</a></li>
-            <li><a href="/user_groups/add">Create New User Group</a></li>
+        <ul class="dashboard">
+            <li><a href="/podcasts"><img src="../img/your-collections.png" alt="Your Podcasts" /></a></li>
+            <li><a href="/podcasts/add"><img src="../img/create-new-collections.png" alt="Create New Podcast" /></a></li>
+         </ul>
+         <ul class="dashboard">
+            <li><a href="/user_groups"><img src="../img/your-usergroups.png" alt="Your User Groups" /></a></li>
+            <li><a href="/user_groups/add"><img src="../img/create-new-usergroups.png" alt="Create New User Group" /></a></li>
         </ul>
 
     </div>

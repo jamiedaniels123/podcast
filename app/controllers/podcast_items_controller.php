@@ -167,13 +167,19 @@ class PodcastItemsController extends AppController {
                             $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'edit', $this->PodcastItem->getLastInsertId() ) );
                         }
                         exit();
-                    }
+						
+                    } else {
+						
+						// The file did not transcode, delete the file. 
+						unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'];
+					}
                 }
             }
         }
-
+		
+		// The file did not upload AOR transcode, roll back DB changes.
         $this->PodcastItem->rollback();
-        $this->Session->setFlash('Could not upload your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
+        $this->Session->setFlash('Could not upload/transcode your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
 
         // We need to redirect based on session information that is set within the index and admin_index methods.
         if( $this->Session->read('Podcast.admin') ) {
