@@ -17,6 +17,7 @@ class AppController extends Controller {
             $this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
         }
+
     }
 
     function getExtension( $filename = null ) {

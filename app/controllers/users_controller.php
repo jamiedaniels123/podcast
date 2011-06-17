@@ -37,7 +37,7 @@ class UsersController extends AppController {
     function login() {
 
         // Check to see if they are already logged in and redirect if true
-        if( $this->Session->check('Auth.User.id') ) {
+        if( $this->Session->check('Auth.User.id') && ( SAMS_OUCU_ID != 'UNDEFINED') ) {
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
             exit;
 

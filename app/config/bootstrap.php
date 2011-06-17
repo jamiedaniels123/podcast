@@ -88,7 +88,7 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_LOGIN_PAGE', 'https://msds.open.ac.uk/signon/SAMSDefault/SAMS001_Defaul.aspx?URL=http://podcast-admin-dev.open.ac.uk');
     }
 }
-
+DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
 DEFINE('PUBLIC_ITUNEU_PODCAST', 1 );
 DEFINE('PUBLISHED_ITUNEU_PODCAST', 2 );
 DEFINE('UNPUBLISHED_ITUNEU_PODCAST', 3 );
