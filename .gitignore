@@ -2,6 +2,7 @@ app/config/database.php
 app/config/core.php
 app/webroot/upload/files/*
 app/webroot/cgi-bin/*
+app/webroot/.htaccess
 .htaccess
 *.swp
 app/tmp/*
