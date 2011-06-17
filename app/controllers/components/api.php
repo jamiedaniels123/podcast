@@ -35,9 +35,8 @@ class ApiComponent extends Object {
 
         $this->response = json_decode( $this->__sendMessage('transcode-media', self::MEDIA_URL, $this->params ) );
         return $this->response;
-
-
     }
+    
     // returns a bool
     function fileExist( $path, $filename ) {
 
