@@ -34,7 +34,7 @@ class ApiComponent extends Object {
         );
 
         $this->response = json_decode( $this->__sendMessage('transcode-media', self::MEDIA_URL, $this->params ) );
-        return $this->response;
+        return $this->getStatus( $this->response );
     }
     
     // returns a bool
@@ -138,4 +138,18 @@ class ApiComponent extends Object {
         
         return $res;
     }
+	
+	
+	/*
+	 * @name : getStatus
+	 * @dfescription : Checks the "status" field for an ACK or NACK and returns a bool for ACK (acknowledged) or NACK
+	 * (Knackered).
+	 * @updated : 17th June 2011
+	 * @by : Charles Jackson
+	 */
+	function getStatus( $response = array() ) {
+		
+		return strtoupper( $response['status'] ) == 'ACK' ? 1 : 0;
+		
+	}
 }

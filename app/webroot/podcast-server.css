@@ -1,0 +1,60 @@
+@charset "utf-8";
+/* CSS Document */
+
+fieldset {position:relative;}
+legend span {display:block;position:absolute;top:-03px;left:60px}
+
+.leader	{display:block;position:absolute;top:20px;left:60px}
+
+.collection-top {margin: 30px 0 0 0; width: 100%;}
+
+.collection-top .left {float:left;width: 50%;}
+
+.collection-top .right {float:right;width: 50%; text-align:right}
+
+.clear {clear:both;}
+
+h3 a {text-decoration: none; font-weight:bold;}
+h3 a:hover {text-decoration: underline;}
+
+.icon {margin:0px 5px 0 5px;padding-bottom:1px;vertical-align:middle;}
+
+.button {background: none; border: 0; vertical-align:middle;}
+.button:hover {text-decoration:underline;}
+
+.podcast-owner {
+	font-style: italic;
+	color: #4492b0;}
+	
+.dashboard	{
+	list-style:none;
+	}
+	
+.dashboard li	{
+		display:inline;	
+}
+
+/*Background colours*/
+
+.white {background-color:#fff;}
+
+.blue {
+	background-color: #003d4c;
+	color: #fff;
+	border: 1px solid #003d4c;
+	border-radius: 4px;
+	padding: 2px;
+	}
+	
+.blue:hover {color: #fff;}
+
+.light-blue	{
+	background-color: #418db1;
+	color: #fff;
+	border: 1px solid #003d4c;
+	border-radius: 4px;
+	padding: 2px;
+	}
+	
+.light-blue:hover {color: #fff;}
+
