@@ -85,7 +85,7 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_EMAIL', 'UNDEFINED' );
         DEFINE('SAMS_OUCU_ID', 'UNDEFINED' );
         DEFINE('SAMS_NAME', 'UNDEFINED' );
-        DEFINE('SAMS_LOGIN_PAGE', 'https://msds.open.ac.uk/signon/SAMSDefault/SAMS001_Defaul.aspx?URL=http://podcast-admin-dev.open.ac.uk');
+        DEFINE('SAMS_LOGIN_PAGE', 'https://msds.open.ac.uk/signon/SAMSDefault/SAMS001_Default.aspx?URL=http://podcast-admin-dev.open.ac.uk');
     }
 }
 DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
