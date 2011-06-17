@@ -59,6 +59,7 @@ DEFINE('NO_IMAGE_AVAILABLE', '/img/noImageAvailable.jpg');
 DEFINE('CORRECT_IMAGE', '/correct.gif');
 DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
 
+// Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
     if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
@@ -78,6 +79,13 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
         DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+
+    } else {
+
+        DEFINE('SAMS_EMAIL', 'UNDEFINED' );
+        DEFINE('SAMS_OUCU_ID', 'UNDEFINED' );
+        DEFINE('SAMS_NAME', 'UNDEFINED' );
+        DEFINE('SAMS_LOGIN_PAGE', 'https://msds.open.ac.uk/signon/SAMSDefault/SAMS001_Defaul.aspx?URL=http://podcast-admin-dev.open.ac.uk');
     }
 }
 

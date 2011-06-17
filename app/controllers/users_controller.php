@@ -40,6 +40,11 @@ class UsersController extends AppController {
         if( $this->Session->check('Auth.User.id') ) {
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
             exit;
+
+        // Check they have logged in SAMS else redirect. SAMS details are picked up the bootstrap.php
+        } elseif( SAMS_OUCU_ID == 'UNDEFINED')  {
+
+            $this->redirect( SAMS_LOGIN_PAGE );
         }
 
         // If the user is logged into SAMS but not currently logged into the application attempt
