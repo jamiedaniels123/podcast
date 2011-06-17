@@ -41,7 +41,8 @@ class FeedsController extends AppController {
 
             foreach( $this->Feed->rss_flavours as $flavour ) {
 
-                $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
+				$this->data = $this->requestAction('/feeds/view/'.$this->Feed->buildParameters( $id, $flavour ) );
+                //$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
 
                 $this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
                 $this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
@@ -66,6 +67,10 @@ class FeedsController extends AppController {
      */
     function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true ) {
 
+		//$this->autoRender = false;
+		//$view = new View( $this, false);
+		//$view->viewPath = 'elements';
+		
         $podcast_items = array();
         
         $this->Podcast = ClassRegistry::init('Podcast');
@@ -124,8 +129,9 @@ class FeedsController extends AppController {
             $this->set( 'channelData', $this->Feed->getChannelData() );
             $podcast_items = $this->Feed->getPodcastItems();
             $this->set( compact( 'podcast_items' ) );
-
           }
+		  
+		  //return $view->render('blank');
     }
 
 
@@ -146,7 +152,7 @@ class FeedsController extends AppController {
             $this->data['MediaTypes'] = $this->Feed->itunes_title_suffix;
 
         } else {
-
+			
             $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'] ) );
 
             // Create a filename prefixed with the current users ID so as not to overwrite another preview file.

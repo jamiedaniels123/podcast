@@ -1,7 +1,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^feeds/view/([^/.]+) index_rss.php [L]
+    RewriteRule ^feeds/view/([^/.]+) index_open.php [L]	
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 </IfModule>
+<Files index.php>
+AUTHID 00000000
+</Files>

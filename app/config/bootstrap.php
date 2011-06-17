@@ -68,26 +68,17 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
         DEFINE('SAMS_NAME', 'Charles Jackson' );
 
-    } elseif( isSet( $_SERVER['REDIRECT_HTTP_SAMS_USER'] ) ) {
+    } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
 
-        DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
-		if( !empty( $_COOKIE['HS7BDF'] ) )
+        DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
+        DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
+		if( !empty( $_COOKIE['HS7BDF'] ) ) {
         	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
-
-    } elseif( isSet( $_SERVER['HTTP_SAMS_USER'] ) ) {
-
-        DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
-		if( !empty( $_COOKIE['HS7BDF'] ) )
-        	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+		} else {
+			DEFINE('SAMS_NAME','Unknown User');
+		}
 
     }
-
-    // Workaround incase Cookie does not exist
-	if( empty( $_COOKIE['HS7BDF'] ) )
-		DEFINE('SAMS_NAME','Unknown User');
-
 }
 DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
 DEFINE('PUBLIC_ITUNEU_PODCAST', 1 );

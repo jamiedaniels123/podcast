@@ -61,3 +61,7 @@
     
 </body>
 </html>
+<pre>
+	<?php print_r( $_SERVER ); ?>
+	<?php print_r( $_COOKIE	 ); ?>    
+</pre>
