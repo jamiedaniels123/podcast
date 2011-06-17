@@ -151,7 +151,7 @@ class FeedsController extends AppController {
 
             // Create a filename prefixed with the current users ID so as not to overwrite another preview file.
             $this->Feed->writeRssFile( WWW_ROOT .'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );
-            $this->redirect( APPLICATION_URL . '/rss/'.$this->Session->read('Auth.User.id').'_debug.xml' );
+            $this->redirect( '/rss/'.$this->Session->read('Auth.User.id').'_debug.xml' );
         }
     }
 }
