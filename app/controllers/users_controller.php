@@ -45,7 +45,7 @@ class UsersController extends AppController {
         // If the user is logged into SAMS but not currently logged into the application attempt
         // to find them  using the apache environment varibles else redirect to the registration form.
         if( $this->Session->check('Auth.User.id') == false ) {
-
+			
             $this->User->recursive = -1;
             $this->data = $this->User->findByOucu( SAMS_OUCU_ID );
 
@@ -107,7 +107,7 @@ class UsersController extends AppController {
     function logout() {
 
         $this->Session->destroy('Auth');
-        $this->redirect( array( 'url' => $_SESSION['REDIRECT_HTTP_SAMS_LOGOFF'] ) );
+        $this->redirect( SAMS_LOGOUT_PAGE );
     }
 
     /*

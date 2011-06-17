@@ -5,7 +5,7 @@ class ApiComponent extends Object {
     var $params = array();
     var $response = array();
 
-    const MEDIA_URL = 'http://podcast-api-dev.ac.uk';
+    const MEDIA_URL = 'http://137.108.130.70';
     
     /*
      * @name : startup
