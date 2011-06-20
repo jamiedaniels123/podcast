@@ -337,6 +337,89 @@ class PodcastsController extends AppController {
     }
 
     /*
+     * APPROVE FUNCTIONALITY
+     * Below this line are the approver functionality that can only be reach if the flag 'approver' is set to true on the
+     * users profile. The URL for all approver routes is "approve/:controller:/:action:/*
+     */
+
+    /*
+     * @name : approve_index
+     * @desscription : Displays a paginated list of all podcasts currently on the system that are waiting to be approved
+     * @name : Charles Jackson
+     * @by : 20th June 2011
+     */
+    function approve_index() {
+
+        unset( $this->Podcast->hasOne['UserPodcast'] );
+        
+        $conditions = $this->Podcast->waitingApproval( $this->data['Podcast']['filter'] );
+        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+
+    }
+
+    /*
+     * @name : approve_approve
+     * @description : Enables an approver to update the status flags for itunes and youtube to 'Y', in essence
+     * approving them.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function approve_approve( $media_channel, $id ) {
+
+        $this->Podcast->recursive = -1;
+        $this->data = $this->Podcast->findById( $id );
+
+        if( !empty( $this->data ) ) {
+
+            if( strtoupper( $media_channel ) == 'ITUNES' )
+                $this->data['Podcast']['publish_itunes_u'] = 'Y';
+            if( strtoupper( $media_channel ) == 'YOUTUBE' )
+                $this->data['Podcast']['publish_youtube'] = 'Y';
+
+            $this->Podcast->save( $this->data );
+            $this->Session->setFlash('The collection has been approved.', 'default', array( 'class' => 'success' ) );
+
+        } else {
+
+            $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
+
+        }
+
+        $this->redirect( $this->referer() );
+    }
+
+    /*
+     * @name : approve_reject
+     * @description : Enables an approver to update the 'intended' status flags for itunes and youtube to 'N', in essence
+     * rejecting them.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function approve_reject( $media_channel, $id ) {
+
+        $this->Podcast->recursive = -1;
+        $this->data = $this->Podcast->findById( $id );
+
+        if( !empty( $this->data ) ) {
+
+            if( strtoupper( $media_channel ) == 'ITUNES' )
+                $this->data['Podcast']['intended_itunesu_flag'] = 'N';
+            if( strtoupper( $media_channel ) == 'YOUTUBE' )
+                $this->data['Podcast']['intended_youtube_flag'] = 'N';
+
+            $this->Podcast->save( $this->data );
+            $this->Session->setFlash('The collection has been rejected.', 'default', array( 'class' => 'success' ) );
+
+        } else {
+
+            $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
+
+        }
+
+        $this->redirect( $this->referer() );
+    }
+
+    /*
      * ADMIN FUNCTIONALITY
      * Below this line are the administration functionality that can only be reach if the flag 'administrator' is set to true on the
      * users profile. The URL for all admin routes is "admin/:controller:/:action:/*

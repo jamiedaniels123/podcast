@@ -711,4 +711,32 @@ class Podcast extends AppModel {
 
         return $conditions;
      }
+
+
+     /*
+      * @name : waitingApproval
+      * @description : Will build the conditions to find all podcasts that are waiting to be approved.
+      * @updated : 20th June 2011
+      * @by : Charles Jackson
+      */
+     function waitingApproval() {
+
+        $conditions = array(
+            array('OR' => array(
+                array(
+                    'Podcast.intended_itunesu_flag' => 'Y',
+                    'Podcast.publish_itunes_u' => 'N'
+                    ),
+                array(
+                    'Podcast.intended_youtube_flag' => 'Y',
+                    'Podcast.publish_youtube' => 'N'
+                    )
+                )
+            ),
+            'Podcast.deleted' => 0
+        );
+
+        return $conditions;
+
+     }
 }
