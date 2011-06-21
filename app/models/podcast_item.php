@@ -60,11 +60,40 @@ class PodcastItem extends AppModel {
      * @updated : 25th May 2011
      * @by : Charles Jackson
      */
-    function createFromUrlVariables( $url = array(), $podcast_id = null ) {
+    function createFromUrlVariables( $params = array(), $podcast_id = null ) {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
-        $this->data['PodcastItem']['filename'] = $url['f1name'];
-        $this->data['PodcastItem']['published_flag'] = true;
+        $this->data['PodcastItem']['filename'] = $params['url']['f1name'];
+        $this->data['PodcastItem']['published_flag'] = 'Y';
+        $this->data['PodcastItem']['processed_state'] = 2;
+
+        if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
+            $this->data['PodcastItem']['aspect_ratio'] = 16.9;
+        if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
+            $this->data['PodcastItem']['aspect_ratio'] = 4.3;
+        
         return $this->data;
+    }
+
+
+    /*
+     * @name : getMediaInfo
+     * @description : We use the getID3 component to extract various bits and pieces from the uploaded file and save to the database
+     * else store in $this->data and so we may create a workflow that can be passed to the Api.
+     * @updated : 21st June 2011
+     * @by : Charles Jackson
+     */
+    function getMediaInfo( $data = array(), $media_info = array() ) {
+
+        if( !is_array( $media_info ) ) {
+
+            $data['PodcastItem']['duration'] = $info['length']; // Stored in the database
+            $data['PodcastItem']['fileformat'] = $info['fileformat']; // Stored in the database
+            $data['PodcastItem']['original_filename'] = $info['filename']; // Stored in the database
+
+            // Now we need to trap information that will be used to create a workslow for the transcoder.
+        }
+
+        return $data;
     }
 }

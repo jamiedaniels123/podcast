@@ -139,7 +139,7 @@ class PodcastItemsController extends AppController {
         if ( $this->Session->check('Podcast.podcast_id') && isSet( $this->params['url'] ) ) {
 
             $this->PodcastItem->create();
-            $this->data = $this->PodcastItem->createFromUrlVariables( $this->params['url'], $this->Session->read('Podcast.podcast_id') );
+            $this->data = $this->PodcastItem->createFromUrlVariables( $this->params, $this->Session->read('Podcast.podcast_id') );
             $this->PodcastItem->set( $this->data );
 
             $this->PodcastItem->begin();
@@ -150,7 +150,10 @@ class PodcastItemsController extends AppController {
                 
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
-                    $this->getMediaInfo( $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
+                    // Now we have the file in it's correct location we must capture various details and store in this->data
+                    // so we may save to the database and create a workflow for the transcoder.
+                    $this->data = $this->PodcastItem->getMediaInfo( $this->data, $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] ) );
+
                     if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'] ) ) {
                         
                         $this->PodcastItem->commit();
@@ -347,7 +350,6 @@ class PodcastItemsController extends AppController {
     function admin_delete( $id = null ) {
 
         $this->autoRender = false;
-        $this->recursive = -1;
 
         if( $id )
             $this->data = $this->PodcastItem->findById( $id );
@@ -359,29 +361,21 @@ class PodcastItemsController extends AppController {
 
         } else {
 
+            // Remove the associated media from the podcast server.
+            $files = array();
+            foreach( $this->data['PodcastItemMedia'] as $media ) {
+
+                $files[] = $this->data['Podcast']['custom_id'].'/'.$media['PodcastItemMedia']['media_type'].'/'.$media['PodcastItemMedia']['filename'];
+            }
+            $this->Api->deleteFileOnMediaServer( $files );
+
             // Delete the podcast
             $this->PodcastItem->delete( $id );
-
-            //
-            // @TODO : Remove podcast media.
+           
 
             $this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
         }
         
         $this->redirect( $this->referer() );
-    }
-
-    function getMediaInfo( $file = null ) {
-
-        //echo "file is ".$file;
-        $info = $this->Getid3->extract( FILE_REPOSITORY . '1450_kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/BSG_4.4.avi' );
-
-        if( !is_array( $info ) )	{
-            die('could not find file');
-
-        }
-
-        pr($info);
-        die('info above');
     }
 }
