@@ -234,6 +234,42 @@ class PodcastItemsController extends AppController {
             $this->Session->setFlash('Your podcast media has been successfully updated.', 'default', array( 'class' => 'success' ) );
         }
     }
+	
+    /*
+     * @name : delete
+     * @desscription : Enables a user to delete an individual item of media assuming they have permission
+     * @name : Charles Jackson
+     * @by : 5th May 2011
+     */
+    function delete( $id = null ) {
+
+        $this->autoRender = false;
+		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
+        $this->data = $this->PodcastItem->findById( $id );
+		
+        // If we did not find the podcast media then redirect to the referer.
+        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
+
+            $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
+
+        } else {
+
+			if( $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+
+				// Delete the podcast
+				$this->PodcastItem->delete( $id );
+			   
+	
+				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+				
+				$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			}
+        }
+        
+        $this->redirect( $this->referer() );
+    }
 
     /*
      * ADMIN FUNCTIONALITY
@@ -351,29 +387,25 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 
-        if( $id )
-            $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->findById( $id );
 
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
-
         } else {
 
-            // Remove the associated media from the podcast server.
-            $files = array();
-            foreach( $this->data['PodcastItemMedia'] as $media ) {
+			if( $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 
-                $files[] = $this->data['Podcast']['custom_id'].'/'.$media['PodcastItemMedia']['media_type'].'/'.$media['PodcastItemMedia']['filename'];
-            }
-            $this->Api->deleteFileOnMediaServer( $files );
-
-            // Delete the podcast
-            $this->PodcastItem->delete( $id );
-           
-
-            $this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+				// Delete the podcast
+				$this->PodcastItem->delete( $id );
+				
+				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+				
+				$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			}
         }
         
         $this->redirect( $this->referer() );
