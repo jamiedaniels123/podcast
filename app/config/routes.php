@@ -28,6 +28,8 @@
  */
 	//Router::connect('/', array( 'controller' => 'users', 'action' => 'dashboard'));
         Router::connect('/', array('controller' => 'users', 'action' => 'dashboard' ) );
+        Router::connect('/callback', array('controller' => 'podcasts', 'action' => 'callback' ) );
+        Router::connect('/callback/*', array('controller' => 'podcasts', 'action' => 'callback' ) );
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */

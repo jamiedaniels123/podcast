@@ -3,6 +3,7 @@ class PodcastItemsController extends AppController {
 
     var $name = 'PodcastItems';
     var $components = array( 'Image' );
+
     private $errors = array();
 
     var $paginate = array( 'limit' => 5, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
@@ -149,6 +150,7 @@ class PodcastItemsController extends AppController {
                 
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
+                    $this->getMediaInfo( $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
                     if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'] ) ) {
                         
                         $this->PodcastItem->commit();
@@ -171,7 +173,7 @@ class PodcastItemsController extends AppController {
                     } else {
 						
                         // The file did not transcode, delete the file.
-                        unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'];
+                        unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
                     }
                 }
             }
@@ -367,5 +369,19 @@ class PodcastItemsController extends AppController {
         }
         
         $this->redirect( $this->referer() );
+    }
+
+    function getMediaInfo( $file = null ) {
+
+        //echo "file is ".$file;
+        $info = $this->Getid3->extract( FILE_REPOSITORY . '1450_kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/BSG_4.4.avi' );
+
+        if( !is_array( $info ) )	{
+            die('could not find file');
+
+        }
+
+        pr($info);
+        die('info above');
     }
 }

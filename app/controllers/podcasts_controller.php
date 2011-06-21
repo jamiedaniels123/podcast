@@ -254,7 +254,7 @@ class PodcastsController extends AppController {
 
     /*
      * @name : delete
-     * @desscription : Enables a user to perform a hard delete on a podcast and the associated media if they are the current owner.
+     * @desscription : Enables a user to perform a soft delete on a podcast and the associated media if they are the current owner.
      * @name : Charles Jackson
      * @by : 19th May 2011
      */
@@ -280,10 +280,17 @@ class PodcastsController extends AppController {
             $this->Podcast->set( $this->podcast );
             $this->Podcast->save();
 
-            if( $this->Folder->deleteByHtaccess( $this->podcast ) ) {
-            
-                $this->Podcast->commit();
-                $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+            if( $this->Folder->createHtaccess( $this->podcast ) ) {
+
+                if( $this->Api->transferFileMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
+                    
+                    $this->Podcast->commit();
+                    $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+
+                } else {
+
+                    $this->Session->setFlash('Something went wrong and we were unable to delete the file. Please try again.', 'default', array( 'class' => 'error' ) );
+                }
 
             } else {
 
@@ -603,11 +610,17 @@ class PodcastsController extends AppController {
             // If we did no find the podcast that redirect to the referer.
             if( empty( $this->podcast ) == false ) {
 
-                // Delete the podcast
-                $this->Podcast->delete( $this->podcast['Podcast']['id'] );
-                // @TODO : Remove any associated media.
+                if( $this->Api->deleteFolderFromMediaServer( array( $data['Podcast']['custom_id'] ) ) ) {
 
-                $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+                    // Delete the podcast
+                    $this->Podcast->delete( $this->podcast['Podcast']['id'] );
+                    $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+
+                } else {
+
+                     $this->Session->setFlash('We were unable to delete the collection from the media server. Please try again.', 'default', array( 'class' => 'error' ) );
+
+                }
             }
         }
         
@@ -636,8 +649,14 @@ class PodcastsController extends AppController {
             $this->Podcast->set( $this->data );
             $this->Podcast->save();
 
-            //@TODO : restore the data.
-            $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+            if( $this->Api->deleteFileFromMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
+                
+                $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+
+            } else {
+
+                $this->Session->setFlash('We were unable to restore the collection. Please try again.', 'default', array( 'class' => 'error' ) );
+            }
 
         }
 

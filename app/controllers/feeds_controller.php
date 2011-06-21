@@ -35,19 +35,31 @@ class FeedsController extends AppController {
         $this->Podcast = ClassRegistry::init('Podcast');
         $this->Podcast->recursive = -1;
         $podcast = $this->Podcast->findById( $id );
-
+        $rss_array = array();
+        
         // If we found a podcast, create the RSS feeds
         if( !empty( $podcast ) ) {
 
             foreach( $this->Feed->rss_flavours as $flavour ) {
 
                 $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $id, $flavour ) );
-
-                $this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-                $this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
+                
+                if( is_array( $this->data) && count( $this->data ) ) {
+                    
+                    $this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+                    $this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
+                    $rss_array[] = $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'];
+                }
             }
+            
+            if( $this->Api->transferFileMediaServer( $rss_array ) ) {
 
-            $this->Session->setFlash('Your RSS feeds have been successfully generated and scheduled for transfer to the media server.', 'default', array( 'class' => 'success' ) );
+                $this->Session->setFlash('Your RSS feeds have been successfully generated and scheduled for transfer to the media server.', 'default', array( 'class' => 'success' ) );
+
+            } else {
+
+                $this->Session->setFlash('We could not schedule movement of the RSS feeds with the media server. Please try again.', 'default', array( 'class' => 'error' ) );
+            }
 
         } else {
 

@@ -2,16 +2,15 @@
 class FolderComponent extends Object {
 
 
-    function deleteByHtaccess( $data = array() ) {
+    function createHtaccess( $data = array() ) {
 
         $this->create( $data['Podcast']['custom_id'] );
         $text = 'ErrorDocument 404 /notfound.html';
 
         if( $this->writeFile( $text, $data['Podcast']['custom_id'],'.htaccess' ) )
             return true;
-        
-        return false;
 
+        return false;
     }
 
     /*
@@ -27,7 +26,6 @@ class FolderComponent extends Object {
         if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
 
             unlink( FILE_REPOSITORY.$data['PodcastItem']['filename'] );
-            //$this->Api->Transcode( $data );
             return true;
         }
 

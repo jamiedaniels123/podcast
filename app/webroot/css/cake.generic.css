@@ -682,3 +682,13 @@ form#theuploadform input[type="button"] {
 form#theuploadform input[type="file"] {
     width: 300px;
 }
+
+
+ul#breadcrumb li {
+
+	float: left;
+	margin-right: 10px;
+        list-style-type: none;
+
+
+}

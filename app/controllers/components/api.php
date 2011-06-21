@@ -18,6 +18,50 @@ class ApiComponent extends Object {
        $this->controller = & $controller;
     }
 
+
+    function deleteFolderFromMediaServer( $folders = array() ) {
+
+        $this->params = array(
+            'data' => $folders
+        );
+
+        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::MEDIA_URL, $this->params ) );
+        return $this->getStatus( $this->response );
+
+    }
+
+    /*
+     * @name : deleteFileOnMediaServer
+     * @description : Deletes a file on the media server.
+     * @updated : 20th June 2011
+     * @by : Ian Newton / Charles Jackson
+     */
+    function deleteFileOnMediaServer( $files = array() ) {
+
+        $this->params = array(
+            'data' => $files
+        );
+
+        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::MEDIA_URL, $this->params ) );
+        return $this->getStatus( $this->response );
+    }
+
+    /*
+     * @name : transferFileMediaServer
+     * @description : Called from the Feeds controller, passes a list of files to be moved across to the media server.
+     * @updated : 7th June 2011
+     * @by : Ian Newton / Charles Jackson
+     */
+    function transferFileMediaServer( $files = array() ) {
+
+        $this->params = array(
+            'data' =>  $files
+        );
+
+        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $this->params ) );
+        return $this->getStatus( $this->response );
+    }
+
     /*
      * @name : sendMessage
      * @description : Called from the controller, formats parameters passed into a JSON encoded array
