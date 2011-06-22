@@ -9,19 +9,19 @@ class User extends AppModel {
         'firstname' => array(
             'Rule1' => array(
                 'rule' => 'notEmpty',
-                'message' => 'Please enter the users first name.'
+                'message' => 'Please enter your first name.'
             )
         ),
         'lastname' => array(
             'Rule1' => array(
                 'rule' => 'notEmpty',
-                'message' => 'Please enter the users last name.'
+                'message' => 'Please enter your last name.'
             )
         ),
         'email' => array(
             'Rule1' => array(
                 'rule' => 'email',
-                'allowEmpty' => true,
+                'allowEmpty' => false,
                 'message' => 'Please enter a valid email address.'
             )
         ),
@@ -125,6 +125,23 @@ class User extends AppModel {
                         'Podcasts.id'
                         )
                     )
+                )
+            )
+        );
+    }
+
+    /*
+     * @name : getAdministrators
+     * @description : Returns an array of all administrators on the system.
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function getAdministrators() {
+
+        return $this->find('all', array(
+
+            'conditions' => array(
+                'User.administrator' => true
                 )
             )
         );

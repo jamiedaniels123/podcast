@@ -57,14 +57,16 @@
                             <?php echo $podcast['Podcast']['intended_youtube_flag']; ?>
                         </td>
                         <td class="actions">
-                            <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
-                            <?php if( $this->Object->intendedForItunes( $podcast['Podcast'] ) ) : ?>
-                                <a href="/approve/podcasts/approve/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for itunesu?');" id="approve_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes approve</a>
-                                <a href="/approve/podcasts/reject/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for itunesu?');" id="reject_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes reject</a>
+                            <a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
+                            <?php if( $this->Object->intendedForItunes( $podcast['Podcast'] ) && $this->Permission->isItunesUser() ) : ?>
+                                <a href="/podcasts/itunes/<?php echo $podcast['Podcast']['id']; ?>" id="edit_itunespodcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
+                                <a href="/podcasts/approval/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for itunesu?');" id="approve_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes approve</a>
+                                <a href="/podcasts/rejection/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for itunesu?');" id="reject_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes reject</a>
                             <?php endif; ?>
-                            <?php if( $this->Object->intendedForYoutube( $podcast['Podcast'] ) ) : ?>
-                                <a href="/approve/podcasts/approve/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for youtube?');" id="approve_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube approve</a>
-                                <a href="/approve/podcasts/reject/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for youtube?');" id="reject_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube reject</a>
+                            <?php if( $this->Object->intendedForYoutube( $podcast['Podcast'] ) && $this->Permission->isYouTubeUser() ) : ?>
+                                <a href="/podcasts/youtube/<?php echo $podcast['Podcast']['id']; ?>" id="edit_youtubepodcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
+                                <a href="/podcasts/approval/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for youtube?');" id="approve_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube approve</a>
+                                <a href="/podcasts/rejection/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for youtube?');" id="reject_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube reject</a>
                             <?php endif; ?>
                         </td>
                     </tr>

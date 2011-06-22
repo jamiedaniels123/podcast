@@ -13,7 +13,7 @@ class UsersController extends AppController {
      */
     function beforeFilter() {
         
-        $this->Auth->allow( 'register', 'login', 'home' );
+        $this->Auth->allow( 'register', 'login', 'home', 'apply' );
         parent::beforeFilter();
     }
 
@@ -52,8 +52,17 @@ class UsersController extends AppController {
             // They do not appear to be registered on the application, redirect them to the register action
             if( empty( $this->data ) ) {
 
-                $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'register' ) );
-                exit;
+                if( REGISTER_BY_OUCU ) {
+                    
+                    $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'register' ) );
+                    exit;
+
+                } else {
+
+                    $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'apply' ) );
+                    exit;
+
+                }
 
             // We found the user but the terms and conditions have been updated since they last logged in.
             // Redirect them to the register action.
@@ -160,6 +169,25 @@ class UsersController extends AppController {
         }
     }
 
+    function apply() {
+
+        if( !empty( $this->data ) ) {
+
+            $this->data['User']['status'] = false; // Set their status to inactive so they are not able to login.
+
+            if( $this->User->save( $this->data ) ) {
+
+                $this->emailTemplates->__sendNewRegistrationEmail( $this->data, $this->User->getAdministrators() );
+                $this->Session->setFlash( 'Your application has been sent. Thanks for the interest.', 'default', array( 'class' => 'success' ) );
+
+            } else {
+                
+                $this->Session->setFlash( 'There has been a problem with your application. Please complete all fields.', 'default', array( 'class' => 'error' ) );
+            }
+
+        }
+        
+    }
     /*
      * ADMIN FUNCTIONALITY
      * Below this line are the administration functionality that can only be reach if the flag 'administrator' is set to true on the

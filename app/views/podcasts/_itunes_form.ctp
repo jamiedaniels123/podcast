@@ -211,6 +211,8 @@
                 <?php echo $this->Form->error('Podcast.owner_id'); ?>
             </div>
         <?php endif; ?>
-        <?php echo $this->element('../podcasts/_form_itunes_apply'); ?>
+        <?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
+            <?php echo $this->element('../podcasts/_form_itunes'); ?>
+        <?php endif; ?>
     </div>
 <?php endif; ?>

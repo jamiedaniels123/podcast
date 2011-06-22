@@ -157,7 +157,28 @@ class PodcastsController extends AppController {
             $this->redirect( $this->referer() );
         }
     }
-    
+
+    /*
+     * @name : justification
+     * @desscription : Enables an itunes or youtube user to view details of a collection and the associated justifiication
+     * for inclusion on youtube or itunesu.
+     * @name : Charles Jackson
+     * @by : 22nd June 2011
+     */
+    function justification( $id = null ) {
+
+        $this->Podcast->recursive = 2;
+        // They are loading the page, get the data using the $id passed as a parameter.
+        $this->data = $this->Podcast->findById( $id );
+
+        // We did not find the podcast, error and redirect.
+        if( empty( $this->data ) || $this->Permission->isItunesUser() == false || $this->Permission->isYoutubeUser() == false ) {
+
+            $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->redirect( $this->referer() );
+        }
+    }
+
     /*
      * @name : edit
      * @desscription : Displays a form that enables peeps to edit an existing row on the podcasts table.
@@ -248,6 +269,57 @@ class PodcastsController extends AppController {
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
+            }
+        }
+    }
+
+    /*
+     * @name : itunes
+     * @desscription : Displays a form that enables peeps to edit itunes details of a collection
+     * @name : Charles Jackson
+     * @by : 22nd June 2011
+     */
+    function itunes( $id = null ) {
+
+        $this->Podcast->recursive = 2;
+
+        if ( !empty( $this->data ) ) {
+
+            // Save this->data into a local array called data so we may unset the attachment array elements before
+            // validating else it will fail because they contain arrays.
+            $data = array();
+            $data = $this->data;
+
+            $this->data = $this->Podcast->unsetAttachments( $this->data );
+
+            $this->Podcast->set( $this->data );
+
+            if( $this->Podcast->saveAll() ) {
+
+                // Now copy back the original including array elements and
+                // save again with attachment elements.
+                $this->data = $data;
+                $this->__update();
+
+                $this->Session->setFlash('Itunes details have been successfully updated.', 'default', array( 'class' => 'success' ) );
+                $this->redirect( array( 'action' => 'justification', $this->data['Podcast']['id'] ) );
+
+            } else {
+                
+                $this->data = $this->Podcast->rebuild( $this->data );
+                $this->errors = $this->Podcast->invalidFields( $this->data );
+                $this->Session->setFlash('Could not update your collection. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
+            }
+
+        } else {
+
+            $this->data = $this->Podcast->findById( $id );
+
+            // We did not find the podcast, redirect.
+            if( empty( $this->data ) || $this->Permission->isItunesUser() == false ) {
+
+                $this->Session->setFlash('Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
+                $this->redirect( $this->referer() );
             }
         }
     }
@@ -344,18 +416,12 @@ class PodcastsController extends AppController {
     }
 
     /*
-     * APPROVE FUNCTIONALITY
-     * Below this line are the approver functionality that can only be reach if the flag 'approver' is set to true on the
-     * users profile. The URL for all approver routes is "approve/:controller:/:action:/*
-     */
-
-    /*
-     * @name : approve_index
+     * @name : approve
      * @desscription : Displays a paginated list of all podcasts currently on the system that are waiting to be approved
      * @name : Charles Jackson
      * @by : 20th June 2011
      */
-    function approve_index() {
+    function approve() {
 
         unset( $this->Podcast->hasOne['UserPodcast'] );
         
@@ -365,13 +431,13 @@ class PodcastsController extends AppController {
     }
 
     /*
-     * @name : approve_approve
+     * @name : approval
      * @description : Enables an approver to update the status flags for itunes and youtube to 'Y', in essence
      * approving them.
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function approve_approve( $media_channel, $id ) {
+    function approval( $media_channel, $id ) {
 
         $this->Podcast->recursive = -1;
         $this->data = $this->Podcast->findById( $id );
@@ -380,9 +446,12 @@ class PodcastsController extends AppController {
 
             if( strtoupper( $media_channel ) == 'ITUNES' )
                 $this->data['Podcast']['publish_itunes_u'] = 'Y';
+            
             if( strtoupper( $media_channel ) == 'YOUTUBE' )
                 $this->data['Podcast']['publish_youtube'] = 'Y';
 
+            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+            
             $this->Podcast->save( $this->data );
             $this->Session->setFlash('The collection has been approved.', 'default', array( 'class' => 'success' ) );
 
@@ -392,17 +461,17 @@ class PodcastsController extends AppController {
 
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( '/podcasts/approve' );
     }
 
     /*
-     * @name : approve_reject
-     * @description : Enables an approver to update the 'intended' status flags for itunes and youtube to 'N', in essence
+     * @name : rejection
+     * @description : Enables a user to update the 'intended' status flags for itunes and youtube to 'N', in essence
      * rejecting them.
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function approve_reject( $media_channel, $id ) {
+    function rejection( $media_channel, $id ) {
 
         $this->Podcast->recursive = -1;
         $this->data = $this->Podcast->findById( $id );
@@ -411,6 +480,7 @@ class PodcastsController extends AppController {
 
             if( strtoupper( $media_channel ) == 'ITUNES' )
                 $this->data['Podcast']['intended_itunesu_flag'] = 'N';
+            
             if( strtoupper( $media_channel ) == 'YOUTUBE' )
                 $this->data['Podcast']['intended_youtube_flag'] = 'N';
 
@@ -423,7 +493,7 @@ class PodcastsController extends AppController {
 
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( '/podcasts/approve' );
     }
 
     /*

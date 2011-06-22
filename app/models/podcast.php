@@ -121,6 +121,10 @@ class Podcast extends AppModel {
                 'message' => 'If entered, you must provide a valid web address.'
             )
         ),
+        'itunesu_justification' => array(
+            'rule' => array('ifIntendedForItunesu'),
+            'message' => 'If you wish to publish this collection on ItunesU please provide a justification.'
+        )
     );
 
     var $belongsTo = array(
@@ -260,6 +264,29 @@ class Podcast extends AppModel {
     }
 
     /*
+     * @name : ifIntendedForItunesu
+     * @description : Custom validation method called from the validation array. If the user wishes to publish
+     * this collection on Itunes they must provide a justification.
+     * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function ifIntendedForItunesu( $check = array() ) {
+
+        if( $this->data['Podcast']['intended_itunesu_flag'] == 'Y' ) {
+
+            // get the value of the field being passed
+            $value = array_shift( $check );
+
+            if( empty( $value ) )
+                return false;
+        }
+
+        return true;
+    }
+
+
+    /*
      * @name : privateUntilPublishedMedia
      * @description : A podcast must remain private untill it has associated published media. This method is
      * called by the validation array and returns a count of published media.
@@ -295,7 +322,7 @@ class Podcast extends AppModel {
 
     /*
      * @name : __checkExplicitStatus
-     * @description : Called directly before model data is saved, it read through all associated media
+     * @description : Called directly before model data is saved, it reads through all associated media
      * and looks at the value of explicit. Depending upon results will set the appropriate value at
      * podcast level.
      * @updated : 3rd June 2011

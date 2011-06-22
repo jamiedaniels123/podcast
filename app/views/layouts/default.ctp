@@ -43,6 +43,7 @@
         </div>
         <div id="content">
             <?php echo $this->Session->flash(); ?>
+            <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
             <?php echo $content_for_layout; ?>
         </div>
@@ -60,5 +61,5 @@
 </body>
 </html>
 <pre>
-	<?php print_r( $breadcrumbs ); ?>
+	<?php print_r( $this->data ); ?>
 </pre>

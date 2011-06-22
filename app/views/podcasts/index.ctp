@@ -80,7 +80,7 @@
         endif; ?>
         </table>
         
-                <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
+        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
         <button class="button white" type="submit" onclick="return confirm('Are you sure you wish to delete all these podcasts and associated media?')"><span>delete</span></button>
         
         
