@@ -70,7 +70,9 @@ class FeedsController extends AppController {
 
             $this->Session->setFlash('We were unable to generate the RSS feeds.', 'default', array( 'class' => 'error' ) );
         }
-
+		if( isSet( $this->params['no_redirect'] ) )
+			return true;
+			
         $this->redirect( $this->referer() );
     }
     
