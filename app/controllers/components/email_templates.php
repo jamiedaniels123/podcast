@@ -9,8 +9,16 @@ class emailTemplatesComponent extends Object {
 
         // saving the controller reference for later use
         $this->controller =& $controller;
+
+        /* SMTP Options */
+        $this->Email->smtpOptions = array(
+            'port' => 25,
+            'host' => 'smtpmail.open.ac.uk'
+        );
+
+        $this->Email->delivery = 'smtp';
         $this->Email->date_create = date('Y-m-d H:i:s');
-        $this->Email->from = "support@".$this->getDomain();
+        $this->Email->from = 'Podcast Admin Server <cj3998@openmail.open.ac.uk>';
 
     }
 
