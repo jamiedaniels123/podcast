@@ -1,4 +1,4 @@
-<h2>NEW REGISTRATION</h2>
+<h2>New Registration</h2>
 <p>
 	The following user has registered with the podcast server.
 </p>

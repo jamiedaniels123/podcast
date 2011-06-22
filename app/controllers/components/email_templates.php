@@ -18,7 +18,7 @@ class emailTemplatesComponent extends Object {
 
         $this->Email->delivery = 'smtp';
         $this->Email->date_create = date('Y-m-d H:i:s');
-        $this->Email->from = 'Podcast Admin Server <cj3998@openmail.open.ac.uk>';
+        $this->Email->from = DEFAULT_EMAIL_ADDRESS;
 
     }
 
@@ -26,14 +26,14 @@ class emailTemplatesComponent extends Object {
      * @NAME : __sendNewRegistrationEmail
      * @DESCRIPTION : When a user registers with the site this email will be sent out.
      */
-    function __sendNewRegistrationEmail($data, $recipients = array() ) {
+    function __sendNewRegistrationEmail( $data, $administrators = array() ) {
 
         /* Set delivery method */
-        foreach( $recipients as $recipient ) {
+        foreach( $administrators as $administrator ) {
             
-            $this->Email->to = $recipient['User']['email'];
+            $this->Email->to = $administrator['User']['email'];
             $this->Email->subject = "New Registration at ".$_SERVER['HTTP_HOST'];
-            $this->Email->replyTo = $recipient['User']['email'];
+            $this->Email->replyTo = $data['User']['email'];
             $this->Email->template = 'new_registration'; // note no '.ctp'
 
             $this->Email->sendAs = 'html'; // because we like to send pretty mail
@@ -43,6 +43,26 @@ class emailTemplatesComponent extends Object {
 
             $this->Email->send();
         }
+    }
+
+    /*
+     * @NAME : __sendRegistrationApprovedEmail
+     * @DESCRIPTION : When an administrator approved a user registration this email will be sent out.
+     */
+    function __sendRegistrationApprovedEmail( $recipient ) {
+
+        /* Set delivery method */
+        $this->Email->to = $recipient['User']['email'];
+        $this->Email->subject = "Registration confirmed at ".$_SERVER['HTTP_HOST'];
+        $this->Email->replyTo = DEFAULT_EMAIL_ADDRESS;
+        $this->Email->template = 'registration_approved'; // note no '.ctp'
+
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        //Set view variables as normal
+        $this->controller->set('data', $recipient);
+        //Do not pass any args to send()
+
+        $this->Email->send();
     }
 
     function getDomain() {

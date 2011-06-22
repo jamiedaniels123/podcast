@@ -29,6 +29,11 @@ class FeedsController extends AppController {
      */
     function add( $id = null ) {
 
+        // If we are calling this method using "requestAction" as opposed to a redirect then we must take the
+        // ID from the this->params array.
+        if( ( $id == null ) && ( $this->params['id'] ) )
+            $id = $this->params['id'];
+
         $this->autoRender = false;
 
         // First lets try and retrieve the podcast we wish to create RSS feeds for.

@@ -105,4 +105,4 @@ DEFINE('YES', 'Y');
 DEFINE('NO', 'N');
 
 DEFINE('REGISTER_BY_OUCU', true );
-
+DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );
