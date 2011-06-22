@@ -64,13 +64,13 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
     if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
 
-        DEFINE('SAMS_EMAIL', $_SERVER['LOCAL_SAMS_USER'].'@openmail.open.ac.uk' );
+        DEFINE('SAMS_EMAIL', $_SERVER['LOCAL_SAMS_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
         DEFINE('SAMS_NAME', 'Charles Jackson' );
 
     } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
 
-        DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@openmail.open.ac.uk' );
+        DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
 		if( !empty( $_COOKIE['HS7BDF'] ) ) {
         	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
@@ -104,5 +104,5 @@ DEFINE('YOUTUBE', 'YOUTUBE');
 DEFINE('YES', 'Y');
 DEFINE('NO', 'N');
 
-DEFINE('REGISTER_BY_OUCU', false );
-
+DEFINE('REGISTER_BY_OUCU', true );
+DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );

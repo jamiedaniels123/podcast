@@ -124,6 +124,7 @@ class PodcastsController extends AppController {
                 $this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
                 $this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
                 $this->__update();
+
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
 
             } else {
@@ -225,6 +226,9 @@ class PodcastsController extends AppController {
                     $this->data = $data;
 
                     $this->__update();
+
+                    // Generate the RSS Feeds.
+                    $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $this->data['Podcast']['id'] ) );
 
                     // Will only be true if they have attempted to change ownership at some point.
                     if( isSet( $this->data['Podcast']['confirmed'] ) && $this->data['Podcast']['confirmed']  == true ) {
