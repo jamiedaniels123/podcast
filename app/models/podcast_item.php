@@ -96,4 +96,37 @@ class PodcastItem extends AppModel {
 
         return $data;
     }
+
+	/*
+	 * @name : listAssociatedMedia
+	 * @description : Build an array of media files that can by passed to the API.
+	 * @updated : 21st June 2011
+	 * @by : Charles Jackson
+	 */
+	function listAssociatedMedia( $data = array() ) {
+	
+		$media_files = array();
+		
+		// Loop through the media and append to an array
+        foreach( $data['PodcastMedia'] as $media ) {
+
+        	$media_files[] = array( 
+				'source_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',
+				'target_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',				
+				'filename' => $media['PodcastMedia']['filename']
+				);
+        }
+		
+		// Grab the transcript if it exists and append to array
+		if( is_array( $data['Transcript'] ) && count( $data['Transcript'] ) ) {
+			
+			$media_files[] = array( 
+				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
+				'target_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
+				'filename' => $data['Transcript']['filename']
+				);
+		}
+		
+		return $media_files;		
+	}
 }

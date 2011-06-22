@@ -25,7 +25,7 @@ class ApiComponent extends Object {
             'data' => $folders
         );
 
-        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::MEDIA_URL, $this->params ) );
+        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::MEDIA_URL, $this->params ), 1 );
         return $this->getStatus( $this->response );
 
     }
@@ -36,29 +36,67 @@ class ApiComponent extends Object {
      * @updated : 20th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function deleteFileOnMediaServer( $files = array() ) {
+    function deleteFileOnMediaServer( $source = null, $filename = null ) {
 
-        $this->params = array(
-            'data' => $files
-        );
+		// If we wish to delete a individual file we pass individual elements.
+		if( is_array( $source ) == false ) {
+			
+			$this->params = array(
+				'data' => array(
+					array(
+						'source_path' => $source,
+						'filename' => $filename
+					)
+				)
+			);
+					
+		} else {
+			
+			// We wish to delete multiple file hence $source is a preformatted array.
+			$this->params = array(
+				'data' => $source
+				);
+		}
 
-        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::MEDIA_URL, $this->params ) );
+        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::MEDIA_URL, $this->params ), 1 );
         return $this->getStatus( $this->response );
     }
 
     /*
      * @name : transferFileMediaServer
-     * @description : Called from the Feeds controller, passes a list of files to be moved across to the media server.
+     * @description : Passes a list of files to be moved across to the media server.
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transferFileMediaServer( $files = array() ) {
+    function transferFileMediaServer( $source = null, $filename = null, $target = null ) {
 
-        $this->params = array(
-            'data' =>  $files
-        );
-
-        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $this->params ) );
+		// If we wish to transfer a individual file we pass individual elements.
+		if( is_array( $source ) == false ) {
+			
+			// If target is NULL the destination path mirrors the source path.
+			if( $target == null )
+				$target = $source;
+				
+				
+			$this->params = array(
+				'data' => array(
+					array(
+						'source_path' => $source,
+						'destination_path' => $target,
+						'filename' => $filename
+					)
+				)
+			);
+					
+		} else {
+			
+			// We wish to delete multiple file hence $source is a preformatted array.
+			$this->params = array(
+				'data' => $source
+				);
+		}
+		
+        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $this->params ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -72,12 +110,12 @@ class ApiComponent extends Object {
 
         $this->params = array(
             'data' => array(
-                'media_path' => $path,
+                'source_path' => $path,
                 'filename' => $filename
             )
         );
 
-        $this->response = json_decode( $this->__sendMessage('transcode-media', self::MEDIA_URL, $this->params ) );
+        $this->response = json_decode( $this->__sendMessage('transcode-media', self::MEDIA_URL, $this->params ), 1 );
         return $this->getStatus( $this->response );
     }
     
@@ -86,12 +124,12 @@ class ApiComponent extends Object {
 
         $this->params = array(
             'data' => array(
-                'media_path' => $path,
+                'source_path' => $path,
                 'filename' => $filename
             )
         );
 
-        $this->response = json_decode( $this->__sendMessage('checkFile', self::MEDIA_URL, $this->params ) );
+        $this->response = json_decode( $this->__sendMessage('checkFile', self::MEDIA_URL, $this->params ), 1 );
         return (int)$this->response['data']['status'];
     }
 
@@ -192,8 +230,8 @@ class ApiComponent extends Object {
 	 * @by : Charles Jackson
 	 */
 	function getStatus( $response = array() ) {
-		
-		return strtoupper( $response['status'] ) == 'ACK' ? 1 : 0;
+
+		return strtoupper( $response[0]['status'] ) == 'ACK' ? true : false;
 		
 	}
 }
