@@ -222,6 +222,7 @@ class PodcastsController extends AppController {
                         $this->data = $this->Podcast->rebuild( $data );
                         $this->Podcast->rollback();
 
+<<<<<<< HEAD
                     } else {
 
                         // Generate the RSS Feeds.
@@ -236,6 +237,21 @@ class PodcastsController extends AppController {
                             $this->Podcast->commit(); // Everything hunky dory, commit the changes.
                             $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
 
+=======
+                    // Generate the RSS Feeds.
+                    $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $this->data['Podcast']['id'], 'no_redirect' => true ) );
+
+                    // They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
+					
+					// We need to increase the default recursive to ensure we retrieve enough info to check permissions.
+					$this->Podcast->recursive = 2; 
+					$this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
+
+                    if( $this->Permission->toView( $this->data ) ) {
+						
+						$this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+                        $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+>>>>>>> e4fab28235f1bb1f8b557ef7945a7f8d9acc349d
 
                             $this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
 
