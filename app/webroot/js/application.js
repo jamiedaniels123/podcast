@@ -14,11 +14,11 @@ jQuery(document).ready(function($) {
 
     // The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastIntendedItunesuFlag').length ) {
+    if( jQuery('#PodcastConsiderForItunesu').length ) {
 
         show_hide_itune_elements();
 
-        jQuery('#PodcastIntendedItunesuFlag').live('click',function(e) {
+        jQuery('#PodcastConsiderForItunesu').live('click',function(e) {
 
             show_hide_itune_elements();
         });
@@ -113,7 +113,7 @@ function show_hide_podcast_elements() {
 // for a podcast to have iTune settings but the user does not have iTunes permissions.
 function show_hide_itune_elements() {
 
-    if( jQuery('#PodcastIntendedItunesuFlag').is(':checked') ) {
+    if( jQuery('#PodcastConsiderForItunesu').is(':checked') ) {
 
         jQuery('.itunes_container').show('slow');
 

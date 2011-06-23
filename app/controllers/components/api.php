@@ -70,31 +70,31 @@ class ApiComponent extends Object {
      */
     function transferFileMediaServer( $source = null, $filename = null, $target = null ) {
 
-		// If we wish to transfer a individual file we pass individual elements.
-		if( is_array( $source ) == false ) {
-			
-			// If target is NULL the destination path mirrors the source path.
-			if( $target == null )
-				$target = $source;
-				
-				
-			$this->params = array(
-				'data' => array(
-					array(
-						'source_path' => $source,
-						'destination_path' => $target,
-						'filename' => $filename
-					)
-				)
-			);
-					
-		} else {
-			
-			// We wish to delete multiple file hence $source is a preformatted array.
-			$this->params = array(
-				'data' => $source
-				);
-		}
+        // If we wish to transfer a individual file we pass individual elements.
+        if( is_array( $source ) == false ) {
+
+            // If target is NULL the destination path mirrors the source path.
+            if( $target == null )
+                $target = $source;
+
+
+            $this->params = array(
+                'data' => array(
+                    array(
+                        'source_path' => $source,
+                        'destination_path' => $target,
+                        'filename' => $filename
+                    )
+                )
+            );
+
+        } else {
+
+            // We wish to delete multiple file hence $source is a preformatted array.
+            $this->params = array(
+                'data' => $source
+                );
+        }
 		
         $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $this->params ), 1 );
         return $this->getStatus( $this->response );

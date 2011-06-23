@@ -122,8 +122,8 @@ class Podcast extends AppModel {
             )
         ),
         'itunesu_justification' => array(
-            'rule' => array('ifIntendedForItunesu'),
-            'message' => 'If you wish to publish this collection on ItunesU please provide a justification.'
+            'rule' => array('ifConsiderForItunesu'),
+            'message' => 'If you wish this collection to be considered for publication on iTunesU please provide a brief justification.'
         )
     );
 
@@ -264,16 +264,16 @@ class Podcast extends AppModel {
     }
 
     /*
-     * @name : ifIntendedForItunesu
+     * @name : ifConsiderForItunesu
      * @description : Custom validation method called from the validation array. If the user wishes to publish
      * this collection on Itunes they must provide a justification.
      * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
      * @updated : 22nd June 2011
      * @by : Charles Jackson
      */
-    function ifIntendedForItunesu( $check = array() ) {
+    function ifConsiderForItunesu( $check = array() ) {
 
-        if( $this->data['Podcast']['intended_itunesu_flag'] == 'Y' ) {
+        if( $this->data['Podcast']['consider_for_itunesu'] == true ) {
 
             // get the value of the field being passed
             $value = array_shift( $check );
@@ -739,11 +739,10 @@ class Podcast extends AppModel {
         return $conditions;
      }
 
-
      /*
       * @name : waitingApproval
       * @description : Will build the conditions to find all podcasts that are waiting to be approved.
-      * @updated : 20th June 2011
+      * @updated : 23rd June 2011
       * @by : Charles Jackson
       */
      function waitingApproval() {
@@ -751,11 +750,13 @@ class Podcast extends AppModel {
         $conditions = array(
             array('OR' => array(
                 array(
-                    'Podcast.intended_itunesu_flag' => 'Y',
+                    'Podcast.consider_for_itunesu' => true,
+                    'Podcast.intended_itunesu_flag' => 'N',
                     'Podcast.publish_itunes_u' => 'N'
                     ),
                 array(
-                    'Podcast.intended_youtube_flag' => 'Y',
+                    'Podcast.consider_for_youtube' => true,
+                    'Podcast.intended_youtube_flag' => 'N',
                     'Podcast.publish_youtube' => 'N'
                     )
                 )
@@ -764,6 +765,37 @@ class Podcast extends AppModel {
         );
 
         return $conditions;
-
      }
+
+    /*
+     * @name : unconfirmedChangeOfOwnership
+     * @description : Called when somebody updates a podcast. It checks to see if there has been a change of ownership and if that
+     * change has been confirmed by the user. Returns a bool.
+     * updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function unconfirmedChangeOfOwnership( $data = array() ) {
+
+        if(
+            ( isSet( $data['Podcast']['confirmed'] ) && ( $data['Podcast']['confirmed'] == false ) )
+            &&
+            ( isSet( $data['Podcast']['current_owner_id'] ) && ( $data['Podcast']['current_owner_id'] != $data['Podcast']['owner_id'] ) ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * @name : setPreferredNode
+     * @description : We set the value of preferred node to equal the value of the first node choosen when editing a podcast.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setPreferredNode( $data = array() ) {
+
+        $data['Podcast']['preferred_node'] = $data['Nodes'][0];
+        return $data;
+    }
 }

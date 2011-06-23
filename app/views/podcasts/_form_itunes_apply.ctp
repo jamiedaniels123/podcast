@@ -1,8 +1,8 @@
 <div class="input checkbox">
-    <input type="hidden" value="N" id="PodcastIntendedItunesuFlag_" name="data[Podcast][intended_itunesu_flag]">
-    <input type="checkbox" id="PodcastIntendedItunesuFlag" value="Y" <?php echo $this->data['Podcast']['intended_itunesu_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][intended_itunesu_flag]">
-    <label for="PodcastIntendedItunesuFlag">Intended for iTunes U</label>
-    <?php echo $this->Form->error('Podcast.intended_itunesu_flag'); ?>
+    <input type="hidden" value="0" id="PodcastConsiderForItunesu_" name="data[Podcast][consider_for_itunesu]">
+    <input type="checkbox" id="PodcastConsiderForItunesu" value="1" <?php echo $this->data['Podcast']['consider_for_itunesu'] ? 'checked="checked"' : '';?> name="data[Podcast][consider_for_itunesu]">
+    <label for="PodcastConsiderForItunesu">Consider for iTunes U</label>
+    <?php echo $this->Form->error('Podcast.consider_for_itunesu'); ?>
 </div>
 <div class="clear"></div>
 <div class="input textarea itunes_container" style="display:none;">

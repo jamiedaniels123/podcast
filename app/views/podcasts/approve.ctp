@@ -20,8 +20,8 @@
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('created');?></th>
-                <th><?php echo $this->Paginator->sort('Intended for iTunes U','intended_itunesu_flag');?></th>
-                <th><?php echo $this->Paginator->sort('Intended for Youtube','intended_youtube_flag');?></th>
+                <th><?php echo $this->Paginator->sort('Consider for iTunesU','consider_for_itunesu');?></th>
+                <th><?php echo $this->Paginator->sort('Consider for Youtube','consider_for_youtube');?></th>
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -51,10 +51,10 @@
                             <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
                         <td>
-                            <?php echo $podcast['Podcast']['intended_itunesu_flag']; ?>
+                            <?php echo (int)$podcast['Podcast']['consider_for_itunesu'] ? 'Yes' : 'No'; ?>
                         </td>
                         <td>
-                            <?php echo $podcast['Podcast']['intended_youtube_flag']; ?>
+                            <?php echo (int)$podcast['Podcast']['consider_for_youtube'] ? 'Yes' : 'No'; ?>
                         </td>
                         <td class="actions">
                             <a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>

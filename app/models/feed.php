@@ -688,6 +688,25 @@ class Feed extends AppModel {
             $flavour['media_type'] .= '/';
 
         return( $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'] );
+    }
+
+    /*
+     * @name : beingCalledAsMethod
+     * @description : It is possible for the 'add' method with the feeds controller to be called in two distinct ways.
+     * Number 1 : Via a direct link. When the user clicks on a "generate rss button" and the user page is directed to the method RSS feeds
+     * generated and associated flash messages created before they are redircted back to the original calling page.
+     * Number 2 : As a function using the command $this->requestAction whereas the user has updated the podcast and the method is called
+     * 'behind the scenes' from a.n.other controller method. In these case we do not want to generate any flash messages or redirect the
+     * user we merely want to return 'true' or 'false'.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function beingCalledAsMethod(  $id = null, $parameters = array() ) {
+
+        if( ( $id == null ) && ( (int)$parameters['id'] ) )
+            return true;
+
+        return false;
 
     }
 }

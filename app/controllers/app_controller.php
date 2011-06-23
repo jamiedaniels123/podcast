@@ -50,42 +50,44 @@ class AppController extends Controller {
         $this->Breadcrumb = ClassRegistry::init('Breadcrumb');
         $this->Breadcrumb->recursive = -1;
 
-        $breadcrumb =
-
-        $this->Breadcrumb->find('first', array(
-            'conditions' => array(
-                'OR' => array (
-                    array( 'Breadcrumb.url' => $this->params['url']['url'] ),
-                    array(
-                        'Breadcrumb.controller' => $this->params['controller'],
-                        'Breadcrumb.action' => $this->params['action'],
-                        )
-                    )
-                )
-            )
-        );
-
-
-        $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
-        $breadcrumbs[] = $breadcrumb;
-
-        while( (int)$breadcrumb['Breadcrumb']['parent_id'] ) {
-
+        if( isSet( $this->params['url']['url'] ) ) {
+            
             $breadcrumb =
 
             $this->Breadcrumb->find('first', array(
                 'conditions' => array(
-                    'Breadcrumb.id' => $parent_id,
+                    'OR' => array (
+                        array( 'Breadcrumb.url' => $this->params['url']['url'] ),
+                        array(
+                            'Breadcrumb.controller' => $this->params['controller'],
+                            'Breadcrumb.action' => $this->params['action'],
+                            )
+                        )
                     )
                 )
             );
 
-            $breadcrumbs[] = $breadcrumb;
             $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
+            $breadcrumbs[] = $breadcrumb;
+
+            while( (int)$breadcrumb['Breadcrumb']['parent_id'] ) {
+
+                $breadcrumb =
+
+                $this->Breadcrumb->find('first', array(
+                    'conditions' => array(
+                        'Breadcrumb.id' => $parent_id,
+                        )
+                    )
+                );
+
+                $breadcrumbs[] = $breadcrumb;
+                $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
+            }
+
+
+            $this->set('breadcrumbs', array_reverse( $breadcrumbs ) );
         }
-
-
-        $this->set('breadcrumbs', array_reverse( $breadcrumbs ) );
 
     }
 

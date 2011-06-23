@@ -1,6 +1,8 @@
 <?php
 class ImageComponent extends Object {
 
+    var $components = array( 'Api' );
+    
    /*
     * @name : ImageComponent
     * @description : Used to upload images and will take the following parameters :-
@@ -16,8 +18,12 @@ class ImageComponent extends Object {
     public $errors = array();
     private $data = null; // Contains the full array of data
     private $image_key = null; // The name of the array element
+    private $folder = null; // Contains the folder with absolute path on the local server
+    private $custom_id = null;  // The custom_id is used as the folder and is passed to the media server as a relative path
     private $temporary_file = null; // The name of the temporary file uploaded into TMP folder
     private $file_extension = null; // The file extension being uploaded.
+    private $image_collection = null; // Used in error message to explain exactly which image collection is in error such as "logoless, podcast, wide" etc
+    var $html = null;
 
     /*
      * @name : uploadPodcastImage
@@ -25,65 +31,40 @@ class ImageComponent extends Object {
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
-    function uploadPodcastMediaImage( $data, $image_key ) {
+    function uploadPodcastMediaImage( $data = array(), $image_key = null ) {
 
-        $folder_name = null;
-        $file_name = null;
+        // Has an image been uploaded and is it error free?
+        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
-        // Have they attempted to upload an image?
-        if ( isSet( $data[$this->controller->modelClass][$image_key]['name'] ) && strlen( $data[$this->controller->modelClass][$image_key]['name'] ) ) {
-
-            // If the podcast container has a custom_id field we use it for the folder name and
-            // as a naming convention for the file else we use the unique ID of the database row.
-            if( strlen( $data['Podcast']['custom_id'] ) ) {
-
-                $folder_name = FEEDS_LOCATION.$data['Podcast']['custom_id'];
-
-            } else {
-
-                $folder_name = FEEDS_LOCATION.$data['Podcast']['id'];
-            }
-
-            $info = pathinfo( $data[$this->controller->modelClass][$image_key]['name'] );
-            $file_name = $info['filename'].'_'.$data['Podcast']['id'].'_'.$data['PodcastItem']['id'];
-
-            $this->assignClassVariables( $data, $image_key, $folder_name );
-
-            // Has an image been uploaded and is it error free?
-            if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] == 0 ) {
-
-                if( $this->isValidImage() ) {
-
-                    if( $this->createTemporaryFile() ) {
-
-                        // Create the folder structure if it does not already exist
-                        $this->createFolder();
-
-                        // Create a copy of the original file.
-                        copy( $this->temporary_file, $this->folder.'/'.$file_name.'.'.$this->file_extension );
-                        // Create a resized copy of the file.
-                        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
-                        // Generate a thumbnail square version of the image.
-                        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
-
-                        // Delete the temporary image
-                        unlink( $this->temporary_file );
-
-                        return $file_name.'.'.$this->file_extension;
-
-                    } else {
-
-                        $this->errors[] = 'Could not copy your podcast media image into a temporary location. Please alert an administrator.';
-                    }
-
-                } else {
-
-                    $this->errors[] = 'Your podcast media image is not in a valid format.';
-                }
-            }
+            $this->errors[] = 'There has been a problem uploading your podcast media images. Please try again.';
+            return false;
         }
 
-        return false;
+        $this->setImageCollection('Podcast Media');
+        $this->setData( $data );
+        $this->setCustomId( $this->data['Podcast']['custom_id'] );
+        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setImageKey( $image_key );
+        $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'].'_'.$this->data['PodcastItem']['id'] );
+
+        if( $this->isValidImage() == false )
+            return false;
+
+        if( $this->createTemporaryFile() == false )
+            return false;
+
+
+        if( $this->createFolder() == false )
+            return false;
+
+        $this->createImages(); // Create 3 versions of the image
+
+        // Now we need to call the Api and schedule the images for transfer to the media server.
+        if( $this->__transferImagesToMediaServer() == false )
+            return false;
+
+        return $this->file_name.'.'.$this->file_extension;
+
     }
 
 
@@ -95,63 +76,37 @@ class ImageComponent extends Object {
      */
     function uploadPodcastImage( $data, $image_key ) {
 
-        $folder_name = null;
-        $file_name = null;
-        
-        // Have they attempted to upload an image?
-        if ( isSet( $data[$this->controller->modelClass][$image_key]['name'] ) && strlen( $data[$this->controller->modelClass][$image_key]['name'] ) ) {
-            
-            // If the podcast container has a custom_id field we use it for the folder name and
-            // as a naming convention for the file else we use the unique ID of the database row.
-            if( strlen( $data[$this->controller->modelClass]['custom_id'] ) ) {
+        // Has an image been uploaded and is it error free?
+        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['custom_id'];
-
-            } else {
-
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['id'];
-            }
-
-            $info = pathinfo( $data[$this->controller->modelClass][$image_key]['name'] );
-            $file_name = $info['filename'].'_'.$data['Podcast']['id'];
-
-            $this->assignClassVariables( $data, $image_key, $folder_name );
-
-            // Has an image been uploaded and is it error free?
-            if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] == 0 ) {
-
-                if( $this->isValidImage() ) {
-
-                    if( $this->createTemporaryFile() ) {
-
-                        // Create the folder structure if it does not already exist
-                        $this->createFolder();
-
-                        // Create a copy of the original file.
-                        copy( $this->temporary_file, $this->folder.'/'.$file_name.'.'.$this->file_extension );
-                        // Create a resized copy of the file.
-                        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
-                        // Generate a thumbnail square version of the image.
-                        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
-
-                        // Delete the temporary image
-                        unlink( $this->temporary_file );
-
-                        return $file_name.'.'.$this->file_extension;
-
-                    } else {
-
-                        $this->errors[] = 'Could not copy your podcast image into a temporary location. Please alert an administrator.';
-                    }
-
-                } else {
-
-                    $this->errors[] = 'Your podcast image is not in a valid format.';
-                }
-            }
+            $this->errors[] = 'There has been a problem uploading your podcast images. Please try again.';
+            return false;
         }
-        
-        return false;
+
+        $this->setImageCollection('Podcast');
+        $this->setData( $data );
+        $this->setCustomId( $this->data['Podcast']['custom_id'] );
+        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setImageKey( $image_key );
+        $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+
+        if( $this->isValidImage() == false )
+            return false;
+
+        if( $this->createTemporaryFile() == false )
+            return false;
+
+
+        if( $this->createFolder() == false )
+            return false;
+
+        $this->createImages(); // Create 3 versions of the image
+
+        // Now we need to call the Api and schedule the images for transfer to the media server.
+        if( $this->__transferImagesToMediaServer() == false )
+            return false;
+
+        return $this->file_name.'.'.$this->file_extension;
     }
 
     /*
@@ -162,65 +117,37 @@ class ImageComponent extends Object {
      */
     function uploadLogolessPodcastImage( $data, $image_key ) {
 
-        $folder_name = null;
-        $file_name = null;
+        // Has an image been uploaded and is it error free?
+        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
-        if ( isSet( $data[$this->controller->modelClass][$image_key]['name'] ) && strlen( $data[$this->controller->modelClass][$image_key]['name'] ) ) {
-
-            // If the podcast container has a custom_id field we use it for the folder name and
-            // as a naming convention for the file else we use the unique ID of the database row.
-            if( strlen( $data[$this->controller->modelClass]['custom_id'] ) ) {
-
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['custom_id'];
-
-            } else {
-
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['id'];
-            }
-
-            // Get the filename with the extension so we can append extensions for rezied image and thumbnail
-            $info = pathinfo( $data[$this->controller->modelClass][$image_key]['name'] );
-            $file_name = 'LL_'.$info['filename'].'_'.$data['Podcast']['id'];
-
-
-            $this->assignClassVariables( $data, $image_key, $folder_name );
-
-            // Do we have any errors?
-            if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] == 0 ) {
-
-                if( $this->isValidImage() ) {
-
-                    if( $this->createTemporaryFile() ) {
-
-                        // Create the folder structure if it does not already exist
-                        $this->createFolder();
-
-                        // Create a copy of the original file.
-                        copy( $this->temporary_file, $this->folder.'/'.$file_name.'.'.$this->file_extension );
-                        // Create a resized copy of the file.
-                        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
-                        // Generate a thumbnail square version of the image.
-                        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
-
-                        // Delete the temporary image
-                        unlink( $this->temporary_file );
-
-                        return $info['filename'];
-
-                    } else {
-
-                        $this->errors[] = 'Could not copy your logoless podcast image into a temporary location. Please alert an administrator.';
-
-                    }
-
-                } else {
-
-                    $this->errors[] = 'Your logoless podcast image is not in a valid format.';
-                }
-
-            }
+            $this->errors[] = 'There has been a problem uploading your logoless images. Please try again.';
+            return false;
         }
-        return false;
+
+        $this->setImageCollection('Logoless');
+        $this->setData( $data );
+        $this->setCustomId( $this->data['Podcast']['custom_id'] );
+        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setImageKey( $image_key );
+        $this->setFileName( 'LL_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+
+        if( $this->isValidImage() == false )
+            return false;
+
+        if( $this->createTemporaryFile() == false )
+            return false;
+
+
+        if( $this->createFolder() == false )
+            return false;
+
+        $this->createImages(); // Create 3 versions of the image
+
+        // Now we need to call the Api and schedule the images for transfer to the media server.
+        if( $this->__transferImagesToMediaServer() == false )
+            return false;
+
+        return $this->file_name.'.'.$this->file_extension;
     }
 
     /*
@@ -231,64 +158,37 @@ class ImageComponent extends Object {
      */
     function uploadWidePodcastImage( $data, $image_key ) {
 
-        $folder_name = null;
-        $file_name = null;
+        // Has an image been uploaded and is it error free?
+        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
-        if ( isSet( $data[$this->controller->modelClass][$image_key]['name'] ) && strlen( $data[$this->controller->modelClass][$image_key]['name'] ) ) {
-
-            // If the podcast container has a custom_id field we use it for the folder name and
-            // as a naming convention for the file else we use the unique ID of the database row.
-            if( strlen( $data[$this->controller->modelClass]['custom_id'] ) ) {
-
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['custom_id'];
-
-            } else {
-
-                $folder_name = FEEDS_LOCATION.$data[$this->controller->modelClass]['id'];
-            }
-
-            // Get the filename with the extension so we can append extensions for rezied image and thumbnail
-            $info = pathinfo( $data[$this->controller->modelClass][$image_key]['name'] );
-            $file_name = 'WS_'.$info['filename'].'_'.$data['Podcast']['id'];
-
-            $this->assignClassVariables( $data, $image_key, $folder_name );
-
-            // Do we have any errors?
-            if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] == 0 ) {
-
-                if( $this->isValidImage() ) {
-
-                    if( $this->createTemporaryFile() ) {
-
-                        // Create the folder structure if it does not already exist
-                        $this->createFolder();
-
-                        // Create a copy of the original file.
-                        copy( $this->temporary_file, $this->folder.'/'.$file_name.'.'.$this->file_extension );
-                        // Create a resized copy of the file.
-                        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
-                        // Generate a thumbnail square version of the image.
-                        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
-
-                        // Delete the temporary image
-                        unlink( $this->temporary_file );
-
-                        return $info['basename'];
-
-                    } else {
-
-                        $this->errors[] = 'Could not copy your logoless podcast image into a temporary location. Please alert an administrator.';
-
-                    }
-
-                } else {
-
-                    $this->errors[] = 'Your logoless podcast image is not in a valid format.';
-                }
-
-            }
+            $this->errors[] = 'There has been a problem uploading your widescreen images. Please try again.';
+            return false;
         }
-        return false;
+
+        $this->setImageCollection('Widescreen');
+        $this->setData( $data );
+        $this->setCustomId( $this->data['Podcast']['custom_id'] );
+        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setImageKey( $image_key );
+        $this->setFileName( 'WS_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+
+        if( $this->isValidImage() == false )
+            return false;
+
+        if( $this->createTemporaryFile() == false )
+            return false;
+
+
+        if( $this->createFolder() == false )
+            return false;
+
+        $this->createImages(); // Create 3 versions of the image
+
+        // Now we need to call the Api and schedule the images for transfer to the media server.
+        if( $this->__transferImagesToMediaServer() == false )
+            return false;
+
+        return $this->file_name.'.'.$this->file_extension;
     }
 
     /* NOTHING TO SEE HERE FOLKS!!!!!!!!!!!!!!
@@ -307,18 +207,71 @@ class ImageComponent extends Object {
     }
 
     /*
-     * @name : assignClassVariables
-     * @description : Assign variables passed as a parameter.
-     * @updated : 6th May 2011
+     * @name : setImageCollection
+     * @description : Standard setter
+     * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function assignClassVariables( $data, $image_key, $folder ) {
+    function setImageCollection( $image_collection = null ) {
+
+        $this->image_collection = $image_collection;
+    }
+
+    /*
+     * @name : setCustomId
+     * @description : Standard setter
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setCustomId( $custom_id = null ) {
+
+        $this->custom_id = $custom_id;
+    }
+
+    /*
+     * @name : setFolderName
+     * @description : Standard setter
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setFolderName( $folder_name = null ) {
+
+        $this->folder_name = $folder_name;
+    }
+
+    /*
+     * @name : setImageKey
+     * @description : Standard setter
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setImageKey( $image_key = null ) {
+
+        $this->image_key = $image_key;
+    }
+
+    /*
+     * @name : setData
+     * @description : Standard setter
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setData( $data = array() ) {
 
         $this->data = $data;
-        $this->image_key = $image_key;
-        $this->folder = $folder;
     }
-    
+
+    /*
+     * @name : setFilename
+     * @description : Standard setter
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setFilename( $file_name = null ) {
+
+        $this->file_name = $file_name;
+    }
+
     /*
      * @name : isValidImage
      * @description : Will check the file extension against a list of allowed file types and return a boolean.
@@ -330,7 +283,7 @@ class ImageComponent extends Object {
         $this->setFileExtension( $this->data[$this->controller->modelClass][$this->image_key]['name'] );
 
         if ( !in_array($this->file_extension, $this->allowed_file_types ) ) {
-
+            $this->errors[] = 'Your '.$this->image_collection.' image is not in a valid format.';
             return false;
         }
 
@@ -359,18 +312,15 @@ class ImageComponent extends Object {
 
             // Copy the image into the temporary directory
             if ( !copy( $this->data[$this->controller->modelClass][$this->image_key]['tmp_name'], "$this->temporary_file" ) ) {
-
+                
+                $this->errors[] = 'Could not copy your '.$this->image_collection.' image into a temporary location on server. If the problem persists please alert an administrator.';
                 return false;
-
-            } else {
-
-                return true;
             }
 
-        } else {
-
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     /*
@@ -391,9 +341,85 @@ class ImageComponent extends Object {
 
             if( !is_dir( $new_folder_path ) ) {
 
-                mkdir( $new_folder_path, 0755, true );
+                if( mkdir( $new_folder_path, 0755, true ) == false ) {
+                    $this->errors[] = 'Could not create the following folder structure for your '.$this->image_collection.' - '.$new_folder_path.'. If the problem persists please alert an administrator.';
+                    return false;
+                }
             }
         }
+    }
+
+    /*
+     * @name : setFileExtension
+     * @description : Return the file extension passed as a parameter
+     * @updated : 6th May 2011
+     * @by : Charles Jackson
+     */
+    function setFileExtension( $file_name ) {
+
+        $i = strrpos( $file_name, "." );
+
+        if ( !$i ) { return ""; }
+
+        $l = strlen( $file_name ) - $i;
+        $this->file_extension = substr( $file_name, $i+1, $l );
+    }
+
+    /*
+     * @name : createImages
+     * @description : Will create 3 images using a common naming convention
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function __createImages() {
+
+        // Create a copy of the original file.
+        copy( $this->temporary_file, $this->folder.'/'.$this->file_name.'.'.$this->file_extension );
+        // Create a resized copy of the file.
+        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
+        // Generate a thumbnail square version of the image.
+        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
+
+        // Delete the temporary image
+        unlink( $this->temporary_file );
+    }
+
+    /*
+     * @name : __transferImagesToMediaServer
+     * @destination : Using the API it will transfer uploaded images to the media server. Worth noting, it assumes
+     * the images come in three standard formats. Will return a bool.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function __transferImagesToMediaServer() {
+
+        if(
+            $this->Api->transferFileMediaServer(
+            array(
+                array(
+                    'source_path' => $this->custom_id,
+                    'destination_path' => $this->custom_id,
+                    'filename' => $this->file_name.'.'.$this->file_extension
+                ),
+                array(
+                    'source_path' => $this->custom_id,
+                    'destination_path' => $this->custom_id,
+                    'filename' => $this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension
+                ),
+                array(
+                    'source_path' => $this->custom_id,
+                    'destination_path' => $this->custom_id,
+                    'filename' => $this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension
+                    )
+                )
+            )
+        ) {
+
+            return true;
+        }
+
+        $this->errors[] = 'Could not schedule movement of your '.$this->image_collection.' images to the media server. If the problem persists please alert an administrator.';
+        return false;
     }
 
     /*
@@ -441,7 +467,7 @@ class ImageComponent extends Object {
 
         // Save the cropped image
         switch( $this->file_extension ) {
-			
+
             case 'jpeg':
             case 'jpg':
              imagejpeg($cropped,$filename,80);
@@ -507,27 +533,9 @@ class ImageComponent extends Object {
              imagepng($img_des,$filename,80);
              break;
         }
-        
-    }
-
-    /*
-     * @name : setFileExtension
-     * @description : Return the file extension passed as a parameter
-     * @updated : 6th May 2011
-     * @by : Charles Jackson
-     */
-    function setFileExtension( $file_name ) {
-
-        $i = strrpos( $file_name, "." );
-
-        if ( !$i ) { return ""; }
-
-        $l = strlen( $file_name ) - $i;
-        $this->file_extension = substr( $file_name, $i+1, $l );
 
     }
 
-    
     /*
      * @name : recursiveRemoveFolder
      * @description : This method will remove a folder and its content else, if empty
@@ -605,25 +613,6 @@ class ImageComponent extends Object {
         }
     }
 
-   /*
-    * @name : delete_image
-    * @description : Will delete each image passed as a parameter. Each filename must contain a path relative from
-    * the web_root folder.
-    * @updated : 5th May 2011
-    * @by : Charles Jackson
-    */
-    function delete_image( $file_names = array() ) {
-
-        foreach( $file_names as $file_name ) {
-
-            if( file_exists( www_ROOT.$file_name ) )
-                unlink( WWW_ROOT.$file_name );
-        }
-
-        return true;
-    }
-
-
     /*
      * @name : getErrors
      * @description : Will create the image names from the parameters passed
@@ -645,7 +634,6 @@ class ImageComponent extends Object {
 
         return count( $this->errors );
     }
-
 
 }
 

@@ -17,16 +17,13 @@ class ObjectHelper extends AppHelper {
 
     /*
      * @name : intendedForItunes
-     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @description : Retruns a bool depending up the value of the flag.
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
     function intendedForItunes( $podcast = array() ) {
 
-        if( strtoupper( $podcast['intended_itunesu_flag'] ) == 'Y' )
-            return true;
-
-        return false;
+        return $podcast['consider_for_itunesu'];
     }
 
     /*
@@ -37,10 +34,7 @@ class ObjectHelper extends AppHelper {
      */
     function intendedForYoutube( $podcast = array() ) {
 
-        if( strtoupper( $podcast['intended_youtube_flag'] ) == 'Y' )
-            return true;
-
-        return false;
+        return $podcast['consider_for_youtube'];
     }
 
 }

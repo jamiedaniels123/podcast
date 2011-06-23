@@ -30,8 +30,8 @@ class FeedsController extends AppController {
     function add( $id = null ) {
 
         // If we are calling this method using "requestAction" as opposed to a redirect then we must take the
-        // ID from the this->params array.
-        if( ( $id == null ) && ( $this->params['id'] ) )
+        // ID from $this->params array. See model function for indepth explanation.
+        if( $this->Feed->beingCalledAsMethod( $id, $this->params ) )
             $id = $this->params['id'];
 
         $this->autoRender = false;
@@ -59,17 +59,17 @@ class FeedsController extends AppController {
             
             if( $this->Api->transferFileMediaServer( $rss_array ) ) {
 
+                if( $this->Feed->beingCalledAsMethod( $id, $this->params ) )
+                    return true;
+
                 $this->Session->setFlash('Your RSS feeds have been successfully generated and scheduled for transfer to the media server.', 'default', array( 'class' => 'success' ) );
-
-            } else {
-
-                $this->Session->setFlash('We could not schedule movement of the RSS feeds with the media server. Please try again.', 'default', array( 'class' => 'error' ) );
             }
-
-        } else {
-
-            $this->Session->setFlash('We were unable to generate the RSS feeds.', 'default', array( 'class' => 'error' ) );
         }
+
+        $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'error' ) );
+
+        if( $this->Feed->beingCalledAsMethod( $id, $this->params ) )
+            return false;
 
         $this->redirect( $this->referer() );
     }
