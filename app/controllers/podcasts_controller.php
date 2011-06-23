@@ -17,52 +17,11 @@ class PodcastsController extends AppController {
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
-     * is rendered. We are applying some global actions here. Not necessarily the most efficient but very simple.
+     * is rendered. 
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
     function beforeRender() {
-
-        // Get all the nodes
-        $this->Node = ClassRegistry::init('Node');
-        $this->nodes = $this->Node->find('list', array( 'order' => 'Node.title' ) );
-        $this->nodes = $this->Node->removeDuplicates( $this->nodes, $this->data, 'Nodes' );
-        $this->set('nodes', $this->nodes );
-
-        // Get all the categories
-        $this->Category = ClassRegistry::init('Category');
-        $this->categories = $this->Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
-        $this->categories = $this->Category->removeDuplicates( $this->categories, $this->data, 'Categories' );
-        $this->set('categories', $this->categories );
-
-        // Get all the itunes categories
-        $this->ItunesuCategory = ClassRegistry::init('ItunesuCategory');
-        $this->itunesu_categories = $this->ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
-        $this->itunesu_categories = $this->ItunesuCategory->removeDuplicates( $this->itunesu_categories, $this->data, 'iTuneCategories' );
-        $this->set('itunes_categories', $this->itunesu_categories );
-
-        // Get all the languages
-        $this->Language = ClassRegistry::init('Language');
-        $this->set('languages', $this->Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
-
-        // Get all the user groups
-        $this->UserGroup = ClassRegistry::init('UserGroup');
-        $this->user_groups = $this->UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'MemberGroups' );
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'ModeratorGroups' );
-        $this->set('user_groups', $this->user_groups );
-
-        // Get all the user groups
-        $this->User = ClassRegistry::init( 'User' );
-        $this->users = $this->User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
-        $this->set('users', $this->users );
-
-        $this->set('all_users', $this->User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
-
-        // Set the possible values of explicit
-        $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
 
         // If there are any errors assign them to the view
         if( count( $this->errors ) )
@@ -197,21 +156,20 @@ class PodcastsController extends AppController {
             $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
             // Set the preferred node to equal the first node chosen
             $this->data = $this->Podcast->setPreferredNode( $this->data );
-            
+
             $this->Podcast->set( $this->data );
 
-            if( $this->Podcast->validates() ) {
+            if( $this->Podcast->saveAll() ) {
 
                 // OK, it validates but have they changed/confirmed ownership.
                 if( $this->Podcast->unconfirmedChangeOfOwnership( $this->data ) ) {
 
+                    $this->Podcast->rollback(); // We rollback the data because they still need to confirm this update
                     $this->data = $this->Podcast->rebuild( $data );
                     $this->data['Podcast']['confirmed'] = true;
                     $this->Session->setFlash('You are changing ownership of this podcast. Submit again to confirm the change.', 'default', array( 'class' => 'alert' ) );
 
                 } else {
-
-                    $this->Podcast->saveAll();
 
                     // Now copy back the original including array elements and
                     // save again with attachment elements.
@@ -253,6 +211,8 @@ class PodcastsController extends AppController {
 
             } else {
 
+                $this->Podcast->rollback();
+                
                 // Rebuild the dynamic select boxes according to the users current selections else they will merely display ID numbers.
                 $this->data = $this->Podcast->rebuild( $data );
                 $this->errors = $this->Podcast->invalidFields( $this->data );
@@ -280,6 +240,9 @@ class PodcastsController extends AppController {
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
             }
         }
+
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastDefaults();
     }
 
     /*
@@ -295,7 +258,6 @@ class PodcastsController extends AppController {
         if ( !empty( $this->data ) ) {
 
             $this->Podcast->begin();
-            
             $this->Podcast->set( $this->data );
 
             if( $this->Podcast->saveAll() && $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
@@ -323,6 +285,9 @@ class PodcastsController extends AppController {
                 $this->redirect( $this->referer() );
             }
         }
+
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastDefaults();
     }
 
     /*
@@ -351,7 +316,7 @@ class PodcastsController extends AppController {
             // Delete the podcast
             $this->podcast['Podcast']['deleted'] = true;
             $this->Podcast->set( $this->podcast );
-            $this->Podcast->save();
+            $this->Podcast->save( $this->podcast );
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->createHtaccess( $this->podcast ) && $this->Api->transferFileMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
@@ -521,7 +486,7 @@ class PodcastsController extends AppController {
 
     /*
      * @name : admin_view
-     * @desscription : Enables an adminitratorto view details of an individual podcast.
+     * @desscription : Enables an adminitrator to view details of an individual podcast.
      * @name : Charles Jackson
      * @by : 20th May 2011
      */
@@ -536,6 +501,7 @@ class PodcastsController extends AppController {
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
         }
+
     }
 
     /*
@@ -548,6 +514,8 @@ class PodcastsController extends AppController {
 
         if ( !empty( $this->data ) ) {
 
+            $this->Podcast->begin();
+            
             // Save this->data into a local array called data so we may unset the attachment array elements before
             // validating else it will fail because they contain arrays.
             $data = array();
@@ -596,6 +564,8 @@ class PodcastsController extends AppController {
 
             } else {
 
+                $this->Podcast->rollback();
+                
                 // Rebuild the dynamic select boxes according to the users current selections else they will merely display ID numbers.
                 $this->data = $this->Podcast->rebuild( $this->data );
 
@@ -614,6 +584,9 @@ class PodcastsController extends AppController {
                 $this->redirect( $this->referer() );
             }
         }
+
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastDefaults();
     }
  
     /*
@@ -674,11 +647,11 @@ class PodcastsController extends AppController {
 
         } else {
 
-            $this->data['Podcast']['deleted'] = false;
-            $this->Podcast->set( $this->data );
-            $this->Podcast->save();
-
             if( $this->Api->deleteFileFromMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
+                
+                $this->data['Podcast']['deleted'] = false;
+                $this->Podcast->set( $this->data );
+                $this->Podcast->save();
                 
                 $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
@@ -752,4 +725,55 @@ class PodcastsController extends AppController {
         return true; // No RSS Feed needed so return a default of true to signify everything OK.
     }
 
+    /*
+     * @name : setDefaults
+     * @description : Called prior to various methods when the user can update a podcast. This method will sanatize data prior to being
+     * shown on a form such as retrieving all users on the system as a list for possible membership of a podcast then removing any people
+     * that are already members of the aforementioned podcast.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function __setPodcastDefaults() {
+
+        // Get all the nodes
+        $this->Node = ClassRegistry::init('Node');
+        $this->nodes = $this->Node->find('list', array( 'order' => 'Node.title' ) );
+        $this->nodes = $this->Node->removeDuplicates( $this->nodes, $this->data, 'Nodes' );
+        $this->set('nodes', $this->nodes );
+
+        // Get all the categories
+        $this->Category = ClassRegistry::init('Category');
+        $this->categories = $this->Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
+        $this->categories = $this->Category->removeDuplicates( $this->categories, $this->data, 'Categories' );
+        $this->set('categories', $this->categories );
+
+        // Get all the itunes categories
+        $this->ItunesuCategory = ClassRegistry::init('ItunesuCategory');
+        $this->itunesu_categories = $this->ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
+        $this->itunesu_categories = $this->ItunesuCategory->removeDuplicates( $this->itunesu_categories, $this->data, 'iTuneCategories' );
+        $this->set('itunes_categories', $this->itunesu_categories );
+
+        // Get all the languages
+        $this->Language = ClassRegistry::init('Language');
+        $this->set('languages', $this->Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
+
+        // Get all the user groups
+        $this->UserGroup = ClassRegistry::init('UserGroup');
+        $this->user_groups = $this->UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
+        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'MemberGroups' );
+        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'ModeratorGroups' );
+        $this->set('user_groups', $this->user_groups );
+
+        // Get all the user groups
+        $this->User = ClassRegistry::init( 'User' );
+        $this->users = $this->User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
+        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
+        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
+        $this->set('users', $this->users );
+
+        $this->set('all_users', $this->User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
+
+        // Set the possible values of explicit
+        $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
+    }
 }

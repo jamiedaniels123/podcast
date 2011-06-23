@@ -14,21 +14,28 @@
             <dd><?php echo $this->data['Owner']['full_name']; ?>&nbsp;</dd>
             <dt>Copyright: </dt>
             <dd><?php echo $this->data['Podcast']['copyright']; ?>&nbsp;</dd>
-
         </dl>
     </div>
 </div>
 <div class="clear"></div>
-<fieldset id="podcast_media">
-    <legend>Podcast Media</legend>
-    <ul>
-        <?php foreach( $this->data['PodcastItems'] as $podcast_item ) : ?>
-            <?php if( isSet( $this->params['admin'] ) ) : ?>
-                <li><a href="/admin/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view <?php echo $podcast_item['title']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></li>
-            <?php else : ?>
-                <li><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view <?php echo $podcast_item['title']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></li>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </ul>
-</fieldset>
-<div class="clear"></div>
+<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isAdministrator() ) : ?>
+
+    <?php if( $this->Permission->isAdminRouting() ) : ?>
+        <a href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">edit</a>
+        <a href="/admin/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit">media</a>
+    <?php else : ?>
+        <a href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">edit</a>
+        <a href="/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit">media</a>
+    <?php endif; ?>
+
+<?php endif; ?>
+
+<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isAdministrator() ) : ?>
+
+    <?php if( $this->Permission->isAdminRouting() ) : ?>
+        <a href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this podcast?');" >delete</a>
+    <?php else : ?>
+        <a href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this podcast?');" >delete</a>
+    <?php endif; ?>
+
+<?php endif; ?>

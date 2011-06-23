@@ -17,8 +17,7 @@
     <div class="clear"></div>
     
     
-    <form method="post" action="/podcasts/delete">
-
+    <form method="post" action="">
 
             <table cellpadding="0" cellspacing="0">
             <tr>
@@ -81,14 +80,10 @@
         </table>
         
         <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
-        <button class="button white" type="submit" onclick="return confirm('Are you sure you wish to delete all these podcasts and associated media?')"><span>delete</span></button>
-        
-        
+        <button class="button white multiple_action_button" type="button" data-form_target="/podcasts/delete" id="delete_multiple_podcasts"><span>delete</span></button>
+        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>generate rss</span></button>
+       
     </form>
-    
-   
-    
-    
     <div class="paging">
     
      <p>

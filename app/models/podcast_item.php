@@ -68,9 +68,9 @@ class PodcastItem extends AppModel {
         $this->data['PodcastItem']['processed_state'] = 2;
 
         if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
-            $this->data['PodcastItem']['aspect_ratio'] = 16.9;
+            $this->data['PodcastItem']['aspect_ratio'] = 0.5625;
         if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
-            $this->data['PodcastItem']['aspect_ratio'] = 4.3;
+            $this->data['PodcastItem']['aspect_ratio'] = 0.75;
         
         return $this->data;
     }

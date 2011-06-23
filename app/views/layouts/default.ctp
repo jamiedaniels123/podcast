@@ -60,3 +60,7 @@
     
 </body>
 </html>
+
+<pre>
+<?php print_r( $this->data ); ?>
+</pre>

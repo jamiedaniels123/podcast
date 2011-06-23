@@ -86,8 +86,19 @@ jQuery(document).ready(function($) {
             tickCheckboxes();
             jQuery(this).attr('data-status', 'ticked');
         }
+    });
 
+    // This method will set the action of the form used when selecting multiple
+    // checkboxes and submitting one of the options such as 'delete' or 'generate rss'.
+    jQuery('.multiple_action_button').click( function(e) {
 
+        e.preventDefault();
+
+        if( confirm('Are you sure?') ) {
+            var action = jQuery(this).attr('data-form_target');
+            jQuery(this).parents('form:first').attr('action',action);
+            jQuery(this).closest("form").submit();
+        }
     });
 });
 

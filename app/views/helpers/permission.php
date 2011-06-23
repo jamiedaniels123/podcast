@@ -72,7 +72,7 @@ class PermissionHelper extends AppHelper {
 
     /*
      * @name : isOwner
-     * @description : If set, compares the value of Auth.User.id against the user_id held on the podcast table and returns
+     * @description : If set, compares the value of Auth.User.id against the owner_id held on the podcast table and returns
      * a bool. If the session is not set return false.
      * @updated : 20th May 2011
      * @by : Charles Jackson

@@ -33,6 +33,10 @@ class ImageComponent extends Object {
      */
     function uploadPodcastMediaImage( $data = array(), $image_key = null ) {
 
+        // Have they tried uploading an image?
+        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+            return false;
+
         // Has an image been uploaded and is it error free?
         if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
@@ -76,6 +80,10 @@ class ImageComponent extends Object {
      */
     function uploadPodcastImage( $data, $image_key ) {
 
+        // Have they tried uploading an image?
+        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+            return false;
+
         // Has an image been uploaded and is it error free?
         if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
@@ -117,6 +125,10 @@ class ImageComponent extends Object {
      */
     function uploadLogolessPodcastImage( $data, $image_key ) {
 
+        // Have they tried uploading an image?
+        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+            return false;
+
         // Has an image been uploaded and is it error free?
         if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
 
@@ -157,6 +169,10 @@ class ImageComponent extends Object {
      * @by : Charles Jackson
      */
     function uploadWidePodcastImage( $data, $image_key ) {
+
+        // Have they tried uploading an image?
+        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+            return false;
 
         // Has an image been uploaded and is it error free?
         if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
@@ -299,7 +315,7 @@ class ImageComponent extends Object {
     function createTemporaryFile() {
 
         // Generate a unique name for the image (from the timestamp)
-        $id_unic = str_replace(".", "", strtotime ("now"));
+        $id_unic = str_replace( ".", "", strtotime ( "now" ) );
         $file_name = $id_unic;
 
         settype( $file_name, 'string' );
@@ -378,7 +394,7 @@ class ImageComponent extends Object {
         // Create a resized copy of the file.
         $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
         // Generate a thumbnail square version of the image.
-        $this->createThumbnail( $this->temporary_file, 50, $this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
+        $this->resizeImage( $this->temporary_file, 50, $this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
 
         // Delete the temporary image
         unlink( $this->temporary_file );
@@ -423,72 +439,12 @@ class ImageComponent extends Object {
     }
 
     /*
-     * @name : createThumbnail
-     * @description : Creates a cropped verion of the image according to the scale passed as a parameter.
-     * @updated : 6th May 2011
-     * @by : Charles Jackson
-     */
-    function createThumbnail($imgname, $scale, $filename) {
-
-        switch( $this->file_extension ){
-            case 'jpeg':
-            case 'jpg':
-              $img_src = imageCreateFromjpeg ($imgname);
-              break;
-            case 'gif':
-              $img_src = imagecreatefromgif ($imgname);
-              break;
-            case 'png':
-              $img_src = imagecreatefrompng ($imgname);
-              break;
-        }
-
-        $width = imagesx($img_src);
-        $height = imagesy($img_src);
-        $ratiox = $width / $height * $scale;
-        $ratioy = $height / $width * $scale;
-
-        //-- Calculate resampling
-        $newheight = ($width <= $height) ? $ratioy : $scale;
-        $newwidth = ($width <= $height) ? $scale : $ratiox;
-
-        //-- Calculate cropping (division by zero)
-        $cropx = ($newwidth - $scale != 0) ? ($newwidth - $scale) / 2 : 0;
-        $cropy = ($newheight - $scale != 0) ? ($newheight - $scale) / 2 : 0;
-
-        //-- Setup Resample & Crop buffers
-        $resampled = imagecreatetruecolor($newwidth, $newheight);
-        $cropped = imagecreatetruecolor($scale, $scale);
-
-        //-- Resample
-        imagecopyresampled($resampled, $img_src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-        //-- Crop
-        imagecopy($cropped, $resampled, 0, 0, $cropx, $cropy, $newwidth, $newheight);
-
-        // Save the cropped image
-        switch( $this->file_extension ) {
-
-            case 'jpeg':
-            case 'jpg':
-             imagejpeg($cropped,$filename,80);
-             break;
-             case 'gif':
-             imagegif($cropped,$filename,80);
-             break;
-             case 'png':
-             imagepng($cropped,$filename,80);
-             break;
-        }
-
-    }
-
-    /*
      * @name : resizeImage
-     * @description :
+     * @description : Resize an image according to the parameters passed.
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
-    function resizeImage($imgname, $size, $filename)    {
+    function resizeImage( $imgname, $size, $filename ) {
 
         switch( $this->file_extension ) {
             case 'jpeg':
@@ -503,37 +459,36 @@ class ImageComponent extends Object {
             break;
         }
 
-        $true_width = imagesx($img_src);
-        $true_height = imagesy($img_src);
+        $true_width = imagesx( $img_src );
+        $true_height = imagesy( $img_src );
 
-        if ($true_width>=$true_height)
+        if ( $true_width >= $true_height )
         {
-            $width=$size;
-            $height = ($width/$true_width)*$true_height;
+            $width = $size;
+            $height = ( $width / $true_width ) * $true_height;
         }
         else
         {
-            $width=$size;
-            $height = ($width/$true_width)*$true_height;
+            $width = $size;
+            $height = ( $width / $true_width ) * $true_height;
         }
-        $img_des = ImageCreateTrueColor($width,$height);
-        imagecopyresampled ($img_des, $img_src, 0, 0, 0, 0, $width, $height, $true_width, $true_height);
+        $img_des = ImageCreateTrueColor( $width, $height );
+        imagecopyresampled ( $img_des, $img_src, 0, 0, 0, 0, $width, $height, $true_width, $true_height );
 
         // Save the resized image
-        switch( $this->file_extension )
-        {
+        switch( $this->file_extension ) {
+
             case 'jpeg':
             case 'jpg':
-             imagejpeg($img_des,$filename,80);
-             break;
-             case 'gif':
-             imagegif($img_des,$filename,80);
-             break;
-             case 'png':
-             imagepng($img_des,$filename,80);
-             break;
+            imagejpeg($img_des,$filename,80);
+            break;
+            case 'gif':
+            imagegif($img_des,$filename,80);
+            break;
+            case 'png':
+            imagepng($img_des,$filename,80);
+            break;
         }
-
     }
 
     /*
