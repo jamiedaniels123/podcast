@@ -65,7 +65,7 @@ CREATE TABLE `breadcrumbs` (
 
 LOCK TABLES `breadcrumbs` WRITE;
 /*!40000 ALTER TABLE `breadcrumbs` DISABLE KEYS */;
-INSERT INTO `breadcrumbs` VALUES (1,NULL,NULL,0,'2011-06-20 10:55:18','2011-06-20 10:55:18','Home','/'),(2,'users','dashboard',0,'2011-06-20 10:56:00','2011-06-20 10:56:00','Dashboard','/users/dashboard'),(3,'podcasts','index',2,'2011-06-20 11:11:21','2011-06-20 11:11:21','Collections','/podcasts'),(4,'podcasts','view',3,'2011-06-20 11:22:18','2011-06-20 11:22:18','View',''),(5,'podcasts','edit',3,'2011-06-20 11:22:44','2011-06-20 11:22:44','Edit',''),(6,'podcasts','add',3,'2011-06-20 11:23:12','2011-06-20 11:23:12','Create',''),(7,'podcasts','approve_index',3,'2011-06-20 11:24:50','2011-06-20 11:24:50','Podcasts Waiting Approval','/approve/podcasts'),(8,'user_groups','index',2,'2011-06-20 11:26:34','2011-06-20 11:26:34','Your User Groups','/user_groups'),(9,'user_groups','view',8,'2011-06-20 11:27:17','2011-06-20 11:27:17','View',''),(10,'user_groups','edit',8,'2011-06-20 11:28:05','2011-06-20 11:28:05','Edit',''),(11,'user_groups','add',8,'2011-06-20 11:29:09','2011-06-20 11:29:09','Create',''),(15,'users','admin_index',2,'2011-06-20 14:48:21','2011-06-20 14:48:21','User Administration','/admin/users'),(16,'users','admin_edit',15,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit',''),(17,'user_groups','admin_index',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','User Group Administration',NULL),(18,'user_groups','admin_add',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','Create','/admin/user_groups/add'),(19,'user_groups','admin_edit',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit',''),(20,'user_groups','admin_view',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','View',NULL),(21,'podcasts','admin_edit',21,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit','/admin/podcasts/edit'),(22,'podcasts','admin_index',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','Collections Administration','/admin/podcasts'),(24,'podcasts','admin_add',21,NULL,NULL,'Add','/admin/podcasts/add'),(23,'podcasts','admin_view',21,NULL,NULL,'View','/admin/podcasts/view'),(25,'users','apply',0,'2011-06-22 13:33:10','2011-06-22 13:33:10','Apply to Join',''),(26,'users','register',0,'2011-06-22 13:49:36','2011-06-22 13:49:36','Register','');
+INSERT INTO `breadcrumbs` VALUES (1,NULL,NULL,0,'2011-06-20 10:55:18','2011-06-20 10:55:18','Home','/'),(2,'users','dashboard',0,'2011-06-20 10:56:00','2011-06-20 10:56:00','Dashboard','/users/dashboard'),(3,'podcasts','index',2,'2011-06-20 11:11:21','2011-06-20 11:11:21','Collections','/podcasts'),(4,'podcasts','view',3,'2011-06-20 11:22:18','2011-06-20 11:22:18','View',''),(5,'podcasts','edit',3,'2011-06-20 11:22:44','2011-06-20 11:22:44','Edit',''),(6,'podcasts','add',3,'2011-06-20 11:23:12','2011-06-20 11:23:12','Create',''),(7,'podcasts','approve_index',3,'2011-06-20 11:24:50','2011-06-20 11:24:50','Podcasts Waiting Approval','/approve/podcasts'),(8,'user_groups','index',2,'2011-06-20 11:26:34','2011-06-20 11:26:34','Your User Groups','/user_groups'),(9,'user_groups','view',8,'2011-06-20 11:27:17','2011-06-20 11:27:17','View',''),(10,'user_groups','edit',8,'2011-06-20 11:28:05','2011-06-20 11:28:05','Edit',''),(11,'user_groups','add',8,'2011-06-20 11:29:09','2011-06-20 11:29:09','Create',''),(15,'users','admin_index',2,'2011-06-20 14:48:21','2011-06-20 14:48:21','User Administration','/admin/users'),(16,'users','admin_edit',15,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit',''),(17,'user_groups','admin_index',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','User Group Administration',NULL),(18,'user_groups','admin_add',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','Create','/admin/user_groups/add'),(19,'user_groups','admin_edit',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit',''),(20,'user_groups','admin_view',17,'0000-00-00 00:00:00','0000-00-00 00:00:00','View',NULL),(21,'podcasts','admin_edit',22,'0000-00-00 00:00:00','0000-00-00 00:00:00','Edit','/admin/podcasts/edit'),(22,'podcasts','admin_index',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','Collections Administration','/admin/podcasts'),(24,'podcasts','admin_add',21,NULL,NULL,'Add','/admin/podcasts/add'),(23,'podcasts','admin_view',22,NULL,NULL,'View','/admin/podcasts/view'),(25,'users','apply',0,'2011-06-22 13:33:10','2011-06-22 13:33:10','Apply to Join',''),(26,'users','register',0,'2011-06-22 13:49:36','2011-06-22 13:49:36','Register','');
 /*!40000 ALTER TABLE `breadcrumbs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,7 +403,7 @@ CREATE TABLE `podcast_links` (
   `podcast_id` mediumint(8) unsigned NOT NULL,
   `primary` set('N','Y') NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5086 DEFAULT CHARSET=latin1 COMMENT='LInks between nodes and podcasts';
+) ENGINE=MyISAM AUTO_INCREMENT=5097 DEFAULT CHARSET=latin1 COMMENT='LInks between nodes and podcasts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -412,7 +412,7 @@ CREATE TABLE `podcast_links` (
 
 LOCK TABLES `podcast_links` WRITE;
 /*!40000 ALTER TABLE `podcast_links` DISABLE KEYS */;
-INSERT INTO `podcast_links` VALUES (5079,6,1455,'N'),(5085,22,1457,'N'),(5084,21,1457,'N'),(5083,5,1457,'N');
+INSERT INTO `podcast_links` VALUES (5079,6,1455,'N'),(5085,22,1457,'N'),(5084,21,1457,'N'),(5083,5,1457,'N'),(5096,22,1459,'N');
 /*!40000 ALTER TABLE `podcast_links` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -580,8 +580,11 @@ CREATE TABLE `podcasts` (
   `intended_youtube_flag` set('Y','N') DEFAULT 'N',
   `itunesu_justification` text,
   `youtube_justification` text,
+  `consider_for_itunesu` tinyint(1) DEFAULT '0',
+  `consider_for_youtube` tinyint(1) DEFAULT '0',
+  `preferred_node` mediumint(8) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1458 DEFAULT CHARSET=latin1 COMMENT='Podcasts';
+) ENGINE=MyISAM AUTO_INCREMENT=1461 DEFAULT CHARSET=latin1 COMMENT='Podcasts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,7 +593,7 @@ CREATE TABLE `podcasts` (
 
 LOCK TABLES `podcasts` WRITE;
 /*!40000 ALTER TABLE `podcasts` DISABLE KEYS */;
-INSERT INTO `podcasts` VALUES (1455,'','Comic Strip Characters','regsergr','','','','','','','',NULL,'','','en','clean','','','','THIS IS THE SUBTITLE.............','www.example.com','','','',NULL,'1455_comicstripcharacters','Y','','local','Y',NULL,NULL,'Y','N','private',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-21 15:21:27','2011-06-22 11:28:19',0,1110,1,'N','Because I want it!!!',NULL),(1456,'','Hello World',NULL,'','','','',NULL,'',NULL,NULL,NULL,NULL,'en','clean',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1456_helloworld','Y','N','local','N',NULL,NULL,'N','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-22 11:34:43','2011-06-22 11:34:43',0,1110,0,'N',NULL,NULL),(1457,'','ANOTHER TEST FOR ITUNES','This is the ssummary','','','','','','','',NULL,'','','en','clean','','','','Witwoo!','www.example.com','','','',NULL,'1457_anothertestforitunes','Y','','local','Y',NULL,NULL,'Y','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-22 11:37:45','2011-06-22 11:39:42',0,1110,1,'N','Submitted by Charles',NULL);
+INSERT INTO `podcasts` VALUES (1455,'','Comic Strip Characters','regsergr','','','','','','','',NULL,'','','en','clean','','','','THIS IS THE SUBTITLE.............','www.example.com','','','',NULL,'1455_comicstripcharacters','Y','','local','Y',NULL,NULL,'Y','N','private',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-21 15:21:27','2011-06-22 11:28:19',0,1110,1,'N','Because I want it!!!',NULL,0,0,0),(1456,'','Hello World',NULL,'','','','',NULL,'',NULL,NULL,NULL,NULL,'en','clean',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1456_helloworld','Y','N','local','N',NULL,NULL,'N','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-22 11:34:43','2011-06-22 11:34:43',0,1110,0,'N',NULL,NULL,0,0,0),(1457,'','ANOTHER TEST FOR ITUNES','This is the ssummary','','','','','','','',NULL,'','','en','clean','','','','Witwoo!','www.example.com','','','',NULL,'1457_anothertestforitunes','Y','','local','Y',NULL,NULL,'Y','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-22 11:37:45','2011-06-22 11:39:42',0,1110,1,'N','Submitted by Charles',NULL,0,0,0),(1458,'','Comic Strip Characters','rgsgfd','','','','',NULL,'',NULL,NULL,'',NULL,'en','clean','','','',NULL,'www.example.com','','','',NULL,'1458_comicstripcharacters','Y','','local','N',NULL,NULL,'Y','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-22 16:29:20','2011-06-23 15:22:24',1,1118,1,'N','hg glkhgljg\r\n\r\njhg kjgkj',NULL,1,0,NULL),(1459,'','Hello World','dfgdfsgsfd','','','','',NULL,'',NULL,NULL,'',NULL,'en','clean','','','',NULL,'www.example.com','','','',NULL,'','Y','','local','N',NULL,NULL,'N','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-23 09:31:38','2011-06-23 11:55:36',0,1118,1,'N','gfddgffsdg',NULL,1,0,0),(1460,'','fghhgf','','','','','',NULL,'',NULL,NULL,'',NULL,'en','clean','','','',NULL,'','','','',NULL,'','Y','','local','N',NULL,NULL,'N','N','public',NULL,NULL,NULL,NULL,'N',NULL,'N','2011-06-23 15:18:55','2011-06-23 15:38:42',1,1118,0,'N','',NULL,0,0,NULL);
 /*!40000 ALTER TABLE `podcasts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -732,7 +735,7 @@ CREATE TABLE `user_group_podcasts` (
   `podcast_id` int(11) NOT NULL,
   `moderator` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -741,7 +744,7 @@ CREATE TABLE `user_group_podcasts` (
 
 LOCK TABLES `user_group_podcasts` WRITE;
 /*!40000 ALTER TABLE `user_group_podcasts` DISABLE KEYS */;
-INSERT INTO `user_group_podcasts` VALUES (48,1,1455,0),(49,15,1455,0),(50,3,1455,1),(59,1,1457,0),(60,2,1457,0),(61,9,1457,0),(62,16,1457,0),(63,25,1457,0),(64,19,1457,1);
+INSERT INTO `user_group_podcasts` VALUES (48,1,1455,0),(49,15,1455,0),(50,3,1455,1),(59,1,1457,0),(60,2,1457,0),(61,9,1457,0),(62,16,1457,0),(63,25,1457,0),(64,19,1457,1),(106,3,1459,0),(107,7,1459,0),(108,15,1459,0),(109,10,1459,1);
 /*!40000 ALTER TABLE `user_group_podcasts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -859,7 +862,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1118,NULL,'Charles','Jackson','cj3999@open.ac.uk',0,'N','N','N','cj3999','0000-00-00 00:00:00','0000-00-00 00:00:00',1,'2011-06-22 13:49:42',1,1);
+INSERT INTO `users` VALUES (1118,NULL,'Charles','Jackson','cj3999@open.ac.uk',0,'Y','Y','Y','cj3999','0000-00-00 00:00:00','0000-00-00 00:00:00',1,'2011-06-22 13:49:42',1,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -872,4 +875,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2011-06-22 13:53:08
+-- Dump completed on 2011-06-23 17:10:07
