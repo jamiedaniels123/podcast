@@ -63,7 +63,7 @@
                         <td class="actions">
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">view</a>
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">generate rss</a>
+                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>
                                 <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">edit</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this podcast and associated media?');">delete</a>
                                 <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>">media</a>
@@ -81,7 +81,7 @@
         
         <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
         <button class="button white multiple_action_button" type="button" data-form_target="/podcasts/delete" id="delete_multiple_podcasts"><span>delete</span></button>
-        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>generate rss</span></button>
+        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>refresh rss</span></button>
        
     </form>
     <div class="paging">

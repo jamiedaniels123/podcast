@@ -794,8 +794,15 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function setPreferredNode( $data = array() ) {
-
-        $data['Podcast']['preferred_node'] = $data['Nodes'][0];
+		
+		if( is_array( $data['Nodes'] ) && count( $data['Nodes'] ) ) {
+			
+	        $data['Podcast']['preferred_node'] = $data['Nodes'][0];
+			
+		} else {
+			
+			$data['Podcast']['preferred_node'] = null;
+		}
         return $data;
     }
 }

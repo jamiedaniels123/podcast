@@ -67,11 +67,14 @@ class PodcastsController extends AppController {
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
             $this->data['Podcast']['private'] = self::YES;
-
+			
             $this->Podcast->set( $this->data );
 
             if( $this->Podcast->saveAll() ) {
 
+				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
+	            $this->Podcast->save( $this->data );
+				
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
 
             } else {
@@ -194,16 +197,19 @@ class PodcastsController extends AppController {
                             $this->Podcast->commit(); // Everything hunky dory, commit the changes.
                             $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
 
+							$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
                             $this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
 
                             // They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
                             if( $this->Permission->toView( $this->data ) ) {
 
                                 $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+								exit;
 
                             } else {
 
                                 $this->redirect( array( 'action' => 'index') );
+								exit;
                             }
                         }
                     }
@@ -240,7 +246,7 @@ class PodcastsController extends AppController {
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
             }
         }
-
+		
         // Need to retrieve form options such as additional users and catagories etc... on the system.
         $this->__setPodcastDefaults();
     }
@@ -470,6 +476,9 @@ class PodcastsController extends AppController {
             $this->Podcast->set( $this->data );
 
             if( $this->Podcast->saveAll() ) {
+
+				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
+	            $this->Podcast->save( $this->data );
                 
                 $this->redirect( array( 'action' => 'admin_view', $this->Podcast->getLastInsertId() ) );
 
@@ -680,13 +689,18 @@ class PodcastsController extends AppController {
 
         // Try to upload the associated images and transfer to the media server. If successful the upload component will return the name
         // of the uploaded file else it will return false.
-        $this->data['Podcast']['image'] = $this->Image->uploadPodcastImage( $this->data, 'image' );
-        $this->data['Podcast']['image_logoless'] = $this->Image->uploadLogolessPodcastImage( $this->data, 'image_logoless' );
-        $this->data['Podcast']['image_wide'] = $this->Image->uploadWidePodcastImage( $this->data, 'image_wide' );
+		if( isSet($this->data['Podcast']['image'] ) )
+	        $this->data['Podcast']['image'] = $this->Image->uploadPodcastImage( $this->data, 'image' );
+			
+		if( isSet($this->data['Podcast']['image_logoless'] ) )			
+	        $this->data['Podcast']['image_logoless'] = $this->Image->uploadLogolessPodcastImage( $this->data, 'image_logoless' );
+			
+		if( isSet($this->data['Podcast']['image_wide'] ) )			
+	        $this->data['Podcast']['image_wide'] = $this->Image->uploadWidePodcastImage( $this->data, 'image_wide' );
 
         // Check to see if the upload component created any errors.
         if( $this->Image->hasErrors() ) {
-
+			die('we have errors');
             $this->errors = $this->Image->getErrors();
             return false;
 
@@ -706,8 +720,6 @@ class PodcastsController extends AppController {
      */
     function __generateRSSFeeds( $id = null ) {
 
-        return true;
-        
         $podcast = null;
 
         $this->Podcast->recursive = -1; // Minimise the amount of data we retrieve.

@@ -681,13 +681,40 @@ class Feed extends AppModel {
         return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'.rss');
     }
 
-    function buildRssPath( $podcast, $flavour ) {
+	/*
+	 * @name : buildRssPath
+	 * @description : Will build a path relative to the file repository where everything will get written in preparation 
+	 * for transfer to the media server.
+	 * @updated : 24th June 2011
+	 * @by : Charles Jackson
+	 */
+    function buildRssPath( $podcast = array(), $flavour = array() ) {
 
-        // The media_type can be empty but if not, append a slash '/' for the purposes of creating the path line.
+        // The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
         if( !empty( $flavour['media_type'] ) )
-            $flavour['media_type'] .= '/';
+			$flavour['media_type'] = $flavour['media_type'].'/';
 
-        return( $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'] );
+		return $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'];
+    }
+
+	/*
+	 * @name : buildApiEntry
+	 * @description : Will format an array that will eventually be passed to the Api.
+	 * @updated : 24th June 2011
+	 * @by : Charles Jackson
+	 */
+    function buildApiEntry( $custom_id, $media_type = null, $file_name = null ) {
+
+        // The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
+        if( !empty( $media_type ) )
+            $media_type .= '/';
+
+		return
+			array(
+				'source_path' => $custom_id.'/'.$media_type,
+				'destination_path' => $custom_id.'/'.$media_type,
+				'filename' => $file_name
+			);
     }
 
     /*
@@ -701,9 +728,9 @@ class Feed extends AppModel {
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function beingCalledAsMethod(  $id = null, $parameters = array() ) {
+    function beingCalledAsMethod( $parameters = array() ) {
 
-        if( ( $id == null ) && ( (int)$parameters['id'] ) )
+        if( isSet( $parameters['id'] ) && (int)$parameters['id'] )
             return true;
 
         return false;

@@ -22,15 +22,11 @@ class AppController extends Controller {
 
     }
 
-    function getExtension( $filename = null ) {
-
-        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
-    }
 
 
     /*
      * @name : get_breadcrumbs
-     * @description : Build the breadcrumbs
+     * @description : Build the breadcrumbs, loaded on every page except when it's an ajax call.
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
@@ -88,5 +84,10 @@ class AppController extends Controller {
         die('we are in the callback');
         
     }
+	
+    function getExtension( $filename = null ) {
 
+        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
+    }
+	
 }

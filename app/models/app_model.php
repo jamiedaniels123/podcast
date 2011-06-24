@@ -24,7 +24,6 @@ class AppModel extends Model {
 
                 $list[] = $key;
             }
-
             foreach( $subset_array[$data_key] as $row ) {
 
                 $subset_list[] = $row['id'];

@@ -33,7 +33,6 @@ class PermissionComponent extends Object {
 
         }
 
-
         if( $this->__isModerator( $data['Moderators'] ) )
             return true;
         if( $this->__isMember( $data['Members'] ) )

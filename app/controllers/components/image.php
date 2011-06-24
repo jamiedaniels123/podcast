@@ -34,11 +34,11 @@ class ImageComponent extends Object {
     function uploadPodcastMediaImage( $data = array(), $image_key = null ) {
 
         // Have they tried uploading an image?
-        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+        if ( strlen( $data[$this->controller->modelClass][$image_key]['name'] ) == 0 )
             return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
+        if ( (int)$data[$this->controller->modelClass][$image_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your podcast media images. Please try again.';
             return false;
@@ -47,7 +47,7 @@ class ImageComponent extends Object {
         $this->setImageCollection('Podcast Media');
         $this->setData( $data );
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
-        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
         $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'].'_'.$this->data['PodcastItem']['id'] );
 
@@ -61,7 +61,7 @@ class ImageComponent extends Object {
         if( $this->createFolder() == false )
             return false;
 
-        $this->createImages(); // Create 3 versions of the image
+        $this->__createImages(); // Create 3 versions of the image
 
         // Now we need to call the Api and schedule the images for transfer to the media server.
         if( $this->__transferImagesToMediaServer() == false )
@@ -80,21 +80,22 @@ class ImageComponent extends Object {
      */
     function uploadPodcastImage( $data, $image_key ) {
 
+
         // Have they tried uploading an image?
-        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+        if ( strlen( $data[$this->controller->modelClass][$image_key]['name'] ) == 0 )
             return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
+        if ( (int)$data[$this->controller->modelClass][$image_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your podcast images. Please try again.';
             return false;
         }
-
+		die('sssss');
         $this->setImageCollection('Podcast');
         $this->setData( $data );
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
-        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
         $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
 
@@ -108,7 +109,7 @@ class ImageComponent extends Object {
         if( $this->createFolder() == false )
             return false;
 
-        $this->createImages(); // Create 3 versions of the image
+        $this->__createImages(); // Create 3 versions of the image
 
         // Now we need to call the Api and schedule the images for transfer to the media server.
         if( $this->__transferImagesToMediaServer() == false )
@@ -126,11 +127,11 @@ class ImageComponent extends Object {
     function uploadLogolessPodcastImage( $data, $image_key ) {
 
         // Have they tried uploading an image?
-        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+        if ( strlen( $data[$this->controller->modelClass][$image_key]['name'] ) == 0 )
             return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
+        if ( (int)$data[$this->controller->modelClass][$image_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your logoless images. Please try again.';
             return false;
@@ -139,7 +140,7 @@ class ImageComponent extends Object {
         $this->setImageCollection('Logoless');
         $this->setData( $data );
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
-        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
         $this->setFileName( 'LL_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
 
@@ -153,7 +154,7 @@ class ImageComponent extends Object {
         if( $this->createFolder() == false )
             return false;
 
-        $this->createImages(); // Create 3 versions of the image
+        $this->__createImages(); // Create 3 versions of the image
 
         // Now we need to call the Api and schedule the images for transfer to the media server.
         if( $this->__transferImagesToMediaServer() == false )
@@ -171,11 +172,11 @@ class ImageComponent extends Object {
     function uploadWidePodcastImage( $data, $image_key ) {
 
         // Have they tried uploading an image?
-        if ( strlen( $this->data[$this->controller->modelClass][$this->image_key]['name'] ) == 0 )
+        if ( strlen( $data[$this->controller->modelClass][$image_key]['name'] ) == 0 )
             return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$this->data[$this->controller->modelClass][$this->image_key]['error'] ) {
+        if ( (int)$data[$this->controller->modelClass][$image_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your widescreen images. Please try again.';
             return false;
@@ -184,7 +185,7 @@ class ImageComponent extends Object {
         $this->setImageCollection('Widescreen');
         $this->setData( $data );
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
-        $this->setFolderName( FEEDS_LOCATION.$this->data['Podcast']['custom_id'] );
+        $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
         $this->setFileName( 'WS_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
 
@@ -198,7 +199,7 @@ class ImageComponent extends Object {
         if( $this->createFolder() == false )
             return false;
 
-        $this->createImages(); // Create 3 versions of the image
+        $this->__createImages(); // Create 3 versions of the image
 
         // Now we need to call the Api and schedule the images for transfer to the media server.
         if( $this->__transferImagesToMediaServer() == false )
@@ -251,8 +252,8 @@ class ImageComponent extends Object {
      * @by : Charles Jackson
      */
     function setFolderName( $folder_name = null ) {
-
-        $this->folder_name = $folder_name;
+		
+        $this->folder = $folder_name;
     }
 
     /*
@@ -322,12 +323,12 @@ class ImageComponent extends Object {
         $file_name.= '.';
         $file_name .= $this->file_extension;
 
-        $this->temporary_file = TMP . '/'.$file_name;
+        $this->temporary_file = TMP .$file_name;
 
         if ( is_uploaded_file( $this->data[$this->controller->modelClass][$this->image_key]['tmp_name'] ) ) {
 
             // Copy the image into the temporary directory
-            if ( !copy( $this->data[$this->controller->modelClass][$this->image_key]['tmp_name'], "$this->temporary_file" ) ) {
+            if ( !copy( $this->data[$this->controller->modelClass][$this->image_key]['tmp_name'], $this->temporary_file ) ) {
                 
                 $this->errors[] = 'Could not copy your '.$this->image_collection.' image into a temporary location on server. If the problem persists please alert an administrator.';
                 return false;
@@ -349,7 +350,7 @@ class ImageComponent extends Object {
     function createFolder() {
 
         $new_folders = explode( '/', $this->folder );
-        $new_folder_path = WWW_ROOT;
+        $new_folder_path = FILE_REPOSITORY;
 
         foreach( $new_folders as $new_folder ) {
 
@@ -363,6 +364,8 @@ class ImageComponent extends Object {
                 }
             }
         }
+		
+		return true;
     }
 
     /*
@@ -382,22 +385,21 @@ class ImageComponent extends Object {
     }
 
     /*
-     * @name : createImages
+     * @name : __createImages
      * @description : Will create 3 images using a common naming convention
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
     function __createImages() {
-
+		
         // Create a copy of the original file.
-        copy( $this->temporary_file, $this->folder.'/'.$this->file_name.'.'.$this->file_extension );
+        copy( $this->temporary_file, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.'.'.$this->file_extension );
         // Create a resized copy of the file.
-        $this->resizeImage($this->temporary_file, 300, $this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
+        $this->resizeImage($this->temporary_file, 300, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
         // Generate a thumbnail square version of the image.
-        $this->resizeImage( $this->temporary_file, 50, $this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
-
-        // Delete the temporary image
-        unlink( $this->temporary_file );
+        $this->resizeImage( $this->temporary_file, 50, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
+		
+		unlink( $this->temporary_file );
     }
 
     /*
