@@ -19,10 +19,7 @@ class AppController extends Controller {
         }
 
         $this->get_breadcrumbs();
-
     }
-
-
 
     /*
      * @name : get_breadcrumbs
