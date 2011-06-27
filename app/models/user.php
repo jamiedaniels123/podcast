@@ -87,6 +87,11 @@ class User extends AppModel {
      */
     function buildUserFromSamsData( $data = array() ) {
 
+		echo SAMS_NAME;
+		echo SAMS_EMAIL;
+		echo SAMS_OUCU_ID;
+		
+		
 		$name = array();
 		$name = explode(" ", SAMS_NAME );
 

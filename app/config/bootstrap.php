@@ -52,13 +52,6 @@
 DEFINE('APPLICATION_URL', 'http://'.$_SERVER['SERVER_NAME']);
 DEFINE('SECURE_APPLICATION_URL', 'https://'.$_SERVER['SERVER_NAME']);
 
-DEFINE('FEEDS_LOCATION', 'feeds/');
-DEFINE('THUMBNAIL_EXTENSION', '_thm');
-DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
-DEFINE('NO_IMAGE_AVAILABLE', '/img/noImageAvailable.jpg');
-DEFINE('CORRECT_IMAGE', '/correct.gif');
-DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
-
 // Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
@@ -72,9 +65,13 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
         DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
         DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
+		
 		if( !empty( $_COOKIE['HS7BDF'] ) ) {
+			
         	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+			
 		} else {
+			
 			DEFINE('SAMS_NAME','Unknown User');
 		}
 
@@ -89,13 +86,20 @@ DEFINE('PRIVATE_ITUNEU_PODCAST', 5 );
 DEFINE('DELETED_PODCAST', 6 );
 
 DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
-DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
+DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+
 DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://podcast.open.ac.uk/');
-//DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
-DEFINE('FEEDS_FOLDER', 'feeds/');
+
 DEFINE('DEFAULT_AUTHOR', 'The Open University');
 DEFINE('DEFAULT_RSS_FILENAME','rss2.xml');
 DEFINE('TRANSCRIPT_PREFIX', 'Transcript - ');
+DEFINE('FEEDS','feeds/');
+DEFINE('FEEDS_LOCATION', 'feeds/');
+DEFINE('THUMBNAIL_EXTENSION', '_thm');
+DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
+DEFINE('NO_IMAGE_AVAILABLE', DEFAULT_MEDIA_URL.FEEDS.'images/no-image.jpg');
+DEFINE('CORRECT_IMAGE', '/correct.gif');
+DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
 
 DEFINE('RSS_VIEW', 'http://'.$_SERVER['SERVER_NAME'].'/feeds/view/');
     

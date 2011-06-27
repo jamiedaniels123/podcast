@@ -49,7 +49,7 @@ class ImageComponent extends Object {
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
         $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
-        $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'].'_'.$this->data['PodcastItem']['id'] );
+        $this->setFileName( $this->data['Podcast']['custom_id'] );
 
         if( $this->isValidImage() == false )
             return false;
@@ -82,22 +82,22 @@ class ImageComponent extends Object {
 
 
         // Have they tried uploading an image?
-        if ( strlen( $data[$this->controller->modelClass][$image_key]['name'] ) == 0 )
+        if ( strlen( $data['Podcast'][$image_key]['name'] ) == 0 )
             return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$data[$this->controller->modelClass][$image_key]['error'] ) {
+        if ( (int)$data['Podcast'][$image_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your podcast images. Please try again.';
             return false;
         }
-		die('sssss');
+		
         $this->setImageCollection('Podcast');
         $this->setData( $data );
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
         $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
-        $this->setFileName( $this->data[$this->controller->modelClass][$this->image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+        $this->setFileName( $this->data['Podcast']['custom_id'] );
 
         if( $this->isValidImage() == false )
             return false;
@@ -142,7 +142,7 @@ class ImageComponent extends Object {
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
         $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
-        $this->setFileName( 'LL_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+        $this->setFileName( 'LL_'.$this->data['Podcast']['custom_id'] );
 
         if( $this->isValidImage() == false )
             return false;
@@ -187,7 +187,7 @@ class ImageComponent extends Object {
         $this->setCustomId( $this->data['Podcast']['custom_id'] );
         $this->setFolderName( $this->data['Podcast']['custom_id'] );
         $this->setImageKey( $image_key );
-        $this->setFileName( 'WS_'.$this->data[$this->controller->modelClass][$image_key]['name']['filename'].'_'.$this->data['Podcast']['id'] );
+        $this->setFileName( 'WS_'.$this->data['Podcast']['custom_id'] );
 
         if( $this->isValidImage() == false )
             return false;
@@ -415,18 +415,18 @@ class ImageComponent extends Object {
             $this->Api->transferFileMediaServer(
             array(
                 array(
-                    'source_path' => $this->custom_id,
-                    'destination_path' => $this->custom_id,
+                    'source_path' => $this->custom_id.'/',
+                    'destination_path' => $this->custom_id.'/',
                     'filename' => $this->file_name.'.'.$this->file_extension
                 ),
                 array(
-                    'source_path' => $this->custom_id,
-                    'destination_path' => $this->custom_id,
+                    'source_path' => $this->custom_id.'/',
+                    'destination_path' => $this->custom_id.'/',
                     'filename' => $this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension
                 ),
                 array(
-                    'source_path' => $this->custom_id,
-                    'destination_path' => $this->custom_id,
+                    'source_path' => $this->custom_id.'/',
+                    'destination_path' => $this->custom_id.'/',
                     'filename' => $this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension
                     )
                 )
@@ -591,6 +591,7 @@ class ImageComponent extends Object {
 
         return count( $this->errors );
     }
+	
 
 }
 

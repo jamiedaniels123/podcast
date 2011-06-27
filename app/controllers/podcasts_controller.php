@@ -325,8 +325,14 @@ class PodcastsController extends AppController {
             $this->Podcast->save( $this->podcast );
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->createHtaccess( $this->podcast ) && $this->Api->transferFileMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
-
+            if( $this->Folder->createHtaccess( $this->podcast ) && $this->Api->transferFileMediaServer( 
+				array( 
+					'source_path' => $data['Podcast']['custom_id'].'/',
+					'target_path' => $data['Podcast']['custom_id'].'/', 
+					'filename' => '.htaccess' 
+					)
+				) ) {						
+				
                 $this->Podcast->commit();
                 $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
@@ -622,7 +628,14 @@ class PodcastsController extends AppController {
             // If we did no find the podcast that redirect to the referer.
             if( empty( $this->podcast ) == false ) {
 
-                if( $this->Api->deleteFolderFromMediaServer( array( $data['Podcast']['custom_id'] ) ) ) {
+
+				// Hard delete this podcast by deleting the whole folder structure.
+				if( $this->Api->deleteFolderOnMediaServer( array( 
+					array( 
+						'source_path' => $podcast['Podcast']['custom_id'].'/',
+						)
+					)
+				) ) {
 
                     // Delete the podcast
                     $this->Podcast->delete( $this->podcast['Podcast']['id'] );
@@ -648,7 +661,7 @@ class PodcastsController extends AppController {
     function admin_restore( $id = null ) {
 
         $this->autoRender = false;
-        $this->podcast = $this->Podcast->findById( $id );
+        $this->data = $this->Podcast->findById( $id );
 
         if( empty( $this->data ) ) {
 
@@ -656,7 +669,14 @@ class PodcastsController extends AppController {
 
         } else {
 
-            if( $this->Api->deleteFileFromMediaServer( array( $data['Podcast']['custom_id'].'/.htaccess' ) ) ) {
+			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
+            if( $this->Api->deleteFileOnMediaServer( array( 
+				array( 
+					'source_path' => $this->data['Podcast']['custom_id'].'/',
+					'filename' => '.htaccess'
+					)
+				)
+			) ) {
                 
                 $this->data['Podcast']['deleted'] = false;
                 $this->Podcast->set( $this->data );
@@ -700,7 +720,7 @@ class PodcastsController extends AppController {
 
         // Check to see if the upload component created any errors.
         if( $this->Image->hasErrors() ) {
-			die('we have errors');
+			
             $this->errors = $this->Image->getErrors();
             return false;
 

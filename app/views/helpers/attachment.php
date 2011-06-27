@@ -3,6 +3,33 @@ class AttachmentHelper extends AppHelper {
 
     private $html = null;
     
+	
+	
+	/*
+	 * @name : getMediaImageLink
+	 * @description : Will return a string pointing to an image on the media box. If the image request does not exist
+	 * it will return a default image string.
+	 * @updated : 24th June 2011
+	 * @by : Charles Jackson
+	 */
+	function getMediaImage( $path = null ) {
+	
+		// Make a head request to ensure it actually exists.
+		if(	http_head( DEFAULT_MEDIA_URL.$path ) )
+			return DEFAULT_MEDIA_URL.$path;
+			
+		return NO_IMAGE_AVAILABLE;
+	}
+	
+	function getPodcastImage( $podcast = array(), $name_extension = null ) {
+		
+		$image_extension = $this->getFileExtension( $podcast['image'] );
+		$file_name = $this->getFileName( $podcast['image'] );
+		
+		return DEFAULT_MEDIA_URL.FEEDS.$file_name.$name_extension.$image_extension;
+	}
+
+
     /*
      * @name : getPodcastThumbnail
      * @description : Checks to see if a thumbnail exists and will return accordingly else it will return the default image.

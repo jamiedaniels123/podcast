@@ -19,13 +19,9 @@ class ApiComponent extends Object {
     }
 
 
-    function deleteFolderFromMediaServer( $folders = array() ) {
+    function deleteFolderOnMediaServer( $data = array() ) {
 
-        $this->params = array(
-            'data' => $folders
-        );
-
-        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::MEDIA_URL, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::MEDIA_URL, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
 
     }
@@ -38,12 +34,8 @@ class ApiComponent extends Object {
      */
     function deleteFileOnMediaServer( $data = array() ) {
 
-		// We wish to delete multiple file hence $source is a preformatted array.
-		$this->params = array(
-			$data
-		);
 		
-        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::MEDIA_URL, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::MEDIA_URL, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -55,8 +47,7 @@ class ApiComponent extends Object {
      */
     function transferFileMediaServer( $data = array() ) {
 
-		// We wish to delete multiple file hence $source is a preformatted array.
-        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $data, count($data) ), 1 );
+        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::MEDIA_URL, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
     }
 
