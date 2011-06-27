@@ -12,8 +12,6 @@
         ?>
     </p>
     <form method="post" action="/admin/podcasts/delete">
-        <a href="/" class="toggler" data-status="unticked">Toggle</a>
-        <button type="submit" onclick="return confirm('Are you sure you wish to delete all these podcasts and associated media?')"><span>delete</span></button>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th>Select</th>
@@ -72,6 +70,9 @@
                 endforeach;
             endif; ?>
         </table>
+        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
+        <button class="button white multiple_action_button" type="button" data-form_target="/admin/podcasts/delete" id="delete_multiple_podcasts"><span>delete</span></button>
+        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>refresh rss</span></button>
     </form>
     <div class="paging">
             <?php echo $this->Paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>

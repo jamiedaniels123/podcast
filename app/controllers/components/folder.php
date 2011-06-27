@@ -20,15 +20,18 @@ class FolderComponent extends Object {
      * @by : Charles Jackson
      */
     function moveFileChuckerUpload( $data = array() ) {
-        
+
         $this->create( $data['Podcast']['custom_id'] );
         
-        if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
+        if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['id'].'_'.$data['PodcastItem']['filename'] ) ) {
 
             unlink( FILE_REPOSITORY.$data['PodcastItem']['filename'] );
             return true;
         }
 
+        echo "<pre>";
+			print_r( $data );
+			die();
         return false;
     }
 

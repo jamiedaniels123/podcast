@@ -147,15 +147,20 @@ class PodcastItemsController extends AppController {
             if( $this->PodcastItem->save() ) {
 
                 $this->data = $this->PodcastItem->findById( $this->PodcastItem->getLastInsertId() );
-                
+				                
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
+
+					// Save an updated record appending the database ID number to the start of the filename to ensure it is unique.
+					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['filename'];
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
 
                     // Now we have the file in it's correct location we must capture various details and store in this->data
                     // so we may save to the database and create a workflow for the transcoder.
                     $this->data = $this->PodcastItem->getMediaInfo( $this->data, $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] ) );
 
                     if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'] ) ) {
-                        
+						
                         $this->PodcastItem->commit();
 
                         // We have successfully saved the URL, now redirect back onto itself but without the GET parameters passed
@@ -177,14 +182,26 @@ class PodcastItemsController extends AppController {
 						
                         // The file did not transcode, delete the file.
                         unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
+						$this->PodcastItem->rollback();						
+						$this->Session->setFlash('Could not schedule your media for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
                     }
-                }
+					
+                } else {
+					
+                        // The file did not transcode, delete the file.
+                        unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
+						$this->PodcastItem->rollback();						
+						$this->Session->setFlash('Could not copy your uploaded media. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+				}
             }
-        }
-		
-		// The file did not upload AOR transcode, roll back DB changes.
-        $this->PodcastItem->rollback();
-        $this->Session->setFlash('Could not upload/transcode your podcast media. Please try again.',  'default', array( 'class' => 'error' ) );
+			
+        } else {
+
+			// The file did not upload and/or transcode, capture the errors and roll back DB changes.
+			$this->errors = $this->PodcastItem->invalidFields( $this->data );
+			$this->PodcastItem->rollback();
+			$this->Session->setFlash('Could not save your media information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
+		}
 
         // We need to redirect based on session information that is set within the index and admin_index methods.
         if( $this->Session->read('Podcast.admin') ) {
