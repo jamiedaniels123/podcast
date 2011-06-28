@@ -38,7 +38,7 @@
                             <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                         </td>
                         <td>
-                            <?php echo $this->Attachment->getPodcastThumbnail( $podcast ); ?>
+                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="podcast image" />
                         </td>
                         <td>
                             <?php echo $podcast['Owner']['full_name']; ?>

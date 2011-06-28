@@ -150,7 +150,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.created_when',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename',
             'order' => 'PodcastItems.publication_date DESC'
         ),
         'PublishedPodcastItems' => array(
@@ -613,7 +613,8 @@ class Podcast extends AppModel {
       * 1) Are they the owner?
       * 2) Are they a moderator?
       * 3) Are they a member?
-      * 4) Are they a member of an associated user group?
+      * 4) Are they a member of an associated moderator group?
+      * 5) Are they a member of an associated user group?	  
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
@@ -805,4 +806,34 @@ class Podcast extends AppModel {
 		}
         return $data;
     }
+	
+	/* 
+	 * @name : deleteImages
+	 * @description : Will create an array containing the 3 image names (original, resized and thumbnail) that can be passed
+	 * to the API for deletion. At time of creatiion called from the "delete_image" method in the podcasts controller.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function deleteImages( $podcast = array(), $image_type = null ) {
+
+		if( !isSet( $podcast['Podcast'][$image_type] ) )
+			return false;
+			
+		$media_images = array();
+		
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $podcast['Podcast'][$image_type]
+			);
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $this->getStandardImageName( $podcast['Podcast'][$image_type] )
+			);
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $this->getThumbnailImageName( $podcast['Podcast'][$image_type] )
+			);
+			
+		return $media_images;
+	}
 }

@@ -48,7 +48,7 @@
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php echo $this->Attachment->getPodcastThumbnail( $podcast ); ?>
+                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="podcast image" />
                         </td>
                         <td>
                             <a href="#"><?php echo $podcast['Podcast']['title']; ?></a>

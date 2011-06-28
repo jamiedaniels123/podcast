@@ -3,7 +3,7 @@
 class PodcastsController extends AppController {
 
     var $name = 'Podcasts';
-    var $components = array( 'Image' );
+    var $components = array( 'Upload' );
     private $errors = array();
     var $html = null; // Used to store errors created by the images component.
     
@@ -145,7 +145,7 @@ class PodcastsController extends AppController {
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
             
             // Save this->data into a local array so we can rebuild the form if any of the validation fails and
-            // we are required to rollback the database.
+            // we are required to rollback the database plus we can save the data with attachments prior to resaving with attachments.
             $data = array();
             $data = $this->data;
 
@@ -193,7 +193,7 @@ class PodcastsController extends AppController {
                             $this->Podcast->rollback();
 
                         } else {
-
+							
                             $this->Podcast->commit(); // Everything hunky dory, commit the changes.
                             $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
 
@@ -248,7 +248,7 @@ class PodcastsController extends AppController {
         }
 		
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastDefaults();
+        $this->__setPodcastFormOptions();
     }
 
     /*
@@ -264,13 +264,43 @@ class PodcastsController extends AppController {
         if ( !empty( $this->data ) ) {
 
             $this->Podcast->begin();
+
+            // Save this->data into a local array so we can rebuild the form if any of the validation fails and
+            // we are required to rollback the database plus we can save the data with attachments prior to resaving with attachments.
+            $data = array();
+            $data = $this->data;
+
+            $this->data = $this->Podcast->unsetAttachments( $this->data );
+			
             $this->Podcast->set( $this->data );
 
             if( $this->Podcast->saveAll() && $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
 
-                $this->Podcast->commit();
-                $this->Session->setFlash('Itunes details have been successfully updated and RSS feeds refreshed.', 'default', array( 'class' => 'success' ) );
-                $this->redirect( array( 'action' => 'justification', $this->data['Podcast']['id'] ) );
+                    // Now copy back the original including array elements and
+                    // save again with attachment elements.
+                    $this->data = $data;
+                    if ( $this->__updateImages() == false ) {
+
+                        $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
+                        $this->data = $this->Podcast->rebuild( $data );
+                        $this->Podcast->rollback();
+
+                    } else {
+
+                        // Generate the RSS Feeds.
+                        if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
+                        
+                            $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem continues please alert an administrator', 'default', array( 'class' => 'error' ) );
+                            $this->data = $this->Podcast->rebuild( $data );
+                            $this->Podcast->rollback();
+
+                        } else {
+
+                            $this->Podcast->commit(); // Everything hunky dory, commit the changes.
+                            $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+							$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+						}
+					}
 
             } else {
 
@@ -293,7 +323,7 @@ class PodcastsController extends AppController {
         }
 
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastDefaults();
+        $this->__setPodcastFormOptions();
     }
 
     /*
@@ -344,7 +374,7 @@ class PodcastsController extends AppController {
             }
         }
         
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
    /*
@@ -527,6 +557,8 @@ class PodcastsController extends AppController {
      */
     function admin_edit( $id = null ) {
 
+		$this->Podcast->recursive = 2;
+		
         if ( !empty( $this->data ) ) {
 
             $this->Podcast->begin();
@@ -555,6 +587,7 @@ class PodcastsController extends AppController {
                 // Now copy back the original including array elements and
                 // save again with attachment elements.
                 $this->data = $data;
+
                 if ( $this->__updateImages() == false ) {
 
                     $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
@@ -574,6 +607,7 @@ class PodcastsController extends AppController {
 
                         $this->Podcast->commit(); // Everything hunky dory, commit the changes.
                         $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+						 $this->redirect( array( 'admin' => true, 'action' => 'view', $this->data['Podcast']['id'] ) );						
                     }
                 }
 
@@ -601,7 +635,7 @@ class PodcastsController extends AppController {
         }
 
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastDefaults();
+        $this->__setPodcastFormOptions();
     }
  
     /*
@@ -648,7 +682,7 @@ class PodcastsController extends AppController {
             }
         }
         
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
     /*
@@ -709,19 +743,37 @@ class PodcastsController extends AppController {
 
         // Try to upload the associated images and transfer to the media server. If successful the upload component will return the name
         // of the uploaded file else it will return false.
-		if( isSet($this->data['Podcast']['image'] ) )
-	        $this->data['Podcast']['image'] = $this->Image->uploadPodcastImage( $this->data, 'image' );
+        if( $this->Upload->podcastImage( $this->data, 'image' ) ) {
 			
-		if( isSet($this->data['Podcast']['image_logoless'] ) )			
-	        $this->data['Podcast']['image_logoless'] = $this->Image->uploadLogolessPodcastImage( $this->data, 'image_logoless' );
+			$this->data['Podcast']['image'] = $this->Upload->getUploadedFileName();
 			
-		if( isSet($this->data['Podcast']['image_wide'] ) )			
-	        $this->data['Podcast']['image_wide'] = $this->Image->uploadWidePodcastImage( $this->data, 'image_wide' );
+		} else {
+			
+			unset( $this->data['Podcast']['image'] );
+		}
+
+        if( $this->Upload->logolessPodcastImage( $this->data, 'image_logoless' ) ) {
+			
+			$this->data['Podcast']['image_logoless'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image_logoless'] );
+		}
+		
+        if( $this->Upload->widePodcastImage( $this->data, 'image_wide' ) ) {
+			
+			$this->data['Podcast']['image_wide'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image_wide'] );
+		}
 
         // Check to see if the upload component created any errors.
-        if( $this->Image->hasErrors() ) {
+        if( $this->Upload->hasErrors() ) {
 			
-            $this->errors = $this->Image->getErrors();
+            $this->errors = $this->Upload->getErrors();
             return false;
 
         } else {
@@ -732,6 +784,40 @@ class PodcastsController extends AppController {
         }
     }
 
+	/*
+	 * @name : delete_image
+	 * @description : Enables peeps to delete a podcast image from the media server.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */
+	function delete_image( $image_type, $id ) {
+		
+		$this->data = $this->Podcast->findById( $id );
+		
+		if( empty( $this->data ) || empty( $this->data['Podcast'][$image_type] ) ) {
+			
+			$this->Session->setFlash('We were unable to identify the image you are trying to delete. Please try again.', 'default', array( 'class' => 'error' ) );
+			
+		} else { 
+		
+			// Now we must delete the images from the media server.
+			if( $this->Api->deleteFileOnMediaServer( $this->Podcast->deleteImages( $this->data['Podcast'], $image_type ) ) ) {
+				
+				// We have successfully scheduled the image for deletion, now update the row on the podcasts table.
+				$this->data['Podcast'][$image_type] = null;
+				$this->Podcast->set( $this->data );
+				$this->Podcast->save();
+				$this->Session->setFlash('Podcast image successfully deleted.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+
+				$this->Session->setFlash('We were unable to schedule deletion of the file with the media server. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				
+			}
+		}
+			
+		$this->redirect( $this->referer() );		
+	}
     /*
      * @name : __generateRSSFeeds
      * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.
@@ -758,14 +844,14 @@ class PodcastsController extends AppController {
     }
 
     /*
-     * @name : setDefaults
+     * @name : __setPodcastFormOptions
      * @description : Called prior to various methods when the user can update a podcast. This method will sanatize data prior to being
      * shown on a form such as retrieving all users on the system as a list for possible membership of a podcast then removing any people
      * that are already members of the aforementioned podcast.
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function __setPodcastDefaults() {
+    function __setPodcastFormOptions() {
 
         // Get all the nodes
         $this->Node = ClassRegistry::init('Node');
@@ -793,7 +879,9 @@ class PodcastsController extends AppController {
         $this->UserGroup = ClassRegistry::init('UserGroup');
         $this->user_groups = $this->UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
         $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'MemberGroups' );
+
         $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'ModeratorGroups' );
+
         $this->set('user_groups', $this->user_groups );
 
         // Get all the user groups

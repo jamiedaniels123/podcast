@@ -6,7 +6,7 @@ class AppController extends Controller {
 
     var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder', 'Api', 'Getid3', 'emailTemplates' );
 
-    var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb' );
+    var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 
     function beforeFilter() {
 
@@ -76,15 +76,36 @@ class AppController extends Controller {
 
     }
 
-    function callback( $data = array() ) {
-
-        die('we are in the callback');
-        
-    }
-	
+	/*
+	 * @name : getExtension
+	 * @description : Return the extension of parameter passed	
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */
     function getExtension( $filename = null ) {
 
         return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
-	
+
+	/*
+	 * @name : callback
+	 * @description : The API callback URL, will echo out a json encoded array to screen.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */
+	function callback( $data = array() ) {
+
+		$this->layout = 'none';
+
+		$data = array(
+			'command' => 'whatever',
+			'status' => 'ACK',
+			'mqIndex' => 1,
+			'timestamp' => date('Y-m-d H:i:s')
+		);
+		
+		echo json_encode( $data );
+		die();        
+    }
+
 }

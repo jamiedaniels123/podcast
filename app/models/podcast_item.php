@@ -90,12 +90,14 @@ class PodcastItem extends AppModel {
             $data['PodcastItem']['duration'] = $info['length']; // Stored in the database
             $data['PodcastItem']['fileformat'] = $info['fileformat']; // Stored in the database
             $data['PodcastItem']['original_filename'] = $info['filename']; // Stored in the database
-
-            // Now we need to trap information that will be used to create a workslow for the transcoder.
         }
 
-        return $data;
+		$this->Workflow = ClassRegistry::init('Workflow');
+		
+		$data['workflow'] = $this->Workflow->get( $data, $media_info );
+
     }
+
 
 	/*
 	 * @name : listAssociatedMedia

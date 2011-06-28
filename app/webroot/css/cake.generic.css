@@ -292,6 +292,7 @@ form div {
 	margin-bottom: 0em;
 	padding: 0 .5em;
 	vertical-align:middle;
+	clear:left;
 }
 form .input {
 	color: #1a1a1a;
@@ -692,3 +693,5 @@ ul#breadcrumb li {
 
 
 }
+img.icon {
+	width: 30px;

@@ -57,10 +57,11 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcodeMedia( $path, $filename ) {
+    function transcodeMedia( $path, $filename, $workflow ) {
 
         $this->params = array(
             'data' => array(
+				'workflow' => $workflow,
                 'source_path' => $path,
                 'filename' => $filename
             )

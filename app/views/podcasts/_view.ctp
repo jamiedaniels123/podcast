@@ -1,6 +1,6 @@
 <div class="wrapper">
     <div class="float_right">
-            <?php echo $this->Attachment->getPodcastStandardImage( $this->data ); ?>
+    	<img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="podcast image" />
     </div>
     <div class="float_left">
         <dl>
@@ -18,9 +18,9 @@
     </div>
 </div>
 <div class="clear"></div>
-<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isAdministrator() ) : ?>
+<?php if( $this->Miscellaneous->isAdminRouting() || $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) ) : ?>
 
-    <?php if( $this->Permission->isAdminRouting() ) : ?>
+    <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
         <a href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">edit</a>
         <a href="/admin/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit">media</a>
     <?php else : ?>
@@ -30,7 +30,7 @@
 
 <?php endif; ?>
 
-<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isAdministrator() ) : ?>
+<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Miscellaneous->isAdminRouting() ) : ?>
 
     <?php if( $this->Permission->isAdminRouting() ) : ?>
         <a href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this podcast?');" >delete</a>

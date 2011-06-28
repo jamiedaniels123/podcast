@@ -1,3 +1,4 @@
+<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
 <div class="itunes_container">
     <div class="input text">
         <label for="PodcastPublishItunesDate">iTunes U Publish Date</label>
@@ -35,6 +36,14 @@
         <input type="hidden" value="" id="PodcastMetadataDate_" name="data[Podcast][metadata_date]">
         <input type="text" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][metadata_date]">
         <?php echo $this->Form->error('Podcast.metadata_date'); ?>
+    </div>
+    <div class="input select">
+        <label for="PodcastItunesuSite">iTunes Site</label>
+        <select name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">
+			<option value="Public" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PUBLIC' ? 'selected="selected"' : ''; ?>>Public</option>
+			<option value="Private" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PRIVATE' ? 'selected="selected"' : ''; ?>>Private</option>            
+        </select>
+        <?php echo $this->Form->error('Podcast.itunes_site'); ?>
     </div>
     <div class="input text">
         <label for="PodcastItunesUUrl">iTunes U URL</label>
@@ -139,6 +148,10 @@
         <input type="file" id="PodcastImageLogoless" name="data[Podcast][image_logoless]">
         <?php echo $this->Form->error('Podcast.image_logoless'); ?>
     </div>
+    <div class="image thumbnail">
+       <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
+		<a href="/podcasts/delete_image/image_logoless/<?php echo $this->data['Podcast']['id']; ?>" title="delete logoless image" onclick="return confirm('Are you sure you wish to delete the logoless screen image?')">delete</a>
+    </div>
     <div class="input text">
         <label for="PodcastImageLlCopyright">Copyright/credit</label>
         <input type="text" id="PodcastImageLlCopyright" name="data[Podcast][image_ll_copyright]" value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
@@ -148,6 +161,10 @@
         <label for="PodcastImageWide">Widescreen Image</label>
         <input type="file" id="PodcastImageWide" name="data[Podcast][image_wide]">
         <?php echo $this->Form->error('Podcast.image_wide'); ?>
+    </div>
+    <div class="image thumbnail">
+       <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
+		<a href="/podcasts/delete_image/image_wide/<?php echo $this->data['Podcast']['id']; ?>" title="delete widescreen image" onclick="return confirm('Are you sure you wish to delete the wide screen image?')">delete</a>
     </div>
     <div class="input text">
         <label for="PodcastImageWideCopyright">Copyright/credit</label>

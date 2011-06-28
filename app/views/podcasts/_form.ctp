@@ -141,6 +141,10 @@
             <input type="file" id="PodcastImage" name="data[Podcast][image]">
             <?php echo $this->Form->error('Podcast.image'); ?>
         </div>
+        <div class="image thumbnail">
+           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
+            <a href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete podcast image" onclick="return confirm('Are you sure you wish to delete the podcast image?')">delete</a>
+        </div>
         <div class="input checkbox">
             <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
             <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
@@ -195,13 +199,15 @@
             </div>
         </div>
         <div class="clear"></div>
-        <?php if( isSet( $this->params['admin'] ) || ( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) && ( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || ( isSet( $this->data['Podcast']['current_owner_id'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) ) : ?>
+        <?php if( $this->Miscellaneous->isAdminRouting() || ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
+        
             <div class="input text">
                 <label for="PodcastOwnerId">Podcast Owner</label>
-                <?php if( isSet( $this->data['Podcast']['current_owner_id'] ) ) : ?>
+                <?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
                     <input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
                     <input type="hidden" name="data[Podcast][confirmed]" value="<?php echo isSet( $this->data['Podcast']['confirmed'] ) ? '1' : '0'; ?>" id="PodcastConfirmed" />
                 <?php endif; ?>
+                
                 <select name="data[Podcast][owner_id]" id="PodcastOwnerId">
                     <option value="">Please select</option>
                     <?php foreach( $all_users as $user_id => $name ) : ?>
@@ -210,7 +216,19 @@
                 </select>
                 <?php echo $this->Form->error('Podcast.owner_id'); ?>
             </div>
+            
         <?php endif; ?>
-        <?php echo $this->element('../podcasts/_form_itunes_apply'); ?>
+        
+        
+        <?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
+        
+	        <?php echo $this->element('../podcasts/_form_itunes'); ?>
+            
+        <?php else : ?>
+        
+        	<?php echo $this->element('../podcasts/_form_itunes_apply'); ?>
+            
+        <?php endif; ?>
+        
     </div>
 <?php endif; ?>

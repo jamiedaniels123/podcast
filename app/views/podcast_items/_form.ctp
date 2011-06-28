@@ -1,8 +1,10 @@
 <fieldset>
     <legend>Media</legend>
     <input type="hidden" id="PodcastId" name="data[Podcast][id]" value="<?php echo $this->data['Podcast']['id']; ?>">
+    <input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">    
     <input type="hidden" id="PodcastTitle" name="data[Podcast][title]" value="<?php echo $this->data['Podcast']['title']; ?>">
     <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
+    <input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">    
     <div class="input text">
         <label for="PodcastItemTitle">Title</label>
         <input type="text" id="PodcastItemTitle" name="data[PodcastItem][title]" value="<?php echo $this->data['PodcastItem']['title']; ?>">
@@ -24,9 +26,12 @@
         <?php echo $this->Form->error('PodcastItem.TargetUrlText'); ?>
     </div>
     <div class="input file">
+	    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" />
+       	<a href="/podcast_items/delete_image/<?php echo $this->data['PodcastItem']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this image?');" title="delete image">delete image</a>
         <label for="PodcastItemImage">Item Image</label>
         <input type="file" id="PodcastItemImage" name="data[PodcastItem][image]">
         <?php echo $this->Form->error('PodcastItem.image'); ?>
+        
     </div>
     <div class="input checkbox">
         <input type="hidden" value="N" id="PodcastItemPublishedFlag_" name="data[PodcastItem][published_flag]">
@@ -53,18 +58,6 @@
         </select>
         <?php echo $this->Form->error('PodcastItem.subsection'); ?>
     </div>
-    <div class="input text">
-        <label for="PodcastItemPublicationDate">Publication Date</label>
-        <input type="hidden" value="" id="PodcastItemPublicationDate_" name="data[PodcastItem][publication_date]">
-        <input type="text" id="PodcastItemPublicationDate" value="<?php echo (int)$this->data['PodcastItem']['publication_date'] ? $this->data['PodcastItem']['publication_date'] : ''; ?>" class="datepicker" name="data[PodcastItem][publication_date]">
-        <?php echo $this->Form->error('PodcastItem.publication_date'); ?>
-    </div>
-    <div class="input checkbox">
-        <input type="hidden" value="N" id="PodcastItemAutoPublishFlag_" name="data[PodcastItem][auto_publish_flag]">
-        <input type="checkbox" id="PodcastItemAutoPublishFlag" value="Y" <?php echo $this->data['PodcastItem']['auto_publish_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][auto_publish_flag]">
-        <label for="PodcastItemAutoPublishFlag">Automatically Publish?</label>
-        <?php echo $this->Form->error('PodcastItem.auto_publish_flag'); ?>
-    </div>
     <?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
         <fieldset>
             <legend>iTunes Explicit</legend>
@@ -79,8 +72,8 @@
         </fieldset>
     <?php endif; ?>
     <div class="input file">
-        <label for="PodcastItemTranscript">Transcript</label>
-        <input type="file" id="PodcastItemTranscript" name="data[PodcastItem][transcript]">
+        <label for="PodcastItemMediaTranscript">Transcript</label>
+        <input type="file" id="PodcastItemMediaTranscript" name="data[PodcastItemMedia][transcript]">
         <?php echo $this->Form->error('PodcastItem.transcript'); ?>
     </div>
 </fieldset>

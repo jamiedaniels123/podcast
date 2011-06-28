@@ -2,7 +2,7 @@
 class PodcastItemsController extends AppController {
 
     var $name = 'PodcastItems';
-    var $components = array( 'Image' );
+    var $components = array( 'Upload' );
 
     private $errors = array();
 
@@ -86,6 +86,8 @@ class PodcastItemsController extends AppController {
 
         if ( !empty( $this->data ) ) {
 
+			$this->PodcastItem->begin();
+			
             // Save this->data into a local array called data so we may unset the attachment array elements before
             // validating else it will fail because they contain arrays.
             $data = array();
@@ -101,16 +103,27 @@ class PodcastItemsController extends AppController {
                 // save again with attachment elements.
                 $this->data = $data;
 
-                $this->__update();
+                if( ( $this->__updateImage() == false ) || ( $this->__updateTranscript() == false ) ) {
 
+					$this->PodcastItem->rollback();
+	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					exit;
+					
+				} else {
 
-                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					$this->PodcastItem->commit();
+					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'error' ) );									
+	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					exit;
+				}
 
             } else {
 
                 $this->errors = $this->PodcastItem->invalidFields( $this->data );
                 $this->Session->setFlash('Could not update your meta data. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
+			
+			$this->PodcastItem->rollback(); // If we get here something did not work on the save, rollback changes.
 
         } else {
 
@@ -159,7 +172,7 @@ class PodcastItemsController extends AppController {
                     // so we may save to the database and create a workflow for the transcoder.
                     $this->data = $this->PodcastItem->getMediaInfo( $this->data, $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] ) );
 
-                    if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'] ) ) {
+                    if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->data['workflow'] ) ) {
 						
                         $this->PodcastItem->commit();
 
@@ -216,34 +229,30 @@ class PodcastItemsController extends AppController {
     }
 
     /*
-     * @name : __updated
-     * @description : Internal method called by the add and edit methods, both user and administrator.
+     * @name : __updateImage
+     * @description : Internal method called by the edit methods, both user and administrator.
      * @updated : 9th May 2011
      * @by : Charles Jackson
      */
-    function __update() {
-
+    function __updateImage() {
+	
         // Try to upload the associated images. If successful the upload component will return the name of the uploaded file
         // else it will return false.
-        $this->data['PodcastItem']['image'] = $this->Image->uploadPodcastMediaImage( $this->data, 'image' );
-
+        if( $this->Upload->podcastMediaImage( $this->data, 'image' ) ) {
+			
+			$this->data['Podcast']['image_filename'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image_filename'] );
+		}
+				
         // Check to see if the upload component created any errors.
-        if( $this->Image->hasErrors() ) {
+        if( $this->Upload->hasErrors() ) {
 
-            // Ugly, if any errors are found we create formatted HTML unordered list and append to the flash message. We
-            // cannot append to the $this->errors array because of the immediate redirect ( it will be lost ).
-            // @todo - revisit this solution.
-            $this->html = 'Your podcast media has been successfully updated but we were unable to upload your associated image.';
-            $this->html .= '<ul>';
-
-            foreach( $this->Image->getErrors() as $error ) {
-
-                $this->html .= '<li>'.$error.'</li>';
-            }
-            $this->html .= '</ul>';
-
-            $this->Session->setFlash($this->html, 'default', array( 'class' => 'alert' ) );
-
+            $this->errors = $this->Upload->getErrors();
+            return false;
+			
         } else {
 
             // Resave the object so we capture the names of the uploaded images.
@@ -251,6 +260,28 @@ class PodcastItemsController extends AppController {
             $this->Session->setFlash('Your podcast media has been successfully updated.', 'default', array( 'class' => 'success' ) );
         }
     }
+
+    /*
+     * @name : __updateTranscript
+     * @description : Internal method called by the edit methods, both user and administrator.
+     * @updated : 9th May 2011
+     * @by : Charles Jackson
+     */
+	function __updateTranscript() {
+		
+		$this->data['PodcastItemMedia']['filename'] = $this->Upload->transcript( $this->data, 'transcript' );
+		
+		if( $this->Upload->hasErrors() ) {
+			
+			
+		} else {
+		
+			$this->data['PodcastItemMedia']['media_type'] = strtolower( TRANSCRIPT );
+			$this->data['PodcastItemMedia']['duration'] = null;
+			$this->data['PodcastItemMedia']['processed_state'] = 9; // Media available
+		}
+		
+	}
 	
     /*
      * @name : delete
@@ -286,6 +317,58 @@ class PodcastItemsController extends AppController {
         }
         
         $this->redirect( $this->referer() );
+    }
+
+    /*
+     * @name : delete_image
+     * @desscription : Enables a user to delete an image associated with a piece of media on the podcast_items table.
+     * @name : Charles Jackson
+     * @by : 27th June 2011
+     */
+	function delete_image( $id ) {
+		
+        $this->autoRender = false;
+		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
+        $this->data = $this->PodcastItem->findById( $id );
+		
+        // If we did not find the podcast media then redirect to the referer.
+        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
+
+            $this->Session->setFlash('We could not find the media image you were looking for.', 'default', array( 'class' => 'error' ) );
+
+        } else {
+			
+			// We unset the publication date field because the default value of 0000-00-00 00:00:00 will produce model validation error.
+			unset( $this->data['PodcastItem']['publication_date'] ); 
+			
+			$this->data['PodcastItem']['image_filename'] = null;
+			$this->PodcastItem->set( $this->data );
+			
+			if( $this->PodcastItem->save() ) {
+				
+				if( $this->Api->deleteFileOnMediaServer( 
+					array(
+							'source_path' => $this->data['Podcast']['custom_id'].'/',  
+							'filename' => $this->data['PodcastItem']['image_filename'],  
+						)
+					) 
+				) {
+
+					$this->Session->setFlash('The media has been deleted.', 'default', array( 'class' => 'success' ) );
+			        $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
+								
+				} else {
+				
+					$this->Session->setFlash('We could not schedule the image file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				}
+				
+			} else {
+
+				$this->Session->setFlash('There has been a problem deleting the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			}
+        }
+		
+		$this->redirect( $this->referer() );
     }
 
     /*
@@ -372,14 +455,27 @@ class PodcastItemsController extends AppController {
                 // save again with attachment elements.
                 $this->data = $data;
 
-                $this->__update();
-                $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'admin_view', $this->data['Podcast']['id'] ) );
+                if( ( $this->__updateImage() == false ) || ( $this->__updateTranscript() == false ) ) {
+
+					$this->PodcastItem->rollback();
+	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					exit;
+					
+				} else {
+
+					$this->PodcastItem->commit();
+					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'error' ) );									
+	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					exit;
+				}
 
             } else {
 
                 $this->errors = $this->PodcastItem->invalidFields( $this->data );
                 $this->Session->setFlash('Could not update your meta data. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
+			
+			$this->PodcastItem->rollback(); // If we get here something did not work on the save, rollback changes.
 
         } else {
 
