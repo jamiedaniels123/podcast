@@ -111,3 +111,18 @@ DEFINE('NO', 'N');
 
 DEFINE('REGISTER_BY_OUCU', true );
 DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );
+
+DEFINE('WIDE_SCREEN', '0.5625');
+DEFINE('STANDARD_SCREEN', '0.75');
+
+// Workflows
+	// Various workflows
+DEFINE('NONE', NULL);
+DEFINE('DIRECT_TRANSFER', 'direct_transfer');
+DEFINE('AUDIO', 'audio');
+DEFINE('SCREENCAST','screencast');
+DEFINE('SCREENCAST_WIDE', 'screencast-wide');
+DEFINE('VIDEO', 'video');
+DEFINE('VIDEO_WIDE', 'video-wide');
+DEFINE('MULTI_VIDEO', 'multi-video');
+DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');

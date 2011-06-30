@@ -357,8 +357,8 @@ class PodcastsController extends AppController {
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->createHtaccess( $this->podcast ) && $this->Api->transferFileMediaServer( 
 				array( 
-					'source_path' => $data['Podcast']['custom_id'].'/',
-					'target_path' => $data['Podcast']['custom_id'].'/', 
+					'source_path' => $this->podcast['Podcast']['custom_id'].'/',
+					'target_path' => $this->podcast['Podcast']['custom_id'].'/', 
 					'filename' => '.htaccess' 
 					)
 				) ) {						

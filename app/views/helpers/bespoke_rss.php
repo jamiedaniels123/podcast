@@ -128,13 +128,13 @@ class BespokeRssHelper extends RssHelper {
                     }
                     break;
                 case 'enclosure':
-                    if ( is_string( $val['url'] ) && get_headers( $val['url'], true ) ) {
+                    if ( is_string( $val['url'] ) ) {
 
                         $headers = get_headers( $val['url'], true );
-                        if ( !isSet( $val['length'] ) )
+                        if ( !isSet( $val['length'] ) && isSet( $headers['Content-Length'][1] ) )
                             $val['length'] = sprintf("%u", $headers['Content-Length'][1] );
 
-                        if ( !isSet( $val['type'] ) )
+                        if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
                             $val['type'] = $headers['Content-Type'][1];
                     }
                     $val['url'] = $this->url($val['url'], true);
@@ -142,9 +142,8 @@ class BespokeRssHelper extends RssHelper {
                     $val = null;
                     break;
                 case 'media:thumbnail':
-                    if ( is_string( $val['url'] ) && get_headers( $val['url'] ) ) {
+                    if ( is_string( $val['url'] ) ) {
 
-                        $headers = get_headers( $val['url'] );
                         if ( !isSet( $val['height'] ) && !isSet( $val['width'] ) ) {
                             $val['height'] = '400px';
                             $val['width'] = '400px';
