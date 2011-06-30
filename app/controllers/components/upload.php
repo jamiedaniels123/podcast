@@ -65,7 +65,8 @@ class UploadComponent extends Object {
         if( $this->__transferImagesToMediaServer() == false )
             return false;
 
-		$this->setUploadedFileName( $this->file_name.'.'.$this->file_extension );
+		// The legacy system stores the image at podcast item level name without an extension. We are obliged to follow this convention.
+		$this->setUploadedFileName( $this->file_name );
 		
         return true;
     }
@@ -251,7 +252,6 @@ class UploadComponent extends Object {
 
         if( $this->createFolder() == false )
             return false;
-
 
 		if ( copy( $this->temporary_file, FILE_REPOSITORY.$this->folder.'/'.$this->file_name ) ) {
 		
@@ -442,6 +442,8 @@ class UploadComponent extends Object {
     /*
      * @name : setFileExtension
      * @description : Sets the name of the file extension.
+	 * @NOTE: The legacy system renames every image with a "jpg" extension (doh!) and it is a convention we are obliged to follow... 
+	 * Therefore I have written a proper solution then appended a line to the end of this method that sets "jpg" regardless.
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
@@ -453,6 +455,8 @@ class UploadComponent extends Object {
 
         $l = strlen( $file_name ) - $i;
         $this->file_extension = substr( $file_name, $i+1, $l );
+		
+		$this->file_extension = 'jpg'; // Needed for compatibility with legacy system.
     }
 	
     /*

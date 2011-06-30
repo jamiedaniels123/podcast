@@ -74,19 +74,13 @@ class PodcastItem extends AppModel {
         if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
             $this->data['PodcastItem']['aspect_ratio'] = null;
 
-		// None of this information is stored in the DB but it is used in the Workflow->determine() model/method so we capture it here.
-		$this->data['PodcastItem']['screencast'] = ( strtoupper( $params['url']['ff02v'] ) == 'YES' ? true : false ); 
-		$this->data['PodcastItem']['video_width'] = ( isSet( $params['video']['resolution_x'] ) ? $params['video']['resolution_x'] : 0 );
-		$this->data['PodcastItem']['video_height'] = ( isSet( $params['video']['resolution_y'] ) ? $params['video']['resolution_y'] : 0 );
-
         return $this->data;
     }
 
 
     /*
      * @name : captureId3Information
-     * @description : We use the getID3 component to extract various bits and pieces from the uploaded file and save to the database
-     * else store in $this->data and so we may create a workflow that can be passed to the Api.
+     * @description : We use the getID3 component to extract various bits and pieces from the uploaded file and save to the database.
      * @updated : 21st June 2011
      * @by : Charles Jackson
      */

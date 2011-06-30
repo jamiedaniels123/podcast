@@ -130,17 +130,17 @@ class AppModel extends Model {
 
         $ext = substr( strtolower( strrchr( $filename,'.' ) ), 1 ); # filename extension without the dot
 
-        return ( $ext = 'pdf' );
+        return ( $ext == 'pdf' );
     }
 
     function getExtension( $filename = null ) {
 
-        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
+        return substr( $filename, ( strrpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
     function getStandardImageName( $image_filename = null ) {
 
-        $standard_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
+        $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
         $standard_filename += RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
 
         return $standard_filename;
@@ -148,7 +148,7 @@ class AppModel extends Model {
 
     function getThumbnailImageName( $image_filename = null ) {
 
-        $thumbnail_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
+        $thumbnail_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
         $thumbnail_filename += THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
 
         return $thumbnail_filename;

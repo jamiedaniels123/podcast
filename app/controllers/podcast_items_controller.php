@@ -162,12 +162,14 @@ class PodcastItemsController extends AppController {
 
                 $this->data = $this->PodcastItem->findById( $this->PodcastItem->getLastInsertId() );
 
-				// Move from the default file chucker upload folder into a specific custom_id folder
+				// Move from the default file chucker upload folder into a specific custom_id folder and rename it
+				// appending the database ID number to the start of the filename to ensure it is unique.
                 if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
-					// Set an updated filename appending the database ID number to the start of the filename to ensure it is unique.
-					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['filename'];
-					die('we are here');					
+					// Capture the new name by setting an updated filename appending the database ID number to the start of 
+					// the filename to ensure it is unique.
+					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['original_filename'];
+				
 					// Capture the ID3 information
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 					
@@ -180,19 +182,20 @@ class PodcastItemsController extends AppController {
 					$this->Workflow = ClassRegistry::init('Workflow');
 					$this->Workflow->setData( $this->data );
 					$this->Workflow->setId3Data( $getId3_information );
+					$this->Workflow->setParams( $this->params );
 					$this->Workflow->determine();
 
 					// Do we have errors? If true, probably an invalid file type.
 					if( $this->Workflow->hasErrors() ) {
 						
-						$this->errors = $this->Workflow->errors;
-						$this->Session->setFlash('We were unable to transcode your media file. Please try again', 'default', array( 'class' => 'error' ) );
+						$this->errors = $this->Workflow->getErrors();
+						$this->Session->setFlash('We were unable to determine a transcoding workflow for your media file.', 'default', array( 'class' => 'error' ) );
 						unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 						$this->PodcastItem->rollback();
 						
 					// The media is not transcoded and we can transfer direct to the media box. We include an additional element
 					// entitled "media" that we can recognise in the callback.
-					} elseif( $this->Workflow->get() == DIRECT_TRANSFER ) {
+					} elseif( $this->Workflow->getWorkflow() == DIRECT_TRANSFER ) {
 						
 						if( $this->Api->transferFileMediaServer( 
 							array( 
@@ -219,7 +222,7 @@ class PodcastItemsController extends AppController {
 					} else {
 						
 						// Transcode the media
-						if( $this->Api->transcodeMedia( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->get() ) ) {
+						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow() ) ) {
 	
 							// Witwoo! Everything worked.						
 							$this->PodcastItem->commit();

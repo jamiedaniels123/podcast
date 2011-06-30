@@ -7,6 +7,7 @@ class Workflow extends AppModel {
 	
 	var $data = array();
 	var $id3_data = array();
+	var $params = array();
 	
 	var $file_format = null;
 	var $file_extension = null;
@@ -15,7 +16,7 @@ class Workflow extends AppModel {
 	var $video_height = null;
 	var $aspect_ratio = null;
 	
-	var $workflow = null; // Holds the determined workflow.
+	public $workflow = null; // Holds the determined workflow.
 
 	var $not_for_transcoding = array('mp3','pdf','m4a','m4b');
 	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv');
@@ -29,30 +30,33 @@ class Workflow extends AppModel {
 	 */
 	function determine() {
 		
+
 		$this->setFileFormat( $this->id3_data['fileformat'] );
 		$this->setFileExtension( strtolower( $this->getExtension( $this->id3_data['filename'] ) ) );
-
-		if( in_array( $this->file_extension, array( $this->not_for_transcoding ) ) ) {
+		
+		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
 			$this->setWorkflow( DIRECT_TRANSFER );
 			return true;
+			exit;
 		}
-		
-		if( in_array( $this->file_extension, array( $this->video_transcoding ) ) ) {
 
-			$this->setScreencast( strtoupper( $this->data['PodcastItem']['screencast'] ) == 'Y' ? true : false );
-			$this->setVideoWidth( $this->data['PodcastItem']['video_width'] );
-			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] ); // NOTE: Intelligent setter, see further down.
+		if( in_array( $this->file_extension, $this->video_transcoding ) ) {
+
+			$this->setScreencast( strtoupper( $this->params['url']['ff02v'] ) == 'YES' ? true : false );
+			$this->setVideoWidth( isSet( $this->params['video']['resolution_x'] ) ? $this->params['video']['resolution_x'] : 0 );
+			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
+			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setWorkflow( $this->__select() );			
 			return true;
 		}
 
-		if( in_array( $this->file_extension, array( $this->audio_transcoding ) ) ) {
-			
+		if( in_array( $this->file_extension, $this->audio_transcoding ) ) {
+
 			$this->setWorkflow( AUDIO );
 			return true;
 		}
-		
+
 		// If we reached this point the user has uploaded an unsupported file type. Should never happen because validation
 		// also exists in the file chucker upload.
 		$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
@@ -80,6 +84,17 @@ class Workflow extends AppModel {
 	function setId3Data( $id3_data = array() ) {
 		
 		$this->id3_data = $id3_data;
+	}
+	
+	/*
+	 * @name : setParams
+	 * @description : Contains all the data passed in the URL by the file chucker script.
+	 * @updated : 29th June 2011
+	 * @by : Charles Jackson
+	 */
+	function setParams( $params = array() ) {
+		
+		$this->params = $params;
 	}
 
 	/* 
@@ -110,7 +125,7 @@ class Workflow extends AppModel {
 	 * @updated : 29th June 2011
 	 * @by : Charles Jackson
 	 */		
-	function setScreenCast( $screencase = false ) {
+	function setScreenCast( $screencast = false ) {
 	
 		$this->screencast = $screencast;
 	}
@@ -171,6 +186,7 @@ class Workflow extends AppModel {
 				}
 			}
 		}
+		
 	}
 
 	/* 
@@ -230,25 +246,25 @@ class Workflow extends AppModel {
 	function __select() {
 
 		if( $this->screencast ) {
-			
+
 			if( $this->aspect_ratio == WIDE_SCREEN ) {
-				
-				$this->setWorkflow( SCREENCAST_WIDE );
+
+				return SCREENCAST_WIDE;
 				
 			} else {
-				
-				$this->setWorkflow( SCREENCAST_STANDARD );
+
+				return SCREENCAST;
 			}
 			
 		} else {
-			
+
 			if( $this->aspect_ratio == WIDE_SCREEN ) {
 				
-				$this->setWorkflow( VIDEO_WIDE );
+				return VIDEO_WIDE;
 				
 			} else {
 				
-				$this->setWorkflow( VIDEO );
+				return VIDEO;
 			}
 		}
 	}
@@ -261,7 +277,10 @@ class Workflow extends AppModel {
 	 */	
 	function hasErrors() {
 	
-		return count( $this->errors );	
+		if( empty( $this->errors ) )	
+			return false;
+		
+		return true;
 	}
 
 	/*
