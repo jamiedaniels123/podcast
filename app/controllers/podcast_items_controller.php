@@ -224,6 +224,11 @@ class PodcastItemsController extends AppController {
 						// Transcode the media
 						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow() ) ) {
 	
+							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
+							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatio();
+							$this->PodcastItem->set( $this->data ); // Hydrate the object
+							$this->PodcastItem->save();
+							
 							// Witwoo! Everything worked.						
 							$this->PodcastItem->commit();
 							$this->Session->setFlash('Your podcast media has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
@@ -330,7 +335,7 @@ class PodcastItemsController extends AppController {
     function delete( $id = null ) {
 
         $this->autoRender = false;
-		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
+		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions and listAssociatedMedia
         $this->data = $this->PodcastItem->findById( $id );
 		
         // If we did not find the podcast media then redirect to the referer.
@@ -340,17 +345,18 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-			if( $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+			if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 
-				// Delete the podcast
-				$this->PodcastItem->delete( $id );
-			   
+				// Soft delete the podcast
+				$this->data['PodcastItem']['deleted'] = true;
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
 	
 				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
 				
 			} else {
 				
-				$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 			}
         }
         
@@ -358,12 +364,12 @@ class PodcastItemsController extends AppController {
     }
 
     /*
-     * @name : delete_image
-     * @desscription : Enables a user to delete an image associated with a piece of media on the podcast_items table.
+     * @name : delete_attachment
+     * @desscription : Enables a user to delete an attachment (image or transcript) associated with a piece of media on the podcast_items table.
      * @name : Charles Jackson
      * @by : 27th June 2011
      */
-	function delete_image( $id ) {
+	function delete_attachment( $attachment, $id ) {
 		
         $this->autoRender = false;
 		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
@@ -372,14 +378,14 @@ class PodcastItemsController extends AppController {
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
 
-            $this->Session->setFlash('We could not find the media image you were looking for.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('We could not find the media attachment you were looking for.', 'default', array( 'class' => 'error' ) );
 
         } else {
 			
 			// We unset the publication date field because the default value of 0000-00-00 00:00:00 will a produce model validation error.
 			unset( $this->data['PodcastItem']['publication_date'] ); 
 			
-			$this->data['PodcastItem']['image_filename'] = null;
+			$this->data['PodcastItem'][$attachment.'_filename'] = null;
 			$this->PodcastItem->set( $this->data );
 			
 			if( $this->PodcastItem->save() ) {
@@ -387,22 +393,22 @@ class PodcastItemsController extends AppController {
 				if( $this->Api->deleteFileOnMediaServer( 
 					array(
 							'source_path' => $this->data['Podcast']['custom_id'].'/',  
-							'filename' => $this->data['PodcastItem']['image_filename'],  
+							'filename' => $this->data['PodcastItem'][$attachment.'_filename'],  
 						)
 					) 
 				) {
 
-					$this->Session->setFlash('The media has been deleted.', 'default', array( 'class' => 'success' ) );
+					$this->Session->setFlash('The media attachment has been deleted.', 'default', array( 'class' => 'success' ) );
 			        $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
 								
 				} else {
 				
-					$this->Session->setFlash('We could not schedule the image file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('We could not schedule the attachment for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 				}
 				
 			} else {
 
-				$this->Session->setFlash('There has been a problem deleting the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash('There has been a problem deleting the media attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 			}
         }
 		
@@ -417,24 +423,31 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : admin_index
-     * @desscription : Displays a list of all available podcast media for the podcast passed as a parameter and
+     * @desscription : Displays a list of all podcast media for the podcast passed as a parameter and
      * includes a partial _form element that renders filechucker.cgi that enables peeps to upload a media file
      * add a row to the podcast_items table.
      * @name : Charles Jackson
      * @by : 13thth May 2011
      */
+    /*
+     * @name : admin_index
+     * @desscription : Displays a list of all available podcast media for the podcast passed as a parameter and
+     * includes a partial _form element that renders filechucker.cgi.
+     * @updated : 13th May 2011
+     * @by : Charles Jackson
+     */
     function admin_index( $podcast_id ) {
 
-        $this->PodcastItem->Podcast->recursive = 3;
-        
+        $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
+
         if( (int)$podcast_id ) {
 
             $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
-            
-            // We cannot easily pass parameters into the filechucker.cgi script hence we store some basic information
+
+            // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
             // in the session.
             $this->Session->write('Podcast.podcast_id', $podcast_id);
-            $this->Session->write('Podcast.admin', true);
+            $this->Session->write('Podcast.admin', false);
         }
 
         if( empty( $this->data ) ) {
@@ -561,4 +574,43 @@ class PodcastItemsController extends AppController {
         
         $this->redirect( $this->referer() );
     }
+	
+    /*
+     * @name : admin_restore
+     * @description : Will update the value of the 'deleted' column of any podcast_item to 0 therefore restoring the
+     * media.
+     * @updated : 30th June 2011
+     * @by : Charles Jackson
+     */
+    function admin_restore( $id = null ) {
+
+        $this->autoRender = false;
+		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to listAssociatedMedia
+        $this->data = $this->PodcastItem->findById( $id );
+
+        if( empty( $this->data ) ) {
+
+            $this->Session->setFlash('We could not identify the media you are trying to restore.', 'default', array( 'class' => 'error' ) );
+
+        } else {
+
+			if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+
+				// Soft delete the podcast
+				$this->data['PodcastItem']['deleted'] = false;
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+                
+                $this->Session->setFlash('We successfully restored the media.', 'default', array( 'class' => 'success' ) );
+
+            } else {
+
+                $this->Session->setFlash('We were unable to restore the media, please try again.', 'default', array( 'class' => 'error' ) );
+            }
+
+        }
+
+        $this->redirect( $this->referer() );
+    }
+	
 }

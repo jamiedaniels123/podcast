@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend>All Podcasts</legend>
+    <legend>Podcasts : Administration</legend>
     <p>
         Below is a list of all podcasts on the system.
     </p>
@@ -19,7 +19,6 @@
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('created');?></th>
-                <th><?php echo $this->Paginator->sort('Status','deleted');?></th>
                 <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
@@ -30,8 +29,14 @@
 
                     $class = null;
                     if ($i++ % 2 == 0) :
-                        $class = ' class="altrow"';
-                    endif;
+						 if( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+	                        $class = ' class="altrow deleted"';
+						else :
+							$class = ' class="altrow"';
+						endif;
+                    elseif( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+						$class = ' class="deleted"';
+					endif;
             ?>
                     <tr<?php echo $class;?>>
                         <td>
@@ -49,9 +54,6 @@
                         <td>
                             <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
-                        <td>
-                            <?php echo $this->Object->isDeleted( $podcast['Podcast'] ) ? 'Deleted' : 'Active'; ?>
-                        </td>
                         <td>
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>

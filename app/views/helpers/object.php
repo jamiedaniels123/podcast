@@ -51,6 +51,28 @@ class ObjectHelper extends AppHelper {
     }
 
     /*
+     * @name : itunesPublished
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function itunesPublished( $podcast = array() ) {
+
+        return $podcast['itunes_flag'] == strtoupper( YES );
+    }
+
+    /*
+     * @name : youtubePublished
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function youtubePublished( $podcast = array() ) {
+
+        return $podcast['youtube_flag'] == strtoupper( YES );
+    }
+
+    /*
      * @name : intendedForItunes
      * @description : Retruns a bool depending up the value of the flag set (Y or N)
      * @updated : 20th June 2011

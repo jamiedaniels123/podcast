@@ -1,5 +1,5 @@
 <fieldset class="podcast_items index">
-    <legend><?php echo $this->data['Podcast']['title']; ?> Podcast Media</legend>
+    <legend><?php echo $this->data['Podcast']['title']; ?> Podcast Media Administration</legend>
     <p>
         Use this form to add and manage media for a podcast. We recommend that you avoid using a PDF document as the most recent
         (top of the list) item in a podcast.
@@ -13,9 +13,6 @@
         The 'embed' interface will be improved and better intergrated into the admin. At present this option is only available to administrators
         of podcasts. Embeding tracks from Podcasts restricted to the OU (SAMS only) will only work on OU sites and when a user has logged in.
     </p>
-    <?php echo $this->element('../podcast_items/_index'); ?>
+    <?php echo $this->element('../podcast_items/_admin_index'); ?>
     <?php echo $this->element('../podcast_items/_add'); ?>
 </fieldset>
-<pre>
-    <?php print_r( $this->data ); ?>
-</pre>

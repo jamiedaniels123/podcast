@@ -32,8 +32,12 @@
 
 <?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Miscellaneous->isAdminRouting() ) : ?>
 
-    <?php if( $this->Permission->isAdminRouting() ) : ?>
-        <a href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this podcast?');" >delete</a>
+    <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
+        <?php if( $this->Object->isDeleted( $this->data['Podcast'] ) ) : ?>
+	        <a href="/admin/podcasts/restore/<?php echo $this->data['Podcast']['id'];?>" title="restore" onclick="return confirm('Are you sure you wish to restore this podcast?');" >restore</a>
+        <?php else : ?>
+	        <a href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this podcast?');" >delete</a>
+        <?php endif; ?>
     <?php else : ?>
         <a href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this podcast?');" >delete</a>
     <?php endif; ?>

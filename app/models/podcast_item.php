@@ -141,8 +141,14 @@ class PodcastItem extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function listAssociatedMedia( $data = array() ) {
-	
 		$media_files = array();
+		
+		$media_files[] = array(
+			'source_path' => $data['Podcast']['custom_id'].'/',
+			'target_path' => $data['Podcast']['custom_id'].'/',
+			'filename' => $data['PodcastItem']['filename'],
+			'target_filename' => '.'.$data['PodcastItem']['filename']			
+		);
 		
 		// Loop through the media and append to an array
         foreach( $data['PodcastMedia'] as $media ) {
@@ -150,20 +156,22 @@ class PodcastItem extends AppModel {
         	$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',
 				'target_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',				
-				'filename' => $media['PodcastMedia']['filename']
+				'filename' => $media['PodcastMedia']['filename'],
+				'target_filename' => '.'.$media['PodcastMedia']['filename']			
 				);
         }
 		
 		// Grab the transcript if it exists and append to array
-		if( is_array( $data['Transcript'] ) && count( $data['Transcript'] ) ) {
+		if( is_array( $data['Transcript'] ) && !empty( $data['Transcript']['id'] ) ) {
 			
 			$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'target_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'filename' => $data['Transcript']['filename']
+				'filename' => $data['Transcript']['filename'],
+				'target_filename' => '.'.$media['PodcastMedia']['filename']
 				);
 		}
-		
+
 		return $media_files;		
 	}
 }

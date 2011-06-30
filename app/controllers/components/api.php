@@ -57,16 +57,9 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function renameFileMediaServer( $path, $filename ) {
+    function renameFileMediaServer( $data = array() ) {
 
-        $this->params = array(
-			array(
-				'source_path' => $path.'/',
-				'filename' => $filename
-			)
-        );
-
-        $this->response = json_decode( $this->__sendMessage('rename-file-on-media-server', self::ADMIN_API, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('rename-file-on-media-server', self::ADMIN_API, $data ), 1 );
         return $this->getStatus( $this->response );
     }
 

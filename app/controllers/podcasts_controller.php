@@ -537,6 +537,7 @@ class PodcastsController extends AppController {
      */
     function admin_view( $id = null ) {
 
+		$this->Podcast->recursive = 2;
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->Podcast->findById( $id );
 

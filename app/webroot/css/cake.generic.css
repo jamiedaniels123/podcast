@@ -695,3 +695,8 @@ ul#breadcrumb li {
 }
 img.icon {
 	width: 30px;
+}
+
+tr.deleted td {
+	background-color: #f4f4f4!important;	
+}
