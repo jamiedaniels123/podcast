@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 01, 2011 at 09:52 AM
+-- Generation Time: Jul 01, 2011 at 11:32 AM
 -- Server version: 5.1.52
 -- PHP Version: 5.3.3
 
@@ -1242,7 +1242,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `terms` tinyint(1) DEFAULT '0',
   `status` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Users table' AUTO_INCREMENT=1123 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Users table' AUTO_INCREMENT=1124 ;
 
 --
 -- Dumping data for table `users`
@@ -1252,7 +1252,8 @@ INSERT INTO `users` (`id`, `user_title`, `firstname`, `lastname`, `email`, `acce
 (1120, NULL, 'Ian', 'Newton', 'in625@open.ac.uk', 0, 'Y', 'Y', 'Y', 'in625', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 10:43:04', 1, 1),
 (1119, NULL, 'Charles', 'Jackson', 'cj3998@open.ac.uk', 0, 'Y', 'Y', 'Y', 'cj3998', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 10:25:26', 1, 1),
 (1121, NULL, 'Chris', 'Valentine', 'cpv2@open.ac.uk', 0, 'Y', 'Y', 'Y', 'cpv2', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 10:52:51', 1, 1),
-(1122, NULL, 'Peter', 'Scott', 'pjs33@open.ac.uk', 0, 'Y', 'Y', 'Y', 'pjs33', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 15:55:21', 1, 1);
+(1122, NULL, 'Peter', 'Scott', 'pjs33@open.ac.uk', 0, 'Y', 'Y', 'Y', 'pjs33', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 15:55:21', 1, 1),
+(1123, NULL, 'Jamie', 'Daniels', 'jdd7@open.ac.uk', 0, 'Y', 'Y', 'Y', 'jdd7', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-07-01 10:12:09', 1, 1);
 
 -- --------------------------------------------------------
 

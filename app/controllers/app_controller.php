@@ -100,25 +100,5 @@ class AppController extends Controller {
         return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
-	/*
-	 * @name : callback
-	 * @description : The API callback URL, will echo out a json encoded array to screen.
-	 * @updated : 28th June 2011
-	 * @by : Charles Jackson
-	 */
-	function callback( $data = array() ) {
-
-		$this->layout = 'none';
-
-		$data = array(
-			'command' => 'whatever',
-			'status' => 'ACK',
-			'mqIndex' => 1,
-			'timestamp' => date('Y-m-d H:i:s')
-		);
-		
-		echo json_encode( $data );
-		die();        
-    }
 
 }

@@ -65,6 +65,25 @@ class emailTemplatesComponent extends Object {
         $this->Email->send();
     }
 
+
+    function __sendCallbackErrorEmail( $recipients=array(),$data ,$errormessage) {
+
+        /* Set delivery method */
+        $this->Email->to = 'j.d.daniels@open.ac.uk';
+        $this->Email->subject = "callback error at ".$_SERVER['HTTP_HOST'];
+        $this->Email->replyTo = DEFAULT_EMAIL_ADDRESS;
+        $this->Email->template = 'callback_error'; // note no '.ctp'
+
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+        $this->controller->set('errormessage', $errormessage);
+        //Do not pass any args to send()
+
+        $this->Email->send();
+    }
+
+
     function getDomain() {
 
         $domain = preg_replace("/^(.*\.)?([^.]*\..*)$/", "$2", $_SERVER['HTTP_HOST']);

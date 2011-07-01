@@ -163,6 +163,10 @@ class FolderComponent extends Object {
         return true;
     }
 
-
+	function cleanUp($path,$filename){
+		if(file_exists(FILE_REPOSITORY.$path.'/'.$filename)==false){
+			return false;
+		}
+	}
     
 }
