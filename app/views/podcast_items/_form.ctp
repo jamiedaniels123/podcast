@@ -25,21 +25,9 @@
     <?php echo $this->Form->error('PodcastItem.publiished_flag'); ?>
 </div>
 <div class="input text">
-    <label for="PodcastItemPublishedDate">Published Date</label>
-    <input type="hidden" value="" id="PodcastItemPublishedDate_" name="data[PodcastItem][published_date]">
-    <input type="text" id="PodcastItemPublishedDate" value="<?php echo (int)$this->data['PodcastItem']['published_date'] ? $this->data['PodcastItem']['published_date'] : ''; ?>" class="datepicker" name="data[PodcastItem][published_date]">
-    <?php echo $this->Form->error('PodcastItem.published_date'); ?>
-</div>
-
-<div class="input text">
-    <label for="PodcastItemTargetUrl">Item Link URL</label>
-    <input type="text" id="PodcastItemTargetUrl" name="data[PodcastItem][target_url]" value="<?php echo $this->data['PodcastItem']['target_url']; ?>">
-    <?php echo $this->Form->error('PodcastItem.TargetUrl'); ?>
-</div>
-<div class="input text">
-    <label for="PodcastItemTargetUrlText">Item Link Text</label>
-    <input type="text" id="PodcastItemTargetUrlText" name="data[PodcastItem][target_url_text]" value="<?php echo $this->data['PodcastItem']['target_url_text']; ?>">
-    <?php echo $this->Form->error('PodcastItem.TargetUrlText'); ?>
+    <label for="PodcastItemPublicationDate">Published Date</label>
+    <input type="text" id="PodcastItemPublicationDate" value="<?php echo (int)$this->data['PodcastItem']['publication_date'] ? $this->data['PodcastItem']['publication_date'] : ''; ?>" class="datepicker" name="data[PodcastItem][publication_date]">
+    <?php echo $this->Form->error('PodcastItem.publication_date'); ?>
 </div>
 <div class="input file">
     <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" />
@@ -49,20 +37,26 @@
     <label for="PodcastItemImage">Item Image</label>
     <input type="file" id="PodcastItemImage" name="data[PodcastItem][image]">
     <?php echo $this->Form->error('PodcastItem.image'); ?>
-    
 </div>
-<div class="input checkbox">
-    <input type="hidden" value="N" id="PodcastItemYoutubeFlag_" name="data[PodcastItem][youtube_flag]">
-    <input type="checkbox" id="PodcastItemYoutubeFlag" value="Y" <?php echo $this->data['PodcastItem']['youtube_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][youtube_flag]">
-    <label for="PodcastItemYoutubeFlag">YouTube?</label>
-    <?php echo $this->Form->error('PodcastItem.youtube_flag'); ?>
+<div class="input text">
+    <label for="PodcastItemUnitCourse">Unit Course</label>
+    <input type="text" id="PodcastItemUnitCourse" value="<?php echo $this->data['PodcastItem']['unit_course']; ?>" name="data[PodcastItem][unit_course]">
+    <?php echo $this->Form->error('PodcastItem.unit_course'); ?>
 </div>
-<div class="input select">
-    <label for="PodcastSubsection">Sub Section</label>
-    <select id="PodcastSubsection" name="data[PodcastItem][subsection]">
-        <option value="0">None</option>
-    </select>
-    <?php echo $this->Form->error('PodcastItem.subsection'); ?>
+<div class="input text">
+    <label for="PodcastItemUnitCourseTitle">Unit Course Title</label>
+    <input type="text" id="PodcastItemUnitCourseTitle" value="<?php echo $this->data['PodcastItem']['unit_course_title']; ?>" name="data[PodcastItem][unit_course_title]">
+    <?php echo $this->Form->error('PodcastItem.unit_course_title'); ?>
+</div>
+<div class="input text">
+    <label for="PodcastItemTargetUrl">Target URL</label>
+    <input type="text" id="PodcastItemTargetUrl" name="data[PodcastItem][target_url]" value="<?php echo $this->data['PodcastItem']['target_url']; ?>">
+    <?php echo $this->Form->error('PodcastItem.TargetUrl'); ?>
+</div>
+<div class="input text">
+    <label for="PodcastItemTargetUrlText">Target URL Text</label>
+    <input type="text" id="PodcastItemTargetUrlText" name="data[PodcastItem][target_url_text]" value="<?php echo $this->data['PodcastItem']['target_url_text']; ?>">
+    <?php echo $this->Form->error('PodcastItem.TargetUrlText'); ?>
 </div>
 <div class="input file">
     <label for="PodcastItemMediaTranscript">Transcript</label>
@@ -77,4 +71,7 @@
 <?php endif; ?>
 <?php if( $this->Permission->isYoutubeUser() ) : ?>
 	<?php echo $this->element('../podcast_items/_form_youtube'); ?>
+<?php endif; ?>
+<?php if( ( $this->Permission->isYoutubeUser() ) || ( $this->Permission->isItunesUser() ) ) : ?>
+	<?php echo $this->element('../podcast_items/_form_itunes_and_youtube'); ?>
 <?php endif; ?>

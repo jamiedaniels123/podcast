@@ -95,6 +95,31 @@ class AttachmentHelper extends AppHelper {
 
     }
 	
+	/*
+	 * @name : getTranscriptLink
+	 * @description : Returns a link to a transcript
+	 * @updated : 1st July 2011
+	 * @by : Charles Jackson
+	 */
+	 
+	function getTranscriptLink( $path = null, $filename = null ) {
+
+		if( empty( $filename ) )
+			return('None');
+		
+
+		
+		// Check to see if the file is there
+		if(	file_exists( DEFAULT_MEDIA_URL.$path.$filename ) )
+			return '<a href="'.DEFAULT_MEDIA_URL.$path.'/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+
+
+		if(	file_exists( FILE_REPOSITORY.$path.$filename ) )
+			return '<a href="'.LOCAL_MEDIA_URL.$path.'/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+					
+		return 'Transcript missing on media server.';
+	}
+	
 
 
 }

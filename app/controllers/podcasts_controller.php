@@ -343,20 +343,20 @@ class PodcastsController extends AppController {
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $this->podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
+            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
             $this->Podcast->begin();
 
             // Delete the podcast
-            $this->podcast['Podcast']['deleted'] = true;
-            $this->Podcast->set( $this->podcast );
-            $this->Podcast->save( $this->podcast );
+            $podcast['Podcast']['deleted'] = true;
+            $Podcast->set( $podcast ); // Hydrate the object
+            $Podcast->save();
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->createHtaccess( $this->podcast ) && $this->Api->transferFileMediaServer( 
+            if( $this->Folder->createHtaccess( $podcast ) && $this->Api->transferFileMediaServer( 
 				array( 
-					'source_path' => $this->podcast['Podcast']['custom_id'].'/',
-					'target_path' => $this->podcast['Podcast']['custom_id'].'/', 
+					'source_path' => $podcast['Podcast']['custom_id'].'/',
+					'target_path' => $podcast['Podcast']['custom_id'].'/', 
 					'filename' => '.htaccess' 
 					)
 				) ) {						
@@ -606,7 +606,7 @@ class PodcastsController extends AppController {
 
                         $this->Podcast->commit(); // Everything hunky dory, commit the changes.
                         $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
-						 $this->redirect( array( 'admin' => true, 'action' => 'view', $this->data['Podcast']['id'] ) );						
+						$this->redirect( array( 'admin' => true, 'action' => 'view', $this->data['Podcast']['id'] ) );						
                     }
                 }
 
@@ -656,10 +656,10 @@ class PodcastsController extends AppController {
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $this->podcast = $this->Podcast->findById( $key );
+            $podcast = $this->Podcast->findById( $key );
         
             // If we did no find the podcast that redirect to the referer.
-            if( empty( $this->podcast ) == false ) {
+            if( empty( $podcast ) == false ) {
 
 
 				// Hard delete this podcast by deleting the whole folder structure.
@@ -671,7 +671,7 @@ class PodcastsController extends AppController {
 				) ) {
 
                     // Delete the podcast
-                    $this->Podcast->delete( $this->podcast['Podcast']['id'] );
+                    $this->Podcast->delete( $podcast['Podcast']['id'] );
                     $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
                 } else {
@@ -881,7 +881,7 @@ class PodcastsController extends AppController {
 
         $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'ModeratorGroups' );
 
-        $this->set('user_groups', $this->user_groups );
+        $this->set('user_groups', $user_groups );
 
         // Get all the user groups
         $User = ClassRegistry::init( 'User' );
