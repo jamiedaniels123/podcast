@@ -14,6 +14,24 @@
     <?php echo $this->Form->error('PodcastItem.summary'); ?>
 </div>
 <div class="input text">
+    <label for="PodcastItemAuthor">Author</label>
+    <textarea id="PodcastItemAuthor" name="data[PodcastItem][author]"><?php echo $this->data['PodcastItem']['author']; ?></textarea>
+    <?php echo $this->Form->error('PodcastItem.author'); ?>
+</div>
+<div class="input checkbox">
+    <input type="hidden" value="N" id="PodcastItemPublishedFlag_" name="data[PodcastItem][published_flag]">
+    <input type="checkbox" id="PodcastItemPublishedFlag" value="Y" <?php echo $this->data['PodcastItem']['published_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][published_flag]">
+    <label for="PodcastItemPublishedFlag">Published?</label>
+    <?php echo $this->Form->error('PodcastItem.publiished_flag'); ?>
+</div>
+<div class="input text">
+    <label for="PodcastItemPublishedDate">Published Date</label>
+    <input type="hidden" value="" id="PodcastItemPublishedDate_" name="data[PodcastItem][published_date]">
+    <input type="text" id="PodcastItemPublishedDate" value="<?php echo (int)$this->data['PodcastItem']['published_date'] ? $this->data['PodcastItem']['published_date'] : ''; ?>" class="datepicker" name="data[PodcastItem][published_date]">
+    <?php echo $this->Form->error('PodcastItem.published_date'); ?>
+</div>
+
+<div class="input text">
     <label for="PodcastItemTargetUrl">Item Link URL</label>
     <input type="text" id="PodcastItemTargetUrl" name="data[PodcastItem][target_url]" value="<?php echo $this->data['PodcastItem']['target_url']; ?>">
     <?php echo $this->Form->error('PodcastItem.TargetUrl'); ?>
@@ -34,22 +52,10 @@
     
 </div>
 <div class="input checkbox">
-    <input type="hidden" value="N" id="PodcastItemPublishedFlag_" name="data[PodcastItem][published_flag]">
-    <input type="checkbox" id="PodcastItemPublishedFlag" value="Y" <?php echo $this->data['PodcastItem']['published_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][published_flag]">
-    <label for="PodcastItemPublishedFlag">Published?</label>
-    <?php echo $this->Form->error('PodcastItem.publiished_flag'); ?>
-</div>
-<div class="input checkbox">
     <input type="hidden" value="N" id="PodcastItemYoutubeFlag_" name="data[PodcastItem][youtube_flag]">
     <input type="checkbox" id="PodcastItemYoutubeFlag" value="Y" <?php echo $this->data['PodcastItem']['youtube_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][youtube_flag]">
     <label for="PodcastItemYoutubeFlag">YouTube?</label>
     <?php echo $this->Form->error('PodcastItem.youtube_flag'); ?>
-</div>
-<div class="input checkbox">
-    <input type="hidden" value="N" id="PodcastItemItunesFlag_" name="data[PodcastItem][itunes_flag]">
-    <input type="checkbox" id="PodcastItemItunesFlag" value="Y" <?php echo $this->data['PodcastItem']['itunes_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][itunes_flag]">
-    <label for="PodcastItemItunesFlag">iTunes?</label>
-    <?php echo $this->Form->error('PodcastItem.itunes_flag'); ?>
 </div>
 <div class="input select">
     <label for="PodcastSubsection">Sub Section</label>
@@ -58,19 +64,6 @@
     </select>
     <?php echo $this->Form->error('PodcastItem.subsection'); ?>
 </div>
-<?php if( isSet( $this->params['admin'] ) || $this->Permission->isItunesUser() ) : ?>
-    <fieldset>
-        <legend>iTunes Explicit</legend>
-        <div class="input radio">
-            <input type="radio" value="yes" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'yes' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">Yes</label>
-            <input type="radio" value="no" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'no' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">No</label>
-            <input type="radio" value="clean" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'clean' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
-            <label for="PodcastItemExplicit">Clean</label>
-        </div>
-    </fieldset>
-<?php endif; ?>
 <div class="input file">
     <label for="PodcastItemMediaTranscript">Transcript</label>
     <input type="file" id="PodcastItemMediaTranscript" name="data[PodcastItemMedia][transcript]">
@@ -79,3 +72,9 @@
 	    <a href="/podcast_items/delete_attachment/transcript/<?php echo $this->data['PodcastItem']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete transcript</a>
     <?php endif; ?>
 </div>
+<?php if( $this->Permission->isItunesUser() ) : ?>
+	<?php echo $this->element('../podcast_items/_form_itunes'); ?>
+<?php endif; ?>
+<?php if( $this->Permission->isYoutubeUser() ) : ?>
+	<?php echo $this->element('../podcast_items/_form_youtube'); ?>
+<?php endif; ?>

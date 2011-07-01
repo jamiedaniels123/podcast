@@ -2,8 +2,8 @@
 class MiscellaneousHelper extends AppHelper {
 
     /*
-     * @name : isDeleted
-     * @description : Accepts an array and returns a bool on whether deleted. 
+     * @name : isAdminRouting
+     * @description : Returns a bool
      * @updated : 1st June 2011
      * @by : Charles Jackson
      */

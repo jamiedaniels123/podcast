@@ -7,8 +7,6 @@ class PodcastsController extends AppController {
     private $errors = array();
     var $html = null; // Used to store errors created by the images component.
     
-    const YES = 'Y';
-    const NO = 'N';
     const ITUNES = 'ITUNES';
     const YOUTUBE = 'YOUTUBE';
 
@@ -66,7 +64,7 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = self::YES;
+            $this->data['Podcast']['private'] = YES;
 			
             $this->Podcast->set( $this->data );
 
@@ -123,7 +121,7 @@ class PodcastsController extends AppController {
         $this->data = $this->Podcast->findById( $id );
 
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) || $this->Permission->isItunesUser() == false || $this->Permission->isYoutubeUser() == false ) {
+        if( empty( $this->data ) || ( $this->Permission->isItunesUser() == false && $this->Permission->isYoutubeUser() == false ) ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -408,10 +406,10 @@ class PodcastsController extends AppController {
         if( !empty( $this->data ) ) {
 
             if( strtoupper( $media_channel ) == self::ITUNES )
-                $this->data['Podcast']['intended_itunesu_flag'] = self::YES;
+                $this->data['Podcast']['intended_itunesu_flag'] = YES;
             
             if( strtoupper( $media_channel ) == self::YOUTUBE )
-                $this->data['Podcast']['intended_youtube_flag'] = self::YES;
+                $this->data['Podcast']['intended_youtube_flag'] = YES;
 
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
             
@@ -442,12 +440,12 @@ class PodcastsController extends AppController {
         if( !empty( $this->data ) ) {
 
             if( strtoupper( $media_channel ) == self::ITUNES ) {
-                $this->data['Podcast']['intended_itunesu_flag'] = self::NO;
+                $this->data['Podcast']['intended_itunesu_flag'] = NO;
                 $this->data['Podcast']['consider_for_itunesu'] = false;
             }
             
             if( strtoupper( $media_channel ) == self::YOUTUBE ) {
-                $this->data['Podcast']['intended_youtube_flag'] = self::NO;
+                $this->data['Podcast']['intended_youtube_flag'] = NO;
                 $this->data['Podcast']['consider_for_youtube'] = false;
             }
 
@@ -465,7 +463,7 @@ class PodcastsController extends AppController {
     /*
      * ADMIN FUNCTIONALITY
      * Below this line are the administration functionality that can only be reach if the flag 'administrator' is set to true on the
-     * users profile. The URL for all admin routes is "admin/:controller:/:action:/*
+     * users profile (see app_controller). The URL for all admin routes is "admin/:controller:/:action:/*
      */
     
     /*
@@ -507,11 +505,11 @@ class PodcastsController extends AppController {
 
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = self::YES;
+            $this->data['Podcast']['private'] = YES; // Default to private.
 
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->data ); // Hydrate the object.
 
-            if( $this->Podcast->saveAll() ) {
+            if( $this->Podcast->save() ) { 
 
 				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
 	            $this->Podcast->save( $this->data );
@@ -581,9 +579,9 @@ class PodcastsController extends AppController {
             // Set the preferred node to equal the first node chosen
             $this->data = $this->Podcast->setPreferredNode( $this->data );
 
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->data ); // Hydrate the object
 
-            if(  $this->Podcast->saveAll()  ) {
+            if(  $this->Podcast->saveAll()  ) { // Using "saveAll" so we save associated data
 
                 // Now copy back the original including array elements and
                 // save again with attachment elements.
@@ -714,7 +712,7 @@ class PodcastsController extends AppController {
 			) ) {
                 
                 $this->data['Podcast']['deleted'] = false;
-                $this->Podcast->set( $this->data );
+                $this->Podcast->set( $this->data ); // Hydrate the object
                 $this->Podcast->save();
                 
                 $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
@@ -728,11 +726,45 @@ class PodcastsController extends AppController {
 
         $this->redirect( $this->referer() );
     }
+	
+	/*
+	 * @name : delete_image
+	 * @description : Enables peeps to delete a podcast image from the media server.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */
+	function delete_image( $image_type, $id ) {
+		
+		$this->data = $this->Podcast->findById( $id );
+		
+		if( empty( $this->data ) || empty( $this->data['Podcast'][$image_type] ) ) {
+			
+			$this->Session->setFlash('We were unable to identify the image you are trying to delete. Please try again.', 'default', array( 'class' => 'error' ) );
+			
+		} else { 
+		
+			// Now we must delete the images from the media server.
+			if( $this->Api->deleteFileOnMediaServer( $this->Podcast->deleteImages( $this->data['Podcast'], $image_type ) ) ) {
+				
+				// We have successfully scheduled the image for deletion, now update the row on the podcasts table.
+				$this->data['Podcast'][$image_type] = null;
+				$this->Podcast->set( $this->data );
+				$this->Podcast->save();
+				$this->Session->setFlash('Podcast image successfully deleted.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+
+				$this->Session->setFlash('We were unable to schedule deletion of the file with the media server. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				
+			}
+		}
+			
+		$this->redirect( $this->referer() );		
+	}
 
     // PRIVATE METHODS
-    // Below this line are methods that can only be called by another controller method. In traditional MVC these
-    // methods should exist as functions in the model however, they exploit various components that are more elegantly
-    // accessed via the controller hence I have left them here. Not a perfect world!
+    // Below this line are methods that can only be called by another controller method "__". They exploit various components 
+	// that are more elegantly accessed via the controller hence I have left them here. Not a perfect world!
 
     /*
      * @name : __updateImages
@@ -785,40 +817,6 @@ class PodcastsController extends AppController {
         }
     }
 
-	/*
-	 * @name : delete_image
-	 * @description : Enables peeps to delete a podcast image from the media server.
-	 * @updated : 28th June 2011
-	 * @by : Charles Jackson
-	 */
-	function delete_image( $image_type, $id ) {
-		
-		$this->data = $this->Podcast->findById( $id );
-		
-		if( empty( $this->data ) || empty( $this->data['Podcast'][$image_type] ) ) {
-			
-			$this->Session->setFlash('We were unable to identify the image you are trying to delete. Please try again.', 'default', array( 'class' => 'error' ) );
-			
-		} else { 
-		
-			// Now we must delete the images from the media server.
-			if( $this->Api->deleteFileOnMediaServer( $this->Podcast->deleteImages( $this->data['Podcast'], $image_type ) ) ) {
-				
-				// We have successfully scheduled the image for deletion, now update the row on the podcasts table.
-				$this->data['Podcast'][$image_type] = null;
-				$this->Podcast->set( $this->data );
-				$this->Podcast->save();
-				$this->Session->setFlash('Podcast image successfully deleted.', 'default', array( 'class' => 'success' ) );
-				
-			} else {
-
-				$this->Session->setFlash('We were unable to schedule deletion of the file with the media server. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-				
-			}
-		}
-			
-		$this->redirect( $this->referer() );		
-	}
     /*
      * @name : __generateRSSFeeds
      * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.

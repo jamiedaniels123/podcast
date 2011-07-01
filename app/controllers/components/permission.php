@@ -253,6 +253,17 @@ class PermissionComponent extends Object {
 
         return count( $this->errors );
     }
+	
+    /*
+     * @name : isAdminRouting
+     * @description : Return a bool
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function isAdminRouting() {
+
+		return isSet( $this->params['admin'] );
+    }	
 }
 
 ?>

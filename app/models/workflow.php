@@ -39,9 +39,8 @@ class Workflow extends AppModel {
 			$this->setWorkflow( DIRECT_TRANSFER );
 			return true;
 			exit;
-		}
-
-		if( in_array( $this->file_extension, $this->video_transcoding ) ) {
+			
+		} elseif( in_array( $this->file_extension, $this->video_transcoding ) ) {
 
 			$this->setScreencast( strtoupper( $this->params['url']['ff02v'] ) == 'YES' ? true : false );
 			$this->setVideoWidth( isSet( $this->params['video']['resolution_x'] ) ? $this->params['video']['resolution_x'] : 0 );
@@ -49,9 +48,8 @@ class Workflow extends AppModel {
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setWorkflow( $this->__select() );			
 			return true;
-		}
-
-		if( in_array( $this->file_extension, $this->audio_transcoding ) ) {
+			
+		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
 			$this->setWorkflow( AUDIO );
 			return true;
