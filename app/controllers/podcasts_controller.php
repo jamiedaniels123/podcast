@@ -853,44 +853,44 @@ class PodcastsController extends AppController {
     function __setPodcastFormOptions() {
 
         // Get all the nodes
-        $this->Node = ClassRegistry::init('Node');
-        $this->nodes = $this->Node->find('list', array( 'order' => 'Node.title' ) );
-        $this->nodes = $this->Node->removeDuplicates( $this->nodes, $this->data, 'Nodes' );
-        $this->set('nodes', $this->nodes );
+        $Node = ClassRegistry::init('Node');
+        $nodes = $Node->find('list', array( 'order' => 'Node.title' ) );
+        $nodes = $Node->removeDuplicates( $nodes, $this->data, 'Nodes' );
+        $this->set('nodes', $nodes );
 
         // Get all the categories
-        $this->Category = ClassRegistry::init('Category');
-        $this->categories = $this->Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
-        $this->categories = $this->Category->removeDuplicates( $this->categories, $this->data, 'Categories' );
-        $this->set('categories', $this->categories );
+        $Category = ClassRegistry::init('Category');
+        $categories = $Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
+        $categories = $Category->removeDuplicates( $categories, $this->data, 'Categories' );
+        $this->set('categories', $categories );
 
         // Get all the itunes categories
-        $this->ItunesuCategory = ClassRegistry::init('ItunesuCategory');
-        $this->itunesu_categories = $this->ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
-        $this->itunesu_categories = $this->ItunesuCategory->removeDuplicates( $this->itunesu_categories, $this->data, 'iTuneCategories' );
-        $this->set('itunes_categories', $this->itunesu_categories );
+        $ItunesuCategory = ClassRegistry::init('ItunesuCategory');
+        $itunesu_categories = $ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
+        $itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
+        $this->set('itunes_categories', $itunesu_categories );
 
         // Get all the languages
-        $this->Language = ClassRegistry::init('Language');
-        $this->set('languages', $this->Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
+        $Language = ClassRegistry::init('Language');
+        $this->set('languages', $Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
 
         // Get all the user groups
-        $this->UserGroup = ClassRegistry::init('UserGroup');
-        $this->user_groups = $this->UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'MemberGroups' );
+        $UserGroup = ClassRegistry::init('UserGroup');
+        $user_groups = $UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
+        $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'MemberGroups' );
 
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'ModeratorGroups' );
+        $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'ModeratorGroups' );
 
         $this->set('user_groups', $this->user_groups );
 
         // Get all the user groups
-        $this->User = ClassRegistry::init( 'User' );
-        $this->users = $this->User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
-        $this->set('users', $this->users );
+        $User = ClassRegistry::init( 'User' );
+        $users = $User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
+        $users = $User->removeDuplicates( $users, $this->data, 'Members' );
+        $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );
+        $this->set('users', $users );
 
-        $this->set('all_users', $this->User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
+        $this->set('all_users', $User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
 
         // Set the possible values of explicit
         $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
