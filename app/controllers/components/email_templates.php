@@ -2,7 +2,7 @@
 
 class emailTemplatesComponent extends Object {
 
-    var $components = array( 'Email' );
+    var $components = array( 'Email', 'Session' );
 
     //called before Controller::beforeFilter()
     function initialize(&$controller) {
@@ -46,8 +46,8 @@ class emailTemplatesComponent extends Object {
     }
 
     /*
-     * @NAME : __sendRegistrationApprovedEmail
-     * @DESCRIPTION : When an administrator approved a user registration this email will be sent out.
+     * @name : __sendRegistrationApprovedEmail
+     * @description : When an administrator approved a user registration this email will be sent out.
      */
     function __sendRegistrationApprovedEmail( $recipient ) {
 
@@ -65,7 +65,10 @@ class emailTemplatesComponent extends Object {
         $this->Email->send();
     }
 
-
+    /*
+     * @name : __sendCallbackErrorEmail
+     * @description : 
+     */
     function __sendCallbackErrorEmail( $recipients=array(),$data ,$errormessage) {
 
         /* Set delivery method */
@@ -82,6 +85,27 @@ class emailTemplatesComponent extends Object {
 
         $this->Email->send();
     }
+	
+    /*
+     * @name : __sendPodcastRejectionEmail
+     * @description : 
+     */
+	function __sendPodcastRejectionEmail( $media_type, $data, $justification ) {
+		
+        $this->Email->to = $data['Owner']['email'];
+        $this->Email->subject = "Podcast Rejection from Admin Server";
+        $this->Email->replyTo = $this->Session->read('Auth.User.email');
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        $this->Email->template = 'podcast_rejection'; // note no '.ctp'		
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+        $this->controller->set('media_type', $media_type);
+        $this->controller->set('justification', $justification);		
+        //Do not pass any args to send()
+
+        $this->Email->send();
+		
+	}
 
 
     function getDomain() {

@@ -107,15 +107,15 @@ class AttachmentHelper extends AppHelper {
 		if( empty( $filename ) )
 			return('None');
 		
-
+		
 		
 		// Check to see if the file is there
-		if(	file_exists( DEFAULT_MEDIA_URL.$path.$filename ) )
-			return '<a href="'.DEFAULT_MEDIA_URL.$path.'/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+		if(	file_exists( DEFAULT_MEDIA_URL.$path.'/transcript/'.$filename ) )
+			return '<a href="'.DEFAULT_MEDIA_URL.$path.'/transcript/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
 
 
-		if(	file_exists( FILE_REPOSITORY.$path.$filename ) )
-			return '<a href="'.LOCAL_MEDIA_URL.$path.'/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+		if(	file_exists( FILE_REPOSITORY.$path.'/transcript/'.$filename ) )
+			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$path.'/transcript/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
 					
 		return 'Transcript missing on media server.';
 	}

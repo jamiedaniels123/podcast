@@ -189,29 +189,42 @@ class PodcastsController extends AppController {
                             $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem continues please alert an administrator', 'default', array( 'class' => 'error' ) );
                             $this->data = $this->Podcast->rebuild( $data );
                             $this->Podcast->rollback();
-
-                        } else {
 							
-                            $this->Podcast->commit(); // Everything hunky dory, commit the changes.
-                            $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+						} elseif( ( $this->Folder->buildHtaccessFile( $this->data ) == false ) || ( $this->Api->transferFileMediaServer( 
+						
+							array( 
+								'source_path' => $this->data['Podcast']['custom_id'].'/',
+								'target_path' => $this->data['Podcast']['custom_id'].'/', 
+								'filename' => '.htaccess' 
+								)
+							) ) == false ) {		
+							
+								$this->Session->setFlash('We were unable to generate the necessary .htaccess permissions', 'default', array( 'class' => 'error' ) );
+								$this->data = $this->Podcast->rebuild( $data );
+								$this->Podcast->rollback();
+							
+							} else {
 
-							$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
-                            $this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
-
-                            // They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
-                            if( $this->Permission->toView( $this->data ) ) {
-
-                                $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
-								exit;
-
-                            } else {
-
-                                $this->redirect( array( 'action' => 'index') );
-								exit;
-                            }
-                        }
-                    }
-                }
+								$this->Podcast->commit(); // Everything hunky dory, commit the changes.
+								$this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+	
+								$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
+								$this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
+	
+								// They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
+								if( $this->Permission->toView( $this->data ) ) {
+	
+									$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+									exit;
+	
+								} else {
+	
+									$this->redirect( array( 'action' => 'index') );
+									exit;
+								}
+							}
+    	                }
+        	        }
 
             } else {
 
@@ -353,7 +366,7 @@ class PodcastsController extends AppController {
             $Podcast->save();
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->createHtaccess( $podcast ) && $this->Api->transferFileMediaServer( 
+            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
 				array( 
 					'source_path' => $podcast['Podcast']['custom_id'].'/',
 					'target_path' => $podcast['Podcast']['custom_id'].'/', 
@@ -432,28 +445,37 @@ class PodcastsController extends AppController {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function rejection( $media_channel, $id ) {
-
-        $this->Podcast->recursive = -1;
-        $this->data = $this->Podcast->findById( $id );
-
+    function rejection() {
+		
         if( !empty( $this->data ) ) {
 
-            if( strtoupper( $media_channel ) == self::ITUNES ) {
+			$justification =  $this->data['Podcast']['justification'];
+			
+            if( strtoupper( $this->data['Podcast']['media_channel'] ) == self::ITUNES ) {
                 $this->data['Podcast']['intended_itunesu_flag'] = NO;
                 $this->data['Podcast']['consider_for_itunesu'] = false;
+				$media_channel = self::ITUNES;
             }
             
-            if( strtoupper( $media_channel ) == self::YOUTUBE ) {
+            if( strtoupper( $this->data['Podcast']['media_channel'] ) == self::YOUTUBE ) {
                 $this->data['Podcast']['intended_youtube_flag'] = NO;
                 $this->data['Podcast']['consider_for_youtube'] = false;
+				$media_channel = self::YOUTUBE;				
             }
+			
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			$this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
 
-            $this->Podcast->save( $this->data );
+			$this->emailTemplates->__sendPodcastRejectionEmail( strtolower( $media_channel ), $this->data, $justification );
+			
             $this->Session->setFlash('The collection has been rejected.', 'default', array( 'class' => 'success' ) );
+			
 
         } else {
-
+			
+			$this->Podcast->recursive = -1;
+			$this->data = $this->Podcast->findById( $id );
             $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
         }
 
@@ -602,6 +624,19 @@ class PodcastsController extends AppController {
                         $this->data = $this->Podcast->rebuild( $data );
                         $this->Podcast->rollback();
 
+					} elseif( ( $this->Folder->buildHtaccessFile( $this->data ) == false ) || ( $this->Api->transferFileMediaServer( 
+					
+						array( 
+							'source_path' => $this->data['Podcast']['custom_id'].'/',
+							'target_path' => $this->data['Podcast']['custom_id'].'/', 
+							'filename' => '.htaccess' 
+							)
+						) ) == false ) {		
+						
+							$this->Session->setFlash('We were unable to generate the necessary .htaccess permissions', 'default', array( 'class' => 'error' ) );
+							$this->data = $this->Podcast->rebuild( $data );
+							$this->Podcast->rollback();
+
                     } else {
 
                         $this->Podcast->commit(); // Everything hunky dory, commit the changes.
@@ -702,19 +737,21 @@ class PodcastsController extends AppController {
 
         } else {
 
+
+			$this->data['Podcast']['deleted'] = false;
+			$this->Podcast->set( $this->data ); // Hydrate the object
+			$this->Podcast->save();
+
 			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
-            if( $this->Api->deleteFileOnMediaServer( array( 
+            // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
+            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
 				array( 
-					'source_path' => $this->data['Podcast']['custom_id'].'/',
-					'filename' => '.htaccess'
+					'source_path' => $podcast['Podcast']['custom_id'].'/',
+					'target_path' => $podcast['Podcast']['custom_id'].'/', 
+					'filename' => '.htaccess' 
 					)
-				)
-			) ) {
-                
-                $this->data['Podcast']['deleted'] = false;
-                $this->Podcast->set( $this->data ); // Hydrate the object
-                $this->Podcast->save();
-                
+				) ) {						
+				
                 $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
             } else {

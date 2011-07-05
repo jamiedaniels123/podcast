@@ -12,11 +12,16 @@ class Callback extends AppModel {
 	}
 
 	function understand(){
-		return(isset($this->data['command']) && isset($this->data['status']));
+		if(in_array($this->data['command'], $this->commands)){
+			return(isset($this->data['command']) && isset($this->data['status']));
+		}
+		else{
+			return false;
+		}
+		
 	}
 
 	function ok(){
-		return false;
 		return($this->data['status']=='ACK');
 	}
 

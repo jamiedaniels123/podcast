@@ -116,7 +116,7 @@ class UploadComponent extends Object {
         if( $this->__transferImagesToMediaServer() == false )
             return false;
 
-		$this->setUploadedFileName( $this->file_name.'.'.$this->file_extension );
+		$this->setUploadedFileName( $this->file_name.'.jpg' );
 	
         return true;
     }
@@ -164,7 +164,7 @@ class UploadComponent extends Object {
             return false;
 
 
-		$this->setUploadedFileName( $this->file_name.'.'.$this->file_extension );
+		$this->setUploadedFileName( $this->file_name.'.jpg' );
 	
         return true;
 
@@ -212,7 +212,7 @@ class UploadComponent extends Object {
         if( $this->__transferImagesToMediaServer() == false )
             return false;
 
-		$this->setUploadedFileName( $this->file_name.'.'.$this->file_extension );
+		$this->setUploadedFileName( $this->file_name.'.jpg' );
 	
         return true;
 
@@ -225,15 +225,14 @@ class UploadComponent extends Object {
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
-    function transcript( $data, $data_key ) {
-
+    function transcript( $data = array(), $data_key ) {
 
         // Have they tried uploading a transcript?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
 
         // Has an image been uploaded and is it error free?
-        if ( (int)$data['PodcastItemMedia'][$data_key]['error'] ) {
+        if ( (int)$data['Transcript'][$data_key]['error'] ) {
 
             $this->errors[] = 'There has been a problem uploading your transcript. Please try again.';
             return false;
@@ -243,11 +242,12 @@ class UploadComponent extends Object {
         $this->setFolderName( $this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ) );
         $this->setDataKey( $data_key );
         $this->setFileName( $this->data['Podcast']['custom_id'].'.pdf' );
-
+        $this->setFileExtension( $this->data['Transcript'][$this->data_key]['name'] );
+		
         if( $this->isPDF() == false )
             return false;
 
-        if( $this->createTemporaryFile() == false )
+        if( $this->createTemporaryFile( 'Transcript' ) == false )
             return false;
 
         if( $this->createFolder() == false )
@@ -268,7 +268,7 @@ class UploadComponent extends Object {
 				)
 			) {
 	
-				$this->setUploadedFileName( $this->file_name.'.'.$this->file_extension );
+				$this->setUploadedFileName( $this->file_name );
 				return true;
 
 			}
@@ -370,8 +370,25 @@ class UploadComponent extends Object {
 
         $this->setFileExtension( $this->data[$this->controller->modelClass][$this->data_key]['name'] );
 
-        if ( !in_array($this->file_extension, $this->allowed_file_types ) ) {
+        if ( in_array($this->file_extension, $this->allowed_file_types ) == false ) {
             $this->errors[] = 'Your '.$this->data_collection.' image is not in a valid format.';
+            return false;
+        }
+
+        return true;
+    }
+
+    /*
+     * @name : isPDF
+     * @description : Will check the file extension as being PDF and set the file extension
+     * @updated : 6th May 2011
+     * @by : Charles Jackson
+     */
+    function isPDF() {
+
+        if ( strtolower( $this->file_extension ) != 'pdf' ) {
+
+            $this->errors[] = 'Your '.$this->data_collection.' is not in a valid PDF format.';
             return false;
         }
 
@@ -384,8 +401,11 @@ class UploadComponent extends Object {
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
-    function createTemporaryFile() {
+    function createTemporaryFile( $model_class = null ) {
 
+		if( $model_class == null ) // Captured images are stored within the Model class data array however transcripts are an exception
+			$model_class = $this->controller->modelClass;
+			
         // Generate a unique name for the image (from the timestamp)
         $id_unic = str_replace( ".", "", strtotime ( "now" ) );
         $file_name = $id_unic;
@@ -396,10 +416,10 @@ class UploadComponent extends Object {
 
         $this->temporary_file = TMP .$file_name;
 
-        if ( is_uploaded_file( $this->data[$this->controller->modelClass][$this->data_key]['tmp_name'] ) ) {
+        if ( is_uploaded_file( $this->data[$model_class][$this->data_key]['tmp_name'] ) ) {
 
             // Copy the image into the temporary directory
-            if ( !copy( $this->data[$this->controller->modelClass][$this->data_key]['tmp_name'], $this->temporary_file ) ) {
+            if ( !copy( $this->data[$model_class][$this->data_key]['tmp_name'], $this->temporary_file ) ) {
                 
                 $this->errors[] = 'Could not copy your '.$this->data_collection.' image into a temporary location on server. If the problem persists please alert an administrator.';
                 return false;
@@ -410,6 +430,7 @@ class UploadComponent extends Object {
 
         return false;
     }
+
 
     /*
      * @name : createFolder
@@ -443,20 +464,18 @@ class UploadComponent extends Object {
      * @name : setFileExtension
      * @description : Sets the name of the file extension.
 	 * @NOTE: The legacy system renames every image with a "jpg" extension (doh!) and it is a convention we are obliged to follow... 
-	 * Therefore I have written a proper solution then appended a line to the end of this method that sets "jpg" regardless.
+	 * Therefore I have written a proper solution and a workaround
      * @updated : 6th May 2011
      * @by : Charles Jackson
      */
     function setFileExtension( $file_name ) {
 
-        $i = strrpos( $file_name, "." );
+		$i = strrpos( $file_name, "." );
 
-        if ( !$i ) { return ""; }
+		if ( !$i ) { return ""; }
 
-        $l = strlen( $file_name ) - $i;
-        $this->file_extension = substr( $file_name, $i+1, $l );
-		
-		$this->file_extension = 'jpg'; // Needed for compatibility with legacy system.
+		$l = strlen( $file_name ) - $i;
+		$this->file_extension = substr( $file_name, $i+1, $l );
     }
 	
     /*
@@ -479,11 +498,11 @@ class UploadComponent extends Object {
     function __createImages() {
 		
         // Create a copy of the original file.
-        copy( $this->temporary_file, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.'.'.$this->file_extension );
+        copy( $this->temporary_file, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.'.jpg' );
         // Create a resized copy of the file.
-        $this->resizeImage($this->temporary_file, 300, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension );
+        $this->resizeImage($this->temporary_file, 300, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.RESIZED_IMAGE_EXTENSION.'.jpg' );
         // Generate a thumbnail square version of the image.
-        $this->resizeImage( $this->temporary_file, 50, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension );
+        $this->resizeImage( $this->temporary_file, 50, FILE_REPOSITORY.$this->folder.'/'.$this->file_name.THUMBNAIL_EXTENSION.'.jpg' );
 		
 		unlink( $this->temporary_file );
     }

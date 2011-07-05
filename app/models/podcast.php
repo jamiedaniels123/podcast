@@ -136,8 +136,13 @@ class Podcast extends AppModel {
         'Owner' => array(
             'className' => 'User',
             'foreignKey' => 'owner_id',
-            'fields' => 'Owner.id, Owner.full_name'
-        )
+            'fields' => 'Owner.id, Owner.full_name, Owner.email'
+        ),
+        'PreferredNode' => array(
+            'className' => 'Nodes',
+            'foreignKey' => 'preferred_node',
+            'fields' => 'PreferredNode.id,PreferredNode.title'
+        )		
     );
 
     var $hasMany = array(
@@ -368,12 +373,12 @@ class Podcast extends AppModel {
         }
 
         // OK, now empty the date fields if they contain a null date.
-        foreach( $this->data['Podcast'] as $key => $value ) {
+        foreach( $this->data[$this->alias] as $key => $value ) {
 
             if( in_array( $key, array('publish_itunes_date','update_itunes_date','target_itunesu_date','production_date','rights_date', 'metadata_date' ) ) ) {
 
                 if( (int)$value == false ) {
-                    $this->data['Podcast'][$key] = null;
+                    $this->data[$this->alias][$key] = null;
                 }
             }
 
@@ -836,4 +841,5 @@ class Podcast extends AppModel {
 			
 		return $media_images;
 	}
+	
 }

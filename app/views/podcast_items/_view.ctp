@@ -1,6 +1,6 @@
 <div class="wrapper">
     <div class="float_right">
-            <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="podcast image" />
+            <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'].'.jpg', $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="podcast image" />
     </div>
     <div class="float_left">
         <dl>
@@ -29,7 +29,7 @@
             <dt>Target URL Text</dt>
             <dd><?php echo $this->data['PodcastItem']['target_url_text']; ?>&nbsp;</dd>
             <dt>Transcript</dt>
-            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['transcript_filename'] ); ?></dd>
+            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['Transcript']['filename'] ); ?></dd>
         </dl>
 
 		<?php if( $this->Permission->isItunesUser() ) : ?>

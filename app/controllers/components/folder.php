@@ -2,16 +2,57 @@
 class FolderComponent extends Object {
 
 
-    function createHtaccess( $data = array() ) {
+	/*
+	 * @name : buildHtaccessFile
+	 * @description : Builds a htaccess file using the podcast values passed as a parameter.
+	 * @updated : 5th July 2011
+	 * @by : Charles Jackson
+	 */
+	function buildHtaccessFile( $data = array() ) {
 
-        $this->create( $data['Podcast']['custom_id'] );
-        $text = 'ErrorDocument 404 /notfound.html';
+		$text = "RewriteEngine on\n";
+		
+		if( $data['Podcast']['deleted']	 ) {
+			
+			$text .= "#Podcast has been soft deleted\n";
+			$text .= "ErrorDocument 404 /notfound.html\n";
+		}
+		
+		// If this is an intranet only podcast we check the IP address they came from
+		if( $data['Podcast']['intranet_only'] == 'Y' ) {
+			
+			$text .= "#Restrict access to the OU Intranet only\n";
+			$text .= "RewriteCond %{REMOTE_ADDR} !^137\.108\.[0-9]+\.[0-9]+$\n";
+			$text .= "RewriteCond %{REMOTE_ADDR} !^194\.66\.1[234][0-9]\.[0-9]+$\n";
+			$text .= "RewriteCond %{ENV:SAMS} !^PASSED\n";
+			$text .= "RewriteRule ^(.*)$ /feeds-sams/validate.php?file=/feeds/vc-on-itunes/$1 [L]\n";
+		}
+		
+		// Redirect all non-ou traffic to our amazon S3 account
+		if( $data['Podcast']['media_location'] == 's3nonOU' ) { 
+		
+			$text .= "#non-OU media requests diverted to S3 service\n";
+			$text .= "RewriteCond %{REMOTE_ADDR} !^137\.108\.[0-9]+\.[0-9]+$\n";
+			$text .= "RewriteCond %{REMOTE_ADDR} !^194\.66\.[0-9]\.[0-9]+$\n";
+			$text .= "RewriteCond %{REQUEST_FILENAME} !.*(xml|jpg)$\n";
+			$text .= "RewriteCond %{HTTP_USER_AGENT} !^Jakarta.*$\n";
+			$text .= "RewriteRule ^(.*)$ ".AMAZON_S3_SERVER."/feeds/".$data['Podcast']['custom_id']."/$1 [R=302,NC]\n";
+			
+		// Redirect all traffic to our amazon s3 account
+		} elseif( $data['Podcast']['media_location'] == 's3all' ) {
+			
+			$text .= "#OU media requests diverted to S3 service\n";
+			$text .= "RewriteCond %{REQUEST_FILENAME} !.*(xml|jpg)$\n";
+			$text .= "RewriteCond %{HTTP_USER_AGENT} !^Jakarta.*$\n";
+			$text .= "RewriteRule ^(.*)$ ".AMAZON_S3_SERVER."/feeds/".$data['Podcast']['custom_id']."/$1 [R=302,NC]\n";
+		}
 
         if( $this->writeFile( $text, $data['Podcast']['custom_id'],'.htaccess' ) )
             return true;
 
         return false;
-    }
+		
+	}
 
     /*
      * @name : moveFileChuckerUpload

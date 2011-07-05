@@ -43,12 +43,10 @@
                         <td width="15px">
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
                                 <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
-                            <?php else : ?>
-                                <!--Not Available-->
                             <?php endif; ?>
                         </td>
                         <td>
-                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="podcast image" />
+                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" class="thumbnail" title="podcast image" />
                         </td>
                         <td>
                             <a href="#"><?php echo $podcast['Podcast']['title']; ?></a>

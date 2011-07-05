@@ -70,7 +70,7 @@ class PodcastItemsController extends AppController {
         // We did not find the podcast, error and redirect.
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
-            $this->Session->setFlash( 'Could not find your chosen media. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash( 'Could not find your item media file. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
         }
     }
@@ -102,10 +102,17 @@ class PodcastItemsController extends AppController {
                 // save again with attachment elements.
                 $this->data = $data;
 
-                if( ( $this->__updateImage() == false ) || ( $this->__updateTranscript() == false ) ) {
+                if( ( $this->__updateImage() == false )  ) {
 
 					$this->PodcastItem->rollback();
-					$this->Session->setFlash('Could not update your attachments, images and/or transcript. Please try again.', 'default', array( 'class' => 'error' ) );														
+					$this->Session->setFlash('Could not update your associated image. Please try again.', 'default', array( 'class' => 'error' ) );														
+	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					exit;
+	
+				} elseif( ( $this->__updateTranscript() == false )  ) {
+
+					$this->PodcastItem->rollback();
+					$this->Session->setFlash('Could not update your associated transcript. Please try again.', 'default', array( 'class' => 'error' ) );														
 	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
 					exit;
 					
@@ -283,11 +290,11 @@ class PodcastItemsController extends AppController {
         // else it will return false.
         if( $this->Upload->podcastMediaImage( $this->data, 'image' ) ) {
 			
-			$this->data['Podcast']['image_filename'] = $this->Upload->getUploadedFileName();
+			$this->data['PodcastItem']['image_filename'] = $this->Upload->getUploadedFileName();
 			
 		} else {
 			
-			unset( $this->data['Podcast']['image_filename'] );
+			unset( $this->data['PodcastItem']['image_filename'] );
 		}
 				
         // Check to see if the upload component created any errors.
@@ -300,7 +307,9 @@ class PodcastItemsController extends AppController {
 
             // Resave the object so we capture the names of the uploaded images.
             $this->PodcastItem->save( $this->data );
+
             $this->Session->setFlash('Your podcast media has been successfully updated.', 'default', array( 'class' => 'success' ) );
+			return true;
         }
     }
 
@@ -312,18 +321,26 @@ class PodcastItemsController extends AppController {
      */
 	function __updateTranscript() {
 		
-		$this->data['PodcastItemMedia']['filename'] = $this->Upload->transcript( $this->data, 'transcript' );
-		
-		if( $this->Upload->hasErrors() ) {
+		if( $this->Upload->transcript( $this->data, 'filename' ) == false ) {
 			
-			
+			unset( $this->data['Transcript']['filename'] );
+            $this->errors = $this->Upload->getErrors();
+            return false;
+						
 		} else {
-		
-			$this->data['PodcastItemMedia']['media_type'] = strtolower( TRANSCRIPT );
-			$this->data['PodcastItemMedia']['duration'] = null;
-			$this->data['PodcastItemMedia']['processed_state'] = 9; // Media available
+			
+			$this->data['Transcript']['original_filename'] = $this->data['Transcript']['filename']['name'];
+			$this->data['Transcript']['filename'] = $this->Upload->getUploadedFilename();
+			$this->data['Transcript']['media_type'] = strtolower( TRANSCRIPT );
+			$this->data['Transcript']['duration'] = 0;
+			$this->data['Transcript']['podcast_item'] = $this->data['PodcastItem']['id'];
+			$this->data['Transcript']['processed_state'] = 9; // Media available
+			
+			$this->PodcastItem->Transcript->set( $this->data );
+			$this->PodcastItem->Transcript->save();
+			return true;
+			
 		}
-		
 	}
 	
     /*
@@ -365,7 +382,7 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : delete_attachment
-     * @desscription : Enables a user to delete an attachment (image or transcript) associated with a piece of media on the podcast_items table.
+     * @desscription : Enables a user to delete an associated image of a row on the podcast_items table.
      * @name : Charles Jackson
      * @by : 27th June 2011
      */
@@ -378,7 +395,7 @@ class PodcastItemsController extends AppController {
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
 
-            $this->Session->setFlash('We could not find the media attachment you were looking for.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('We could not find the media attachment you are trying to delete.', 'default', array( 'class' => 'error' ) );
 
         } else {
 			
@@ -399,7 +416,7 @@ class PodcastItemsController extends AppController {
 				) {
 
 					$this->Session->setFlash('The media attachment has been deleted.', 'default', array( 'class' => 'success' ) );
-			        $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
+			        $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );	
 								
 				} else {
 				
