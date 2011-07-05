@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend>All Podcasts</legend>
+    <legend>Podcasts : Administration</legend>
     <p>
         Below is a list of all podcasts on the system.
     </p>
@@ -12,8 +12,6 @@
         ?>
     </p>
     <form method="post" action="/admin/podcasts/delete">
-        <a href="/" class="toggler" data-status="unticked">Toggle</a>
-        <button type="submit" onclick="return confirm('Are you sure you wish to delete all these podcasts and associated media?')"><span>delete</span></button>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th>Select</th>
@@ -21,7 +19,6 @@
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('created');?></th>
-                <th><?php echo $this->Paginator->sort('Status','deleted');?></th>
                 <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
@@ -32,15 +29,21 @@
 
                     $class = null;
                     if ($i++ % 2 == 0) :
-                        $class = ' class="altrow"';
-                    endif;
+						 if( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+	                        $class = ' class="altrow deleted"';
+						else :
+							$class = ' class="altrow"';
+						endif;
+                    elseif( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+						$class = ' class="deleted"';
+					endif;
             ?>
                     <tr<?php echo $class;?>>
                         <td>
                             <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                         </td>
                         <td>
-                            <?php echo $this->Attachment->getPodcastThumbnail( $podcast ); ?>
+                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="podcast image" />
                         </td>
                         <td>
                             <?php echo $podcast['Owner']['full_name']; ?>
@@ -52,9 +55,6 @@
                             <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
                         <td>
-                            <?php echo $this->Object->isDeleted( $podcast['Podcast'] ) ? 'Deleted' : 'Active'; ?>
-                        </td>
-                        <td>
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
@@ -62,6 +62,7 @@
                                 <a href="/admin/podcasts/restore/<?php echo $podcast['Podcast']['id']; ?>" id="restore_podcast_<?php echo $podcast['Podcast']['id']; ?>">restore</a>
                             <?php endif; ?>
                             <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
+                            <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>
                             <a href="/admin/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>" id="edit_podcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
                             <a href="/admin/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" id="delete_podcast_<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you with to delete this podcast and all associated media? This action cannot be undone.');">delete</a>
                             <a href="/admin/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>" id="view_media_<?php echo $podcast['Podcast']['id']; ?>">media</a>
@@ -71,6 +72,9 @@
                 endforeach;
             endif; ?>
         </table>
+        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
+        <button class="button white multiple_action_button" type="button" data-form_target="/admin/podcasts/delete" id="delete_multiple_podcasts"><span>delete</span></button>
+        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>refresh rss</span></button>
     </form>
     <div class="paging">
             <?php echo $this->Paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>

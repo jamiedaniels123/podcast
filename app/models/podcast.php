@@ -121,6 +121,10 @@ class Podcast extends AppModel {
                 'message' => 'If entered, you must provide a valid web address.'
             )
         ),
+        'itunesu_justification' => array(
+            'rule' => array('ifConsiderForItunesu'),
+            'message' => 'If you wish this collection to be considered for publication on iTunesU please provide a brief justification.'
+        )
     );
 
     var $belongsTo = array(
@@ -146,7 +150,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.created_when',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted',
             'order' => 'PodcastItems.publication_date DESC'
         ),
         'PublishedPodcastItems' => array(
@@ -154,7 +158,7 @@ class Podcast extends AppModel {
             'foreignKey' => 'podcast_id',
             'fields' => 'PublishedPodcastItems.id, PublishedPodcastItems.podcast_id, PublishedPodcastItems.title, PublishedPodcastItems.summary, PublishedPodcastItems.filename,
                 PublishedPodcastItems.published_flag, PublishedPodcastItems.itunes_flag, PublishedPodcastItems.youtube_flag, PublishedPodcastItems.created, PublishedPodcastItems.created_when,
-                PublishedPodcastItems.author, PublishedPodcastItems.image_filename, PublishedPodcastItems.publication_date',
+                PublishedPodcastItems.author, PublishedPodcastItems.image_filename, PublishedPodcastItems.publication_date, PublishedPodcastItems.explicit',
             'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
         ),
         'PodcastModerators' => array(
@@ -260,6 +264,29 @@ class Podcast extends AppModel {
     }
 
     /*
+     * @name : ifConsiderForItunesu
+     * @description : Custom validation method called from the validation array. If the user wishes to publish
+     * this collection on Itunes they must provide a justification.
+     * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function ifConsiderForItunesu( $check = array() ) {
+
+        if( $this->data['Podcast']['consider_for_itunesu'] == true ) {
+
+            // get the value of the field being passed
+            $value = array_shift( $check );
+
+            if( empty( $value ) )
+                return false;
+        }
+
+        return true;
+    }
+
+
+    /*
      * @name : privateUntilPublishedMedia
      * @description : A podcast must remain private untill it has associated published media. This method is
      * called by the validation array and returns a count of published media.
@@ -295,7 +322,7 @@ class Podcast extends AppModel {
 
     /*
      * @name : __checkExplicitStatus
-     * @description : Called directly before model data is saved, it read through all associated media
+     * @description : Called directly before model data is saved, it reads through all associated media
      * and looks at the value of explicit. Depending upon results will set the appropriate value at
      * podcast level.
      * @updated : 3rd June 2011
@@ -586,7 +613,8 @@ class Podcast extends AppModel {
       * 1) Are they the owner?
       * 2) Are they a moderator?
       * 3) Are they a member?
-      * 4) Are they a member of an associated user group?
+      * 4) Are they a member of an associated moderator group?
+      * 5) Are they a member of an associated user group?	  
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
@@ -711,4 +739,101 @@ class Podcast extends AppModel {
 
         return $conditions;
      }
+
+     /*
+      * @name : waitingApproval
+      * @description : Will build the conditions to find all podcasts that are waiting to be approved.
+      * @updated : 23rd June 2011
+      * @by : Charles Jackson
+      */
+     function waitingApproval() {
+
+        $conditions = array(
+            array('OR' => array(
+                array(
+                    'Podcast.consider_for_itunesu' => true,
+                    'Podcast.intended_itunesu_flag' => 'N',
+                    'Podcast.publish_itunes_u' => 'N'
+                    ),
+                array(
+                    'Podcast.consider_for_youtube' => true,
+                    'Podcast.intended_youtube_flag' => 'N',
+                    'Podcast.publish_youtube' => 'N'
+                    )
+                )
+            ),
+            'Podcast.deleted' => 0
+        );
+
+        return $conditions;
+     }
+
+    /*
+     * @name : unconfirmedChangeOfOwnership
+     * @description : Called when somebody updates a podcast. It checks to see if there has been a change of ownership and if that
+     * change has been confirmed by the user. Returns a bool.
+     * updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function unconfirmedChangeOfOwnership( $data = array() ) {
+
+        if(
+            ( isSet( $data['Podcast']['confirmed'] ) && ( $data['Podcast']['confirmed'] == false ) )
+            &&
+            ( isSet( $data['Podcast']['current_owner_id'] ) && ( $data['Podcast']['current_owner_id'] != $data['Podcast']['owner_id'] ) ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+     * @name : setPreferredNode
+     * @description : We set the value of preferred node to equal the value of the first node choosen when editing a podcast.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function setPreferredNode( $data = array() ) {
+		
+		if( is_array( $data['Nodes'] ) && count( $data['Nodes'] ) ) {
+			
+	        $data['Podcast']['preferred_node'] = $data['Nodes'][0];
+			
+		} else {
+			
+			$data['Podcast']['preferred_node'] = null;
+		}
+        return $data;
+    }
+	
+	/* 
+	 * @name : deleteImages
+	 * @description : Will create an array containing the 3 image names (original, resized and thumbnail) that can be passed
+	 * to the API for deletion. At time of creatiion called from the "delete_image" method in the podcasts controller.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function deleteImages( $podcast = array(), $image_type = null ) {
+
+		if( !isSet( $podcast['Podcast'][$image_type] ) )
+			return false;
+			
+		$media_images = array();
+		
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $podcast['Podcast'][$image_type]
+			);
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $this->getStandardImageName( $podcast['Podcast'][$image_type] )
+			);
+		$media_images[] = array( 
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'filename' => $this->getThumbnailImageName( $podcast['Podcast'][$image_type] )
+			);
+			
+		return $media_images;
+	}
 }

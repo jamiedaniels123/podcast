@@ -14,6 +14,9 @@
         <ul class="dashboard">
             <li><a href="/podcasts"><img src="../img/your-collections.png" alt="Your Podcasts" /></a></li>
             <li><a href="/podcasts/add"><img src="../img/create-new-collections.png" alt="Create New Podcast" /></a></li>
+            <?php if( $this->Permission->isItunesUser() || $this->Permission->isYouTubeUser() ) : ?>
+                <li><a href="/podcasts/approve">APPROVE PODCASTS</a></li>
+            <?php endif; ?>
          </ul>
          <ul class="dashboard">
             <li><a href="/user_groups"><img src="../img/your-usergroups.png" alt="Your User Groups" /></a></li>

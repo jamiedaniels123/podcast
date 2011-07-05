@@ -33,7 +33,6 @@ class PermissionComponent extends Object {
 
         }
 
-
         if( $this->__isModerator( $data['Moderators'] ) )
             return true;
         if( $this->__isMember( $data['Members'] ) )
@@ -183,6 +182,36 @@ class PermissionComponent extends Object {
     }
 
     /*
+     * @name : isItunesUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isItunesUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+            return true;
+
+        return false;
+
+    }
+
+    /*
+     * @name : isYoutubeUser
+     * @description : Returns a bool depending upon whether the user is a youtube user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isYoutubeUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == 'Y' )
+            return true;
+
+        return false;
+
+    }
+
+    /*
      * @name : __inMemberGroup
      * @description : Accepts an array and performs a recursive search through looking for the current user
      * id in the ['id'].
@@ -224,6 +253,17 @@ class PermissionComponent extends Object {
 
         return count( $this->errors );
     }
+	
+    /*
+     * @name : isAdminRouting
+     * @description : Return a bool
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function isAdminRouting() {
+
+		return isSet( $this->params['admin'] );
+    }	
 }
 
 ?>

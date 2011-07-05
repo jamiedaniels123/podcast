@@ -3,9 +3,7 @@
 <head>
     <?php echo $this->Html->charset(); ?>
     <title>
-        <?php __('CakePHP: the rapid development php framework:'); ?>
         <?php echo $title_for_layout; ?>
-
     </title>
     <link rel="stylesheet" type="text/css" media="all" href="/cgi-bin/filechucker.cgi?css" />
     <?php
@@ -18,10 +16,9 @@
         echo $this->Html->meta('rss', '/podcasts/rss.rss');
         echo $this->Html->css('cake.generic');
         echo $this->Html->css('jquery-ui');
-		echo $this->Html->css('podcast-server');
-		echo $this->Html->css('ou-header');
+        echo $this->Html->css('podcast-server');
+        echo $this->Html->css('ou-header');
         echo $scripts_for_layout;
-        
     ?>
     
 </head>
@@ -35,16 +32,18 @@
     
         <div id="header">
             <h1>OU Podcast Server</h1>
-            <p></p>
+            <p>For the management of podcast collections</p>
             <?php if( $this->Session->check('Auth.User.id') ) : ?>
-
             <ol>
                 <li><a href="/users/logout" title="logout link" id="logout_link">Logout <?php echo $this->Session->read('Auth.User.full_name'); ?></a></li>
                 <li><a href="/users/dashboard" title="dashboard link" id="dashboard_link">Dashboard</a></li>
+            </ol>
             <?php endif; ?>
+            <?php echo $this->element('breadcrumb', array('breadcrumbs' => $breadcrumbs ) ); ?>
         </div>
         <div id="content">
             <?php echo $this->Session->flash(); ?>
+            <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
             <?php echo $content_for_layout; ?>
         </div>
@@ -61,3 +60,7 @@
     
 </body>
 </html>
+
+<pre>
+<?php print_r( $this->data ); ?>
+</pre>

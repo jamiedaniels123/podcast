@@ -14,11 +14,11 @@ jQuery(document).ready(function($) {
 
     // The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastIntendedItunesuFlag').length ) {
+    if( jQuery('#PodcastConsiderForItunesu').length ) {
 
         show_hide_itune_elements();
 
-        jQuery('#PodcastIntendedItunesuFlag').live('click',function(e) {
+        jQuery('#PodcastConsiderForItunesu').live('click',function(e) {
 
             show_hide_itune_elements();
         });
@@ -86,8 +86,19 @@ jQuery(document).ready(function($) {
             tickCheckboxes();
             jQuery(this).attr('data-status', 'ticked');
         }
+    });
 
+    // This method will set the action of the form used when selecting multiple
+    // checkboxes and submitting one of the options such as 'delete' or 'generate rss'.
+    jQuery('.multiple_action_button').click( function(e) {
 
+        e.preventDefault();
+
+        if( confirm('Are you sure?') ) {
+            var action = jQuery(this).attr('data-form_target');
+            jQuery(this).parents('form:first').attr('action',action);
+            jQuery(this).closest("form").submit();
+        }
     });
 });
 
@@ -113,7 +124,7 @@ function show_hide_podcast_elements() {
 // for a podcast to have iTune settings but the user does not have iTunes permissions.
 function show_hide_itune_elements() {
 
-    if( jQuery('#PodcastIntendedItunesuFlag').is(':checked') ) {
+    if( jQuery('#PodcastConsiderForItunesu').is(':checked') ) {
 
         jQuery('.itunes_container').show('slow');
 

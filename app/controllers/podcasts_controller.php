@@ -2,62 +2,24 @@
 
 class PodcastsController extends AppController {
 
-    const YES = 'Y';
     var $name = 'Podcasts';
-    var $components = array( 'Image' );
+    var $components = array( 'Upload' );
     private $errors = array();
+    var $html = null; // Used to store errors created by the images component.
+    
+    const ITUNES = 'ITUNES';
+    const YOUTUBE = 'YOUTUBE';
 
     var $paginate = array( 'limit' => 20, 'page' => 1, 'order' => 'Podcast.id DESC' );
 
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
-     * is rendered. We are applying some global actions here. Not necessarily the most efficient but very simple.
+     * is rendered. 
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
     function beforeRender() {
-
-        // Get all the nodes
-        $this->Node = ClassRegistry::init('Node');
-        $this->nodes = $this->Node->find('list', array( 'order' => 'Node.title' ) );
-        $this->nodes = $this->Node->removeDuplicates( $this->nodes, $this->data, 'Nodes' );
-        $this->set('nodes', $this->nodes );
-
-        // Get all the categories
-        $this->Category = ClassRegistry::init('Category');
-        $this->categories = $this->Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
-        $this->categories = $this->Category->removeDuplicates( $this->categories, $this->data, 'Categories' );
-        $this->set('categories', $this->categories );
-
-        // Get all the itunes categories
-        $this->ItunesuCategory = ClassRegistry::init('ItunesuCategory');
-        $this->itunesu_categories = $this->ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
-        $this->itunesu_categories = $this->ItunesuCategory->removeDuplicates( $this->itunesu_categories, $this->data, 'iTuneCategories' );
-        $this->set('itunes_categories', $this->itunesu_categories );
-
-        // Get all the languages
-        $this->Language = ClassRegistry::init('Language');
-        $this->set('languages', $this->Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
-
-        // Get all the user groups
-        $this->UserGroup = ClassRegistry::init('UserGroup');
-        $this->user_groups = $this->UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'MemberGroups' );
-        $this->user_groups = $this->UserGroup->removeDuplicates( $this->user_groups, $this->data, 'ModeratorGroups' );
-        $this->set('user_groups', $this->user_groups );
-
-        // Get all the user groups
-        $this->User = ClassRegistry::init( 'User' );
-        $this->users = $this->User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
-        $this->set('users', $this->users );
-
-        $this->set('all_users', $this->User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
-
-        // Set the possible values of explicit
-        $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
 
         // If there are any errors assign them to the view
         if( count( $this->errors ) )
@@ -100,30 +62,17 @@ class PodcastsController extends AppController {
 
         if ( !empty( $this->data ) ) {
 
-            // Save this->data into a local array called data so we may unset the attachment array elements before
-            // validating else it will fail because they contain arrays.
-            $data = array();
-            $data = $this->data;
-
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = self::YES;
-
-            $this->data = $this->Podcast->unsetAttachments( $this->data );
-
-            // Create the PodcastModerators that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createPodcastModerators( $this->data );
-
+            $this->data['Podcast']['private'] = YES;
+			
             $this->Podcast->set( $this->data );
 
             if( $this->Podcast->saveAll() ) {
 
-                // Now copy back the original including array elements plus the newly inserted Podcast ID and
-                // save again with attachment elements.
-                $this->data = $data;
-                $this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
-                $this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
-                $this->__update();
+				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
+	            $this->Podcast->save( $this->data );
+				
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
 
             } else {
@@ -157,7 +106,28 @@ class PodcastsController extends AppController {
             $this->redirect( $this->referer() );
         }
     }
-    
+
+    /*
+     * @name : justification
+     * @desscription : Enables an itunes or youtube user to view details of a collection and the associated justifiication
+     * for inclusion on youtube or itunesu.
+     * @name : Charles Jackson
+     * @by : 22nd June 2011
+     */
+    function justification( $id = null ) {
+
+        $this->Podcast->recursive = 2;
+        // They are loading the page, get the data using the $id passed as a parameter.
+        $this->data = $this->Podcast->findById( $id );
+
+        // We did not find the podcast, error and redirect.
+        if( empty( $this->data ) || ( $this->Permission->isItunesUser() == false && $this->Permission->isYoutubeUser() == false ) ) {
+
+            $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->redirect( $this->referer() );
+        }
+    }
+
     /*
      * @name : edit
      * @desscription : Displays a form that enables peeps to edit an existing row on the podcasts table.
@@ -170,8 +140,10 @@ class PodcastsController extends AppController {
         
         if ( !empty( $this->data ) ) {
 
-            // Save this->data into a local array called data so we may unset the attachment array elements before
-            // validating else it will fail because they contain arrays.
+            $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
+            
+            // Save this->data into a local array so we can rebuild the form if any of the validation fails and
+            // we are required to rollback the database plus we can save the data with attachments prior to resaving with attachments.
             $data = array();
             $data = $this->data;
 
@@ -183,49 +155,70 @@ class PodcastsController extends AppController {
             $this->data = $this->Podcast->createPodcastModerators( $this->data );
             // Create the ModeratorUserGroups that are saved using a hasMany relationship
             $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
+            // Set the preferred node to equal the first node chosen
+            $this->data = $this->Podcast->setPreferredNode( $this->data );
 
             $this->Podcast->set( $this->data );
 
-            if( $this->Podcast->validates() ) {
+            if( $this->Podcast->saveAll() ) {
 
-                // OK, it validates but have they confirmed change of ownership.
-                if( ( isSet( $this->data['Podcast']['confirmed'] ) && ( $this->data['Podcast']['confirmed'] == false ) ) && ( isSet( $this->data['Podcast']['current_owner_id'] ) && ( $this->data['Podcast']['current_owner_id'] != $this->data['Podcast']['owner_id'] ) ) ) {
+                // OK, it validates but have they changed/confirmed ownership.
+                if( $this->Podcast->unconfirmedChangeOfOwnership( $this->data ) ) {
 
-                    $this->data = $this->Podcast->rebuild( $this->data );
+                    $this->Podcast->rollback(); // We rollback the data because they still need to confirm this update
+                    $this->data = $this->Podcast->rebuild( $data );
                     $this->data['Podcast']['confirmed'] = true;
                     $this->Session->setFlash('You are changing ownership of this podcast. Submit again to confirm the change.', 'default', array( 'class' => 'alert' ) );
 
                 } else {
 
-                    $this->Podcast->saveAll();
-
                     // Now copy back the original including array elements and
                     // save again with attachment elements.
                     $this->data = $data;
+                    if ( $this->__updateImages() == false ) {
 
-                    $this->__update();
-
-                    // Will only be true if they have attempted to change ownership at some point.
-                    if( isSet( $this->data['Podcast']['confirmed'] ) && $this->data['Podcast']['confirmed']  == true ) {
-
-                        $this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
-                    }
-
-                    // They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
-                    if( $this->Permission->toView( $this->data ) ) {
-
-                        $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+                        $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
+                        $this->data = $this->Podcast->rebuild( $data );
+                        $this->Podcast->rollback();
 
                     } else {
+
+                        // Generate the RSS Feeds.
+                        if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
                         
-                        $this->redirect( array( 'action' => 'index') );
+                            $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem continues please alert an administrator', 'default', array( 'class' => 'error' ) );
+                            $this->data = $this->Podcast->rebuild( $data );
+                            $this->Podcast->rollback();
+
+                        } else {
+							
+                            $this->Podcast->commit(); // Everything hunky dory, commit the changes.
+                            $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+
+							$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
+                            $this->data = $this->Podcast->findById( $this->data['Podcast']['id'] );
+
+                            // They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
+                            if( $this->Permission->toView( $this->data ) ) {
+
+                                $this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+								exit;
+
+                            } else {
+
+                                $this->redirect( array( 'action' => 'index') );
+								exit;
+                            }
+                        }
                     }
                 }
 
             } else {
 
+                $this->Podcast->rollback();
+                
                 // Rebuild the dynamic select boxes according to the users current selections else they will merely display ID numbers.
-                $this->data = $this->Podcast->rebuild( $this->data );
+                $this->data = $this->Podcast->rebuild( $data );
                 $this->errors = $this->Podcast->invalidFields( $this->data );
 
                 // We explicitly set confirmed to false incase they have confirmed/failed validation in a single post (silly billy).
@@ -245,16 +238,95 @@ class PodcastsController extends AppController {
                 $this->redirect( $this->referer() );
 
             } else {
+                
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
             }
         }
+		
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastFormOptions();
+    }
+
+    /*
+     * @name : itunes
+     * @desscription : Displays a form that enables peeps to edit itunes details of a collection
+     * @name : Charles Jackson
+     * @by : 22nd June 2011
+     */
+    function itunes( $id = null ) {
+
+        $this->Podcast->recursive = 2;
+
+        if ( !empty( $this->data ) ) {
+
+            $this->Podcast->begin();
+
+            // Save this->data into a local array so we can rebuild the form if any of the validation fails and
+            // we are required to rollback the database plus we can save the data with attachments prior to resaving with attachments.
+            $data = array();
+            $data = $this->data;
+
+            $this->data = $this->Podcast->unsetAttachments( $this->data );
+			
+            $this->Podcast->set( $this->data );
+
+            if( $this->Podcast->saveAll() && $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
+
+                    // Now copy back the original including array elements and
+                    // save again with attachment elements.
+                    $this->data = $data;
+                    if ( $this->__updateImages() == false ) {
+
+                        $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
+                        $this->data = $this->Podcast->rebuild( $data );
+                        $this->Podcast->rollback();
+
+                    } else {
+
+                        // Generate the RSS Feeds.
+                        if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
+                        
+                            $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem continues please alert an administrator', 'default', array( 'class' => 'error' ) );
+                            $this->data = $this->Podcast->rebuild( $data );
+                            $this->Podcast->rollback();
+
+                        } else {
+
+                            $this->Podcast->commit(); // Everything hunky dory, commit the changes.
+                            $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+							$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+						}
+					}
+
+            } else {
+
+                $this->Podcast->rollback();
+                $this->data = $this->Podcast->rebuild( $this->data );
+                $this->errors = $this->Podcast->invalidFields( $this->data );
+                $this->Session->setFlash('Could not update your collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+            }
+
+        } else {
+
+            $this->data = $this->Podcast->findById( $id );
+
+            // We did not find the podcast, redirect.
+            if( empty( $this->data ) || $this->Permission->isItunesUser() == false ) {
+
+                $this->Session->setFlash('Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
+                $this->redirect( $this->referer() );
+            }
+        }
+
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastFormOptions();
     }
 
     /*
      * @name : delete
-     * @desscription : Enables a user to perform a hard delete on a podcast and the associated media if they are the current owner.
+     * @desscription : Enables a user to perform a soft delete on a podcast and the associated media if they are the current owner.
      * @name : Charles Jackson
      * @by : 19th May 2011
      */
@@ -267,79 +339,131 @@ class PodcastsController extends AppController {
         // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
         // was posted.
         if( $id )
-            $this->data['Podcast']['Checkbox'][$id] = 'On';
+            $this->data['Podcast']['Checkbox'][$id] = true;
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $this->podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
+            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
             $this->Podcast->begin();
 
             // Delete the podcast
-            $this->podcast['Podcast']['deleted'] = true;
-            $this->Podcast->set( $this->podcast );
-            $this->Podcast->save();
+            $podcast['Podcast']['deleted'] = true;
+            $Podcast->set( $podcast ); // Hydrate the object
+            $Podcast->save();
 
-            if( $this->Folder->deleteByHtaccess( $this->podcast ) ) {
-            
+            // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
+            if( $this->Folder->createHtaccess( $podcast ) && $this->Api->transferFileMediaServer( 
+				array( 
+					'source_path' => $podcast['Podcast']['custom_id'].'/',
+					'target_path' => $podcast['Podcast']['custom_id'].'/', 
+					'filename' => '.htaccess' 
+					)
+				) ) {						
+				
                 $this->Podcast->commit();
                 $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
             } else {
 
                 $this->Podcast->rollback();
-                $this->Session->setFlash('We could not delete all associated media. Please alert an administrator.', 'default', array( 'class' => 'error' ) );
+                $this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
+                break; // Break out of the loop
             }
         }
         
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
+   /*
+     * @name : approve
+     * @desscription : Displays a paginated list of all podcasts currently on the system that are waiting to be approved
+     * for either itunes or youtube
+     * @name : Charles Jackson
+     * @by : 20th June 2011
+     */
+    function approve() {
+
+        unset( $this->Podcast->hasOne['UserPodcast'] );
+        
+        $conditions = $this->Podcast->waitingApproval();
+        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+
+    }
 
     /*
-     * @name : __updated
-     * @description : Internal method called by the add and edit methods, both user and administrator.
-     * @updated : 9th May 2011
+     * @name : approval
+     * @description : Enables an approver to update the status flags for itunes and youtube to 'Y', in essence
+     * approving them.
+     * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function __update() {
-        
-        // Try to upload the associated images. If successful the upload component will return the name of the uploaded file
-        // else it will return false.
-        $this->data['Podcast']['image'] = $this->Image->uploadPodcastImage( $this->data, 'image' );
-        $this->data['Podcast']['image_logoless'] = $this->Image->uploadLogolessPodcastImage( $this->data, 'image_logoless' );
-        $this->data['Podcast']['image_wide'] = $this->Image->uploadWidePodcastImage( $this->data, 'image_wide' );
+    function approval( $media_channel, $id ) {
 
-        // Check to see if the upload component created any errors.
-        if( $this->Image->hasErrors() ) {
+        $this->Podcast->recursive = -1;
+        $this->data = $this->Podcast->findById( $id );
 
-            // Ugly, if any errors are found we create formatted HTML unordered list and append to the flash message. We
-            // cannot append to the $this->errors array because of the immediate redirect ( it will be lost ).
-            // @todo - revisit this solution.
-            $this->html = 'Your podcast container has been successfully updated but we were unable to upload all your images.';
-            $this->html .= '<ul>';
+        if( !empty( $this->data ) ) {
 
-            foreach( $this->Image->getErrors()  as $error ) {
+            if( strtoupper( $media_channel ) == self::ITUNES )
+                $this->data['Podcast']['intended_itunesu_flag'] = YES;
+            
+            if( strtoupper( $media_channel ) == self::YOUTUBE )
+                $this->data['Podcast']['intended_youtube_flag'] = YES;
 
-                $this->html .= '<li>'.$error.'</li>';
-            }
-
-            $this->html .= '</ul>';
-
-            $this->Session->setFlash($this->html, 'default', array( 'class' => 'alert' ) );
+            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+            
+            $this->Podcast->save( $this->data );
+            $this->Session->setFlash('The collection has been approved.', 'default', array( 'class' => 'success' ) );
 
         } else {
 
-            // Resave the object so we capture the names of the uploaded images.
-            $this->Podcast->save( $this->data['Podcast'] );
-            $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+            $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
+
         }
+
+        $this->redirect( '/podcasts/approve' );
+    }
+
+    /*
+     * @name : rejection
+     * @description : Enables a user to update the 'intended' status flags for itunes and youtube to 'N', in essence
+     * rejecting them.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function rejection( $media_channel, $id ) {
+
+        $this->Podcast->recursive = -1;
+        $this->data = $this->Podcast->findById( $id );
+
+        if( !empty( $this->data ) ) {
+
+            if( strtoupper( $media_channel ) == self::ITUNES ) {
+                $this->data['Podcast']['intended_itunesu_flag'] = NO;
+                $this->data['Podcast']['consider_for_itunesu'] = false;
+            }
+            
+            if( strtoupper( $media_channel ) == self::YOUTUBE ) {
+                $this->data['Podcast']['intended_youtube_flag'] = NO;
+                $this->data['Podcast']['consider_for_youtube'] = false;
+            }
+
+            $this->Podcast->save( $this->data );
+            $this->Session->setFlash('The collection has been rejected.', 'default', array( 'class' => 'success' ) );
+
+        } else {
+
+            $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
+        }
+
+        $this->redirect( '/podcasts/approve' );
     }
 
     /*
      * ADMIN FUNCTIONALITY
      * Below this line are the administration functionality that can only be reach if the flag 'administrator' is set to true on the
-     * users profile. The URL for all admin routes is "admin/:controller:/:action:/*
+     * users profile (see app_controller). The URL for all admin routes is "admin/:controller:/:action:/*
      */
     
     /*
@@ -351,6 +475,7 @@ class PodcastsController extends AppController {
     function admin_index() {
 
         unset( $this->Podcast->hasOne['UserPodcast'] );
+        
         // Have they posted the filter form?
         if( isSet( $this->data['Podcast']['filter'] ) ) {
 
@@ -370,7 +495,7 @@ class PodcastsController extends AppController {
     /*
      * @name : admin_add
      * @description : Displays a form that enables administrators to add a row to the podcasts table. If the form is
-     * populated it will validate the data and save if possible. It will also attempt to upload image attachments.
+     * populated it will validate the data and save if possible.
      * @name : Charles Jackson
      * @by : 5th May 2011
      */
@@ -378,34 +503,17 @@ class PodcastsController extends AppController {
 
         if ( !empty( $this->data ) ) {
 
-            // Save this->data into a local array called data so we may unset the attachment array elements before
-            // validating else it will fail because they contain arrays.
-            $data = array();
-            $data = $this->data;
-
             // Assign the podcast to the current user.
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = self::YES;
+            $this->data['Podcast']['private'] = YES; // Default to private.
 
-            $this->data = $this->Podcast->unsetAttachments( $this->data );
+            $this->Podcast->set( $this->data ); // Hydrate the object.
 
-            // Create the PodcastModerators that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createPodcastModerators( $this->data );
-            // Create the ModeratorUserGroups that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
+            if( $this->Podcast->save() ) { 
 
-
-
-            $this->Podcast->set( $this->data );
-
-            if( $this->Podcast->saveAll() ) {
+				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
+	            $this->Podcast->save( $this->data );
                 
-                // Now copy back the original including array elements plus the newly inserted Podcast ID and
-                // save again with attachment elements.
-                $this->data = $data;
-                $this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
-                
-                $this->__update();
                 $this->redirect( array( 'action' => 'admin_view', $this->Podcast->getLastInsertId() ) );
 
             } else {
@@ -421,12 +529,13 @@ class PodcastsController extends AppController {
 
     /*
      * @name : admin_view
-     * @desscription : Enables an adminitratorto view details of an individual podcast.
+     * @desscription : Enables an adminitrator to view details of an individual podcast.
      * @name : Charles Jackson
      * @by : 20th May 2011
      */
     function admin_view( $id = null ) {
 
+		$this->Podcast->recursive = 2;
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->Podcast->findById( $id );
 
@@ -436,6 +545,7 @@ class PodcastsController extends AppController {
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
         }
+
     }
 
     /*
@@ -446,8 +556,12 @@ class PodcastsController extends AppController {
      */
     function admin_edit( $id = null ) {
 
+		$this->Podcast->recursive = 2;
+		
         if ( !empty( $this->data ) ) {
 
+            $this->Podcast->begin();
+            
             // Save this->data into a local array called data so we may unset the attachment array elements before
             // validating else it will fail because they contain arrays.
             $data = array();
@@ -462,20 +576,44 @@ class PodcastsController extends AppController {
             $this->data = $this->Podcast->createPodcastModerators( $this->data );
             // Create the ModeratorUserGroups that are saved using a hasMany relationship
             $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
+            // Set the preferred node to equal the first node chosen
+            $this->data = $this->Podcast->setPreferredNode( $this->data );
 
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->data ); // Hydrate the object
 
-            if(  $this->Podcast->saveAll()  ) {
+            if(  $this->Podcast->saveAll()  ) { // Using "saveAll" so we save associated data
 
                 // Now copy back the original including array elements and
                 // save again with attachment elements.
                 $this->data = $data;
 
-                $this->__update();
-                $this->redirect( array( 'action' => 'admin_view', $this->data['Podcast']['id'] ) );
+                if ( $this->__updateImages() == false ) {
+
+                    $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
+                    $this->data = $this->Podcast->rebuild( $data );
+                    $this->Podcast->rollback();
+
+                } else {
+
+                    // Generate the RSS Feeds.
+                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
+
+                        $this->Session->setFlash('We were unable to generate the RSS feeds. If the problem continues please alert an administrator', 'default', array( 'class' => 'error' ) );
+                        $this->data = $this->Podcast->rebuild( $data );
+                        $this->Podcast->rollback();
+
+                    } else {
+
+                        $this->Podcast->commit(); // Everything hunky dory, commit the changes.
+                        $this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
+						$this->redirect( array( 'admin' => true, 'action' => 'view', $this->data['Podcast']['id'] ) );						
+                    }
+                }
 
             } else {
 
+                $this->Podcast->rollback();
+                
                 // Rebuild the dynamic select boxes according to the users current selections else they will merely display ID numbers.
                 $this->data = $this->Podcast->rebuild( $this->data );
 
@@ -494,6 +632,9 @@ class PodcastsController extends AppController {
                 $this->redirect( $this->referer() );
             }
         }
+
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastFormOptions();
     }
  
     /*
@@ -508,27 +649,39 @@ class PodcastsController extends AppController {
         $this->recursive = -1;
 
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
-        // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
-        // was posted.
+        // when somebody is deleting an individual podcast we pass into an array and loop through as if the data
+        // was posted via a form.
         if( $id )
-            $this->data['Podcast']['Checkbox'][$id] = 'On';
+            $this->data['Podcast']['Checkbox'][$id] = true;
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $this->podcast = $this->Podcast->findById( $key );
+            $podcast = $this->Podcast->findById( $key );
         
             // If we did no find the podcast that redirect to the referer.
-            if( empty( $this->podcast ) == false ) {
+            if( empty( $podcast ) == false ) {
 
-                // Delete the podcast
-                $this->Podcast->delete( $this->podcast['Podcast']['id'] );
-                // @TODO : Remove any associated media.
 
-                $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+				// Hard delete this podcast by deleting the whole folder structure.
+				if( $this->Api->deleteFolderOnMediaServer( array( 
+					array( 
+						'source_path' => $podcast['Podcast']['custom_id'].'/',
+						)
+					)
+				) ) {
+
+                    // Delete the podcast
+                    $this->Podcast->delete( $podcast['Podcast']['id'] );
+                    $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+
+                } else {
+
+                     $this->Session->setFlash('We were unable to delete the collection from the media server. Please try again.', 'default', array( 'class' => 'error' ) );
+                }
             }
         }
         
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
     /*
@@ -541,7 +694,7 @@ class PodcastsController extends AppController {
     function admin_restore( $id = null ) {
 
         $this->autoRender = false;
-        $this->podcast = $this->Podcast->findById( $id );
+        $this->data = $this->Podcast->findById( $id );
 
         if( empty( $this->data ) ) {
 
@@ -549,15 +702,197 @@ class PodcastsController extends AppController {
 
         } else {
 
-            $this->data['Podcast']['deleted'] = 0;
-            $this->Podcast->set( $this->data );
-            $this->Podcast->save();
+			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
+            if( $this->Api->deleteFileOnMediaServer( array( 
+				array( 
+					'source_path' => $this->data['Podcast']['custom_id'].'/',
+					'filename' => '.htaccess'
+					)
+				)
+			) ) {
+                
+                $this->data['Podcast']['deleted'] = false;
+                $this->Podcast->set( $this->data ); // Hydrate the object
+                $this->Podcast->save();
+                
+                $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
-            //@TODO : restore the data.
-            $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
+            } else {
+
+                $this->Session->setFlash('We were unable to restore the collection. Please try again.', 'default', array( 'class' => 'error' ) );
+            }
 
         }
 
         $this->redirect( $this->referer() );
+    }
+	
+	/*
+	 * @name : delete_image
+	 * @description : Enables peeps to delete a podcast image from the media server.
+	 * @updated : 28th June 2011
+	 * @by : Charles Jackson
+	 */
+	function delete_image( $image_type, $id ) {
+		
+		$this->data = $this->Podcast->findById( $id );
+		
+		if( empty( $this->data ) || empty( $this->data['Podcast'][$image_type] ) ) {
+			
+			$this->Session->setFlash('We were unable to identify the image you are trying to delete. Please try again.', 'default', array( 'class' => 'error' ) );
+			
+		} else { 
+		
+			// Now we must delete the images from the media server.
+			if( $this->Api->deleteFileOnMediaServer( $this->Podcast->deleteImages( $this->data['Podcast'], $image_type ) ) ) {
+				
+				// We have successfully scheduled the image for deletion, now update the row on the podcasts table.
+				$this->data['Podcast'][$image_type] = null;
+				$this->Podcast->set( $this->data );
+				$this->Podcast->save();
+				$this->Session->setFlash('Podcast image successfully deleted.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+
+				$this->Session->setFlash('We were unable to schedule deletion of the file with the media server. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				
+			}
+		}
+			
+		$this->redirect( $this->referer() );		
+	}
+
+    // PRIVATE METHODS
+    // Below this line are methods that can only be called by another controller method "__". They exploit various components 
+	// that are more elegantly accessed via the controller hence I have left them here. Not a perfect world!
+
+    /*
+     * @name : __updateImages
+     * @description : Internal method called by the add and edit methods, both user and administrator.
+     * @updated : 9th May 2011
+     * @by : Charles Jackson
+     */
+    function __updateImages() {
+
+        // Try to upload the associated images and transfer to the media server. If successful the upload component will return the name
+        // of the uploaded file else it will return false.
+        if( $this->Upload->podcastImage( $this->data, 'image' ) ) {
+			
+			$this->data['Podcast']['image'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image'] );
+		}
+
+        if( $this->Upload->logolessPodcastImage( $this->data, 'image_logoless' ) ) {
+			
+			$this->data['Podcast']['image_logoless'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image_logoless'] );
+		}
+		
+        if( $this->Upload->widePodcastImage( $this->data, 'image_wide' ) ) {
+			
+			$this->data['Podcast']['image_wide'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['image_wide'] );
+		}
+
+        // Check to see if the upload component created any errors.
+        if( $this->Upload->hasErrors() ) {
+			
+            $this->errors = $this->Upload->getErrors();
+            return false;
+
+        } else {
+
+            // Resave the object so we capture the names of the uploaded images.
+            $this->Podcast->save( $this->data['Podcast'] );
+            return true;
+        }
+    }
+
+    /*
+     * @name : __generateRSSFeeds
+     * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function __generateRSSFeeds( $id = null ) {
+
+        $podcast = null;
+
+        $this->Podcast->recursive = -1; // Minimise the amount of data we retrieve.
+        $podcast = $this->Podcast->findById( $id );
+
+        if( empty( $podcast ) )
+            return false;
+
+        if( $podcast['Podcast']['podcast_flag'] == true ) {
+
+            // Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+            return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
+        }
+
+        return true; // No RSS Feed needed so return a default of true to signify everything OK.
+    }
+
+    /*
+     * @name : __setPodcastFormOptions
+     * @description : Called prior to various methods when the user can update a podcast. This method will sanatize data prior to being
+     * shown on a form such as retrieving all users on the system as a list for possible membership of a podcast then removing any people
+     * that are already members of the aforementioned podcast.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    function __setPodcastFormOptions() {
+
+        // Get all the nodes
+        $Node = ClassRegistry::init('Node');
+        $nodes = $Node->find('list', array( 'order' => 'Node.title' ) );
+        $nodes = $Node->removeDuplicates( $nodes, $this->data, 'Nodes' );
+        $this->set('nodes', $nodes );
+
+        // Get all the categories
+        $Category = ClassRegistry::init('Category');
+        $categories = $Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
+        $categories = $Category->removeDuplicates( $categories, $this->data, 'Categories' );
+        $this->set('categories', $categories );
+
+        // Get all the itunes categories
+        $ItunesuCategory = ClassRegistry::init('ItunesuCategory');
+        $itunesu_categories = $ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
+        $itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
+        $this->set('itunes_categories', $itunesu_categories );
+
+        // Get all the languages
+        $Language = ClassRegistry::init('Language');
+        $this->set('languages', $Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
+
+        // Get all the user groups
+        $UserGroup = ClassRegistry::init('UserGroup');
+        $user_groups = $UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
+        $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'MemberGroups' );
+
+        $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'ModeratorGroups' );
+
+        $this->set('user_groups', $user_groups );
+
+        // Get all the user groups
+        $User = ClassRegistry::init( 'User' );
+        $users = $User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
+        $users = $User->removeDuplicates( $users, $this->data, 'Members' );
+        $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );
+        $this->set('users', $users );
+
+        $this->set('all_users', $User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
+
+        // Set the possible values of explicit
+        $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
     }
 }

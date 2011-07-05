@@ -292,6 +292,7 @@ form div {
 	margin-bottom: 0em;
 	padding: 0 .5em;
 	vertical-align:middle;
+	clear:left;
 }
 form .input {
 	color: #1a1a1a;
@@ -681,4 +682,21 @@ form#theuploadform input[type="button"] {
 
 form#theuploadform input[type="file"] {
     width: 300px;
+}
+
+
+ul#breadcrumb li {
+
+	float: left;
+	margin-right: 10px;
+        list-style-type: none;
+
+
+}
+img.icon {
+	width: 30px;
+}
+
+tr.deleted td {
+	background-color: #f4f4f4!important;	
 }

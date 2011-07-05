@@ -1,5 +1,4 @@
 <?php
-
 class AppModel extends Model {
 
     /*
@@ -24,7 +23,6 @@ class AppModel extends Model {
 
                 $list[] = $key;
             }
-
             foreach( $subset_array[$data_key] as $row ) {
 
                 $subset_list[] = $row['id'];
@@ -49,18 +47,18 @@ class AppModel extends Model {
 
     /*
      * @name : unsetAttachments
-     * @description : This unique method will unset the array element from the file uploads before saving then return the
+     * @description : This unique method will unset the array elements from the file uploads before saving then return the
      * last_insert_id that 'maybe' used as part of the folder structure when saving associated assets.
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
     function unsetAttachments( $data ) {
 
-        foreach( $data[$this->name] as $key => $element ) {
+		$possible_attachments = array('image','image_logoless','image_wide','transcript','image_filename');
+		
+        foreach( $possible_attachments as $attachment ) {
 
-            // If it's an upload identified by an array and the existence of the tmp_name element then unset it.
-            if( is_array( $element ) && isSet( $element['tmp_name'] ) )
-                unset( $data[$this->name][$key] );
+	        unset( $data[$this->name][$attachment] );
         }
 
         return $data;
@@ -132,26 +130,26 @@ class AppModel extends Model {
 
         $ext = substr( strtolower( strrchr( $filename,'.' ) ), 1 ); # filename extension without the dot
 
-        return ( $ext = 'pdf' );
+        return ( $ext == 'pdf' );
     }
 
     function getExtension( $filename = null ) {
 
-        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
+        return substr( $filename, ( strrpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
     function getStandardImageName( $image_filename = null ) {
 
-        $standard_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
-        $standard_filename += '_std.'.$this->getExtension( $image_filename );
+        $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
+        $standard_filename += RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
 
         return $standard_filename;
     }
 
     function getThumbnailImageName( $image_filename = null ) {
 
-        $thumbnail_filename = substr( $image_filename, 0, strpos( $image_filename, '.' ) );
-        $thumbnail_filename += '_thm.'.$this->getExtension( $image_filename );
+        $thumbnail_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
+        $thumbnail_filename += THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
 
         return $thumbnail_filename;
     }

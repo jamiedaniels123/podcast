@@ -18,6 +18,9 @@
                 <li style="list-style:none;"><a href="/admin/podcasts" class="button white"><img src="/img/admin-collection.png" alt="Information" class="icon" />Podcast Administration</a></li>
                 <li style="list-style:none;"><a href="/admin/podcasts/add" class="button white"><img src="/img/admin-collection.png" alt="Information" class="icon" />Create New Podcast</a></li>
             </ul>
+            <ul>
+                <li><a href="/admin/feeds/preview">RSS Preview Tool</a></li>
+            </ul>
         </div>
     </div>
 </fieldset>

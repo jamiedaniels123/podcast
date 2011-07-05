@@ -13,7 +13,7 @@ class UsersController extends AppController {
      */
     function beforeFilter() {
         
-        $this->Auth->allow( 'register', 'login', 'home' );
+        $this->Auth->allow( 'register', 'login', 'home', 'apply' );
         parent::beforeFilter();
     }
 
@@ -45,15 +45,24 @@ class UsersController extends AppController {
         // If the user is logged into SAMS but not currently logged into the application attempt
         // to find them  using the apache environment varibles else redirect to the registration form.
         if( $this->Session->check('Auth.User.id') == false ) {
-
+			
             $this->User->recursive = -1;
             $this->data = $this->User->findByOucu( SAMS_OUCU_ID );
 
             // They do not appear to be registered on the application, redirect them to the register action
             if( empty( $this->data ) ) {
 
-                $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'register' ) );
-                exit;
+                if( REGISTER_BY_OUCU ) {
+                    
+                    $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'register' ) );
+                    exit;
+
+                } else {
+
+                    $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'apply' ) );
+                    exit;
+
+                }
 
             // We found the user but the terms and conditions have been updated since they last logged in.
             // Redirect them to the register action.
@@ -107,7 +116,7 @@ class UsersController extends AppController {
     function logout() {
 
         $this->Session->destroy('Auth');
-        $this->redirect( array( 'url' => $_SESSION['REDIRECT_HTTP_SAMS_LOGOFF'] ) );
+        $this->redirect( SAMS_LOGOUT_PAGE );
     }
 
     /*
@@ -142,9 +151,6 @@ class UsersController extends AppController {
 
                     $this->User->save($this->data);
 
-                    // Create their basic profile information
-                    //$this->emailTemplates->__sendNewUserMail( $this->data );
-
                     $this->redirect( array( 'action' => 'login' ) );
                     exit;
 
@@ -160,6 +166,40 @@ class UsersController extends AppController {
         }
     }
 
+    /*
+     * @name : apply
+     * @desscription : If we have no terms and conditions and automatic registration via an OU OUCU is not available
+     * users are redirected to this screen and asked to complete a form that will be sent to all administrators.
+     * @name : Charles Jackson
+     * @by : 4th May 2011
+     */
+    function apply() {
+
+        if( !empty( $this->data ) ) {
+
+            $user = $this->User->findByOucu( $this->data['User']['oucu'] );
+
+            if( empty( $user ) ) {
+
+                $this->data['User']['status'] = false; // Set their status to inactive so they are not able to login.
+
+                if( $this->User->save( $this->data ) ) {
+
+                    $this->emailTemplates->__sendNewRegistrationEmail( $this->data, $this->User->getAdministrators() );
+                    $this->Session->setFlash( 'Your application has been sent. Thanks for the interest.', 'default', array( 'class' => 'success' ) );
+
+                } else {
+
+                    $this->Session->setFlash( 'There has been a problem with your application. Please complete all fields.', 'default', array( 'class' => 'error' ) );
+                }
+
+            } else {
+
+                $this->Session->setFlash( 'You have already applied for access. We will be in contact shortly.', 'default', array( 'class' => 'error' ) );
+            }
+        }
+    }
+    
     /*
      * ADMIN FUNCTIONALITY
      * Below this line are the administration functionality that can only be reach if the flag 'administrator' is set to true on the
@@ -274,6 +314,36 @@ class UsersController extends AppController {
 
         $this->Session->setFlash( 'Terms and conditions have been reset. Users willl be forced to agree next time they login.', 'default', array( 'class' => 'success' ) );
         $this->redirect( $this->referer() );
+    }
+
+    /*
+     * @name : admin_approve
+     * @description : Enables an administrator to approve a new user registration.
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function admin_approve( $oucu = null ) {
+
+        $this->data = $this->User->findByOucu( $oucu, array(
+            'conditions' => array(
+                'User.status' => 0
+               )
+            )
+        );
+
+        if( !empty( $this->data ) ) {
+
+            $this->data['User']['status'] = 1;
+            $this->User->save( $this->data );
+            $this->emailTemplates->__sendRegistrationApprovedEmail( $this->data );
+            $this->Session->setFlash( 'The user has been approved and an email sent out.', 'default', array( 'class' => 'success' ) );
+
+        } else {
+
+            $this->Session->setFlash( 'We could not find the user you were looking for. Perhaps that have already been approved?', 'default', array( 'class' => 'error' ) );
+        }
+
+        $this->redirect( '/dashboard' );
     }
 
 }

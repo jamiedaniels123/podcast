@@ -49,13 +49,10 @@
  *
  */
 
-DEFINE('FEEDS_LOCATION', 'feeds/');
-DEFINE('THUMBNAIL_EXTENSION', '_thm');
-DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
-DEFINE('NO_IMAGE_AVAILABLE', '/img/noImageAvailable.jpg');
-DEFINE('CORRECT_IMAGE', '/correct.gif');
-DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
+DEFINE('APPLICATION_URL', 'http://'.$_SERVER['SERVER_NAME']);
+DEFINE('SECURE_APPLICATION_URL', 'https://'.$_SERVER['SERVER_NAME']);
 
+// Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
     if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
@@ -64,20 +61,23 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
         DEFINE('SAMS_NAME', 'Charles Jackson' );
 
-    } elseif( isSet( $_SERVER['REDIRECT_HTTP_SAMS_USER'] ) ) {
+    } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
 
-        DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
-        DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+        DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
+        DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
+		
+		if( !empty( $_COOKIE['HS7BDF'] ) ) {
+			
+        	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+			
+		} else {
+			
+			DEFINE('SAMS_NAME','Unknown User');
+		}
 
-    } elseif( isSet( $_SERVER['HTTP_SAMS_USER'] ) ) {
-
-        DEFINE('SAMS_EMAIL', $_SERVER['REDIRECT_HTTP_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['REDIRECT_HTTP_SAMS_USER'] );
-        DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
     }
 }
-
+DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
 DEFINE('PUBLIC_ITUNEU_PODCAST', 1 );
 DEFINE('PUBLISHED_ITUNEU_PODCAST', 2 );
 DEFINE('UNPUBLISHED_ITUNEU_PODCAST', 3 );
@@ -86,14 +86,43 @@ DEFINE('PRIVATE_ITUNEU_PODCAST', 5 );
 DEFINE('DELETED_PODCAST', 6 );
 
 DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
-DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
-DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
-DEFINE('FEEDS_FOLDER', 'feeds/');
-DEFINE('DEFAULT_AUTHOR', 'The Open University');
-DEFINE('DEFAULT_RSS2_FILENAME','rss2.xml');
+DEFINE('LOCAL_FILE_REPOSITORY_URL', APPLICATION_URL.'/upload/files/');
+DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
 
+DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://podcast.open.ac.uk/');
+
+DEFINE('DEFAULT_AUTHOR', 'The Open University');
+DEFINE('DEFAULT_RSS_FILENAME','rss2.xml');
+DEFINE('TRANSCRIPT_PREFIX', 'Transcript - ');
+DEFINE('FEEDS','feeds/');
+DEFINE('FEEDS_LOCATION', 'feeds/');
+DEFINE('THUMBNAIL_EXTENSION', '_thm');
+DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
+DEFINE('NO_IMAGE_AVAILABLE', DEFAULT_MEDIA_URL.FEEDS.'images/no-image.jpg');
+DEFINE('CORRECT_IMAGE', '/correct.gif');
+DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
+
+DEFINE('RSS_VIEW', 'http://'.$_SERVER['SERVER_NAME'].'/feeds/view/');
+    
 DEFINE('TRANSCRIPT', 'TRANSCRIPT');
 DEFINE('YOUTUBE', 'YOUTUBE');
 DEFINE('YES', 'Y');
 DEFINE('NO', 'N');
 
+DEFINE('REGISTER_BY_OUCU', true );
+DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );
+
+DEFINE('WIDE_SCREEN', '0.5625');
+DEFINE('STANDARD_SCREEN', '0.75');
+
+// Workflows
+	// Various workflows
+DEFINE('NONE', NULL);
+DEFINE('DIRECT_TRANSFER', 'direct_transfer');
+DEFINE('AUDIO', 'audio');
+DEFINE('SCREENCAST','screencast');
+DEFINE('SCREENCAST_WIDE', 'screencast-wide');
+DEFINE('VIDEO', 'video');
+DEFINE('VIDEO_WIDE', 'video-wide');
+DEFINE('MULTI_VIDEO', 'multi-video');
+DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');

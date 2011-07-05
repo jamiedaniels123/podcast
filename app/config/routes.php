@@ -28,9 +28,12 @@
  */
 	//Router::connect('/', array( 'controller' => 'users', 'action' => 'dashboard'));
         Router::connect('/', array('controller' => 'users', 'action' => 'dashboard' ) );
+
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
         Router::parseExtensions('rss');
+
+        Router::connect( '/rss/*', array('controller' => 'feeds', 'action' => 'add', 'url' => array('ext' => 'rss') ) );

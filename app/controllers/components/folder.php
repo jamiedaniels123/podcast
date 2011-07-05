@@ -2,16 +2,15 @@
 class FolderComponent extends Object {
 
 
-    function deleteByHtaccess( $data = array() ) {
+    function createHtaccess( $data = array() ) {
 
         $this->create( $data['Podcast']['custom_id'] );
         $text = 'ErrorDocument 404 /notfound.html';
 
         if( $this->writeFile( $text, $data['Podcast']['custom_id'],'.htaccess' ) )
             return true;
-        
-        return false;
 
+        return false;
     }
 
     /*
@@ -21,13 +20,12 @@ class FolderComponent extends Object {
      * @by : Charles Jackson
      */
     function moveFileChuckerUpload( $data = array() ) {
-        
+
         $this->create( $data['Podcast']['custom_id'] );
         
-        if( $this->moveFile( $data['PodcastItem']['filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
+        if( $this->moveFile( $data['PodcastItem']['original_filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['id'].'_'.$data['PodcastItem']['original_filename'] ) ) {
 
-            unlink( FILE_REPOSITORY.$data['PodcastItem']['filename'] );
-            //$this->Api->Transcode( $data );
+            unlink( FILE_REPOSITORY.$data['PodcastItem']['original_filename'] );
             return true;
         }
 
@@ -70,7 +68,8 @@ class FolderComponent extends Object {
 
                 if( !is_dir( $newfolderPath ) ) {
 
-                    mkdir($newfolderPath,0755,true);
+                    if(! mkdir($newfolderPath,0755,true) )
+                            die($newfolderPath);
                 }
             }
         }
@@ -164,6 +163,10 @@ class FolderComponent extends Object {
         return true;
     }
 
-
+	function cleanUp($path,$filename){
+		if(file_exists(FILE_REPOSITORY.$path.'/'.$filename)==false){
+			return false;
+		}
+	}
     
 }

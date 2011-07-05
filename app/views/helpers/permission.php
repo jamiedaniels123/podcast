@@ -51,14 +51,28 @@ class PermissionHelper extends AppHelper {
     function isAdministrator() {
 
         if( $this->Session->check('Auth.User.administrator') )
-            return $this->Session->read('Auth.User.id');
+            return $this->Session->read('Auth.User.administrator');
+
+        return false;
+    }
+
+    /*
+     * @name : isApprover
+     * @description : If set, returns the value of Auth.User.approver in session else returns false.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isApprover() {
+
+        if( $this->Session->check('Auth.User.approver') )
+            return $this->Session->read('Auth.User.approver');
 
         return false;
     }
 
     /*
      * @name : isOwner
-     * @description : If set, compares the value of Auth.User.id against the user_id held on the podcast table and returns
+     * @description : If set, compares the value of Auth.User.id against the owner_id held on the podcast table and returns
      * a bool. If the session is not set return false.
      * @updated : 20th May 2011
      * @by : Charles Jackson
