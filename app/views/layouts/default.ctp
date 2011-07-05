@@ -35,7 +35,7 @@
     
         <div id="header">
             <h1>OU Podcast Server</h1>
-            <p>For the management of podcast collections</p>
+            <p></p>
             <?php if( $this->Session->check('Auth.User.id') ) : ?>
 
             <ol>

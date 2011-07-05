@@ -25,6 +25,14 @@ h3 a:hover {text-decoration: underline;}
 .podcast-owner {
 	font-style: italic;
 	color: #4492b0;}
+	
+.dashboard	{
+	list-style:none;
+	}
+	
+.dashboard li	{
+		display:inline;	
+}
 
 /*Background colours*/
 
