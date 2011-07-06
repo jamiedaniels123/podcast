@@ -428,7 +428,7 @@ class PodcastsController extends AppController {
 				$media_channel = self::YOUTUBE;				
 			}
 
-			$this->data = $this->Podcast->MakeEveryoneReadOnly( $this->data );
+			//$this->data = $this->Podcast->MakeEveryoneReadOnly( $this->data );
 			
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
 			$this->Podcast->set( $this->data );
