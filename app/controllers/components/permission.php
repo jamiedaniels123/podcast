@@ -45,6 +45,14 @@ class PermissionComponent extends Object {
                 return true;
         }
 
+		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
+		// then let them view it.
+		if( $this->isYoutubeUser() || $this->isItunesUser() )  {
+			
+			if( $data['consider_for_itunesu'] || $data['consider_for_youtube'] )
+				return true;
+		}
+		
         return false;
     }
 

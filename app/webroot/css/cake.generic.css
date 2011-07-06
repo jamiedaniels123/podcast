@@ -710,7 +710,7 @@ button {
 	padding: 5px;
 }
 
-dd img {
+dd img, fieldset.approval .status_image {
 	height:20px;
 }
 
@@ -740,3 +740,9 @@ form.rejection {
 
 	padding: 10px;	
 }
+
+td.status, th.status {
+
+	text-align: center;	
+}
+	

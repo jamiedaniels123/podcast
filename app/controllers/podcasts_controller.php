@@ -402,6 +402,7 @@ class PodcastsController extends AppController {
         $conditions = $this->Podcast->waitingApproval();
         $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
 
+
     }
 
     /*
@@ -413,21 +414,32 @@ class PodcastsController extends AppController {
      */
     function approval( $media_channel, $id ) {
 
-        $this->Podcast->recursive = -1;
         $this->data = $this->Podcast->findById( $id );
 
         if( !empty( $this->data ) ) {
 
-            if( strtoupper( $media_channel ) == self::ITUNES )
+            if( strtoupper( $media_channel ) == self::ITUNES ) {
                 $this->data['Podcast']['intended_itunesu_flag'] = YES;
-            
-            if( strtoupper( $media_channel ) == self::YOUTUBE )
+				$media_channel = self::ITUNES;
+			}
+				            
+            if( strtoupper( $media_channel ) == self::YOUTUBE ) {
                 $this->data['Podcast']['intended_youtube_flag'] = YES;
+				$media_channel = self::YOUTUBE;				
+			}
 
+			$this->data = $this->Podcast->MakeEveryoneReadOnly( $this->data );
+			
             $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+			$this->Podcast->set( $this->data );
+			$this->Podcast->saveAll(); // saveAll so we can capture the updated associations including the recently created read-only members.
+			
+			$this->data = $this->Podcast->findById( $id );
+
+
+			$this->emailTemplates->__sendPodcastApprovalEmail( strtolower( $media_channel ), $this->data );
             
-            $this->Podcast->save( $this->data );
-            $this->Session->setFlash('The collection has been approved.', 'default', array( 'class' => 'success' ) );
+            $this->Session->setFlash('The collection has been approved and you have been assigned ownership.', 'default', array( 'class' => 'success' ) );
 
         } else {
 
@@ -920,13 +932,16 @@ class PodcastsController extends AppController {
 
         $this->set('user_groups', $user_groups );
 
-        // Get all the user groups
+        // Get all the users
         $User = ClassRegistry::init( 'User' );
         $users = $User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
         $users = $User->removeDuplicates( $users, $this->data, 'Members' );
         $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );
+        $users = $User->removeDuplicates( $users, $this->data, 'Owner' );
+
         $this->set('users', $users );
 
+		// Used to generate a list of possible users that can be assigned ownership.
         $this->set('all_users', $User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
 
         // Set the possible values of explicit

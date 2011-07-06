@@ -88,7 +88,7 @@ class emailTemplatesComponent extends Object {
 	
     /*
      * @name : __sendPodcastRejectionEmail
-     * @description : 
+     * @description : Called when a podcast is rejected for either itunes ot youtube
      */
 	function __sendPodcastRejectionEmail( $media_type, $data, $justification ) {
 		
@@ -107,7 +107,26 @@ class emailTemplatesComponent extends Object {
 		
 	}
 
+    /*
+     * @name : __sendPodcastApprovalEmail
+     * @description : Called when a podcast is rejected for either itunes ot youtube
+     */
+	function __sendPodcastApprovalEmail( $media_type, $data ) {
+		
+        $this->Email->to = $data['Owner']['email'];
+        $this->Email->subject = "Podcast Approval from Admin Server";
+        $this->Email->replyTo = $this->Session->read('Auth.User.email');
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        $this->Email->template = 'podcast_approval'; // note no '.ctp'		
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+        $this->controller->set('media_type', $media_type);
+        //Do not pass any args to send()
 
+        $this->Email->send();
+		
+	}
+	
     function getDomain() {
 
         $domain = preg_replace("/^(.*\.)?([^.]*\..*)$/", "$2", $_SERVER['HTTP_HOST']);

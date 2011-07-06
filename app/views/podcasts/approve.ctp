@@ -1,4 +1,4 @@
-<fieldset class="podcasts index">
+<fieldset class="podcasts approval">
     <legend>Podcasts Waiting Approval</legend>
     <p>
         Below is a list of all podcasts on the system that are awaiting approval.
@@ -20,8 +20,8 @@
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('created');?></th>
-                <th><?php echo $this->Paginator->sort('Consider for iTunesU','consider_for_itunesu');?></th>
-                <th><?php echo $this->Paginator->sort('Consider for Youtube','consider_for_youtube');?></th>
+                <th class="status"><?php echo $this->Paginator->sort('Consider for iTunesU','consider_for_itunesu');?></th>
+                <th class="status"><?php echo $this->Paginator->sort('Consider for Youtube','consider_for_youtube');?></th>
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -50,11 +50,11 @@
                         <td>
                             <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
-                        <td>
-                            <?php echo $this->Object->considerForItunes( $podcast['Podcast'] ) ? 'Yes' : 'No'; ?>
+                        <td class="status">
+                        <img src="/img<?php echo $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting itunes approval" class="status_image" />
                         </td>
-                        <td>
-                            <?php echo $this->Object->considerForYoutube( $podcast['Podcast'] ) ? 'Yes' : 'No'; ?>
+                        <td class="status">
+                        <img src="/img<?php echo $this->Object->waitingYoutubeApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting youtube approval" class="status_image" />
                         </td>
                         <td class="actions">
                             <a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>

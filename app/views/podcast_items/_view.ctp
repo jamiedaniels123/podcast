@@ -29,17 +29,22 @@
             <dt>Target URL Text</dt>
             <dd><?php echo $this->data['PodcastItem']['target_url_text']; ?>&nbsp;</dd>
             <dt>Transcript</dt>
-            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['Transcript']['filename'] ); ?></dd>
+            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['Transcript']['filename'] ); ?>			</dd>
         </dl>
-
-		<?php if( $this->Permission->isItunesUser() ) : ?>
-            <?php echo $this->element('../podcast_items/_itunes'); ?>
-        <?php endif; ?>
-        <?php if( $this->Permission->isYoutubeUser() ) : ?>
-            <?php echo $this->element('../podcast_items/_youtube'); ?>
-        <?php endif; ?>
-        <?php if( ( $this->Permission->isYoutubeUser() ) || ( $this->Permission->isItunesUser() ) ) : ?>
-            <?php echo $this->element('../podcast_items/_itunes_and_youtube'); ?>
-        <?php endif; ?>
     </div>
 </div>
+       
+<div class="clear"></div>
+<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
+    <?php echo $this->element('../podcast_items/_itunes'); ?>
+	<div class="clear"></div>
+<?php endif; ?>
+<?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
+    <?php echo $this->element('../podcast_items/_youtube'); ?>
+    <div class="clear"></div>
+<?php endif; ?>
+<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) || $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
+    <?php echo $this->element('../podcast_items/_itunes_and_youtube'); ?>
+    <div class="clear"></div>
+<?php endif; ?>
+

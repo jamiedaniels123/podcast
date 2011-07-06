@@ -1,6 +1,6 @@
 <fieldset>
     <legend>Justification View</legend>
-    <?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
+    <?php if( $this->Object->waitingItunesApproval( $this->data['Podcast'] ) ) : ?>
         <fieldset id="itunesu_justification">
             <legend>iTunes Justification</legend>
             <?php echo $this->data['Podcast']['itunesu_justification']; ?>
@@ -20,7 +20,7 @@
             <a href="/podcasts/rejection/itunes/<?php echo $this->data['Podcast']['id']; ?>" class="reject_podcast">reject</a>
         </fieldset>
     <?php endif; ?>
-    <?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
+    <?php if( $this->Object->waitingYoutubeApproval( $this->data['Podcast'] ) ) : ?>
         <fieldset id="youtube_justification">
             <legend>Youtube Justification</legend>
             <?php echo $this->data['Podcast']['youtube_justification']; ?>

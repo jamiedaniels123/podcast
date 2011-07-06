@@ -841,5 +841,33 @@ class Podcast extends AppModel {
 			
 		return $media_images;
 	}
-	
+
+	/* 
+	 * @name : makeEveryoneReadOnly
+	 * @description : When a podcast has been approved we need to find every moderator (group or individual) and give them
+	 * read-only access.
+	 * @updated : 6th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function makeEveryoneReadOnly( $data = array() ) {
+		
+
+		
+		foreach( $data['ModeratorGroups'] as $moderator_group ) {
+		
+			$data['MemberGroups'][] = $moderator_group;	
+		}
+
+		foreach( $data['Moderators'] as $moderator ) {
+		
+			$data['Members'][] = $moderator;	
+		}
+		
+		$this->deleteExistingModerators( $data['Podcast']['id'] );
+				
+		$data['PodcastModerators'] = array(); // Clear down the associated hasMany array so we don't resave the data we just deleted
+		$data['ModeratorUserGroups'] = array();  // Clear down the associated hasMany array so we don't resave the data we just deleted
+		
+		return $data;
+	}
 }

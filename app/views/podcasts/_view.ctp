@@ -32,9 +32,9 @@
             <dt>Web URL Text: </dt>
             <dd><?php echo $this->data['Podcast']['link_text']; ?>&nbsp;</dd>
             <dt>Private: </dt>
-            <dd><img src="/img<?php echo ( $this->data['Podcast']['private'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="private status" /></dd>
+            <dd><img src="/img<?php echo ( $this->data['Podcast']['private'] == YES ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="private status" /></dd>
             <dt>Intranet Only: </dt>            
-            <dd><img src="/img<?php echo ( $this->data['Podcast']['intranet_only'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="private status" /></dd>
+            <dd><img src="/img<?php echo ( $this->data['Podcast']['intranet_only'] == YES ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="private status" /></dd>
 			<dt>Preferred Node</dt>
             <dd><?php echo $this->data['PreferredNode']['title']; ?>&nbsp;</dd>
 			<dt>Nodes</dt>

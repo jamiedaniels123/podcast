@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 01, 2011 at 11:32 AM
+-- Generation Time: Jul 06, 2011 at 08:23 AM
 -- Server version: 5.1.52
 -- PHP Version: 5.3.3
 
@@ -766,15 +766,22 @@ CREATE TABLE IF NOT EXISTS `podcasts` (
   `consider_for_youtube` tinyint(1) DEFAULT '0',
   `preferred_node` mediumint(8) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Podcasts' AUTO_INCREMENT=1469 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Podcasts' AUTO_INCREMENT=1476 ;
 
 --
 -- Dumping data for table `podcasts`
 --
 
 INSERT INTO `podcasts` (`id`, `grouping`, `title`, `summary`, `image`, `image_copyright`, `image_source`, `image_logoless`, `image_ll_copyright`, `image_wide`, `image_wide_copyright`, `artwork_file`, `author`, `itunes_u_url`, `language`, `explicit`, `keywords`, `contact_name`, `contact_email`, `subtitle`, `link`, `link_text`, `course_code`, `copyright`, `rss_url`, `custom_id`, `private`, `intranet_only`, `media_location`, `publish_itunes_u`, `publish_itunes_date`, `update_itunes_date`, `intended_itunesu_flag`, `openlearn_epub`, `itunesu_site`, `target_itunesu_date`, `production_date`, `rights_date`, `metadata_date`, `publish_youtube`, `youtube_channel`, `valid_feed`, `created`, `modified`, `deleted`, `owner_id`, `podcast_flag`, `intended_youtube_flag`, `itunesu_justification`, `youtube_justification`, `consider_for_itunesu`, `consider_for_youtube`, `preferred_node`) VALUES
+(1472, '', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'N', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 15:49:40', '2011-07-05 15:49:40', 0, 0, 0, 'N', NULL, NULL, 0, 0, 0),
+(1473, '', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'N', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 15:51:32', '2011-07-05 15:51:32', 0, 0, 0, 'N', NULL, NULL, 0, 0, 0),
 (1468, '', 'blah', 'gfnfgngfd', '1468_blah.jpg', '', '', NULL, NULL, NULL, NULL, NULL, '', NULL, 'en', 'clean', '', '', '', NULL, 'www.example.com', '', '', '', NULL, '1468_blah', 'Y', '', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-06-30 15:55:55', '2011-06-30 16:14:48', 0, 1122, 1, 'N', '', NULL, 0, 0, NULL),
-(1465, '', 'Ian-Podcast-10', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1465_ianpodcast10', 'Y', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-06-30 11:10:21', '2011-06-30 11:10:21', 0, 1120, 0, 'N', NULL, NULL, 0, 0, 0);
+(1470, '', 'test', 'ghgjgkjkj', '1470_test.jpg', 'Copyright by ACME', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', 'blah etc', 'Charles Jackson', 'charles@jacksoncharles.co.uk', NULL, 'www.example.com', 'Link for the test', NULL, 'Podcast Copyright', NULL, '1470_test', 'Y', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 11:16:00', '2011-07-05 15:09:52', 0, 1119, 1, 'N', 'because i want it.', 'The quick brown fox\r\n\r\njumped over the lazy dog!', 1, 1, 20),
+(1471, '', 'tammy', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1471_tammy', 'Y', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 11:29:05', '2011-07-05 11:29:05', 0, 1119, 0, 'N', NULL, NULL, 0, 0, 0),
+(1465, '', 'Ian-Podcast-10', NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1465_ianpodcast10', 'Y', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-06-30 11:10:21', '2011-06-30 11:10:21', 0, 1120, 0, 'N', NULL, NULL, 0, 0, 0),
+(1469, '', 'dsadsdfsdd', 'sdfsdfdsfd', '1469_dsadsdfsdd.jpg', '', '', 'LL_1469_dsadsdfsdd.jpg', '', NULL, '', '0', 'Charles Jackson', '', 'en', 'clean', '', '', '', '', 'www.exaample.com', '', '', '', NULL, '1469_dsadsdfsdd', 'Y', 'N', 's3nonOU', 'Y', '2011-07-06', '2011-07-21', 'Y', 'Y', 'public', NULL, '2011-07-15', NULL, NULL, 'N', NULL, 'N', '2011-07-01 13:37:49', '2011-07-05 16:01:31', 0, 1119, 1, 'N', 'sfdfdsfsdsdsdsd', 'Because we want it!', 1, 0, 20),
+(1474, '', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'N', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 15:54:55', '2011-07-05 15:54:55', 0, 0, 0, 'N', NULL, NULL, 0, 0, 0),
+(1475, '', 'crap', 'dfvsdvv', NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'en', 'clean', '', '', '', NULL, 'http://www.www.www', 'erbverb', NULL, '', NULL, '1475_crap', 'Y', 'N', 'local', 'N', NULL, NULL, 'N', 'N', 'public', NULL, NULL, NULL, NULL, 'N', NULL, 'N', '2011-07-05 16:03:47', '2011-07-05 16:12:14', 0, 1123, 1, 'N', 'ergerg', 'wervgerg', 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -787,7 +794,7 @@ CREATE TABLE IF NOT EXISTS `podcasts_categories` (
   `podcast_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `podcasts_categories`
@@ -797,7 +804,10 @@ INSERT INTO `podcasts_categories` (`id`, `podcast_id`, `category_id`) VALUES
 (9, 1455, 1),
 (13, 1457, 60),
 (14, 1457, 1),
-(15, 1457, 33);
+(15, 1457, 33),
+(19, 1469, 42),
+(20, 1469, 60),
+(21, 1469, 1);
 
 -- --------------------------------------------------------
 
@@ -810,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `podcasts_itunesu_categories` (
   `podcast_id` int(11) NOT NULL,
   `itunesu_category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Dumping data for table `podcasts_itunesu_categories`
@@ -820,7 +830,9 @@ INSERT INTO `podcasts_itunesu_categories` (`id`, `podcast_id`, `itunesu_category
 (9, 1455, 57),
 (10, 1455, 85),
 (13, 1457, 46),
-(14, 1457, 85);
+(14, 1457, 85),
+(17, 1469, 12),
+(18, 1469, 110);
 
 -- --------------------------------------------------------
 
@@ -927,7 +939,7 @@ CREATE TABLE IF NOT EXISTS `podcast_items` (
   `modified` datetime DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Items for podcasts' AUTO_INCREMENT=12575 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Items for podcasts' AUTO_INCREMENT=12578 ;
 
 --
 -- Dumping data for table `podcast_items`
@@ -937,6 +949,8 @@ INSERT INTO `podcast_items` (`id`, `podcast_id`, `shortcode`, `sub_feed`, `subse
 (12524, 1464, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', NULL, NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:09:45', '2011-06-30 11:09:45', 0),
 (12523, 1464, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', NULL, NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:08:41', '2011-06-30 11:08:41', 0),
 (12528, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12528_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:32:02', '2011-06-30 16:24:44', 0),
+(12576, 1465, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'drop.avi', '12576_drop.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.7500, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-07-04 14:06:14', '2011-07-04 14:06:14', 1),
+(12575, 1469, NULL, '', 0, 'N', 'N', 'N', '', '', NULL, '', '', 'no', '1_-_Sweet_Love.ogg', '12575_1_-_Sweet_Love.ogg', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', 'N', NULL, NULL, NULL, 'MEDIA_12575_1469_dsadsdfsdd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, '', '', '', '', '', NULL, NULL, NULL, '', '', NULL, NULL, '2011-07-01 13:46:00', '2011-07-04 14:04:42', 0),
 (12534, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12534_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:42:16', '2011-06-30 16:25:59', 1),
 (12535, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12535_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:44:39', '2011-06-30 11:44:39', 0),
 (12536, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12536_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 11:54:44', '2011-06-30 11:54:44', 0),
@@ -973,7 +987,8 @@ INSERT INTO `podcast_items` (`id`, `podcast_id`, `shortcode`, `sub_feed`, `subse
 (12568, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12568_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.5625, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 14:10:25', '2011-06-30 14:10:25', 0),
 (12569, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2.avi', '12569_BSG_4.2.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.5625, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 14:12:23', '2011-06-30 14:12:23', 0),
 (12570, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2_01.avi', '12570_BSG_4.2_01.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.5625, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 14:16:29', '2011-06-30 14:16:29', 0),
-(12572, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2_01.avi', '12572_BSG_4.2_01.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.5625, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 14:22:05', '2011-06-30 14:22:05', 0);
+(12572, 1467, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'BSG_4.2_01.avi', '12572_BSG_4.2_01.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.5625, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-06-30 14:22:05', '2011-06-30 14:22:05', 0),
+(12577, 1465, NULL, '', 0, 'N', 'N', 'N', NULL, '', NULL, '', '', 'no', 'drop.avi', '12577_drop.avi', NULL, NULL, NULL, 'N', NULL, NULL, 1, NULL, 'N', NULL, NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0.7500, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2011-07-05 16:56:35', '2011-07-05 16:56:35', 0);
 
 -- --------------------------------------------------------
 
@@ -994,12 +1009,14 @@ CREATE TABLE IF NOT EXISTS `podcast_item_media` (
   `processed_state` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `podcast_item` (`podcast_item`,`media_type`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='List of media files by ''media type'' associated with a given ' AUTO_INCREMENT=54411 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='List of media files by ''media type'' associated with a given ' AUTO_INCREMENT=54415 ;
 
 --
 -- Dumping data for table `podcast_item_media`
 --
 
+INSERT INTO `podcast_item_media` (`id`, `guid`, `podcast_item`, `media_type`, `original_filename`, `filename`, `duration`, `uploaded_by`, `uploaded_when`, `processed_state`) VALUES
+(54414, NULL, 12575, 'transcript', 'P46.PDF', '1469_dsadsdfsdd.pdf', 0.0000, '', '0000-00-00 00:00:00', 9);
 
 -- --------------------------------------------------------
 
@@ -1013,7 +1030,7 @@ CREATE TABLE IF NOT EXISTS `podcast_links` (
   `podcast_id` mediumint(8) unsigned NOT NULL,
   `primary` set('N','Y') NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='LInks between nodes and podcasts' AUTO_INCREMENT=5097 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='LInks between nodes and podcasts' AUTO_INCREMENT=5121 ;
 
 --
 -- Dumping data for table `podcast_links`
@@ -1024,7 +1041,13 @@ INSERT INTO `podcast_links` (`id`, `node_id`, `podcast_id`, `primary`) VALUES
 (5085, 22, 1457, 'N'),
 (5084, 21, 1457, 'N'),
 (5083, 5, 1457, 'N'),
-(5096, 22, 1459, 'N');
+(5096, 22, 1459, 'N'),
+(5120, 22, 1469, 'N'),
+(5119, 21, 1469, 'N'),
+(5118, 20, 1469, 'N'),
+(5117, 21, 1470, 'N'),
+(5116, 5, 1470, 'N'),
+(5115, 20, 1470, 'N');
 
 -- --------------------------------------------------------
 
@@ -1242,7 +1265,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `terms` tinyint(1) DEFAULT '0',
   `status` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Users table' AUTO_INCREMENT=1124 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='Users table' AUTO_INCREMENT=1127 ;
 
 --
 -- Dumping data for table `users`
@@ -1253,7 +1276,10 @@ INSERT INTO `users` (`id`, `user_title`, `firstname`, `lastname`, `email`, `acce
 (1119, NULL, 'Charles', 'Jackson', 'cj3998@open.ac.uk', 0, 'Y', 'Y', 'Y', 'cj3998', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 10:25:26', 1, 1),
 (1121, NULL, 'Chris', 'Valentine', 'cpv2@open.ac.uk', 0, 'Y', 'Y', 'Y', 'cpv2', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 10:52:51', 1, 1),
 (1122, NULL, 'Peter', 'Scott', 'pjs33@open.ac.uk', 0, 'Y', 'Y', 'Y', 'pjs33', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-06-30 15:55:21', 1, 1),
-(1123, NULL, 'Jamie', 'Daniels', 'jdd7@open.ac.uk', 0, 'Y', 'Y', 'Y', 'jdd7', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-07-01 10:12:09', 1, 1);
+(1123, NULL, 'Jamie', 'Daniels', 'jdd7@open.ac.uk', 0, 'Y', 'Y', 'Y', 'jdd7', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-07-01 10:12:09', 1, 1),
+(1124, NULL, 'Damian', 'Dadswell', 'drd52@open.ac.uk', 0, 'Y', 'Y', 'Y', 'drd52', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, '2011-07-05 17:07:45', 1, 1),
+(1125, NULL, 'Kristoff', 'Van', 'kl2822@open.ac.uk', 0, 'Y', 'Y', 'Y', 'kl2822', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, '2011-07-05 17:16:41', 1, 1),
+(1126, NULL, 'Ben', 'Hawkridge', 'bh6@open.ac.uk', 0, 'Y', 'Y', 'Y', 'bh6', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, '2011-07-06 02:22:33', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1270,7 +1296,7 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='User group definitions' AUTO_INCREMENT=100 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='User group definitions' AUTO_INCREMENT=101 ;
 
 --
 -- Dumping data for table `user_groups`
@@ -1308,7 +1334,8 @@ INSERT INTO `user_groups` (`id`, `group_title`, `members`, `created_by`, `create
 (32, 'OUAV', '(947,1048)', 'bh6', '2011-04-08 17:46:49', NULL, NULL),
 (33, 'Social Sciences - Research project - ICCM', '(1024,1104,1105,1106,1107)', 'cpv2', '2011-04-18 10:40:35', NULL, NULL),
 (99, 'XXXXXXXXXXXXXXX', '', '', '0000-00-00 00:00:00', '2011-06-01 11:19:28', '2011-06-03 23:09:20'),
-(78, 'SAsA', '', '', '0000-00-00 00:00:00', '2011-05-12 11:28:39', '2011-05-12 11:28:52');
+(78, 'SAsA', '', '', '0000-00-00 00:00:00', '2011-05-12 11:28:39', '2011-05-12 11:28:52'),
+(100, 'Kristoffs user group.', '', '', '0000-00-00 00:00:00', '2011-07-05 17:17:30', '2011-07-05 17:17:30');
 
 -- --------------------------------------------------------
 
@@ -1322,7 +1349,7 @@ CREATE TABLE IF NOT EXISTS `user_group_podcasts` (
   `podcast_id` int(11) NOT NULL,
   `moderator` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=110 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=169 ;
 
 --
 -- Dumping data for table `user_group_podcasts`
@@ -1341,7 +1368,31 @@ INSERT INTO `user_group_podcasts` (`id`, `user_group_id`, `podcast_id`, `moderat
 (106, 3, 1459, 0),
 (107, 7, 1459, 0),
 (108, 15, 1459, 0),
-(109, 10, 1459, 1);
+(109, 10, 1459, 1),
+(143, 3, 1470, 0),
+(144, 10, 1470, 0),
+(145, 2, 1470, 0),
+(146, 15, 1470, 1),
+(149, 3, 1469, 0),
+(150, 10, 1469, 0),
+(151, 15, 1469, 0),
+(152, 7, 1469, 0),
+(153, 24, 1469, 0),
+(154, 17, 1469, 0),
+(155, 26, 1469, 0),
+(156, 20, 1469, 0),
+(157, 13, 1469, 0),
+(158, 32, 1469, 0),
+(159, 4, 1469, 0),
+(160, 18, 1469, 0),
+(161, 6, 1469, 0),
+(162, 27, 1469, 0),
+(163, 30, 1469, 0),
+(164, 78, 1469, 0),
+(165, 5, 1469, 0),
+(166, 29, 1469, 0),
+(167, 22, 1469, 1),
+(168, 21, 1469, 1);
 
 -- --------------------------------------------------------
 
@@ -1374,7 +1425,7 @@ CREATE TABLE IF NOT EXISTS `user_podcasts` (
   `podcast_id` int(11) NOT NULL,
   `moderator` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
 
 --
 -- Dumping data for table `user_podcasts`
@@ -1392,7 +1443,14 @@ INSERT INTO `user_podcasts` (`id`, `user_id`, `podcast_id`, `moderator`) VALUES
 (39, 974, 1457, 0),
 (40, 976, 1457, 0),
 (41, 1109, 1457, 0),
-(42, 1110, 1457, 1);
+(42, 1110, 1457, 1),
+(58, 1120, 1470, 0),
+(59, 1119, 1470, 0),
+(60, 1121, 1470, 1),
+(63, 1121, 1469, 0),
+(64, 1122, 1469, 0),
+(65, 1120, 1469, 1),
+(66, 1123, 1469, 1);
 
 -- --------------------------------------------------------
 
@@ -1406,9 +1464,11 @@ CREATE TABLE IF NOT EXISTS `user_user_groups` (
   `user_group_id` int(11) NOT NULL,
   `moderator` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `user_user_groups`
 --
 
+INSERT INTO `user_user_groups` (`id`, `user_id`, `user_group_id`, `moderator`) VALUES
+(1, 1125, 100, 1);
