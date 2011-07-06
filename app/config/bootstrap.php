@@ -61,6 +61,12 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
         DEFINE('SAMS_NAME', 'Charles Jackson' );
 
+	} elseif( isSet( $_SERVER['PETES_SAMS_USER'] ) ) {
+
+        DEFINE('SAMS_EMAIL', $_SERVER['PETES_SAMS_USER'].'@open.ac.uk' );
+        DEFINE('SAMS_OUCU_ID', $_SERVER['PETES_SAMS_USER'] );
+        DEFINE('SAMS_NAME', 'Peter Devine' );
+
     } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
 
         DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
