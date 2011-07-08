@@ -22,8 +22,9 @@
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastImage">Podcast image</label>
-            <input type="file" id="PodcastImage" name="data[Podcast][image]">
+            <label for="PodcastNewImage">Podcast image</label>
+            <input type="file" id="PodcastNewImage" name="data[Podcast][new_image]">
+            <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
             <?php echo $this->Form->error('Podcast.image'); ?>
         </div>
         <div class="image thumbnail">

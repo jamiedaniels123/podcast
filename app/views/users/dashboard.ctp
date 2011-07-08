@@ -8,15 +8,19 @@
         <ul>
             <li style="list-style:none;"><a href="/podcasts" class="button white"><img src="/img/information.png" alt="Information" class="icon" />You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
             <li style="list-style:none;"><a href="/user_groups" class="button white"><img src="/img/information.png" alt="Information" class="icon" />You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
+            <?php if( $this->Permission->isItunesUser() ) : ?>
+                <li style="list-style:none;"><img src="/img/information.png" alt="Information" class="icon" /><a href="/itunes/podcasts">iTunes Collections</a></li>
+            <?php endif; ?>
+            <?php if( $this->Permission->isYouTubeUser() ) : ?>
+                <li style="list-style:none;"><img src="/img/information.png" alt="Information" class="icon" /><a href="/youtube/podcasts">Youtube Collections</a></li>
+            <?php endif; ?>
+
         </ul>
     </div>
     <div class="float_left">
         <ul class="dashboard">
             <li><a href="/podcasts"><img src="../img/your-collections.png" alt="Your Podcasts" /></a></li>
             <li><a href="/podcasts/add"><img src="../img/create-new-collections.png" alt="Create New Podcast" /></a></li>
-            <?php if( $this->Permission->isItunesUser() || $this->Permission->isYouTubeUser() ) : ?>
-                <li><a href="/podcasts/approve">APPROVE PODCASTS</a></li>
-            <?php endif; ?>
          </ul>
          <ul class="dashboard">
             <li><a href="/user_groups"><img src="../img/your-usergroups.png" alt="Your User Groups" /></a></li>

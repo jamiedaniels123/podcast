@@ -1,6 +1,15 @@
 jQuery(document).ready(function($) {
 
-    // The following optional method is called on page load and sets the initial status if the DOM element
+	if( jQuery('#flashMessage.success').length ) {
+
+		jQuery('#flashMessage.success').effect('highlight', { color: '#00c500' }, 2000 );
+	}
+
+	if( jQuery('#flashMessage.error').length ) {
+		jQuery('#flashMessage.error').effect('highlight', { color: '#ff0000' }, 2000 );
+	}
+	
+	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
     if( jQuery('#PodcastPodcastFlag').length ) {
 
@@ -192,3 +201,4 @@ function unTickCheckboxes() {
 
     });
 }
+

@@ -100,7 +100,9 @@ class ApiComponent extends Object {
         );
 
         $this->response = json_decode( $this->__sendMessage('transcode-media-and-deliver', self::ADMIN_API, $this->params ), 1 );
-        return $this->getStatus( $this->response );
+
+		$this->getStatus( $this->response );
+
     }
     
     /*
@@ -174,8 +176,6 @@ class ApiComponent extends Object {
             // If you're trying to troubleshoot problems, try uncommenting the
             // next two lines; it will show you the HTTP response headers across
             // all the redirects:
-            // $meta = stream_get_meta_data($fp);
-            // var_dump($meta['wrapper_data']);
             $res = stream_get_contents($fp);
         }
 

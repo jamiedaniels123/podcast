@@ -9,8 +9,9 @@
             <?php echo $this->Form->error('Podcast.publish_itunes_u'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastImageLogoless">Logoless image</label>
-            <input type="file" id="PodcastImageLogoless" name="data[Podcast][image_logoless]">
+            <label for="PodcastNewImageLogoless">Logoless image</label>
+            <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">
+            <input type="hidden" id="PodcastImageLogoless" name="data[Podcast][image_logoless]" value="<?php echo $this->data['Podcast']['image_logoless']; ?>">            
             <?php echo $this->Form->error('Podcast.image_logoless'); ?>
         </div>
         <div class="image thumbnail">
@@ -23,8 +24,9 @@
             <?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastImageWide">Widescreen Image</label>
-            <input type="file" id="PodcastImageWide" name="data[Podcast][image_wide]">
+            <label for="PodcastNewImageWide">Widescreen Image</label>
+            <input type="file" id="PodcastNewImageWide" name="data[Podcast][new_image_wide]">
+            <input type="hidden" id="PodcastImageWide" name="data[Podcast][image_wide]" value="<?php echo $this->data['Podcast']['image_wide']; ?>">            
             <?php echo $this->Form->error('Podcast.image_wide'); ?>
         </div>
         <div class="image thumbnail">

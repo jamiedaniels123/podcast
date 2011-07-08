@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend><span>Your collections</span></legend>
+    <legend><span>iTunes U Collections</span></legend>
     
     <img src="/img/collection-large.png" />
     
@@ -26,6 +26,7 @@
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('Created');?></th>
+                <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -57,6 +58,9 @@
                         </td>
                         <td>
                             <span class="podcast-owner"><?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?></span>
+                        </td>
+                        <td>
+                            <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">view</a>

@@ -188,6 +188,20 @@ class FolderComponent extends Object {
     }
 
     /*
+     * @name : is_empty_dir
+     * @description : Checks to see if a folder is empty.
+     * @updated : 7th July 2001
+     * @by : Charles Jackson
+     */
+	function is_empty_dir( $dir ) {
+	
+		if ( ( $files = @scandir( $dir ) ) && count( $files ) <= 2 )
+			return true;
+
+		return false;
+	}
+	
+    /*
      * @name : writeFile
      * @description :
      * @updated : 1st June 2001
@@ -204,10 +218,23 @@ class FolderComponent extends Object {
         return true;
     }
 
-	function cleanUp($path,$filename){
-		if(file_exists(FILE_REPOSITORY.$path.'/'.$filename)==false){
+    /*
+     * @name : cleanUp
+     * @description : Will delete the file specified and recursively delete the folder(s) if empty.
+     * @updated : 1st June 2001
+     * @by : Charles Jackson
+     */
+	function cleanUp( $path, $filename ) {
+		
+		if( file_exists( FILE_REPOSITORY.$path.'/'.$filename ) == false )
 			return false;
-		}
+		
+		unlink( FILE_REPOSITORY.$path.'/'.$filename );
+			
+		if( is_empty_dir( FILE_REPOSITORY.$path ) )
+			return ( rmdir( FILE_REPOSITORY.$path ) );
+		
+		return true;
 	}
     
 }

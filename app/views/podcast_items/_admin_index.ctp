@@ -6,6 +6,7 @@
             	<th>&nbsp;</th>
             	<th>Name</th>
                 <th>Uploaded</th>
+                <th>Processed State</th>
             	<th>iTunes</th>                
             	<th>U Tube</th>     
             	<th>Actions</th>                                                
@@ -31,8 +32,9 @@
             </td>
             <td><a href="/admin/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view <?php echo $podcast_item['title']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></td>
            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
-           	<td><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['itunes_flag'] ); ?>" class="icon"></td>
-           	<td><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['youtube_flag'] ); ?>" class="icon"></td>
+            <td class="centered"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
+           	<td class="centered"><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['itunes_flag'] ); ?>" class="icon"></td>
+           	<td class="centered"><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['youtube_flag'] ); ?>" class="icon"></td>
             <td>
                 <a href="/admin/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
                 <?php if( $podcast_item['deleted'] ) : ?>

@@ -62,16 +62,14 @@ class AppModel extends Model {
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
-    function unsetAttachments( $data ) {
+    function unsetAttachments() {
 
 		$possible_attachments = array('image','image_logoless','image_wide','transcript','image_filename');
 		
         foreach( $possible_attachments as $attachment ) {
 
-	        unset( $data[$this->name][$attachment] );
+	        unset( $this->data[$this->name][$attachment] );
         }
-
-        return $data;
     }
 
     /*
@@ -85,7 +83,7 @@ class AppModel extends Model {
 
         $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
                        "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
-                       "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+                       "Ã¢â‚¬â€�", "Ã¢â‚¬â€œ", ",", "<", ".", ">", "/", "?");
 
         $clean = trim(str_replace($strip, "", strip_tags($string)));
         $clean = preg_replace('/\s+/', "-", $clean);

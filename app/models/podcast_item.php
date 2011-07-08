@@ -32,7 +32,8 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.consider_for_itunesu, Podcast.consider_for_youtube'
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.consider_for_itunesu, Podcast.consider_for_youtube',
+            'dependent' => true
         )
     );
 
@@ -65,7 +66,7 @@ class PodcastItem extends AppModel {
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
         $this->data['PodcastItem']['published_flag'] = 'N';
-        $this->data['PodcastItem']['processed_state'] = 1;
+        $this->data['PodcastItem']['processed_state'] = 2;
 		
         if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
             $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN;
@@ -141,6 +142,7 @@ class PodcastItem extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function listAssociatedMedia( $data = array() ) {
+		
 		$media_files = array();
 		
 		$media_files[] = array(
@@ -168,7 +170,7 @@ class PodcastItem extends AppModel {
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'target_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'filename' => $data['Transcript']['filename'],
-				'target_filename' => '.'.$media['PodcastMedia']['filename']
+				'target_filename' => '.'.$data['PodcastMedia']['filename']
 				);
 		}
 

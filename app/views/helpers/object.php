@@ -3,6 +3,17 @@ class ObjectHelper extends AppHelper {
 
     var $helpers = array('Permission');
 
+	var $processed_state = array(
+	
+		'-2' => array('message' => 'failed to copy file back', 'icon' => ERROR_IMAGE ),
+		'-1' => array('message' => 'error in transcoding', 'icon' => ERROR_IMAGE ),
+		'0' => array('message' => 'no media file at all', 'icon' => INCORRECT_IMAGE ),
+		'1' => array('message' => 'awaiting transcoding choice', 'icon' => INCORRECT_IMAGE ),
+		'2' => array('message' => 'transcoding in progress', 'icon' => INCORRECT_IMAGE ),
+		'3' => array('message' => 'transcoded but awaiting approval', 'icon' => INCORRECT_IMAGE ),
+		'9' => array('message' => 'media available', 'icon' => CORRECT_IMAGE ),
+	);
+	
     /*
      * @name : isDeleted
      * @description : Accepts an array and returns a bool on whether deleted. 
@@ -147,5 +158,29 @@ class ObjectHelper extends AppHelper {
 		return true;
 			
 	}
-	
+
+	/*
+	 * @name : getProcessedState
+	 * @description : Translate the processed state of any media into 1 of 3 images to give an indication of status.
+	 * @updated : 7th July 2011
+	 * @by : Charles Jackson
+	 */	
+	function getProcessedState( $processed_state ) {
+		
+		if( isSet( $this->processed_state[$processed_state] ) ) {
+			$html = '<img src="/img/'.$this->processed_state[$processed_state]['icon'].'" class="icon" alt="'.$this->processed_state[$processed_state]['message'].'" />';
+			$html .= '<br />';
+			$html .= '<span class="tagline">'.ucfirst( $this->processed_state[$processed_state]['message'] ).'</span>';
+			
+		} else { 
+		
+			$html = '<img src="/img/'.ERROR_IMAGE.'" alt="State unknown - '.$processed_state.' Investigate" class="icon" />';
+			$html .= '<br />';
+			$html .= '<span class="tagline">State unknown : '.$processed_state.' Investigate!</span>';
+			
+		}
+		
+		return $html;
+		
+	}
 }

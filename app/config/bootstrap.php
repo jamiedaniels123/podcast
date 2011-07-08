@@ -101,6 +101,7 @@ DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
 DEFINE('NO_IMAGE_AVAILABLE', DEFAULT_MEDIA_URL.FEEDS.'images/no-image.jpg');
 DEFINE('CORRECT_IMAGE', '/correct.gif');
 DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
+DEFINE('ERROR_IMAGE', '/error.png');
 
 DEFINE('RSS_VIEW', 'http://'.$_SERVER['SERVER_NAME'].'/feeds/view/');
     
@@ -115,8 +116,17 @@ DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.u
 DEFINE('WIDE_SCREEN', '0.5625');
 DEFINE('STANDARD_SCREEN', '0.75');
 
+// The columns on the podcast table database that indicate itunes status 
+DEFINE('ITUNES_CONSIDERATION', 'consider_for_itunesu');
+DEFINE('ITUNES_INTENDED', 'intended_youtube_flag');
+DEFINE('ITUNES_PUBLISHED', 'publish_itunes_u');
+
+// The columns on the podcast table database that indicate itunes status
+DEFINE('YOUTUBE_CONSIDERATION', 'consider_for_youtube');
+DEFINE('YOUTUBE_INTENDED', 'intended_youtube_flag');
+DEFINE('YOUTUBE_PUBLISHED', 'publish_youtube');
+
 // Workflows
-	// Various workflows
 DEFINE('NONE', NULL);
 DEFINE('DIRECT_TRANSFER', 'direct_transfer');
 DEFINE('AUDIO', 'audio');

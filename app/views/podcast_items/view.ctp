@@ -1,6 +1,16 @@
 <fieldset>
     <legend> <?php echo $this->data['PodcastItem']['title'];?> Media </legend>
-    <?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['Podcast']['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['Podcast']['ModeratorGroups'] ) ) : ?>
+    <?php 
+	if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) 
+	|| 
+	$this->Permission->isModerator( $this->data['Podcast']['PodcastModerators'] ) 
+	|| 
+	$this->Permission->inModeratorGroup( $this->data['Podcast']['ModeratorGroups'] ) 
+	|| 
+	$this->Permission->youTubePrivileges( $this->data['Podcast'] ) 
+	|| 
+	$this->Permission->iTunesPrivileges( $this->data['Podcast'] ) 
+    ) : ?>
 		<a href="/podcast_items/edit/<?php echo $this->data['PodcastItem']['id'];?>" title="edit">edit</a>
         <a href="/podcasts/view/<?php echo $this->data['Podcast']['id'];?>" title="edit">collection</a>
 	<?php endif; ?>

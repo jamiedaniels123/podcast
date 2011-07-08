@@ -36,9 +36,8 @@ class AttachmentHelper extends AppHelper {
 	 */
 	function __getImage( $path = null ) {
 	
-		// Check to see if the file is there
-		if(	file_exists( DEFAULT_MEDIA_URL.$path ) )
-			return DEFAULT_MEDIA_URL.$path;
+		if ( @GetImageSize( DEFAULT_MEDIA_URL.FEEDS.$path ) )
+			return DEFAULT_MEDIA_URL.FEEDS.$path;
 
 
 		if(	file_exists( FILE_REPOSITORY.$path ) )
