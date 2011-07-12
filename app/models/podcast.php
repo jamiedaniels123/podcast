@@ -155,7 +155,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state',
             'order' => 'PodcastItems.publication_date DESC'
         ),
         'PublishedPodcastItems' => array(
@@ -396,10 +396,10 @@ class Podcast extends AppModel {
      * @updated : 23rd May 2011
      * @by : Charles Jackson
      */
-    function deleteExistingModerators( $podcast_id = null ) {
+    function deleteExistingModerators() {
 
-        $this->deletePodcastModerators( $podcast_id );
-        $this->deleteModeratorUserGroups( $podcast_id );
+        $this->deletePodcastModerators( $this->data['Podcast']['id'] );
+        $this->deleteModeratorUserGroups( $this->data['Podcast']['id'] );
     }
 
 
@@ -532,29 +532,27 @@ class Podcast extends AppModel {
       * @updated : 17th May 2011
       * @by : Charles Jackson
       */
-    function createPodcastModerators( $data = array() ) {
+    function createPodcastModerators() {
 
         //$data['PodcastModerators'] = array();
 
-        if( isSet( $data['Moderators'] ) && is_array( $data['Moderators'] ) ) {
+        if( isSet( $this->data['Moderators'] ) && is_array( $this->data['Moderators'] ) ) {
 
             $x = 0;
             // We need to add the moderators using a hasMany relationship so we may set the value of the
             // moderator flag to TRUE. Not possible using the HBTM relationship.
-            foreach( $data['Moderators'] as $moderator_id ) {
+            foreach( $this->data['Moderators'] as $moderator_id ) {
 
 
                 if( (int)$moderator_id ) {
                     
-                    $data['PodcastModerators'][$x]['user_id'] = $moderator_id;
-                    $data['PodcastModerators'][$x]['moderator'] = true;
+                    $this->data['PodcastModerators'][$x]['user_id'] = $moderator_id;
+                    $this->data['PodcastModerators'][$x]['moderator'] = true;
                 }
                 
                 $x++;
             }
         }
-
-        return $data;
      }
 
      /*
@@ -564,28 +562,26 @@ class Podcast extends AppModel {
       * @updated : 23rd May 2011
       * @by : Charles Jackson
       */
-    function createModeratorUserGroups( $data = array() ) {
+    function createModeratorUserGroups() {
 
         //$data['ModeratorUserGroups'] = array();
 
-        if( isSet( $data['ModeratorGroups'] ) && is_array( $data['ModeratorGroups'] ) ) {
+        if( isSet( $this->data['ModeratorGroups'] ) && is_array( $this->data['ModeratorGroups'] ) ) {
 
             $x = 0;
             // We need to add the moderators using a hasMany relationship so we may set the value of the
             // moderator flag to TRUE. Not possible using the HBTM relationship.
-            foreach( $data['ModeratorGroups'] as $moderator_id ) {
+            foreach( $this->data['ModeratorGroups'] as $moderator_id ) {
 
                 if( (int)$moderator_id ) {
                     
-                    $data['ModeratorUserGroups'][$x]['user_group_id'] = $moderator_id;
-                    $data['ModeratorUserGroups'][$x]['moderator'] = true;
+                    $this->data['ModeratorUserGroups'][$x]['user_group_id'] = $moderator_id;
+                    $this->data['ModeratorUserGroups'][$x]['moderator'] = true;
                 }
                 
                 $x++;
             }
         }
-        
-        return $data;
      }
 
      /*
@@ -704,6 +700,7 @@ class Podcast extends AppModel {
         return $conditions;
     }
 
+
     /*
      * @name : buildFilters
      * @description : Exploited from the "/podcasts/index" and "/admin/podcasts/index" URL, it builds the filters
@@ -723,20 +720,24 @@ class Podcast extends AppModel {
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
                 $conditions[0]['Podcast.publish_itunes_u'] = 'N';
                 $conditions[0]['Podcast.openlearn_epub'] = 'N';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case PUBLISHED_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
                 $conditions[0]['Podcast.publish_itunes_u'] = 'Y';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case OPENLEARN_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
                 $conditions[0]['Podcast.openlearn_epub'] = 'Y';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case PRIVATE_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'private';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case DELETED_PODCAST:
                 $conditions[0]['Podcast.deleted'] = 1;
@@ -745,6 +746,85 @@ class Podcast extends AppModel {
         return $conditions;
      }
 
+    /*
+     * @name : buildiTunesFilters
+     * @description : Exploited from the "/itunes/podcasts/index" URL, it builds the filters
+     * that can be selected via the dropdown.
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */
+    function buildiTunesFilters( $filter = null ) {
+
+        switch( strtolower( $filter ) ) {
+            case 'consideration':
+                return array(
+                	'Podcast.consider_for_itunesu' => true,
+                	'Podcast.intended_itunesu_flag' => 'N',
+                	'Podcast.deleted' => 0 
+                );
+                break;
+            case 'intended':
+                return array( 
+	                'Podcast.intended_itunesu_flag' => 'Y',
+                	'Podcast.publish_itunes_u' => 'N',
+	                'Podcast.deleted' => 0 
+                );
+                break;
+            case 'published':
+            	return array(
+	                'Podcast.publish_itunes_u' => 'Y',
+	                'Podcast.deleted' => 0
+            	);
+                break;
+            default :
+                return array(
+                	'Podcast.consider_for_itunesu' => true,
+                	'Podcast.deleted' => 0 
+                );
+                break;                
+        }
+     }
+
+    /*
+     * @name : buildYoutubeFilters
+     * @description : Exploited from the "/youtube/podcasts/index" URL, it builds the filters
+     * that can be selected via the dropdown.
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */
+    function buildYoutubeFilters( $filter = null ) {
+
+        switch( strtolower( $filter ) ) {
+        	
+            case 'consideration':
+                return array(
+                	'Podcast.consider_for_youtube' => true,
+                	'Podcast.intended_youtube_flag' => 'N',
+                	'Podcast.deleted' => 0 
+                );
+                break;
+            case 'intended':
+                return array( 
+	                'Podcast.intended_youtube_flag' => 'Y',
+                	'Podcast.publish_youtube' => 'N',
+	                'Podcast.deleted' => 0 
+                );
+                break;
+            case 'publish':
+            	return array(
+	                'Podcast.publish_youtube' => 'Y',
+	                'Podcast.deleted' => 0
+            	);
+                break;
+            default :
+                return array(
+                	'Podcast.consider_for_youtube' => true,
+                	'Podcast.deleted' => 0 
+                );
+                break;
+        }
+     }
+     
      /*
       * @name : waitingApproval
       * @description : Will build the conditions to find all podcasts that are waiting to be approved.
@@ -794,24 +874,65 @@ class Podcast extends AppModel {
     }
 
     /*
-     * @name : setPreferredNode
+     * @name : getPreferredNode
      * @description : We set the value of preferred node to equal the value of the first node choosen when editing a podcast.
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function setPreferredNode( $data = array() ) {
+    function setPreferredNode() {
 		
-		if( is_array( $data['Nodes'] ) && count( $data['Nodes'] ) ) {
+		if( is_array( $this->data['Nodes'] ) && count( $this->data['Nodes'] ) ) {
 			
-	        $data['Podcast']['preferred_node'] = $data['Nodes'][0];
+			$this->data['Podcast']['preferred_node'] = $this->data['Nodes'][0];
 			
 		} else {
 			
-			$data['Podcast']['preferred_node'] = null;
+			$this->data['Podcast']['preferred_node'] = null;
 		}
-        return $data;
+			
+        return true;
     }
-	
+
+    /*
+     * @name : setPreferredCategory
+     * @description : We set the value of preferred category to equal the value of the first category choosen when editing a podcast.
+     * @updated : 7th July 2011
+     * @by : Charles Jackson
+     */
+    function setPreferredCategory() {
+
+		if( is_array( $this->data['Categories'] ) && count( $this->data['Categories'] ) ) {    	
+
+			$this->data['Podcast']['preferred_category'] = $this->data['Categories'][0];
+			
+		} else {
+			
+			$this->data['Podcast']['preferred_category'] = null;
+		}
+			
+        return true;
+    }
+
+    /*
+     * @name : setPreferredItunesuCategory
+     * @description : We set the value of preferred category to equal the value of the first category choosen when editing a podcast.
+     * @updated : 7th July 2011
+     * @by : Charles Jackson
+     */
+    function setPreferredItunesuCategory( $itunesu_categories = array() ) {
+
+		if( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) {    	
+
+			$this->data['Podcast']['preferred_itunesu_category'] = $this->data['iTuneCategories'][0];
+			
+		} else {
+			
+			$this->data['Podcast']['preferred_itunesu_category'] = null;
+		}
+			
+        return true;
+    }
+		
 	/* 
 	 * @name : deleteImages
 	 * @description : Will create an array containing the 3 image names (original, resized and thumbnail) that can be passed

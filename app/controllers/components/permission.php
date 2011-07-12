@@ -33,9 +33,10 @@ class PermissionComponent extends Object {
 
         }
 
-        if( $this->__isModerator( $data['Moderators'] ) )
+        if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
-        if( $this->__isMember( $data['Members'] ) )
+            
+        if( ( isSet( $data['Members'] ) ) && ( $this->__isMember( $data['Members'] ) ) )
             return true;
 
         // Only podcast containers have member groups so check they exist before we call the routine
@@ -47,12 +48,18 @@ class PermissionComponent extends Object {
 
 		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
 		// then let them view it.
-		if( $this->isYoutubeUser() || $this->isItunesUser() )  {
-			
-			if( $data['consider_for_itunesu'] || $data['consider_for_youtube'] )
+		if( $this->isItunesUser() )  {
+
+			if( isSet( $data['Podcast']['consider_for_itunesu'] ) && ( $data['Podcast']['consider_for_itunesu'] == true ) )
 				return true;
 		}
-		
+
+		if( $this->isYoutubeUser() )  {
+
+			if( isSet( $data['Podcast']['consider_for_youtube'] ) && ( $data['Podcast']['consider_for_youtube'] == true ) )
+				return true;
+		}
+
         return false;
     }
 
@@ -79,6 +86,20 @@ class PermissionComponent extends Object {
         if( $this->__isModerator( $data['Moderators'] ) )
             return true;
 
+    		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
+		// then let them view it.
+		if( $this->isItunesUser() )  {
+
+			if( $data['Podcast']['consider_for_itunesu'] == true )
+				return true;
+		}
+
+		if( $this->isYoutubeUser() )  {
+
+			if( $data['Podcast']['consider_for_youtube'] == true )
+				return true;
+		}
+		            
         return false;
     }
 
@@ -271,7 +292,10 @@ class PermissionComponent extends Object {
     function isAdminRouting() {
 
 		return isSet( $this->params['admin'] );
-    }	
+    }
+
+
+    
 }
 
 ?>

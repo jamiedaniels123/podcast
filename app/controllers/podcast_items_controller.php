@@ -68,7 +68,7 @@ class PodcastItemsController extends AppController {
         $this->data = $this->PodcastItem->findById( $id );
 
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
+        if( empty( $this->data )  || $this->Permission->toView( $this->data ) == false ) {
 
             $this->Session->setFlash( 'Could not find your item media file. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -92,9 +92,10 @@ class PodcastItemsController extends AppController {
             $data = array();
             $data = $this->data;
 
-            $this->data = $this->PodcastItem->unsetAttachments( $this->data );
+            $this->PodcastItem->data = $this->data;
+            $this->PodcastItem->unsetAttachments();
 
-            $this->PodcastItem->set( $this->data );
+            $this->PodcastItem->set( $this->PodcastItem->data );
 
             if(  $this->PodcastItem->save()  ) {
 
@@ -512,11 +513,11 @@ class PodcastItemsController extends AppController {
             $data = array();
             $data = $this->data;
 
-            $this->data = $this->PodcastItem->unsetAttachments( $this->data );
-            
-            // Upload the attachments here...
-            $this->PodcastItem->set( $this->data );
+            $this->PodcastItem->data = $this->data;
+            $this->PodcastItem->unsetAttachments();
 
+            $this->PodcastItem->set( $this->PodcastItem->data );
+            
             if(  $this->PodcastItem->save()  ) {
 
                 // Now copy back the original including array elements and

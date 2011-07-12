@@ -10,12 +10,8 @@
             ));
         ?>
     </p>
-    <form method="post" action="/admin/podcasts/delete">
-        <a href="/" class="toggler" data-status="unticked">Toggle</a>
-        <button type="submit" onclick="return confirm('Are you sure you wish to delete all these podcasts and associated media?')"><span>delete</span></button>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th>Select</th>
                 <th>Image</th>
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
@@ -35,36 +31,32 @@
                     endif;
             ?>
                     <tr<?php echo $class;?>>
-                        <td>
-                            <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
-                        </td>
                         <td class="image thumbnail">
-                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="thumbnail image" />
+                            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="thumbnail image" />
                         </td>
                         <td>
-                            <?php echo $podcast['Owner']['full_name']; ?>
+                            	<?php echo $podcast['Owner']['full_name']; ?>
                         </td>
                         <td>
-                            <?php echo $podcast['Podcast']['title']; ?>
+                            	<?php echo $podcast['Podcast']['title']; ?>
                         </td>
                         <td>
-                            <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
+                            	<?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
                         <td class="status">
-                        <img src="/img<?php echo $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting itunes approval" class="status_image" />
+                        	<img src="/img<?php echo $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting itunes approval" class="status_image" />
                         </td>
                         <td class="status">
-                        <img src="/img<?php echo $this->Object->waitingYoutubeApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting youtube approval" class="status_image" />
+                        	<img src="/img<?php echo $this->Object->waitingYoutubeApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting youtube approval" class="status_image" />
                         </td>
                         <td class="actions">
-                            <a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
+
                         </td>
                     </tr>
             <?php
                 endforeach;
             endif; ?>
         </table>
-    </form>
     <div class="paging">
             <?php echo $this->Paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>
      | 	<?php echo $this->Paginator->numbers();?>

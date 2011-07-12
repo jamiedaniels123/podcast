@@ -52,6 +52,52 @@ class PodcastsController extends AppController {
     }
 
     /*
+     * @name : itunes_index
+     * @desscription : Displays a paginated list of all podcasts that are itunes related.
+     * @name : Charles Jackson
+     * @by : 8th July 2011
+     */
+    function itunes_index() {
+
+        // Unset this join else we will get duplicate rows on the various joins.
+        unset( $this->Podcast->hasOne['UserPodcast'] );
+		$this->Podcast->recursive = 2;
+		
+		if( isSet( $this->data['Podcast']['filter'] ) ) {
+			
+			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildItunesFilters( $this->data['Podcast']['filter'] ) );
+			$this->set('filter',$this->data['Podcast']['filter'] );	
+		} else {
+			
+			$this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.consider_for_itunesu' => 'Y' ) );
+			$this->set('filter',null );
+		}
+    }
+
+    /*
+     * @name : youtube_index
+     * @desscription : Displays a paginated list of all podcasts that are youtube related.
+     * @name : Charles Jackson
+     * @by : 8th July 2011
+     */
+    function youtube_index() {
+
+        // Unset this join else we will get duplicate rows on the various joins.
+        unset( $this->Podcast->hasOne['UserPodcast'] );
+		$this->Podcast->recursive = 2;
+		
+		if( isSet( $this->data['Podcast']['filter'] ) ) {
+			
+			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
+			$this->set('filter',$this->data['Podcast']['filter'] );	
+		} else {
+			
+			$this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.consider_for_youtube' => 'Y' ) );
+			$this->set('filter',null );			
+		}
+    }
+        
+    /*
      * @name : add
      * @desscription : Displays a form that enables peeps to add a row to the podcasts table. If the form is populated
      * it will validate and save the data.
@@ -147,25 +193,31 @@ class PodcastsController extends AppController {
             $data = array();
             $data = $this->data;
 
-            $this->data = $this->Podcast->unsetAttachments( $this->data );
+            $this->Podcast->data = $this->data;
+            
+            $this->Podcast->unsetAttachments();
 
             // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators( $this->data['Podcast']['id'] );
-            // Create the PodcastModerators that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createPodcastModerators( $this->data );
-            // Create the ModeratorUserGroups that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
-            // Set the preferred node to equal the first node chosen
-            $this->data = $this->Podcast->setPreferredNode( $this->data );
+            $this->Podcast->deleteExistingModerators();
+            // Create the PodcastModerators that are saved using a hasMany relationship.
+            $this->Podcast->createPodcastModerators();
+            // Create the ModeratorUserGroups that are saved using a hasMany relationship.
+            $this->Podcast->createModeratorUserGroups();
+            // Set the preferred node to equal the first node chosen.
+            $this->Podcast->setPreferredNode();
+            // Set the preferred category to equal the first node chosen.
+            $this->Podcast->setPreferredCategory();
+            // Set the preferred itunesu category to equal the first node chosen.
+            $this->Podcast->setPreferredItunesuCategory();
 
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->Podcast->data );
 
             if( $this->Podcast->saveAll() ) {
 
                 // OK, it validates but have they changed/confirmed ownership.
                 if( $this->Podcast->unconfirmedChangeOfOwnership( $this->data ) ) {
 
-                    $this->Podcast->rollback(); // We rollback the data because they still need to confirm this update
+                    $this->Podcast->rollback(); // We rollback the data because they still need to confirm this update.
                     $this->data = $this->Podcast->rebuild( $data );
                     $this->data['Podcast']['confirmed'] = true;
                     $this->Session->setFlash('You are changing ownership of this podcast. Submit again to confirm the change.', 'default', array( 'class' => 'alert' ) );
@@ -178,7 +230,8 @@ class PodcastsController extends AppController {
                     if ( $this->__updateImages() == false ) {
 
                         $this->Session->setFlash('We were unable to upload all your images.', 'default', array( 'class' => 'error' ) );
-                        $this->data = $this->Podcast->rebuild( $data );
+                        $this->data = $this->Podcast->rebuild( $this->data );
+
                         $this->Podcast->rollback();
 
                     } else {
@@ -268,7 +321,7 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 22nd June 2011
      */
-    function itunes( $id = null ) {
+    /*function itunes( $id = null ) {
 
         $this->Podcast->recursive = 2;
 
@@ -335,7 +388,7 @@ class PodcastsController extends AppController {
 
         // Need to retrieve form options such as additional users and catagories etc... on the system.
         $this->__setPodcastFormOptions();
-    }
+    }*/
 
     /*
      * @name : delete
@@ -362,8 +415,8 @@ class PodcastsController extends AppController {
 
             // Delete the podcast
             $podcast['Podcast']['deleted'] = true;
-            $Podcast->set( $podcast ); // Hydrate the object
-            $Podcast->save();
+            $this->Podcast->set( $podcast ); // Hydrate the object
+            $this->Podcast->save();
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
@@ -389,23 +442,6 @@ class PodcastsController extends AppController {
     }
 
    /*
-     * @name : approve
-     * @desscription : Displays a paginated list of all podcasts currently on the system that are waiting to be approved
-     * for either itunes or youtube
-     * @name : Charles Jackson
-     * @by : 20th June 2011
-     */
-    function approve() {
-
-        unset( $this->Podcast->hasOne['UserPodcast'] );
-        
-        $conditions = $this->Podcast->waitingApproval();
-        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
-
-
-    }
-
-    /*
      * @name : approval
      * @description : Enables an approver to update the status flags for itunes and youtube to 'Y', in essence
      * approving them.
@@ -447,7 +483,7 @@ class PodcastsController extends AppController {
 
         }
 
-        $this->redirect( '/podcasts/approve' );
+        $this->redirect( $this->referer() );
     }
 
     /*
@@ -491,7 +527,7 @@ class PodcastsController extends AppController {
             $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
         }
 
-        $this->redirect( '/podcasts/approve' );
+        $this->redirect( $this->referer() );
     }
 
     /*
@@ -601,19 +637,22 @@ class PodcastsController extends AppController {
             $data = array();
             $data = $this->data;
 
-            $this->data = $this->Podcast->unsetAttachments( $this->data );
+			$this->Podcast->data = $this->data;
 
             // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators( $this->data['Podcast']['id'] );
+            $this->Podcast->deleteExistingModerators();
+            // Create the PodcastModerators that are saved using a hasMany relationship.
+            $this->Podcast->createPodcastModerators();
+            // Create the ModeratorUserGroups that are saved using a hasMany relationship.
+            $this->Podcast->createModeratorUserGroups();
+            // Set the preferred node to equal the first node chosen.
+            $this->Podcast->setPreferredNode();
+            // Set the preferred category to equal the first node chosen.
+            $this->Podcast->setPreferredCategory();
+            // Set the preferred itunesu category to equal the first node chosen.
+            $this->Podcast->setPreferredItunesuCategory();
 
-            // Create the PodcastModerators that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createPodcastModerators( $this->data );
-            // Create the ModeratorUserGroups that are saved using a hasMany relationship
-            $this->data = $this->Podcast->createModeratorUserGroups( $this->data );
-            // Set the preferred node to equal the first node chosen
-            $this->data = $this->Podcast->setPreferredNode( $this->data );
-
-            $this->Podcast->set( $this->data ); // Hydrate the object
+            $this->Podcast->set( $this->Podcast->data ); // Hydrate the object
 
             if(  $this->Podcast->saveAll()  ) { // Using "saveAll" so we save associated data
 
@@ -825,37 +864,38 @@ class PodcastsController extends AppController {
 
         // Try to upload the associated images and transfer to the media server. If successful the upload component will return the name
         // of the uploaded file else it will return false.
-        if( $this->Upload->podcastImage( $this->data, 'image' ) ) {
+        if( $this->Upload->podcastImage( $this->data, 'new_image' ) ) {
 			
 			$this->data['Podcast']['image'] = $this->Upload->getUploadedFileName();
 			
 		} else {
 			
-			unset( $this->data['Podcast']['image'] );
+			unset( $this->data['Podcast']['new_image'] );
 		}
 
-        if( $this->Upload->logolessPodcastImage( $this->data, 'image_logoless' ) ) {
+        if( $this->Upload->logolessPodcastImage( $this->data, 'new_image_logoless' ) ) {
 			
 			$this->data['Podcast']['image_logoless'] = $this->Upload->getUploadedFileName();
 			
 		} else {
 			
-			unset( $this->data['Podcast']['image_logoless'] );
+			unset( $this->data['Podcast']['new_image_logoless'] );
 		}
 		
-        if( $this->Upload->widePodcastImage( $this->data, 'image_wide' ) ) {
+        if( $this->Upload->widePodcastImage( $this->data, 'new_image_wide' ) ) {
 			
 			$this->data['Podcast']['image_wide'] = $this->Upload->getUploadedFileName();
 			
 		} else {
 			
-			unset( $this->data['Podcast']['image_wide'] );
+			unset( $this->data['Podcast']['new_image_wide'] );
 		}
 
         // Check to see if the upload component created any errors.
         if( $this->Upload->hasErrors() ) {
 			
             $this->errors = $this->Upload->getErrors();
+			
             return false;
 
         } else {

@@ -10,6 +10,7 @@ class PodcastItemMedia extends AppModel {
         'PodcastItem' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_item',
+            'dependent' => true
          )
     );
 }

@@ -72,7 +72,9 @@ class emailTemplatesComponent extends Object {
     function __sendCallbackErrorEmail( $recipients=array(),$data ,$errormessage) {
 
         /* Set delivery method */
-        $this->Email->to = 'j.d.daniels@open.ac.uk';
+        //$this->Email->to = 'j.d.daniels@open.ac.uk';
+		//$this->Email->to = 'cj3998@openmail.open.ac.uk';
+		$this->Email->to = 'i.newton@open.ac.uk';
         $this->Email->subject = "callback error at ".$_SERVER['HTTP_HOST'];
         $this->Email->replyTo = DEFAULT_EMAIL_ADDRESS;
         $this->Email->template = 'callback_error'; // note no '.ctp'
@@ -84,6 +86,8 @@ class emailTemplatesComponent extends Object {
         //Do not pass any args to send()
 
         $this->Email->send();
+		$this->Email->to = 'cj3998@openmail.open.ac.uk';
+		$this->Email->send();
     }
 	
     /*

@@ -1,7 +1,7 @@
 <?php
 class PermissionHelper extends AppHelper {
 
-    var $helpers = array('Session');
+    var $helpers = array('Session','Object');
     
     /*
      * @name : isModerator
@@ -143,5 +143,33 @@ class PermissionHelper extends AppHelper {
         
         return false;
     }
+
+    /*
+     * @name : youTubePrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function youTubePrivileges( $podcast = array() ) {
+  	
+    	if( $this->isYoutubeUser() && $this->Object->considerForYoutube( $podcast ) )
+    		return true;
+    		
+    	return false;
+    }
+
+    /*
+     * @name : iTunesPrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function iTunesPrivileges( $podcast = array() ) {
+  	
+    	if( $this->isItunesUser() && $this->Object->considerForItunes( $podcast ) )
+    		return true;
+    		
+    	return false;
+    }    
 }
 ?>
