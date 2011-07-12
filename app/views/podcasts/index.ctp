@@ -22,11 +22,11 @@
             <table cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <th>Select</th>
-                <th>Image</th>
+                <th width="72px" align="center">Image</th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
-                <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
-                <th><?php echo $this->Paginator->sort('Created');?></th>
-                <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
+                <th width="240px"><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
+                <th width="120px"><?php echo $this->Paginator->sort('Created');?></th>
+                <th width="15px"><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -41,12 +41,12 @@
                     endif;
         ?>
                     <tr<?php echo $class;?>>
-                        <td width="15px">
+                        <td width="15px" align="center">
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
                                 <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                             <?php endif; ?>
                         </td>
-                        <td>
+                        <td width="82px" align="center">
                             <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" class="thumbnail" title="podcast image" />
                         </td>
                         <td>
@@ -59,7 +59,7 @@
                         <td>
                             <span class="podcast-owner"><?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?></span>
                         </td>
-                        <td>
+                        <td align="right">
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
