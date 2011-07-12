@@ -464,18 +464,15 @@ class PodcastsController extends AppController {
 				$media_channel = self::YOUTUBE;				
 			}
 
-			//$this->data = $this->Podcast->MakeEveryoneReadOnly( $this->data );
-			
-            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
 			$this->Podcast->set( $this->data );
-			$this->Podcast->saveAll(); // saveAll so we can capture the updated associations including the recently created read-only members.
+			$this->Podcast->save(); 
 			
 			$this->data = $this->Podcast->findById( $id );
 
 
 			$this->emailTemplates->__sendPodcastApprovalEmail( strtolower( $media_channel ), $this->data );
             
-            $this->Session->setFlash('The collection has been approved and you have been assigned ownership.', 'default', array( 'class' => 'success' ) );
+            $this->Session->setFlash('The collection has been approved and a notification email has been sent to the end user.', 'default', array( 'class' => 'success' ) );
 
         } else {
 
@@ -517,7 +514,7 @@ class PodcastsController extends AppController {
 
 			$this->emailTemplates->__sendPodcastRejectionEmail( strtolower( $media_channel ), $this->data, $justification );
 			
-            $this->Session->setFlash('The collection has been rejected.', 'default', array( 'class' => 'success' ) );
+            $this->Session->setFlash('The collection has been rejected and a notification email sent to the end user.', 'default', array( 'class' => 'success' ) );
 			
 
         } else {
@@ -795,10 +792,10 @@ class PodcastsController extends AppController {
 
 			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
+            if( $this->Folder->buildHtaccessFile( $this->data ) && $this->Api->transferFileMediaServer( 
 				array( 
-					'source_path' => $podcast['Podcast']['custom_id'].'/',
-					'target_path' => $podcast['Podcast']['custom_id'].'/', 
+					'source_path' => $this->data['Podcast']['custom_id'].'/',
+					'target_path' => $this->data['Podcast']['custom_id'].'/', 
 					'filename' => '.htaccess' 
 					)
 				) ) {						

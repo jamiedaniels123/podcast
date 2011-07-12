@@ -592,8 +592,8 @@ th.actions {
 #flashMessage {
     clear: both;
     color: #fff;
-    font-weight: bold;
     padding: 15px;
+    font-size: 1.1em;
 }
 
 #flashMessage.error, div#errors {
@@ -755,4 +755,10 @@ td.centered {
 .tagline {
 	
 	font-size: 0.9em;	
+}
+
+input[type="text"],input[type="password"],textarea,select {
+	
+	background-color: #f6f9fb;
+		
 }

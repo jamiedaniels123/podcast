@@ -101,7 +101,7 @@ class ApiComponent extends Object {
 
         $this->response = json_decode( $this->__sendMessage('transcode-media-and-deliver', self::ADMIN_API, $this->params ), 1 );
 
-		$this->getStatus( $this->response );
+		return $this->getStatus( $this->response );
 
     }
     
@@ -196,7 +196,6 @@ class ApiComponent extends Object {
 	 * @by : Charles Jackson
 	 */
 	function getStatus( $response = array() ) {
-
 		return strtoupper( $response['status'] ) == 'ACK' ? true : false;
 	}
 }

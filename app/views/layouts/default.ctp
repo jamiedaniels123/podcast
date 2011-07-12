@@ -45,7 +45,9 @@
             <?php echo $this->Session->flash(); ?>
             <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
+		<div style="height: 10px;"></div>
             <?php echo $content_for_layout; ?>
+
         </div>
         <div id="footer">
             &nbsp;
