@@ -228,16 +228,17 @@ class UploadComponent extends Object {
     function transcript( $data = array(), $data_key ) {
 
         // Have they tried uploading a transcript?
-		if( $this->attemptedUpload( $data, $data_key ) == false )
+        if ( ( isSet( $data['Transcript'][$data_key] ) == false ) || ( strlen( $data['Transcript'][$data_key]['name'] ) == 0 ) )
 			return false;
 
         // Has an image been uploaded and is it error free?
         if ( (int)$data['Transcript'][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your transcript. Please try again.';
+            $this->errors[] = 'There has been a problem uploading your transcript. Error code : '.(int)$data['Transcript'][$data_key]['error'].' Please try again.';
             return false;
         }
-		
+        
+		$this->setDataCollection('Podcast Media Transcript');
         $this->setData( $data );
         $this->setFolderName( $this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ) );
         $this->setDataKey( $data_key );

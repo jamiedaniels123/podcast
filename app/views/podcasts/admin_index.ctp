@@ -59,7 +59,7 @@
                         </td>
                         <td class="actions">
                             <?php if( $this->Object->isDeleted( $podcast['Podcast'] ) ) : ?>
-                                <a href="/admin/podcasts/restore/<?php echo $podcast['Podcast']['id']; ?>" id="restore_podcast_<?php echo $podcast['Podcast']['id']; ?>">restore</a>
+                                <a href="/admin/podcasts/restore/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to restore this podcast?');" id="restore_podcast_<?php echo $podcast['Podcast']['id']; ?>">restore</a>
                             <?php endif; ?>
                             <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
                             <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>

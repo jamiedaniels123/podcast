@@ -22,18 +22,17 @@ class CallbacksController extends AppController {
 	 * @by : Charles Jackson and Jamie Daniels
 	 */
 	function add() {
+		
 		$this->layout='callback';
-		$this->Callback->setData($this->data);
+		$this->Callback->setData($_POST);
+		
 		$user=ClassRegistry::init('User');
-		$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->data,'Callback ALERT');
+		$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$_POST,'Callback ALERT');
 
 		// Is it a valid command
-		if ($this->Callback->understand()){
-			$m_data = array('status'=>'ACK', 'data'=>'Message recieved', 'timestamp'=>time());
-			$jsonData = json_encode($m_data);
-			$this->set('status',$jsonData);
-
-
+		if ( $this->Callback->understand() ) {
+			
+			$this->set('status', json_encode( array('status'=>'ACK', 'data'=>'Message recieved', 'timestamp'=>time() ) ) );
 
 			// Does the API command signify a need to delete a local file structure?
 			if( in_array( $this->data['command'], $this->requires_local_deletion ) ) {
@@ -44,10 +43,9 @@ class CallbacksController extends AppController {
 					$user=ClassRegistry::init('User');
 					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->data,'Failed to delete file');
 				}
-				
 			}
 
-		}else{
+		} else {
 			
 			$user=ClassRegistry::init('User');
 			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->data,'Failed to understand command');

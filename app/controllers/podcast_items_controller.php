@@ -50,7 +50,7 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id ) );
+            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id, 'PodcastItem.deleted' => false ) );
         }
     }
 
@@ -107,15 +107,11 @@ class PodcastItemsController extends AppController {
 
 					$this->PodcastItem->rollback();
 					$this->Session->setFlash('Could not update your associated image. Please try again.', 'default', array( 'class' => 'error' ) );														
-	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-					exit;
 	
 				} elseif( ( $this->__updateTranscript() == false )  ) {
 
 					$this->PodcastItem->rollback();
 					$this->Session->setFlash('Could not update your associated transcript. Please try again.', 'default', array( 'class' => 'error' ) );														
-	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-					exit;
 					
 				} else {
 
@@ -274,7 +270,7 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
+            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
         }
         exit();
     }
@@ -289,13 +285,13 @@ class PodcastItemsController extends AppController {
 	
         // Try to upload the associated images. If successful the upload component will return the name of the uploaded file
         // else it will return false.
-        if( $this->Upload->podcastMediaImage( $this->data, 'image' ) ) {
+        if( $this->Upload->podcastMediaImage( $this->data, 'new_image_filename' ) ) {
 			
 			$this->data['PodcastItem']['image_filename'] = $this->Upload->getUploadedFileName();
 			
 		} else {
 			
-			unset( $this->data['PodcastItem']['image_filename'] );
+			unset( $this->data['PodcastItem']['new_image_filename'] );
 		}
 				
         // Check to see if the upload component created any errors.
@@ -322,25 +318,33 @@ class PodcastItemsController extends AppController {
      */
 	function __updateTranscript() {
 		
-		if( $this->Upload->transcript( $this->data, 'filename' ) == false ) {
-			
-			unset( $this->data['Transcript']['filename'] );
-            $this->errors = $this->Upload->getErrors();
-            return false;
-						
-		} else {
-			
-			$this->data['Transcript']['original_filename'] = $this->data['Transcript']['filename']['name'];
+		if( $this->Upload->transcript( $this->data, 'new_filename' ) ) {
+
+			$this->data['Transcript']['original_filename'] = $this->data['Transcript']['new_filename']['name'];
 			$this->data['Transcript']['filename'] = $this->Upload->getUploadedFilename();
 			$this->data['Transcript']['media_type'] = strtolower( TRANSCRIPT );
 			$this->data['Transcript']['duration'] = 0;
 			$this->data['Transcript']['podcast_item'] = $this->data['PodcastItem']['id'];
 			$this->data['Transcript']['processed_state'] = 9; // Media available
 			
+		} else {
+			
+			unset( $this->data['Transcript']['filename'] );
+
+		}
+		
+        // Check to see if the upload component created any errors.
+        if( $this->Upload->hasErrors() ) {
+
+            $this->errors = $this->Upload->getErrors();
+            return false;
+			
+        } else {
+		
+			
 			$this->PodcastItem->Transcript->set( $this->data );
 			$this->PodcastItem->Transcript->save();
 			return true;
-			
 		}
 	}
 	
@@ -368,7 +372,10 @@ class PodcastItemsController extends AppController {
 				// Soft delete the podcast
 				$this->data['PodcastItem']['deleted'] = true;
 				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
+				if( $this->PodcastItem->save() == false ) {
+					print_r( $this->data['Podcast'] );
+					die('dddd');
+				}
 	
 				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
 				
@@ -533,7 +540,7 @@ class PodcastItemsController extends AppController {
 				} else {
 
 					$this->PodcastItem->commit();
-					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'error' ) );									
+					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
 	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
 					exit;
 				}

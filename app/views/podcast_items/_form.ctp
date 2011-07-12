@@ -35,8 +35,9 @@
 	    <a href="/podcast_items/delete_attachment/image/<?php echo $this->data['PodcastItem']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this image?');" title="delete image">delete image</a>
     <?php endif; ?>
     <label for="PodcastItemImage">Item Image</label>
-    <input type="file" id="PodcastItemImage" name="data[PodcastItem][image]">
-    <?php echo $this->Form->error('PodcastItem.image'); ?>
+    <input type="hidden" id="PodcastItemImageFilename" name="data[PodcastItem][image_filename]" value="<?php echo $this->data['PodcastItem']['image_filename']; ?>" />
+    <input type="file" id="PodcastItemNewImageFilename" name="data[PodcastItem][new_image_filename]">
+    <?php echo $this->Form->error('PodcastItem.image_filename'); ?>
 </div>
 <div class="input text">
     <label for="PodcastItemUnitCourse">Unit Course</label>
@@ -61,7 +62,7 @@
 <div class="input file">
     <label for="TranscriptFilename">Transcript</label>
     <input type="hidden" id=TranscriptId" name="data[Transcript][id]" value="<?php echo $this->data['Transcript']['id']; ?>" >
-    <input type="file" id="TranscriptFilename" name="data[Transcript][filename]">
+    <input type="file" id="TranscriptFilename" name="data[Transcript][new_filename]">
     <?php echo $this->Form->error('Transcript.filename'); ?>
     <?php if( !empty( $this->data['Transcript']['filename'] ) ) : ?>
 	    <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>

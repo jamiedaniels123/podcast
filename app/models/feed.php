@@ -183,7 +183,7 @@ class Feed extends AppModel {
             'generator' => 'OU Podcast System by KMi',
             'docs' => 'http://blogs.law.harvard.edu/tech/rss' );
 
-        $channelData['atom:link']['attrib']['href'] = $this->media_server . FEEDS_FOLDER . $this->data['Podcast']['custom_id'] . '/' . $this->rss_filename;
+        $channelData['atom:link']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->rss_filename;
         $channelData['atom:link']['attrib']['type'] = 'application/rss+xml';
         $channelData['atom:link']['attrib']['rel'] = 'self';
 
@@ -266,7 +266,7 @@ class Feed extends AppModel {
 
         // We only want to include this media if a copy exists on the media box. Break out of the loop and
         // start again if the media does not exist.
-        if( parent::mediaFileExist( $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_media_folder.$this->podcast_media['filename'] ) == false )
+        if( parent::mediaFileExist( $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_media_folder.$this->podcast_media['filename'] ) == false )
             return false;
 
         $item['title'] = $this->podcast_item['title'];
@@ -283,11 +283,11 @@ class Feed extends AppModel {
 
         } elseif( !empty( $this->podcast_item_standard_image ) ) {
 
-            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image;
+            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image;
 
         } elseif( !empty( $this->podcast_item_image ) ) {
 
-            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image;
+            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image;
         }
 
         // BEGIN - iTunes specific
@@ -308,9 +308,9 @@ class Feed extends AppModel {
         if (!empty( $this->podcast_item['item_link'] ) )
             $item['link'] = $this->podcast_item['item_link'];
 
-        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
+        $item['guid'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
         $item['pubDate'] = $this->podcast_item['publication_date'];
-        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
+        $item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
 
         // OK, we are not processing an eBook or PDF transcript, add duration
         if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false )
@@ -344,7 +344,7 @@ class Feed extends AppModel {
         $item['media:title'] = TRANSCRIPT_PREFIX.$this->podcast_item['title'];
         $item['media:description'] = TRANSCRIPT_PREFIX.$this->podcast_item['summary'];
         $item['media:keywords'] = $this->data['Podcast']['keywords'];
-        //$item['media:thumbnail'] = $this->media_server.FEEDS_FOLDER.'images/pdf-icon.png';
+        //$item['media:thumbnail'] = $this->media_server.FEEDS.'images/pdf-icon.png';
 
         // Itunes specific
         $item['itunes:summary'] = $this->podcast_item['summary'];
@@ -362,10 +362,10 @@ class Feed extends AppModel {
         if (!empty( $this->podcast_item['item_link'] ) )
             $item['link'] = $this->podcast_item['item_link'];
 
-        $item['guid'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
+        $item['guid'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
         // Remove 1 second from datestamp so as not to conflict with actual media.
         $item['pubDate'] = ($this->podcast_item['publication_date'] - 1 );
-        $item['enclosure']['url'] = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
+        $item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
 
         $this->podcast_items[] = $item;
     }
@@ -513,7 +513,7 @@ class Feed extends AppModel {
 
         } else {
             
-            $this->podcast_path_and_image = $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.$this->data['Podcast']['image'];
+            $this->podcast_path_and_image = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.$this->data['Podcast']['image'];
         }
     }
 
@@ -540,7 +540,7 @@ class Feed extends AppModel {
         if( strtoupper( $this->media_type ) == TRANSCRIPT ) {
 
             // Make a header request to check if the file exists
-            if( get_headers( $this->media_server.FEEDS_FOLDER.$this->data['Podcast']['custom_id'].'/'.TRANSCRIPT.'/'.$this->data['Transcript']['filename'] ) ) {
+            if( get_headers( $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.TRANSCRIPT.'/'.$this->data['Transcript']['filename'] ) ) {
 
                 $item['atom:link']['type'] = 'application/pdf';
                 $item['atom:link']['title'] = 'Title for '.$this->podcast_item['title'];

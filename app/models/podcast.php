@@ -881,7 +881,7 @@ class Podcast extends AppModel {
      */
     function setPreferredNode() {
 		
-		if( is_array( $this->data['Nodes'] ) && count( $this->data['Nodes'] ) ) {
+		if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) && count( $this->data['Nodes'] ) ) {
 			
 			$this->data['Podcast']['preferred_node'] = $this->data['Nodes'][0];
 			
@@ -901,7 +901,7 @@ class Podcast extends AppModel {
      */
     function setPreferredCategory() {
 
-		if( is_array( $this->data['Categories'] ) && count( $this->data['Categories'] ) ) {    	
+		if( isSet( $this->data['Categories'] ) && is_array( $this->data['Categories'] ) && count( $this->data['Categories'] ) ) {    	
 
 			$this->data['Podcast']['preferred_category'] = $this->data['Categories'][0];
 			
@@ -921,7 +921,7 @@ class Podcast extends AppModel {
      */
     function setPreferredItunesuCategory( $itunesu_categories = array() ) {
 
-		if( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) {    	
+		if( isSet( $this->data['iTuneCategories'] ) && is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) {    	
 
 			$this->data['Podcast']['preferred_itunesu_category'] = $this->data['iTuneCategories'][0];
 			
@@ -972,8 +972,7 @@ class Podcast extends AppModel {
 	 */	
 	function makeEveryoneReadOnly( $data = array() ) {
 		
-
-		
+	
 		foreach( $data['ModeratorGroups'] as $moderator_group ) {
 		
 			$data['MemberGroups'][] = $moderator_group;	
