@@ -102,4 +102,50 @@ class ObjectHelper extends AppHelper {
 		
 		return isSet( $podcast['current_owner_id'] );
 	}
+	
+	
+	/*
+	 * @name : waitingYoutubeApproval
+	 * @description : Called from the approver screen it checks to see the status of any podcast on the approval listing.
+	 * @updated : 6th July 2011
+	 * @by : Charles Jackson
+	 */	
+	function waitingYoutubeApproval( $podcast = array() ) {
+	
+		// Is this podcast under consideration?
+		if( $this->considerForYoutube( $podcast ) == false )	{
+			return false;
+		}
+		
+		// Has it already been approved?
+		if( $this->intendedForYoutube( $podcast ) ) {
+			return false;
+		}
+			
+		// Not yet been approved.	
+		return true;
+			
+	}
+	
+	/*
+	 * @name : waitingItunesApproval
+	 * @description : Called from the approver screen it checks to see the status of any podcast on the approval listing.
+	 * @updated : 6th July 2011
+	 * @by : Charles Jackson
+	 */	
+	function waitingItunesApproval( $podcast = array() ) {
+	
+		// Is this podcast under consideration?
+		if( $this->considerForItunes( $podcast ) == false )	
+			return false;
+			
+		// Has it already been approved?
+		if( $this->intendedForItunes( $podcast ) )
+			return false;
+			
+		// Not yet been approved.	
+		return true;
+			
+	}
+	
 }

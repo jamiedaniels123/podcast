@@ -23,10 +23,20 @@ class AppModel extends Model {
 
                 $list[] = $key;
             }
-            foreach( $subset_array[$data_key] as $row ) {
-
-                $subset_list[] = $row['id'];
-            }
+			
+			// If we are matching against the 'owner' it will not be a multi dimensional array
+			if( isSet( $subset_array[$data_key]['id'] ) ) {
+				
+				$subset_list[] = $subset_array[$data_key]['id'];
+				
+			} else {
+				
+				// We are matching against moderators (for example) hence we need to loop through a multi-dimensional array.
+				foreach( $subset_array[$data_key] as $row ) {
+	
+					$subset_list[] = $row['id'];
+				}
+			}
 
             // Read through the main array and remove any elements from
             // the list (passed as a parameter) that exist in the

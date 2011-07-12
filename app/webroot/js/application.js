@@ -24,6 +24,18 @@ jQuery(document).ready(function($) {
         });
     }
 
+    // The following optional method is called on page load and sets the initial status if the DOM element
+    // actually exist. It shows/hides podcast specific elements.
+    if( jQuery('#PodcastConsiderForYoutube').length ) {
+
+        show_hide_youtube_elements();
+
+        jQuery('#PodcastConsiderForYoutube').live('click',function(e) {
+
+            show_hide_youtube_elements();
+        });
+    }
+
     // These methods are called on every page when a user wishes to inspect
     // the menu options.
     jQuery('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
@@ -100,6 +112,13 @@ jQuery(document).ready(function($) {
             jQuery(this).closest("form").submit();
         }
     });
+	
+	jQuery('.reject_podcast').click( function(e) {
+
+		e.preventDefault();
+		jQuery(this).siblings('form').toggle('slow');
+		
+	});
 });
 
 // Will show or hide the podcast container div depending
@@ -131,6 +150,23 @@ function show_hide_itune_elements() {
     } else {
 
         jQuery('.itunes_container').hide('slow');
+    }
+}
+
+// Will show or hide the youtube container divs depending
+// upon the status of the checkbox. Called on page load and when the
+// user clicks the checkbox.
+// NOTE: We have to check to see if the Youtube element actually exists on the page. It is possible
+// for a podcast to have Youtube settings but the user does not have Youtube permissions.
+function show_hide_youtube_elements() {
+
+    if( jQuery('#PodcastConsiderForYoutube').is(':checked') ) {
+
+        jQuery('.youtube_container').show('slow');
+
+    } else {
+
+        jQuery('.youtube_container').hide('slow');
     }
 }
 

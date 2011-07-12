@@ -103,7 +103,12 @@ class ApiComponent extends Object {
         return $this->getStatus( $this->response );
     }
     
-
+    /*
+     * @name : fileExist
+     * @description :  Not currently being used.
+     * @updated : 4th July 2011
+     * @by : Ian Newton / Charles Jackson
+     */
     function fileExist( $path, $filename ) {
 
         $this->params = array(
@@ -130,9 +135,7 @@ class ApiComponent extends Object {
 
         $postData = array( 'command' => $command ,'number' => $number ,'data' => $data,'timestamp' => time() );
         $postData = array( 'mess' => json_encode( $postData ) );
-        $response = $this->__restHelper( $mediaUrl, $postData, 'POST' );
-
-        return $response;
+        return( $this->__restHelper( $mediaUrl, $postData, 'POST' ) );
     }
 
     /*
@@ -159,7 +162,6 @@ class ApiComponent extends Object {
               $url .= '?' . $params;
             }
         }
-
         $context = stream_context_create($cparams);
         $fp = fopen($url, 'rb', false, $context);
 
@@ -181,9 +183,8 @@ class ApiComponent extends Object {
 
                 throw new Exception("$verb $url failed: $php_errormsg");
         }
-
+		
 		return $res;
-
     }
 	
 	
@@ -195,8 +196,7 @@ class ApiComponent extends Object {
 	 * @by : Charles Jackson
 	 */
 	function getStatus( $response = array() ) {
-		
+
 		return strtoupper( $response['status'] ) == 'ACK' ? true : false;
-		
 	}
 }

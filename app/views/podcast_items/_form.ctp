@@ -30,7 +30,7 @@
     <?php echo $this->Form->error('PodcastItem.publication_date'); ?>
 </div>
 <div class="input file">
-    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" />
+    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'].'.jpg', $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" />
     <?php if( !empty( $this->data['PodcastItem']['image_filename']) ) : ?>
 	    <a href="/podcast_items/delete_attachment/image/<?php echo $this->data['PodcastItem']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this image?');" title="delete image">delete image</a>
     <?php endif; ?>
@@ -59,11 +59,12 @@
     <?php echo $this->Form->error('PodcastItem.TargetUrlText'); ?>
 </div>
 <div class="input file">
-    <label for="PodcastItemMediaTranscript">Transcript</label>
-    <input type="file" id="PodcastItemMediaTranscript" name="data[PodcastItemMedia][transcript]">
-    <?php echo $this->Form->error('PodcastItem.transcript'); ?>
-    <?php if( !empty( $this->data['PodcastItem']['transcript_filename']) ) : ?>
-	    <a href="/podcast_items/delete_attachment/transcript/<?php echo $this->data['PodcastItem']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete transcript</a>
+    <label for="TranscriptFilename">Transcript</label>
+    <input type="hidden" id=TranscriptId" name="data[Transcript][id]" value="<?php echo $this->data['Transcript']['id']; ?>" >
+    <input type="file" id="TranscriptFilename" name="data[Transcript][filename]">
+    <?php echo $this->Form->error('Transcript.filename'); ?>
+    <?php if( !empty( $this->data['Transcript']['filename'] ) ) : ?>
+	    <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>
     <?php endif; ?>
 </div>
 <?php if( $this->Permission->isItunesUser() ) : ?>

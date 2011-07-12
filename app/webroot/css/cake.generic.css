@@ -285,14 +285,13 @@ fieldset fieldset legend {
 	font-weight: normal;
 }
 fieldset fieldset div {
-	clear: left;
+
 	margin: 0 20px;
 }
 form div {
 	margin-bottom: 0em;
 	padding: 0 .5em;
 	vertical-align:middle;
-	clear:left;
 }
 form .input {
 	color: #1a1a1a;
@@ -633,15 +632,14 @@ div#dashboard {
 div#dashboard ul {
     margin-top: 20px;
 }
-
 fieldset#admin_panel ul, div#dashboard ul {
 
     clear: both;
     margin-bottom: 10px;
-	}
-	
-div#dashboard li {
-	display:inline;
+}
+
+div#dashboard li	{
+	display:inline;	
 }
 
 div.wrapper {
@@ -705,3 +703,50 @@ img.icon {
 tr.deleted td {
 	background-color: #f4f4f4!important;	
 }
+
+#user_groups_container .float_left, #nodes_container .float_left, #moderator_container .float_left, #itune_categories_container .float_left, #ituneu_categories_container .float_left {
+	width: 30%;	
+	
+}
+
+button {
+	
+	padding: 5px;
+}
+
+dd img, fieldset.approval .status_image {
+	height:20px;
+}
+
+div.float_left dl dd {
+	
+	padding-left: 100px;
+}
+
+.images_container {
+		text-align: center;
+}
+.images_container img {
+	margin: 10px;	
+}
+#images_container h2 {
+	margin: 0px;
+	margin-top: 10px;	
+
+}
+
+div.two_column {
+
+	width: 700px;	
+}
+
+form.rejection {
+
+	padding: 10px;	
+}
+
+td.status, th.status {
+
+	text-align: center;	
+}
+	

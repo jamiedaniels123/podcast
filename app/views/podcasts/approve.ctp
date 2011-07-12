@@ -1,4 +1,4 @@
-<fieldset class="podcasts index">
+<fieldset class="podcasts approval">
     <legend>Podcasts Waiting Approval</legend>
     <p>
         Below is a list of all podcasts on the system that are awaiting approval.
@@ -20,8 +20,8 @@
                 <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
                 <th><?php echo $this->Paginator->sort('title');?></th>
                 <th><?php echo $this->Paginator->sort('created');?></th>
-                <th><?php echo $this->Paginator->sort('Consider for iTunesU','consider_for_itunesu');?></th>
-                <th><?php echo $this->Paginator->sort('Consider for Youtube','consider_for_youtube');?></th>
+                <th class="status"><?php echo $this->Paginator->sort('Consider for iTunesU','consider_for_itunesu');?></th>
+                <th class="status"><?php echo $this->Paginator->sort('Consider for Youtube','consider_for_youtube');?></th>
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -39,7 +39,7 @@
                             <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                         </td>
                         <td class="image thumbnail">
-                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
+                            <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="thumbnail image" />
                         </td>
                         <td>
                             <?php echo $podcast['Owner']['full_name']; ?>
@@ -50,24 +50,14 @@
                         <td>
                             <?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?>
                          </td>
-                        <td>
-                            <?php echo $this->Object->considerForItunes( $podcast['Podcast'] ) ? 'Yes' : 'No'; ?>
+                        <td class="status">
+                        <img src="/img<?php echo $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting itunes approval" class="status_image" />
                         </td>
-                        <td>
-                            <?php echo $this->Object->considerForYoutube( $podcast['Podcast'] ) ? 'Yes' : 'No'; ?>
+                        <td class="status">
+                        <img src="/img<?php echo $this->Object->waitingYoutubeApproval( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="waiting youtube approval" class="status_image" />
                         </td>
                         <td class="actions">
                             <a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
-                            <?php if( $this->Object->considerForItunes( $podcast['Podcast'] ) && $this->Permission->isItunesUser() ) : ?>
-                                <a href="/podcasts/itunes/<?php echo $podcast['Podcast']['id']; ?>" id="edit_itunespodcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
-                                <a href="/podcasts/approval/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for itunesu?');" id="approve_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes approve</a>
-                                <a href="/podcasts/rejection/itunes/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for itunesu?');" id="reject_itunes_podcast_<?php echo $podcast['Podcast']['id']; ?>">itunes reject</a>
-                            <?php endif; ?>
-                            <?php if( $this->Object->considerForYoutube( $podcast['Podcast'] ) && $this->Permission->isYouTubeUser() ) : ?>
-                                <a href="/podcasts/youtube/<?php echo $podcast['Podcast']['id']; ?>" id="edit_youtubepodcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
-                                <a href="/podcasts/approval/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to approve this podcast for youtube?');" id="approve_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube approve</a>
-                                <a href="/podcasts/rejection/youtube/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to reject this podcast for youtube?');" id="reject_youtube_podcast_<?php echo $podcast['Podcast']['id']; ?>">youtube reject</a>
-                            <?php endif; ?>
                         </td>
                     </tr>
             <?php

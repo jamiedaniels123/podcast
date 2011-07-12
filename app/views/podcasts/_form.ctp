@@ -1,3 +1,4 @@
+<input type="hidden" id="PodcastDeleted" name="data[Podcast][deleted]" value="<?php echo $this->data['Podcast']['deleted']; ?>">
 <div class="input text">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
@@ -20,19 +21,73 @@
             <textarea id="summary" rows="6" cols="30" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
-        <div class="wrapper">
-            <div class="float_right">
-                <div class="input select">
-                    <span class="move" data-source="PodcastAllNodes" data-target="Nodes"><-- Move</span>
-                    <label for="PodcastAllNodes">All Nodes</label>
-                    <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
-                    <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">
-                        <?php foreach( $nodes as $id => $value ) : ?>
-                            <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
+        <div class="input file">
+            <label for="PodcastImage">Podcast image</label>
+            <input type="file" id="PodcastImage" name="data[Podcast][image]">
+            <?php echo $this->Form->error('Podcast.image'); ?>
+        </div>
+        <div class="image thumbnail">
+           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
+            <a href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete podcast image" onclick="return confirm('Are you sure you wish to delete the podcast image?')">delete</a>
+        </div>
+        <div class="input text">
+            <label for="PodcastImageCopyright">Image Copyright</label>
+            <input type="text" id="PodcastImageCopyright" value="<?php echo $this->data['Podcast']['image_copyright']; ?>" name="data[Podcast][image_copyright]">
+            <?php echo $this->Form->error('Podcast.image_copyright'); ?>
+        </div>
+        <div class="input select">
+            <label for="PodcastLanguage">Language</label>
+            <select name="data[Podcast][language]" id="PodcastLanguage">
+                <?php foreach( $languages as $language_code => $language_description ) : ?>
+                    <option value="<?php echo $language_code; ?>" <?php echo $this->data['Podcast']['language'] == $language_code ? 'selected="true"' : ''; ?>><?php echo $language_description; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php echo $this->Form->error('Podcast.language'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastKeywords">Keywords</label>
+            <input type="text" id="PodcastKeywords" value="<?php echo $this->data['Podcast']['keywords']; ?>" name="data[Podcast][keywords]">
+            <?php echo $this->Form->error('Podcast.keywords'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastContactName">Contact Name (RSS Feed)</label>
+            <input type="text" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">
+            <?php echo $this->Form->error('Podcast.contact_name'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastContactEmail">Contact Email (RSS Feed)</label>
+            <input type="text" id="PodcastContactEmail" value="<?php echo $this->data['Podcast']['contact_email']; ?>" name="data[Podcast][contact_email]">
+            <?php echo $this->Form->error('Podcast.contact_email'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastLink">Web URL</label>
+            <input type="text" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
+            <?php echo $this->Form->error('Podcast.link'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastLinkText">Web link text</label>
+            <input type="text" id="PodcastLinkText" value="<?php echo $this->data['Podcast']['link_text']; ?>" name="data[Podcast][link_text]">
+            <?php echo $this->Form->error('Podcast.link_text'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastCopyright">Copyright</label>
+            <input type="text" id="PodcastCopyright" value="<?php echo $this->data['Podcast']['copyright']; ?>" name="data[Podcast][copyright]">
+            <?php echo $this->Form->error('Podcast.copyright'); ?>
+        </div>
+        <div class="input checkbox">
+            <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
+            <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
+            <label for="PodcastPrivate">Private</label>
+            <?php echo $this->Form->error('Podcast.private'); ?>
+        </div>
+        <div class="input checkbox">
+            <input type="hidden" value="N" id="PodcastIntranetOnly_" name="data[Podcast][intranet_only]">
+            <input type="checkbox" id="PodcastIntranetOnly" value="Y" <?php echo $this->data['Podcast']['intranet_only'] == 'Y' ? 'checked="checked"' : '';?>  name="data[Podcast][intranet_only]">
+            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label>
+            <?php echo $this->Form->error('Podcast.intranet_only'); ?>
+        </div>
+        <div class="clear"></div>
+        <div class="wrapper" id="nodes_container">
             <div class="float_left">
                 <div class="input select">
                     <span class="move" data-source="Nodes" data-target="PodcastAllNodes">Move --></span>
@@ -48,52 +103,21 @@
                     <?php echo $this->Form->error('Podcast.Nodes'); ?>
                 </div>
             </div>
+            <div class="float_left">
+                <div class="input select">
+                    <span class="move" data-source="PodcastAllNodes" data-target="Nodes"><-- Move</span>
+                    <label for="PodcastAllNodes">All Nodes</label>
+                    <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
+                    <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">
+                        <?php foreach( $nodes as $id => $value ) : ?>
+                            <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="clear"></div>
-        <div class="input text">
-            <label for="PodcastAuthor">Author</label>
-            <input type="hidden" value="" id="PodcastAuthor_" name="data[Podcast][author]">
-            <input type="text" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
-            <?php echo $this->Form->error('Podcast.author'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastLink">Web URL</label>
-            <input type="text" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
-            <?php echo $this->Form->error('Podcast.link'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastLinkText">Web link text</label>
-            <input type="text" id="PodcastLinkText" value="<?php echo $this->data['Podcast']['link_text']; ?>" name="data[Podcast][link_text]">
-            <?php echo $this->Form->error('Podcast.link_text'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastCourseCode">Course Code</label>
-            <input type="text" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
-            <?php echo $this->Form->error('Podcast.course_code'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastCopyright">Copyright</label>
-            <input type="text" id="PodcastCopyright" value="<?php echo $this->data['Podcast']['copyright']; ?>" name="data[Podcast][copyright]">
-            <?php echo $this->Form->error('Podcast.copyright'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastKeywords">Keywords</label>
-            <input type="text" id="PodcastKeywords" value="<?php echo $this->data['Podcast']['keywords']; ?>" name="data[Podcast][keywords]">
-            <?php echo $this->Form->error('Podcast.keywords'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastContactName">Contact Name (RDD Feed)</label>
-            <input type="text" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">
-            <?php echo $this->Form->error('Podcast.contact_name'); ?>
-        </div>
-        <div class="input text">
-            <label for="PodcastContactEmail">Contact Email (RSS Feed)</label>
-            <input type="text" id="PodcastContactEmail" value="<?php echo $this->data['Podcast']['contact_email']; ?>" name="data[Podcast][contact_email]">
-            <?php echo $this->Form->error('Podcast.contact_email'); ?>
-        </div>
-        <div class="clear"></div>
-
-        <div class="wrapper">
+        <div class="wrapper" id="user_groups_container">
             <div class="float_left">
                 <div class="input select">
                     <span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move --> </span>
@@ -136,29 +160,7 @@
             </div>
         </div>
         <div class="clear"></div>
-        <div class="input file">
-            <label for="PodcastImage">Podcast image</label>
-            <input type="file" id="PodcastImage" name="data[Podcast][image]">
-            <?php echo $this->Form->error('Podcast.image'); ?>
-        </div>
-        <div class="image thumbnail">
-           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
-            <a href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete podcast image" onclick="return confirm('Are you sure you wish to delete the podcast image?')">delete</a>
-        </div>
-        <div class="input checkbox">
-            <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
-            <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
-            <label for="PodcastPrivate">Private</label>
-            <?php echo $this->Form->error('Podcast.private'); ?>
-        </div>
-        <input type="hidden" id="intranet_only" value="N" name="data[Podcast][intranet_only]">
-        <div class="input checkbox">
-            <input type="hidden" value="0" id="PodcastIntranetOnly_" name="data[Podcast][intranet_only]">
-            <input type="checkbox" id="PodcastIntranetOnly" value="Y" <?php echo $this->data['Podcast']['intranet_only'] == 'Y' ? 'checked="checked"' : '';?>  name="data[Podcast][intranet_only]">
-            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label>
-            <?php echo $this->Form->error('Podcast.intranet_only'); ?>
-        </div>
-        <div class="wrapper">
+        <div class="wrapper" id="moderator_container">
             <div class="float_left">
                 <div class="input select">
                     <span class="move" data-source="Moderators" data-target="Members">Move --> </span>
@@ -216,9 +218,17 @@
                 </select>
                 <?php echo $this->Form->error('Podcast.owner_id'); ?>
             </div>
-            
         <?php endif; ?>
         
+        <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
+        
+	        <?php echo $this->element('../podcasts/_form_admin'); ?>
+        
+        <?php else : ?>
+        
+	        <input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
+            
+        <?php endif; ?>
         
         <?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
         
@@ -228,7 +238,17 @@
         
         	<?php echo $this->element('../podcasts/_form_itunes_apply'); ?>
             
-        <?php endif; ?>
+		<?php endif; ?>
+            
+        <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) ) : ?>
         
+	        <?php echo $this->element('../podcasts/_form_youtube'); ?>
+        
+        <?php else : ?>
+        
+        	<?php echo $this->element('../podcasts/_form_youtube_apply'); ?>
+            
+		<?php endif; ?>
+       
     </div>
 <?php endif; ?>

@@ -16,7 +16,7 @@
         <?php foreach( $this->data['PodcastItems'] as $podcast_item ) : ?>
         	<tr>
             <td>
-             <img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'],$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" />
+             <img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'].'.jpg',$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" />
             </td>
                 <td><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view <?php echo $podcast_item['title']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></td>
             	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>

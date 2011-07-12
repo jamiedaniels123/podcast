@@ -136,8 +136,13 @@ class Podcast extends AppModel {
         'Owner' => array(
             'className' => 'User',
             'foreignKey' => 'owner_id',
-            'fields' => 'Owner.id, Owner.full_name'
-        )
+            'fields' => 'Owner.id, Owner.full_name, Owner.email'
+        ),
+        'PreferredNode' => array(
+            'className' => 'Nodes',
+            'foreignKey' => 'preferred_node',
+            'fields' => 'PreferredNode.id,PreferredNode.title'
+        )		
     );
 
     var $hasMany = array(
@@ -368,12 +373,12 @@ class Podcast extends AppModel {
         }
 
         // OK, now empty the date fields if they contain a null date.
-        foreach( $this->data['Podcast'] as $key => $value ) {
+        foreach( $this->data[$this->alias] as $key => $value ) {
 
             if( in_array( $key, array('publish_itunes_date','update_itunes_date','target_itunesu_date','production_date','rights_date', 'metadata_date' ) ) ) {
 
                 if( (int)$value == false ) {
-                    $this->data['Podcast'][$key] = null;
+                    $this->data[$this->alias][$key] = null;
                 }
             }
 
@@ -835,5 +840,34 @@ class Podcast extends AppModel {
 			);
 			
 		return $media_images;
+	}
+
+	/* 
+	 * @name : makeEveryoneReadOnly
+	 * @description : When a podcast has been approved we need to find every moderator (group or individual) and give them
+	 * read-only access.
+	 * @updated : 6th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function makeEveryoneReadOnly( $data = array() ) {
+		
+
+		
+		foreach( $data['ModeratorGroups'] as $moderator_group ) {
+		
+			$data['MemberGroups'][] = $moderator_group;	
+		}
+
+		foreach( $data['Moderators'] as $moderator ) {
+		
+			$data['Members'][] = $moderator;	
+		}
+		
+		$this->deleteExistingModerators( $data['Podcast']['id'] );
+				
+		$data['PodcastModerators'] = array(); // Clear down the associated hasMany array so we don't resave the data we just deleted
+		$data['ModeratorUserGroups'] = array();  // Clear down the associated hasMany array so we don't resave the data we just deleted
+		
+		return $data;
 	}
 }
