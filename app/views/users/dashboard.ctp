@@ -8,7 +8,7 @@
     
    <div>
    <?php echo $this->Session->flash(); ?>
-   <img src="../../webroot/img/temp-avatar.png" /><p class="dashboard-user-panel-title"><?php echo $this->Session->read('Auth.User.full_name'); ?></p></div>
+   <img src="/img/temp-avatar.png" /><p class="dashboard-user-panel-title"><?php echo $this->Session->read('Auth.User.full_name'); ?></p></div>
         <ul>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
