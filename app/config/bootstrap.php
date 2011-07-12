@@ -61,6 +61,12 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
         DEFINE('SAMS_OUCU_ID', $_SERVER['LOCAL_SAMS_USER'] );
         DEFINE('SAMS_NAME', 'Charles Jackson' );
 
+	} elseif( isSet( $_SERVER['PETES_SAMS_USER'] ) ) {
+
+        DEFINE('SAMS_EMAIL', $_SERVER['PETES_SAMS_USER'].'@open.ac.uk' );
+        DEFINE('SAMS_OUCU_ID', $_SERVER['PETES_SAMS_USER'] );
+        DEFINE('SAMS_NAME', 'Peter Devine' );
+
     } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
 
         DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
@@ -98,7 +104,7 @@ DEFINE('FEEDS','feeds/');
 DEFINE('FEEDS_LOCATION', 'feeds/');
 DEFINE('THUMBNAIL_EXTENSION', '_thm');
 DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
-DEFINE('NO_IMAGE_AVAILABLE', DEFAULT_MEDIA_URL.FEEDS.'images/no-image.jpg');
+DEFINE('NO_IMAGE_AVAILABLE', '/img/default-project-thumbnail.png');
 DEFINE('CORRECT_IMAGE', '/correct.gif');
 DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
 DEFINE('ERROR_IMAGE', '/error.png');
