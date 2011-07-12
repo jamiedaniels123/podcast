@@ -17,13 +17,6 @@ class PodcastItem extends AppModel {
                 'allowEmpty' => true,
                 'message' => 'If entered, you must provide a valid item link URL.'
             )
-        ),
-        'publication_date' => array(
-            'Rule1' => array(
-                'rule' => 'date',
-                'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
-            )
         )
     );
 

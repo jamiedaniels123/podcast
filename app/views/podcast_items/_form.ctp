@@ -68,12 +68,12 @@
 	    <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>
     <?php endif; ?>
 </div>
-<?php if( $this->Permission->isItunesUser() ) : ?>
+<?php if( $this->Permission->isItunesUser() ||  $this->Permission->isAdministrator() ) : ?>
 	<?php echo $this->element('../podcast_items/_form_itunes'); ?>
 <?php endif; ?>
-<?php if( $this->Permission->isYoutubeUser() ) : ?>
+<?php if( $this->Permission->isYoutubeUser() ||  $this->Permission->isAdministrator() ) : ?>
 	<?php echo $this->element('../podcast_items/_form_youtube'); ?>
 <?php endif; ?>
-<?php if( ( $this->Permission->isYoutubeUser() ) || ( $this->Permission->isItunesUser() ) ) : ?>
+<?php if( ( $this->Permission->isYoutubeUser() ) || ( $this->Permission->isItunesUser() ) || ( $this->Permission->isAdministrator() ) ) : ?>
 	<?php echo $this->element('../podcast_items/_form_itunes_and_youtube'); ?>
 <?php endif; ?>

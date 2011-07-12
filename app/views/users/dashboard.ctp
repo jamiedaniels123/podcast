@@ -12,6 +12,12 @@
         <ul>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
+			<?php if( $this->Permission->isItunesUser() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/itunes/podcasts" class="button">Itunes collections</a></li>
+    		<?php endif; ?>
+			<?php if( $this->Permission->isYoutubeUser() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/youtube/podcasts" class="button">Youtube collections</a></li>
+			<?php endif; ?>	            
         </ul>
     </div>
     
@@ -25,12 +31,6 @@
             <li><a href="/user_groups"><img src="/img/your-usergroups.png" alt="Your User Groups" /></a></li>
             <li><a href="/user_groups/add"><img src="/img/create-new-usergroups.png" alt="Create New User Group" /></a></li>
         </ul>
-        <ul>
-        	<?php if( $this->Permission->isItunesUser() || $this->Permission->isYouTubeUser() ) : ?>
-                <li><a href="/podcasts/approve"><img src="/img/approve-collections.png" alt="Approve collections" /></a></li>
-            <?php endif; ?>
-        </ul>
-
     </div>
 </div>
 <div class="clear"></div>
