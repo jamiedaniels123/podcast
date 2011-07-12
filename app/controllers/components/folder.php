@@ -226,10 +226,10 @@ class FolderComponent extends Object {
      */
 	function cleanUp( $path, $filename ) {
 		
-		if( file_exists( FILE_REPOSITORY.$path.'/'.$filename ) == false )
+		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
 			return false;
 		
-		unlink( FILE_REPOSITORY.$path.'/'.$filename );
+		unlink( FILE_REPOSITORY.$path.$filename );
 			
 		if( is_empty_dir( FILE_REPOSITORY.$path ) )
 			return ( rmdir( FILE_REPOSITORY.$path ) );

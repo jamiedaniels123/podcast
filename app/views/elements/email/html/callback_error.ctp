@@ -1,8 +1,8 @@
 <h2>Callback error</h2>
-<p>
+<pre>
 <?php
 	print $errormessage;
 	print_r($data);
 ?>
-</p>
+</pre>
 

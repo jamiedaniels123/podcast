@@ -169,4 +169,24 @@ class PodcastItem extends AppModel {
 
 		return $media_files;		
 	}
+	
+	/*
+	 * @name : getMetaData
+	 * @description : Will retrieve the meta data for a given ID passed as a parameter.
+	 * @updated : 12th July 2011
+	 * @by : Charles Jackson
+	 */
+	function getMetaData( $id ) {
+
+		$this->data = $this->findById($id);
+		
+		return array(
+			'title' => $data['PodcastItem']['title'],
+			'genre' => 'Podcast',
+			'artist' => $data['PodcastItem']['author'],
+			'album' => $data['Podcast']['title'],
+			'year' => date('Y'),
+			'comments' => 'Item from '.$data['Podcast']['title']			
+		);
+	}
 }

@@ -226,7 +226,7 @@ class PodcastItemsController extends AppController {
 					} else {
 						
 						// Transcode the media
-						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow() ) ) {
+						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'] ) ) {
 	
 							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
 							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatio();
