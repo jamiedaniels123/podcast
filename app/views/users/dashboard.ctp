@@ -18,16 +18,16 @@
     
     <div class="float_left">
         <ul class="dashboard">
-            <li><a href="/podcasts"><img src="../img/your-collections.png" alt="Your Podcasts" /></a></li>
-            <li><a href="/podcasts/add"><img src="../img/create-new-collections.png" alt="Create New Podcast" /></a></li>
+            <li><a href="/podcasts"><img src="/img/your-collections.png" alt="Your Podcasts" /></a></li>
+            <li><a href="/podcasts/add"><img src="/img/create-new-collections.png" alt="Create New Podcast" /></a></li>
          </ul>
          <ul class="dashboard">
-            <li><a href="/user_groups"><img src="../img/your-usergroups.png" alt="Your User Groups" /></a></li>
-            <li><a href="/user_groups/add"><img src="../img/create-new-usergroups.png" alt="Create New User Group" /></a></li>
+            <li><a href="/user_groups"><img src="/img/your-usergroups.png" alt="Your User Groups" /></a></li>
+            <li><a href="/user_groups/add"><img src="/img/create-new-usergroups.png" alt="Create New User Group" /></a></li>
         </ul>
         <ul>
         	<?php if( $this->Permission->isItunesUser() || $this->Permission->isYouTubeUser() ) : ?>
-                <li><a href="/podcasts/approve"><img src="../../webroot/img/approve-collections.png" alt="Approve collections" /></a></li>
+                <li><a href="/podcasts/approve"><img src="/img/approve-collections.png" alt="Approve collections" /></a></li>
             <?php endif; ?>
         </ul>
 

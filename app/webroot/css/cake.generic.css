@@ -27,6 +27,7 @@ body {
 	font-family:Tahoma, "Lucida Grande", Arial, Helvetica, sans-serif;
 	font-size:0.8em;
 	margin: 0;
+	font-weight: normal;
 }
 a {
 	color: #003d4c;
@@ -135,12 +136,15 @@ table {
 	color: #333;
 	margin: 15px 0;
 	width: 100%;
+	border-bottom:1px solid #003D4C;	
 }
+
 th {
 	border:0;
-	border-bottom:0px solid #555;
+	border-bottom:1px solid #003D4C;
 	text-align: left;
 	padding:4px;
+	font-weight: normal;
 }
 
 th a {
@@ -160,11 +164,11 @@ th a.desc:after {
 	content: ' ⇡';
 }
 table tr td {
-	background: #e5f3fa;
+	background: #fff;
 	padding: 6px;
 	text-align: left;
 	vertical-align: center;
-	border-bottom: 5px solid #fff;
+	border-bottom: 0px solid #fff;
 	/*border-bottom:1px solid #ddd;*/
 }
 table tr:nth-child(2n) td {
@@ -173,7 +177,7 @@ table tr:nth-child(2n) td {
 }
 table .altrow td {
 	/*background: #f5f5f5;*/
-	background: #e5f3fa;
+	background: #fff;
 }
 td.actions {
 	text-align: center;

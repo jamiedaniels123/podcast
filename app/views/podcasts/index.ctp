@@ -19,7 +19,7 @@
     
     <form method="post" action="">
 
-            <table cellpadding="0" cellspacing="0">
+            <table cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <th>Select</th>
                 <th>Image</th>
