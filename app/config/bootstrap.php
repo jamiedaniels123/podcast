@@ -142,3 +142,6 @@ DEFINE('VIDEO', 'video');
 DEFINE('VIDEO_WIDE', 'video-wide');
 DEFINE('MULTI_VIDEO', 'multi-video');
 DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');
+
+// processed state of media
+DEFINE('MEDIA_AVAILABLE',9);

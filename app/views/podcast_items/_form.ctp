@@ -63,7 +63,7 @@
     <label for="TranscriptFilename">Transcript</label>
     <input type="hidden" id=TranscriptId" name="data[Transcript][id]" value="<?php echo $this->data['Transcript']['id']; ?>" >
     <input type="file" id="TranscriptFilename" name="data[Transcript][new_filename]">
-    <?php echo $this->Form->error('Transcript.filename'); ?>
+    <?php echo $this->Form->error('PodcastItem.filename'); ?>
     <?php if( !empty( $this->data['Transcript']['filename'] ) ) : ?>
 	    <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>
     <?php endif; ?>

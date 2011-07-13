@@ -12,7 +12,7 @@ class UploadComponent extends Object {
 
     var $controller = null;
     public $allowed_file_types = array('jpeg','jpg','png');
-    public $errors = array();
+    public $error = null;
     private $data = null; // Contains the full array of data
     private $data_key = null; // The name of the array element
     private $folder = null; // Contains the folder with absolute path on the local server
@@ -30,7 +30,9 @@ class UploadComponent extends Object {
      * @by : Charles Jackson
      */
     function podcastMediaImage( $data = array(), $data_key = null ) {
-
+		
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -38,7 +40,7 @@ class UploadComponent extends Object {
         // Has an image been uploaded and is it error free?
         if ( (int)$data[$this->controller->modelClass][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your podcast media images. Please try again.';
+            $this->error = 'There has been a problem uploading your podcast media images. Please try again.';
             return false;
         }
 
@@ -80,7 +82,8 @@ class UploadComponent extends Object {
      */
     function podcastImage( $data, $data_key ) {
 
-
+		$this->error = null;
+		
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -89,7 +92,7 @@ class UploadComponent extends Object {
         // Has an image been uploaded and is it error free?
         if ( (int)$data['Podcast'][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your podcast images. Please try again.';
+            $this->error = 'There has been a problem uploading your podcast images. Please try again.';
             return false;
         }
 		
@@ -129,6 +132,8 @@ class UploadComponent extends Object {
      */
     function logolessPodcastImage( $data, $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -136,7 +141,7 @@ class UploadComponent extends Object {
         // Has an image been uploaded and is it error free?
         if ( (int)$data[$this->controller->modelClass][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your logoless images. Please try again.';
+            $this->error = 'There has been a problem uploading your logoless images. Please try again.';
             return false;
         }
 
@@ -178,6 +183,8 @@ class UploadComponent extends Object {
      */
     function widePodcastImage( $data, $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -185,7 +192,7 @@ class UploadComponent extends Object {
         // Has an image been uploaded and is it error free?
         if ( (int)$data[$this->controller->modelClass][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your widescreen images. Please try again.';
+            $this->error = 'There has been a problem uploading your widescreen images. Please try again.';
             return false;
         }
 
@@ -227,6 +234,8 @@ class UploadComponent extends Object {
      */
     function transcript( $data = array(), $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading a transcript?
         if ( ( isSet( $data['Transcript'][$data_key] ) == false ) || ( strlen( $data['Transcript'][$data_key]['name'] ) == 0 ) )
 			return false;
@@ -234,7 +243,7 @@ class UploadComponent extends Object {
         // Has an image been uploaded and is it error free?
         if ( (int)$data['Transcript'][$data_key]['error'] ) {
 
-            $this->errors[] = 'There has been a problem uploading your transcript. Error code : '.(int)$data['Transcript'][$data_key]['error'].' Please try again.';
+            $this->error = 'There has been a problem uploading your transcript. Error code : '.(int)$data['Transcript'][$data_key]['error'].' Please try again.';
             return false;
         }
         
@@ -275,7 +284,7 @@ class UploadComponent extends Object {
 			}
 		}
 		
-        $this->errors[] = 'Could not upload and/or schedule movement of your ' . $this->data_collection . ' document to the media server. If the problem persists please alert an administrator.';
+        $this->error = 'Could not upload and/or schedule movement of your ' . $this->data_collection . ' document to the media server. If the problem persists please alert an administrator.';
         return false;
     }
 	
@@ -372,7 +381,7 @@ class UploadComponent extends Object {
         $this->setFileExtension( $this->data[$this->controller->modelClass][$this->data_key]['name'] );
 
         if ( in_array($this->file_extension, $this->allowed_file_types ) == false ) {
-            $this->errors[] = 'Your '.$this->data_collection.' image is not in a valid format.';
+            $this->error = 'Your '.$this->data_collection.' image is not in a valid format.';
             return false;
         }
 
@@ -389,7 +398,7 @@ class UploadComponent extends Object {
 
         if ( strtolower( $this->file_extension ) != 'pdf' ) {
 
-            $this->errors[] = 'Your '.$this->data_collection.' is not in a valid PDF format.';
+            $this->error = 'Your '.$this->data_collection.' is not in a valid PDF format.';
             return false;
         }
 
@@ -422,7 +431,7 @@ class UploadComponent extends Object {
             // Copy the image into the temporary directory
             if ( !copy( $this->data[$model_class][$this->data_key]['tmp_name'], $this->temporary_file ) ) {
                 
-                $this->errors[] = 'Could not copy your '.$this->data_collection.' image into a temporary location on server. If the problem persists please alert an administrator.';
+                $this->error = 'Could not copy your '.$this->data_collection.' image into a temporary location on server. If the problem persists please alert an administrator.';
                 return false;
             }
 
@@ -452,7 +461,7 @@ class UploadComponent extends Object {
             if( !is_dir( $new_folder_path ) ) {
 
                 if( mkdir( $new_folder_path, 0755, true ) == false ) {
-                    $this->errors[] = 'Could not create the following folder structure for your '.$this->data_collection.' - '.$new_folder_path.'. If the problem persists please alert an administrator.';
+                    $this->error = 'Could not create the following folder structure for your '.$this->data_collection.' - '.$new_folder_path.'. If the problem persists please alert an administrator.';
                     return false;
                 }
             }
@@ -542,7 +551,7 @@ class UploadComponent extends Object {
             return true;
         }
 
-        $this->errors[] = 'Could not schedule movement of your '.$this->data_collection.' images to the media server. If the problem persists please alert an administrator.';
+        $this->error = 'Could not schedule movement of your '.$this->data_collection.' images to the media server. If the problem persists please alert an administrator.';
         return false;
     }
 
@@ -677,25 +686,28 @@ class UploadComponent extends Object {
     }
 
     /*
-     * @name : getErrors
+     * @name : getError
      * @description : Will create the image names from the parameters passed
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
-    function getErrors() {
+    function getError() {
 
-        return $this->errors;
+        return $this->error;
     }
 
     /*
-     * @name : hasErrors
+     * @name : hasError
      * @description : Will return a count of the number of elements in the array
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
-    function hasErrors() {
+    function hasError() {
 
-        return count( $this->errors );
+    	if( empty( $this->error ) )
+    		return false;
+    		
+   		return true;
     }
 	
 	

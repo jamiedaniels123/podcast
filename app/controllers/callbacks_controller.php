@@ -27,8 +27,8 @@ class CallbacksController extends AppController {
 		
 		$this->layout='callback';
 		$this->Callback->setData(file_get_contents("php://input"));
-		
 		$user = ClassRegistry::init('User');
+		
 		$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Callback ALERT');
 
 		// Is it a valid command
@@ -42,20 +42,11 @@ class CallbacksController extends AppController {
 			// Does the API command signify a need to delete a local file structure?
 			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
 				
-				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'WE ARE GOING TO DELETEE STUFF');
-				
 				foreach( $this->Callback->data['data'] as $row ) {
-					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'IN THE DELETE LOOP');
+					
 					// Delete the local file structure or error.
-					if( $this->Folder->cleanUp( $row['source_path'],$row['filename'] ) == false ) {
+					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['filename'] );
 						
-						if( is_object( $user ) == false )
-							$user = ClassRegistry::init('User');
-							
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Failed to delete file');
-					} else {
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Just Deleted');
-					}
 				}
 			}
 			
@@ -68,10 +59,10 @@ class CallbacksController extends AppController {
 				foreach( $this->Callback->data['data'] as $row ) {
 					
 					if( strtoupper( $row['status'] ) == YES ) {
-				
-						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api. 
-						$this->Api->MetaInjection( $this->data['target_path'], $this->data['filename'], $this->data['podcast_item_id'], $podcastItem->getMetaData( $this->data['podcast_item_id'] ) );
-					}
+
+						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
+						$this->Api->metaInjection( $this->PodcastItem->buildInjectionFlavours( $this->data['podcast_item_id'] ) );
+ 					}
 				}
 			}
 
@@ -104,7 +95,6 @@ class CallbacksController extends AppController {
 
 		} else {
 			
-			$user = ClassRegistry::init('User');
 			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Failed to understand command');
 			$m_data = array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time());
 			$jsonData = json_encode($m_data);

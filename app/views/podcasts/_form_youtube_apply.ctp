@@ -1,6 +1,4 @@
 <div class="input checkbox">
-    <input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
-    <input type="hidden" value="0" id="PodcastConsiderForYoutube_" name="data[Podcast][consider_for_youtube]">
     <input type="checkbox" id="PodcastConsiderForYoutube" value="1" <?php echo $this->data['Podcast']['consider_for_youtube'] ? 'checked="checked"' : '';?> name="data[Podcast][consider_for_youtube]">
     <label for="PodcastConsiderForYoutube">Consider for Youtube</label>
     <?php echo $this->Form->error('Podcast.consider_for_youtube'); ?>

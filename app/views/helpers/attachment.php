@@ -35,13 +35,13 @@ class AttachmentHelper extends AppHelper {
 	 * @by : Charles Jackson
 	 */
 	function __getImage( $path = null ) {
-	
-		if ( @GetImageSize( DEFAULT_MEDIA_URL.FEEDS.$path ) )
-			return DEFAULT_MEDIA_URL.FEEDS.$path;
 
-
+		// Check to see if there is a local image on the admin box first as that will be more topical.
 		if(	file_exists( FILE_REPOSITORY.$path ) )
 			return LOCAL_FILE_REPOSITORY_URL.$path;
+		
+		if ( @GetImageSize( DEFAULT_MEDIA_URL.FEEDS.$path ) )
+			return DEFAULT_MEDIA_URL.FEEDS.$path;
 			
 		// No image, return a default.
 		return NO_IMAGE_AVAILABLE;

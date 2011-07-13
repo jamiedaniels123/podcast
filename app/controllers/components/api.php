@@ -85,27 +85,13 @@ class ApiComponent extends Object {
 
     /*
      * @name : metaInjection
-     * @description :
+     * @description : Initiates a meta injection of the files passed as a parameter. 
      * @updated : 12th July 2011
      * @by : Charles Jackson
      */
-    function metaInjection( $path, $filename, $podcast_item_id, $meta_data = array() ) {
+    function metaInjection( $data ) {
     	
-        $this->params = array(
-			array(
-				'target_path' => $path.'/',
-				'filename' => $filename,
-				'podcast_item_id' => $podcast_item_id,
-				'title' => $meta_data['title'],
-				'genre' => $meta_data['genre'],
-				'artist' => $meta_data['artist'],
-				'album' => $meta_data['album'],
-				'year' => $meta_data['year'],
-				'comments' => $meta_data['comments']			
-			)
-        );
-        
-        $this->response = json_decode( $this->__sendMessage('update-file-metadata', self::ADMIN_API, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('update-file-metadata', self::ADMIN_API, $data ), 1 );
     }
     
     /*
@@ -120,7 +106,7 @@ class ApiComponent extends Object {
 			array(
 				'workflow' => $workflow,
 				'source_path' => $path.'/',
-				'target_path' => $path.'/',
+				'destination_path' => $path.'/',
 				'filename' => $filename,
 				'podcast_item_id' => $podcast_item_id
 			)

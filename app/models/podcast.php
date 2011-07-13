@@ -592,18 +592,18 @@ class Podcast extends AppModel {
       * @updated : 17th May 2011
       * @by : Charles Jackson
       */
-     function rebuild( $data ) {
+     function rebuild() {
 
-        $data['Nodes'] = $this->rebuildSelection( $this->data, 'Nodes' );
-        $data['Categories'] = $this->rebuildSelection( $this->data, 'Categories' );
-        $data['iTuneCategories'] = $this->rebuildSelection( $this->data, 'iTuneCategories' );
-        $data['UserGroups'] = $this->rebuildSelection( $this->data, 'UserGroups' );
-        $data['Members'] = $this->rebuildSelection( $this->data, 'Members' );
-        $data['Moderators'] = $this->rebuildSelection( $this->data, 'Moderators' );
-        $data['ModeratorGroups'] = $this->rebuildSelection( $this->data, 'ModeratorGroups' );
-        $data['MemberGroups'] = $this->rebuildSelection( $this->data, 'MemberGroups' );
+        $this->data['Nodes'] = $this->rebuildSelection( $this->data, 'Nodes' );
+        $this->data['Categories'] = $this->rebuildSelection( $this->data, 'Categories' );
+        $this->data['iTuneCategories'] = $this->rebuildSelection( $this->data, 'iTuneCategories' );
+        $this->data['UserGroups'] = $this->rebuildSelection( $this->data, 'UserGroups' );
+        $this->data['Members'] = $this->rebuildSelection( $this->data, 'Members' );
+        $this->data['Moderators'] = $this->rebuildSelection( $this->data, 'Moderators' );
+        $this->data['ModeratorGroups'] = $this->rebuildSelection( $this->data, 'ModeratorGroups' );
+        $this->data['MemberGroups'] = $this->rebuildSelection( $this->data, 'MemberGroups' );
 
-        return $data;
+        return $this->data;
 
      }
 
@@ -860,12 +860,12 @@ class Podcast extends AppModel {
      * updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function unconfirmedChangeOfOwnership( $data = array() ) {
+    function unconfirmedChangeOfOwnership() {
 
         if(
-            ( isSet( $data['Podcast']['confirmed'] ) && ( $data['Podcast']['confirmed'] == false ) )
+            ( isSet( $this->data['Podcast']['confirmed'] ) && ( $this->data['Podcast']['confirmed'] == false ) )
             &&
-            ( isSet( $data['Podcast']['current_owner_id'] ) && ( $data['Podcast']['current_owner_id'] != $data['Podcast']['owner_id'] ) ) )
+            ( isSet( $this->data['Podcast']['current_owner_id'] ) && ( $this->data['Podcast']['current_owner_id'] != $this->data['Podcast']['owner_id'] ) ) )
         {
             return true;
         }
