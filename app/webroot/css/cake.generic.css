@@ -179,15 +179,26 @@ table .altrow td {
 	/*background: #f5f5f5;*/
 	background: #fff;
 }
+
+/*  Actions*/
+
 td.actions {
 	text-align: center;
 	white-space: nowrap;
-	width: 360px;
+	width: 500px;
 }
+
 table td.actions a {
 	margin: 0px 6px;
 	padding:2px 5px;
 }
+
+table td.actions a img {
+	margin: 0 2px 2px 0;
+	padding: 0px 2px 0 0;
+}
+
+
 .cake-sql-log table {
 	background: #f4f4f4;
 }
@@ -648,7 +659,7 @@ div#dashboard li	{
 }
 
 div.wrapper {
-	margin: 0 auto;
+	margin: 30px auto;
 	padding:0px!important;
 }
 

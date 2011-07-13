@@ -17,9 +17,11 @@ legend span {display:block;position:absolute;top:-03px;left:60px}
 h3 a {text-decoration: none; font-weight:bold;}
 h3 a:hover {text-decoration: underline;}
 
-.icon {margin:0px 5px 0 5px;padding-bottom:1px;vertical-align:middle;}
+.icon {margin:0px 5px 2px 2px;padding-bottom:1px;vertical-align:middle;}
 
-.button {background: none; border: 0; vertical-align:middle;}
+.button {background: none; border: 0; vertical-align:middle;margin-right:10px;}
+
+
 .button:hover {text-decoration:underline;}
 
 .podcast-owner {
@@ -43,9 +45,9 @@ h3 a:hover {text-decoration: underline;}
 .light-blue	{
 	background-color: #418db1;
 	color: #fff;
-	border: 1px solid #003d4c;
+	border: 1px solid #418db1;
 	border-radius: 4px;
-	padding: 2px;
+	padding: 2px 4px 2px 2px;
 	}
 	
 .light-blue:hover {color: #fff;}
