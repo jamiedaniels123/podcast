@@ -105,8 +105,8 @@ DEFINE('FEEDS_LOCATION', 'feeds/');
 DEFINE('THUMBNAIL_EXTENSION', '_thm');
 DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
 DEFINE('NO_IMAGE_AVAILABLE', '/img/default-project-thumbnail.png');
-DEFINE('CORRECT_IMAGE', '/correct.gif');
-DEFINE('INCORRECT_IMAGE', '/incorrect.gif');
+DEFINE('CORRECT_IMAGE', '/correct.png');
+DEFINE('INCORRECT_IMAGE', '/incorrect.png');
 DEFINE('ERROR_IMAGE', '/error.png');
 
 DEFINE('RSS_VIEW', 'http://'.$_SERVER['SERVER_NAME'].'/feeds/view/');

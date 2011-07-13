@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         if( confirm('Are you sure?') ) {
-            var action = jQuery(this).attr('data-form_target');
+            var action = jQuery(this).attr('href');
             jQuery(this).parents('form:first').attr('action',action);
             jQuery(this).closest("form").submit();
         }

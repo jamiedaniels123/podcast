@@ -86,6 +86,9 @@
     </div>
 </div>
 <div class="clear"></div>
+
+<div class="two-column-controls">
+
 <?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
 	<?php echo $this->element('../podcasts/_itunes'); ?>
 	<div class="clear"></div>
@@ -99,10 +102,10 @@
 
     <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
         <a class="button light-blue" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/admin/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add track" class="icon" />Media</a>
+        <a class="button light-blue" href="/admin/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
     <?php else : ?>
         <a class="button light-blue" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add track" class="icon" />Add track</a>
+        <a class="button light-blue" href="/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
     <?php endif; ?>
 
 <?php endif; ?>
@@ -111,12 +114,13 @@
 
     <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
         <?php if( $this->Object->isDeleted( $this->data['Podcast'] ) ) : ?>
-	        <a class="button white" href="/admin/podcasts/restore/<?php echo $this->data['Podcast']['id'];?>" title="restore" onclick="return confirm('Are you sure you wish to restore this podcast?');" ><img src="/img/icon-16-restore.png" alt="Restore" class="icon" />Restore</a>
+	        <a class="button white" href="/admin/podcasts/restore/<?php echo $this->data['Podcast']['id'];?>" title="restore" onclick="return confirm('Are you sure you wish to restore this collection?');" ><img src="/img/icon-16-restore.png" alt="Restore" class="icon" />Restore</a>
         <?php else : ?>
-	        <a class="button white" href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this podcast?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+	        <a class="button white" href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
         <?php endif; ?>
     <?php else : ?>
-        <a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this podcast?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+        <a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+        </div>
     <?php endif; ?>
 
 <?php endif; ?>

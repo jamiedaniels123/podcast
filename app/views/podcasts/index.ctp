@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend><span>iTunes U Collections</span></legend>
+    <legend><span>Your Collections</span></legend>
     
     <img src="/img/collection-large.png" />
     
@@ -11,7 +11,7 @@
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
     <div class="collection-top">
-    	<div class="left"><h3><a href="/podcasts/add">Add a new collection</a></h3><a href="#"><img src="/img/add-new.png" alt="Add a new collection" width="16" height="16" class="icon" /></a></div>
+    	<div class="left"><h3><a class="button white" href="/podcasts/add"><img src="/img/add-new.png" alt="Add a new collection" width="16" height="16" class="icon" />Add a new collection</a></h3></div>
     	<div class="right"><?php echo $this->element('../podcasts/_filter'); ?></div>
     </div>
     <div class="clear"></div>
@@ -63,16 +63,16 @@
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
-                            <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="View collection contents" class="icon" />view</a>
+                            <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="View collection contents" class="icon" />View</a>
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />refresh rss</a>
-                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="Edit collection" class="icon" />edit</a>
-                                <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this podcast and associated media?');">delete</a>
-                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/add-new.png" alt="Add track" class="icon" />add track</a>
+                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="Edit collection" class="icon" />Edit</a>
+                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+                                <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                             <?php elseif( $this->Permission->isModerator( $podcast['Moderators'] ) || $this->Permission->inModeratorGroup( $podcast['ModeratorGroups'] ) ) : ?>
-                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">generate rss</a>
-                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">moderate</a>
-                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>">media</a>
+                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Generate RSS</a>
+                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">Moderate</a>
+                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>">Media</a>
                                 
                             <?php endif; ?>
                         </td>
@@ -83,8 +83,8 @@
         </table>
         
         <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
-        <button class="button white multiple_action_button" type="button" data-form_target="/podcasts/delete" id="delete_multiple_podcasts"><span>delete</span></button>
-        <button class="button white multiple_action_button" type="button" data-form_target="/feeds/add" id="generate_rss_multiple_podcasts"><span>refresh rss</span></button>
+		<a class="button white multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts"><span><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</span></a>
+        <a class="button white multiple_action_button" type="button" href="/podcasts/delete" id="delete_multiple_podcasts"><span><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</span></a>
        
     </form>
     <div class="paging">
@@ -97,9 +97,9 @@
         ?>
     </p>    
        <div class="page-controls">
-	   	<?php echo $this->Paginator->prev(''.__('previous', true), array(), null, array('class'=>'disabled previous'));?>
+	   	<?php echo $this->Paginator->prev(''.__('Previous', true), array(), null, array('class'=>'disabled previous'));?>
      | 	<?php echo $this->Paginator->numbers();?>
-        <?php echo $this->Paginator->next(__('next', true).'', array(), null, array('class'=>'disabled next'));?>
+        <?php echo $this->Paginator->next(__('Next', true).'', array(), null, array('class'=>'disabled next'));?>
         </div>
     </div>
 </fieldset>
