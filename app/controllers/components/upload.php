@@ -30,7 +30,9 @@ class UploadComponent extends Object {
      * @by : Charles Jackson
      */
     function podcastMediaImage( $data = array(), $data_key = null ) {
-
+		
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -80,7 +82,8 @@ class UploadComponent extends Object {
      */
     function podcastImage( $data, $data_key ) {
 
-
+		$this->error = null;
+		
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -129,6 +132,8 @@ class UploadComponent extends Object {
      */
     function logolessPodcastImage( $data, $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -178,6 +183,8 @@ class UploadComponent extends Object {
      */
     function widePodcastImage( $data, $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading an image?
 		if( $this->attemptedUpload( $data, $data_key ) == false )
 			return false;
@@ -227,6 +234,8 @@ class UploadComponent extends Object {
      */
     function transcript( $data = array(), $data_key ) {
 
+    	$this->error = null;
+    	
         // Have they tried uploading a transcript?
         if ( ( isSet( $data['Transcript'][$data_key] ) == false ) || ( strlen( $data['Transcript'][$data_key]['name'] ) == 0 ) )
 			return false;

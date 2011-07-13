@@ -48,7 +48,7 @@ class PodcastItemMediasController extends AppController {
 			) {
 
 				$this->Session->setFlash('The attachment has been deleted.', 'default', array( 'class' => 'success' ) );
-				$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
+				$this->PodcastItemMedia->delete( $id );
 							
 			} else {
 			
@@ -56,7 +56,8 @@ class PodcastItemMediasController extends AppController {
 			}
 				
         }
+        
+		$this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
 		
-		$this->redirect( $this->referer() );
     }
 }

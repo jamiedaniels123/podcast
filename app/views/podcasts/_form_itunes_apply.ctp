@@ -1,6 +1,4 @@
 <div class="input checkbox">
-    <input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">    
-    <input type="hidden" value="0" id="PodcastConsiderForItunesu_" name="data[Podcast][consider_for_itunesu]">
     <input type="checkbox" id="PodcastConsiderForItunesu" value="1" <?php echo $this->data['Podcast']['consider_for_itunesu'] ? 'checked="checked"' : '';?> name="data[Podcast][consider_for_itunesu]">
     <label for="PodcastConsiderForItunesu">Consider for iTunes U</label>
     <?php echo $this->Form->error('Podcast.consider_for_itunesu'); ?>

@@ -1,4 +1,8 @@
 <input type="hidden" id="PodcastDeleted" name="data[Podcast][deleted]" value="<?php echo $this->data['Podcast']['deleted']; ?>">
+<input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">
+<input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
+<input type="hidden" value="0" id="PodcastConsiderForYoutube_" name="data[Podcast][consider_for_youtube]">
+<input type="hidden" value="0" id="PodcastConsiderForItunesu_" name="data[Podcast][consider_for_itunesu]">
 <div class="input text">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">

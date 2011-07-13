@@ -58,6 +58,7 @@ class User extends AppModel {
         'Podcasts' => array(
             'className' => 'Podcast',
             'foreignKey' => 'owner_id',
+    		'conditions' => 'Podcasts.deleted = false',
             'fields' => array('Podcasts.id', 'Podcasts.title')
         )
     );

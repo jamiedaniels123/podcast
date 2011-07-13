@@ -83,37 +83,23 @@ class PodcastItemsController extends AppController {
      */
     function edit( $id = null ) {
 
-        if ( !empty( $this->data ) ) {
+           if ( !empty( $this->data ) ) {
 
+        	// Unset this relationship so we can "saveAll" without touching the parent collection
+        	unset( $this->PodcastItem->belongsTo['Podcast'] );
+        	
 			$this->PodcastItem->begin(); // Begin a transaction so we can rollback if needed.
 			
-            // Save this->data into a local array called data so we may unset the attachment array elements before
-            // validating else it will fail because they contain arrays.
-            $data = array();
-            $data = $this->data;
+            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
 
-            $this->PodcastItem->data = $this->data;
-            $this->PodcastItem->unsetAttachments();
-
-            $this->PodcastItem->set( $this->PodcastItem->data );
-
-            if(  $this->PodcastItem->save()  ) {
-
-                // Now copy back the original including array elements and
-                // save again with attachment elements.
-                $this->data = $data;
-
-                if( ( $this->__updateImage() ) && ( $this->__updateTranscript() ) ) {
-						
-
-					$this->PodcastItem->commit();
-					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
-	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-					exit;
-				}
-
+				$this->PodcastItem->set( $this->data );
+            	$this->PodcastItem->saveAll();
+				$this->PodcastItem->commit();
+				$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
+                $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+				exit;
             }
-
+			
             $this->errors = $this->PodcastItem->invalidFields( $this->data );
             $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
 			$this->PodcastItem->rollback();
@@ -126,7 +112,7 @@ class PodcastItemsController extends AppController {
             if( empty( $this->data ) ) {
 
                 $this->Session->setFlash('Could not find your podcast media. Please try again.', 'default', array( 'class' => 'error' ) );
-                $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index', ) );
+                $this->cakeError('error404');
             }
         }
     }
@@ -290,14 +276,9 @@ class PodcastItemsController extends AppController {
             $this->PodcastItem->invalidate('image_filename', $this->Upload->getError() );
             return false;
 			
-        } else {
-
-            // Resave the object so we capture the names of the uploaded images.
-            $this->PodcastItem->save( $this->data );
-
-            $this->Session->setFlash('Your podcast media has been successfully updated.', 'default', array( 'class' => 'success' ) );
-			return true;
         }
+
+		return true;
     }
 
     /*
@@ -328,14 +309,9 @@ class PodcastItemsController extends AppController {
 
             $this->PodcastItem->invalidate('filename', $this->Upload->getError() );
             return false;
-			
-        } else {
-		
-			
-			$this->PodcastItem->Transcript->set( $this->data );
-			$this->PodcastItem->Transcript->save();
-			return true;
-		}
+        }
+        			
+		return true;
 	}
 	
     /*
@@ -362,10 +338,7 @@ class PodcastItemsController extends AppController {
 				// Soft delete the podcast
 				$this->data['PodcastItem']['deleted'] = true;
 				$this->PodcastItem->set( $this->data );
-				if( $this->PodcastItem->save() == false ) {
-					print_r( $this->data['Podcast'] );
-					die('dddd');
-				}
+				$this->PodcastItem->save();
 	
 				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
 				
@@ -391,11 +364,7 @@ class PodcastItemsController extends AppController {
         $this->data = $this->PodcastItem->findById( $id );
 		
         // If we did not find the podcast media then redirect to the referer.
-        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
-
-            $this->Session->setFlash('We could not find the media attachment you are trying to delete.', 'default', array( 'class' => 'error' ) );
-
-        } else {
+        if( !empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 			
 			// We unset the publication date field because the default value of 0000-00-00 00:00:00 will a produce model validation error.
 			unset( $this->data['PodcastItem']['publication_date'] ); 
@@ -414,19 +383,14 @@ class PodcastItemsController extends AppController {
 				) {
 
 					$this->Session->setFlash('The media attachment has been deleted.', 'default', array( 'class' => 'success' ) );
-			        $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );	
-								
-				} else {
-				
-					$this->Session->setFlash('We could not schedule the attachment for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			        $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+			        exit;	
 				}
 				
-			} else {
-
-				$this->Session->setFlash('There has been a problem deleting the media attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 			}
         }
-		
+        
+		$this->Session->setFlash('There has been a problem deleting the media attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
 		$this->redirect( $this->referer() );
     }
 
@@ -503,34 +467,23 @@ class PodcastItemsController extends AppController {
      */
     function admin_edit( $id = null ) {
 
-        if ( !empty( $this->data ) ) {
+       if ( !empty( $this->data ) ) {
 
-            // Save this->data into a local array called data so we may unset the attachment array elements before
-            // validating else it will fail because they contain arrays.
-            $data = array();
-            $data = $this->data;
+        	// Unset this relationship so we can "saveAll" without touching the parent collection
+        	unset( $this->PodcastItem->belongsTo['Podcast'] );
+        	
+			$this->PodcastItem->begin(); // Begin a transaction so we can rollback if needed.
+			
+            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
 
-            $this->PodcastItem->data = $this->data;
-            $this->PodcastItem->unsetAttachments();
-
-            $this->PodcastItem->set( $this->PodcastItem->data );
-            
-            if(  $this->PodcastItem->save()  ) {
-
-                // Now copy back the original including array elements and
-                // save again with attachment elements.
-                $this->data = $data;
-
-                if( ( $this->__updateImage() ) && ( $this->__updateTranscript() ) && ( $this->PodcastItem->buildInjectionFlavours( $this->data['PodcastItem']['id'] ) ) ) {
-
-					$this->PodcastItem->commit();
-					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
-	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-					exit;
-				}
-
+				$this->PodcastItem->set( $this->data );
+            	$this->PodcastItem->saveAll();
+				$this->PodcastItem->commit();
+				$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
+                $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+				exit;
             }
-
+			
             $this->errors = $this->PodcastItem->invalidFields( $this->data );
             $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
 			$this->PodcastItem->rollback();
@@ -543,7 +496,7 @@ class PodcastItemsController extends AppController {
             if( empty( $this->data ) ) {
 
                 $this->Session->setFlash('Could not find your podcast media. Please try again.', 'default', array( 'class' => 'error' ) );
-                $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index', ) );
+                $this->cakeError('error404');
             }
         }
     }
