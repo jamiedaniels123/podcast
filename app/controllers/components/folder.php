@@ -231,7 +231,7 @@ class FolderComponent extends Object {
 		
 		unlink( FILE_REPOSITORY.$path.$filename );
 			
-		if( is_empty_dir( FILE_REPOSITORY.$path ) )
+		if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
 			return ( rmdir( FILE_REPOSITORY.$path ) );
 		
 		return true;

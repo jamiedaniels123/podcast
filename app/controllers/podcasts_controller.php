@@ -858,7 +858,9 @@ class PodcastsController extends AppController {
      * @by : Charles Jackson
      */
     function __updateImages() {
-
+    	
+    	$statusOK = true;
+    	
         // Try to upload the associated images and transfer to the media server. If successful the upload component will return the name
         // of the uploaded file else it will return false.
         if( $this->Upload->podcastImage( $this->data, 'new_image' ) ) {
@@ -868,6 +870,11 @@ class PodcastsController extends AppController {
 		} else {
 			
 			unset( $this->data['Podcast']['new_image'] );
+			
+        	if( $this->Upload->hasError() ) {
+        		$this->Podcast->invalidate('image', $this->Upload->getError() );
+        		$statusOK = false;
+        	}
 		}
 
         if( $this->Upload->logolessPodcastImage( $this->data, 'new_image_logoless' ) ) {
@@ -877,6 +884,11 @@ class PodcastsController extends AppController {
 		} else {
 			
 			unset( $this->data['Podcast']['new_image_logoless'] );
+			
+        	if( $this->Upload->hasError() ) {
+        		$this->Podcast->invalidate('image_logoless', $this->Upload->getError() );
+        		$statusOK = false;
+        	}
 		}
 		
         if( $this->Upload->widePodcastImage( $this->data, 'new_image_wide' ) ) {
@@ -886,21 +898,20 @@ class PodcastsController extends AppController {
 		} else {
 			
 			unset( $this->data['Podcast']['new_image_wide'] );
+			
+        	if( $this->Upload->hasError() ) {
+        		$this->Podcast->invalidate('image_wide', $this->Upload->getError() );
+        		$statusOK = false;
+        	}
 		}
 
-        // Check to see if the upload component created any errors.
-        if( $this->Upload->hasErrors() ) {
+		if( $statusOK ) {
 			
-            $this->errors = $this->Upload->getErrors();
-			
-            return false;
-
-        } else {
-
             // Resave the object so we capture the names of the uploaded images.
             $this->Podcast->save( $this->data['Podcast'] );
-            return true;
-        }
+    	}
+    	
+        return $statusOK;
     }
 
     /*

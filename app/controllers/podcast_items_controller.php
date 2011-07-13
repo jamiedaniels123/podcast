@@ -66,9 +66,9 @@ class PodcastItemsController extends AppController {
         
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->PodcastItem->findById( $id );
-
+        
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data )  || $this->Permission->toView( $this->data ) == false ) {
+        if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
             $this->Session->setFlash( 'Could not find your item media file. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -103,17 +103,8 @@ class PodcastItemsController extends AppController {
                 // save again with attachment elements.
                 $this->data = $data;
 
-                if( ( $this->__updateImage() == false )  ) {
-
-					$this->PodcastItem->rollback();
-					$this->Session->setFlash('Could not update your associated image. Please try again.', 'default', array( 'class' => 'error' ) );														
-	
-				} elseif( ( $this->__updateTranscript() == false )  ) {
-
-					$this->PodcastItem->rollback();
-					$this->Session->setFlash('Could not update your associated transcript. Please try again.', 'default', array( 'class' => 'error' ) );														
-					
-				} else {
+                if( ( $this->__updateImage() ) && ( $this->__updateTranscript() ) ) {
+						
 
 					$this->PodcastItem->commit();
 					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
@@ -121,12 +112,11 @@ class PodcastItemsController extends AppController {
 					exit;
 				}
 
-            } else {
-
-                $this->errors = $this->PodcastItem->invalidFields( $this->data );
-                $this->Session->setFlash('Could not update your meta data. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
-				$this->PodcastItem->rollback();
             }
+
+            $this->errors = $this->PodcastItem->invalidFields( $this->data );
+            $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
+			$this->PodcastItem->rollback();
 
         } else {
 
@@ -295,9 +285,9 @@ class PodcastItemsController extends AppController {
 		}
 				
         // Check to see if the upload component created any errors.
-        if( $this->Upload->hasErrors() ) {
+        if( $this->Upload->hasError() ) {
 
-            $this->errors = $this->Upload->getErrors();
+            $this->PodcastItem->invalidate('image_filename', $this->Upload->getError() );
             return false;
 			
         } else {
@@ -334,9 +324,9 @@ class PodcastItemsController extends AppController {
 		}
 		
         // Check to see if the upload component created any errors.
-        if( $this->Upload->hasErrors() ) {
+        if( $this->Upload->hasError() ) {
 
-            $this->errors = $this->Upload->getErrors();
+            $this->PodcastItem->invalidate('filename', $this->Upload->getError() );
             return false;
 			
         } else {
@@ -531,13 +521,7 @@ class PodcastItemsController extends AppController {
                 // save again with attachment elements.
                 $this->data = $data;
 
-                if( ( $this->__updateImage() == false ) || ( $this->__updateTranscript() == false ) ) {
-
-					$this->PodcastItem->rollback();
-	                $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-					exit;
-					
-				} else {
+                if( ( $this->__updateImage() ) && ( $this->__updateTranscript() ) && ( $this->PodcastItem->buildInjectionFlavours( $this->data['PodcastItem']['id'] ) ) ) {
 
 					$this->PodcastItem->commit();
 					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
@@ -545,13 +529,11 @@ class PodcastItemsController extends AppController {
 					exit;
 				}
 
-            } else {
-
-                $this->errors = $this->PodcastItem->invalidFields( $this->data );
-                $this->Session->setFlash('Could not update your meta data. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
-			
-			$this->PodcastItem->rollback(); // If we get here something did not work on the save, rollback changes.
+
+            $this->errors = $this->PodcastItem->invalidFields( $this->data );
+            $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
+			$this->PodcastItem->rollback();
 
         } else {
 

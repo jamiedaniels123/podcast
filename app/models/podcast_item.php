@@ -189,4 +189,53 @@ class PodcastItem extends AppModel {
 			'comments' => 'Item from '.$data['Podcast']['title']			
 		);
 	}
+	
+	/*
+	 * @name : buildInjectionFlavours
+	 * @description : Find every flavour of media for a media_item and list it in an array for meta injection.
+	 * @updated : 13th July 2011
+	 * @by : Charles Jackson
+	 */
+	function buildInjectionFlavours( $id = null ) {
+
+		$flavours = array();		
+		$data = $this->findById( $id );
+
+		if( $data['PodcastItem']['processed_state'] == MEDIA_AVAILABLE ) {
+			
+			$flavours[] = array(
+			
+				'target_path' => $data['Podcast']['custom_id'].'/',
+				'filename' => $data['PodcastItem']['filename'],
+				'podcast_item_id' => $id,
+				'title' => $data['PodcastItem']['title'],
+				'genre' => $data['PodcastItem']['genre'],
+				'artist' => $data['PodcastItem']['artist'],
+				'album' => $data['PodcastItem']['album'],
+				'year' => $data['PodcastItem']['year'],
+				'comments' => $data['PodcastItem']['comments']			
+			);
+		}
+
+		foreach( $data['PodcastMedia'] as $media ) {
+			
+			if( $data['PodcastItem']['processed_state'] == MEDIA_AVAILABLE ) {
+				
+				$flavours[] = array(
+				
+					'target_path' => $data['Podcast']['custom_id'].'/'.$data['PodcastMedia']['media_type'].'/',
+					'filename' => $data['PodcastMedia']['filename'],
+					'podcast_item_id' => $id,
+					'title' => $data['PodcastItem']['title'],
+					'genre' => $data['PodcastItem']['genre'],
+					'artist' => $data['PodcastItem']['artist'],
+					'album' => $data['PodcastItem']['album'],
+					'year' => $data['PodcastItem']['year'],
+					'comments' => $data['PodcastItem']['comments']			
+				);
+			}	
+		}
+		
+		return $flavours;
+	}
 }
