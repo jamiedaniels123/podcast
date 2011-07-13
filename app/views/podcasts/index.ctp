@@ -68,7 +68,7 @@
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />refresh rss</a>
                                 <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="Edit collection" class="icon" />edit</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this podcast and associated media?');">delete</a>
-                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/add-new.png" alt="Add track" class="icon" />Add track</a>
+                                <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/add-new.png" alt="Add track" class="icon" />add track</a>
                             <?php elseif( $this->Permission->isModerator( $podcast['Moderators'] ) || $this->Permission->inModeratorGroup( $podcast['ModeratorGroups'] ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">generate rss</a>
                                 <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">moderate</a>
