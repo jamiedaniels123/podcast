@@ -95,3 +95,16 @@ h3 a:hover {text-decoration: underline;}
 	float:right;
 	margin:10px 20px 0 0 ;
 	}
+
+.two-column-controls	{
+	border:0px dotted blue;
+	margin-left:55px;	
+}
+
+.two_column dt 	{
+	border-bottom: 1px solid #fff;	
+}
+
+.two_column dt:last-of-type 	{
+	border-bottom: 0px solid red;
+}
