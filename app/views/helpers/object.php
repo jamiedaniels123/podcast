@@ -20,9 +20,9 @@ class ObjectHelper extends AppHelper {
      * @updated : 1st June 2011
      * @by : Charles Jackson
      */
-    function isDeleted( $podcast = array() ) {
+    function isDeleted( $object = array() ) {
 
-        if( $podcast['deleted'] )
+        if( $object['deleted'] )
             return true;
 
         return false;
@@ -169,13 +169,11 @@ class ObjectHelper extends AppHelper {
 		
 		if( isSet( $this->processed_state[$processed_state] ) ) {
 			$html = '<img src="/img/'.$this->processed_state[$processed_state]['icon'].'" class="icon" alt="'.$this->processed_state[$processed_state]['message'].'" />';
-			$html .= '<br />';
-			$html .= '<span class="tagline">'.ucfirst( $this->processed_state[$processed_state]['message'] ).'</span>';
+			$html .= '<span class="tagline">( '.ucwords( $this->processed_state[$processed_state]['message'] ).' )</span>';
 			
 		} else { 
 		
 			$html = '<img src="/img/'.ERROR_IMAGE.'" alt="State unknown - '.$processed_state.' Investigate" class="icon" />';
-			$html .= '<br />';
 			$html .= '<span class="tagline">State unknown : '.$processed_state.' Investigate!</span>';
 			
 		}

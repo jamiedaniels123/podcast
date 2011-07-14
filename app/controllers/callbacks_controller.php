@@ -2,9 +2,9 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_local_deletion = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server', 'transfer-folder-to-media-server');
-	var $requires_meta_injection = array('transcode-media-and-deliver');
-	var $processed_state_update = array('transcode-media-and-deliver');
+	var $requires_local_deletion = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
+	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
+	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
 	
     /*
      * @name : beforeFilter
@@ -39,33 +39,6 @@ class CallbacksController extends AppController {
 			if( $this->Callback->hasErrors() )
 				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'This callback has errors');
 				
-			// Does the API command signify a need to delete a local file structure?
-			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
-				
-				foreach( $this->Callback->data['data'] as $row ) {
-					
-					// Delete the local file structure or error.
-					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['filename'] );
-						
-				}
-			}
-			
-			// If we need to 'kick-off' some meta injection do it here.
-			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
-
-				// Needed to retrieve the meta data.
-				$podcastItem = ClassRegistry::init('PodcastItem');
-				
-				foreach( $this->Callback->data['data'] as $row ) {
-					
-					if( strtoupper( $row['status'] ) == YES ) {
-
-						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						$this->Api->metaInjection( $this->PodcastItem->buildInjectionFlavours( $this->data['podcast_item_id'] ) );
- 					}
-				}
-			}
-
 			// Do we need to update the processed state
 			if( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
 
@@ -73,14 +46,15 @@ class CallbacksController extends AppController {
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
 					
-				$data = $podcastItem->findById( $this->Callback->data['podcast_item_id'] );
 				// We only trancode media 1 at a time but it is still wrapped in a forloop to give a generic structure to all
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
-					
+
+					$data = $podcastItem->findById( $row['data']['podcast_item_id'] );
+															
 					if( strtoupper( $row['status'] ) == YES ) {
 						
-						$data['PodcastItem']['processed_state'] = 9; // Media available
+						$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE; // Media available
 						
 					} else {
 						
@@ -91,7 +65,34 @@ class CallbacksController extends AppController {
 				$podcastItem->set( $data );
 				$podcastItem->save();
 			}			
+				
+			// Does the API command signify a need to delete a local file structure?
+			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
+
+				foreach( $this->Callback->data['data'] as $row ) {
+					
+					// Delete the local file structure or error.
+					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['filename'] );
+				}
+			}
 			
+			// If we need to 'kick-off' some meta injection do it here.
+			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
+				
+				// Needed to retrieve the meta data.
+				if( is_object( $podcastItem ) == false )
+					$podcastItem = ClassRegistry::init('PodcastItem');
+				
+				foreach( $this->Callback->data['data'] as $row ) {
+					
+					if( strtoupper( $row['status'] ) == YES ) {
+
+						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
+						if( $this->Api->metaInjection( $podcastItem->buildInjectionFlavours( $row['data']['podcast_item_id'] ) ) == false )
+							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Error injecting meta data');
+ 					}
+				}
+			}
 
 		} else {
 			
@@ -100,7 +101,6 @@ class CallbacksController extends AppController {
 			$jsonData = json_encode($m_data);
 			$this->set('status',$jsonData);
 		}
-
 	}
 
 

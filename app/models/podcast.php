@@ -156,7 +156,7 @@ class Podcast extends AppModel {
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
                 PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state',
-            'order' => 'PodcastItems.publication_date DESC'
+            'order' => 'PodcastItems.publication_date DESC',
         ),
         'PublishedPodcastItems' => array(
             'className' => 'PodcastItem',

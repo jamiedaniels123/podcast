@@ -36,7 +36,7 @@ class Workflow extends AppModel {
 		
 		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
-			$this->setWorkflow( DIRECT_TRANSFER );
+			$this->setWorkflow( DELIVER_WITHOUT_TRANSCODING );
 			return true;
 			exit;
 			

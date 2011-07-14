@@ -134,7 +134,7 @@ DEFINE('YOUTUBE_PUBLISHED', 'publish_youtube');
 
 // Workflows
 DEFINE('NONE', NULL);
-DEFINE('DIRECT_TRANSFER', 'direct_transfer');
+DEFINE('DELIVER_WITHOUT_TRANSCODING', 'deliver-without-transcoding');
 DEFINE('AUDIO', 'audio');
 DEFINE('SCREENCAST','screencast');
 DEFINE('SCREENCAST_WIDE', 'screencast-wide');

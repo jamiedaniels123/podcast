@@ -24,8 +24,8 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : index
-     * @desscription : Displays a list of all available podcast media for the podcast passed as a parameter and
-     * includes a partial _form element that renders filechucker.cgi.
+     * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
+     * @todo : Move this code to the 'add' method. Change of functionality mid project.
      * @updated : 13th May 2011
      * @by : Charles Jackson
      */
@@ -86,16 +86,27 @@ class PodcastItemsController extends AppController {
            if ( !empty( $this->data ) ) {
 
         	// Unset this relationship so we can "saveAll" without touching the parent collection
-        	unset( $this->PodcastItem->belongsTo['Podcast'] );
+        	//unset( $this->PodcastItem->belongsTo['Podcast'] );
         	
 			$this->PodcastItem->begin(); // Begin a transaction so we can rollback if needed.
 			
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
 
+            	
 				$this->PodcastItem->set( $this->data );
             	$this->PodcastItem->saveAll();
 				$this->PodcastItem->commit();
-				$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
+				
+				// If the meta injection fails alert the user but do not roll back the database.
+				if( $this->Api->metaInjection( $this->PodcastItem->buildInjectionFlavours( $this->data['PodcastItem']['id'] ) ) ) {
+					
+					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );
+					
+				} else {
+					
+					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Use the refresh button.', 'default', array( 'class' => 'alert' ) );
+				}	
+												
                 $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
 				exit;
             }
@@ -170,32 +181,37 @@ class PodcastItemsController extends AppController {
 						
 						$this->errors = $this->Workflow->getErrors();
 						$this->Session->setFlash('We were unable to determine a transcoding workflow for your media file.', 'default', array( 'class' => 'error' ) );
-						unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
-						$this->PodcastItem->rollback();
 						
 					// The media is not transcoded and we can transfer direct to the media box. We include an additional element
 					// entitled "media" that we can recognise in the callback.
-					} elseif( $this->Workflow->getWorkflow() == DIRECT_TRANSFER ) {
+					} elseif( $this->Workflow->getWorkflow() == DELIVER_WITHOUT_TRANSCODING ) {
 						
-						if( $this->Api->transferFileMediaServer( 
+						if( $this->Api->deliverWithoutTranscoding( 
 							array( 
 								'source_path' => $this->data['Podcast']['custom_id'].'/',
 								'target_path' => $this->data['Podcast']['custom_id'].'/', 
-								'filename' => $his->data['PodcastItem']['filename'],
-								'media' => 1
+								'filename' => $this->data['PodcastItem']['filename'],
+								'podcast_item_id' => $this->data['PodcastItem']['id'],
 									)
 								)
 							)
 						{
-						
 							$this->Session->setFlash('Media file has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
 							$this->PodcastItem->commit();
 							
+							// Everything worked OK, redirect to view page
+					        if( $this->Session->read('Podcast.admin') ) {
+					
+					            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
+					
+					        } else {
+					
+					            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
+					        }
+							
 						} else {
 							
-							unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 							$this->Session->setFlash('We were unable to transfer your file to the media server. Please try again', 'default', array( 'class' => 'error' ) );
-							$this->PodcastItem->rollback();
 						}
 						
 					// This media needs to be transcoded.
@@ -212,22 +228,28 @@ class PodcastItemsController extends AppController {
 							// Witwoo! Everything worked.						
 							$this->PodcastItem->commit();
 							$this->Session->setFlash('Your podcast media has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
-	
+
+							// Everything worked OK, redirect to view page
+					        if( $this->Session->read('Podcast.admin') ) {
+					
+					            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
+					
+					        } else {
+					
+					            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
+					        }
+							
 						} else {
 							
-							// Could not schedule for transcoding, delete it.
-							unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
-							$this->PodcastItem->rollback();						
+							// Could not schedule for transcoding.
 							$this->Session->setFlash('Could not schedule your media for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
 						}
 					}
 					
                 } else {
 					
-                        // Could not copy file from the default folder in the transcoding specific folder on the admin box. Delete it.
-                        unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
-						$this->PodcastItem->rollback();						
-						$this->Session->setFlash('Could not copy your uploaded media. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+                    // Could not copy file from the default folder in the transcoding specific folder on the admin box.
+					$this->Session->setFlash('Could not copy your uploaded media. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
 				}
             }
 			
@@ -235,20 +257,14 @@ class PodcastItemsController extends AppController {
 
 			// The file did not upload capture the errors.
 			$this->errors = $this->PodcastItem->invalidFields( $this->data );
-			$this->PodcastItem->rollback();
 			$this->Session->setFlash('Could not save your media information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
 		}
+		
+		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );		
+		$this->PodcastItem->rollback();
+		
+        $this->redirect( array( 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
 
-        // We need to redirect based on session information that is set within the index and admin_index methods.
-        if( $this->Session->read('Podcast.admin') ) {
-
-            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
-
-        } else {
-
-            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
-        }
-        exit();
     }
 
     /*
@@ -324,30 +340,42 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions and listAssociatedMedia
-        $this->data = $this->PodcastItem->findById( $id );
-		
-        // If we did not find the podcast media then redirect to the referer.
-        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
 
-            $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
+        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+        // when somebody is deleting an individual podcast_item we pass into an array and loop through as is the data
+        // was posted.
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
 
-        } else {
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
-			if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+        	$this->data = $this->PodcastItem->findById( $key );
+        	        		
+    	    // If we did not find the podcast media then redirect to the referer.
+	        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) {
 
-				// Soft delete the podcast
-				$this->data['PodcastItem']['deleted'] = true;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
+        	    $this->Session->setFlash('We could not find the media you were looking for.', 'default', array( 'class' => 'error' ) );
+        	    break;
+
+    	    } else {
+
+				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+
+					// Soft delete the podcast
+					$this->data['PodcastItem']['deleted'] = true;
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
 	
-				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+					$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
 				
-			} else {
+				} else {
 				
-				$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-			}
+					$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					break;
+				}
+	        }
         }
-        
+
         $this->redirect( $this->referer() );
     }
 
@@ -386,7 +414,6 @@ class PodcastItemsController extends AppController {
 			        $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
 			        exit;	
 				}
-				
 			}
         }
         
@@ -400,14 +427,6 @@ class PodcastItemsController extends AppController {
      * users profile. The URL for all admin routes is "admin/:controller:/:action:/*
      */
 
-    /*
-     * @name : admin_index
-     * @desscription : Displays a list of all podcast media for the podcast passed as a parameter and
-     * includes a partial _form element that renders filechucker.cgi that enables peeps to upload a media file
-     * add a row to the podcast_items table.
-     * @name : Charles Jackson
-     * @by : 13thth May 2011
-     */
     /*
      * @name : admin_index
      * @desscription : Displays a list of all available podcast media for the podcast passed as a parameter and

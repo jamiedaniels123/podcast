@@ -145,17 +145,18 @@ class PodcastItem extends AppModel {
 			'target_filename' => '.'.$data['PodcastItem']['filename']			
 		);
 		
+
 		// Loop through the media and append to an array
         foreach( $data['PodcastMedia'] as $media ) {
-
+        	
         	$media_files[] = array( 
-				'source_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',
-				'target_path' => $data['Podcast']['custom_id'].'/'.$media['PodcastMedia']['media_type'].'/',				
-				'filename' => $media['PodcastMedia']['filename'],
-				'target_filename' => '.'.$media['PodcastMedia']['filename']			
+				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',
+				'target_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
+				'filename' => $media['filename'],
+				'target_filename' => '.'.$media['filename']			
 				);
         }
-		
+			
 		// Grab the transcript if it exists and append to array
 		if( is_array( $data['Transcript'] ) && !empty( $data['Transcript']['id'] ) ) {
 			
@@ -200,7 +201,7 @@ class PodcastItem extends AppModel {
 
 		$flavours = array();		
 		$data = $this->findById( $id );
-
+		
 		if( $data['PodcastItem']['processed_state'] == MEDIA_AVAILABLE ) {
 			
 			$flavours[] = array(
@@ -209,31 +210,28 @@ class PodcastItem extends AppModel {
 				'filename' => $data['PodcastItem']['filename'],
 				'podcast_item_id' => $id,
 				'title' => $data['PodcastItem']['title'],
-				'genre' => $data['PodcastItem']['genre'],
-				'artist' => $data['PodcastItem']['artist'],
-				'album' => $data['PodcastItem']['album'],
-				'year' => $data['PodcastItem']['year'],
-				'comments' => $data['PodcastItem']['comments']			
+				'genre' => 'Podcast',
+				'artist' => $data['PodcastItem']['author'],
+				'album' => $data['Podcast']['title'],
+				'year' => date('Y'),
+				'comments' => $data['PodcastItem']['summary']
 			);
-		}
-
-		foreach( $data['PodcastMedia'] as $media ) {
 			
-			if( $data['PodcastItem']['processed_state'] == MEDIA_AVAILABLE ) {
+			foreach( $data['PodcastMedia'] as $flavour ) {
 				
 				$flavours[] = array(
 				
-					'target_path' => $data['Podcast']['custom_id'].'/'.$data['PodcastMedia']['media_type'].'/',
-					'filename' => $data['PodcastMedia']['filename'],
+					'target_path' => $data['Podcast']['custom_id'].'/'.$flavour['media_type'].'/',
+					'filename' => $flavour['filename'],
 					'podcast_item_id' => $id,
 					'title' => $data['PodcastItem']['title'],
-					'genre' => $data['PodcastItem']['genre'],
-					'artist' => $data['PodcastItem']['artist'],
-					'album' => $data['PodcastItem']['album'],
-					'year' => $data['PodcastItem']['year'],
-					'comments' => $data['PodcastItem']['comments']			
+					'genre' => 'Podcast',
+					'artist' => $data['PodcastItem']['author'],
+					'album' => $data['Podcast']['title'],
+					'year' => date('Y'),
+					'comments' => $data['PodcastItem']['summary']			
 				);
-			}	
+			}
 		}
 		
 		return $flavours;

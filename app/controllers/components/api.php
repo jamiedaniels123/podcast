@@ -52,6 +52,22 @@ class ApiComponent extends Object {
     }
 
     /*
+     * @name : deliverWithoutTranscoding
+     * @description : The method is identical to the "transferFileMediaServer" method. However we use a seperate
+     * command so the callback URL knows the media will require meta data injection after a successful transfer 
+     * @updated : 14th June 2011
+     * @by : Charles Jackson
+     */
+    function deliverWithoutTranscoding( $data = array() ) {
+
+		$this->params = array(  $data );
+		
+		
+        $this->response = json_decode( $this->__sendMessage('deliver-without-transcoding', self::ADMIN_API, $this->params, count( $data ) ), 1 );
+        return $this->getStatus( $this->response );
+    }
+        
+    /*
      * @name : renameFileMediaServer
      * @description : Called from the controller, formats parameters passed into a JSON encoded array
      * @updated : 7th June 2011

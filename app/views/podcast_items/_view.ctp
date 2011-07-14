@@ -14,6 +14,8 @@
             <dd><?php echo $this->data['PodcastItem']['author']; ?>&nbsp;</dd>
             <dt>Created: </dt>
             <dd><?php echo $this->data['PodcastItem']['created'] ? $this->Time->getPrettyLongDate( $this->data['PodcastItem']['created'] ) : $this->Time->getPrettyShortDate( $this->data['PodcastItem']['created_when'] ); ?>&nbsp;</dd>
+            <dt>Processed State</dt>
+            <dd><?php echo $this->Object->getProcessedState( $this->data['PodcastItem']['processed_state'] ); ?></dd>
             <dt>Published: </dt>
             <dd><?php echo $this->data['PodcastItem']['published_flag'] == YES ? 'Yes' : 'No'; ?>&nbsp;</dd>
             <?php if( $this->data['PodcastItem']['published_flag'] == YES ) : ?>
@@ -30,6 +32,8 @@
             <dd><?php echo $this->data['PodcastItem']['target_url_text']; ?>&nbsp;</dd>
             <dt>Transcript</dt>
             <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['Transcript']['filename'] ); ?>			</dd>
+            <dt>Parent Collection</dt>
+            <dd><?php echo $this->data['Podcast']['title']; ?>&nbsp;</dd>
         </dl>
     </div>
 </div>
