@@ -50,13 +50,14 @@ class PermissionComponent extends Object {
 		// then let them view it.
 		if( $this->isItunesUser() )  {
 
-			if( isSet( $data['Podcast']['consider_for_itunesu'] ) && ( $data['Podcast']['consider_for_itunesu'] == true ) )
+			if( isSet( $data['consider_for_itunesu'] ) && ( $data['consider_for_itunesu'] == true ) )
 				return true;
+				
 		}
 
 		if( $this->isYoutubeUser() )  {
 
-			if( isSet( $data['Podcast']['consider_for_youtube'] ) && ( $data['Podcast']['consider_for_youtube'] == true ) )
+			if( isSet( $data['consider_for_youtube'] ) && ( $data['consider_for_youtube'] == true ) )
 				return true;
 		}
 
@@ -130,8 +131,8 @@ class PermissionComponent extends Object {
      * @updated : 24th May 2011
      * @by : Charles Jackson
      */
-    function startup( & $controller) {
-
+    function initialize( & $controller) {
+		
        $this->controller = & $controller;
     }
     
@@ -153,6 +154,20 @@ class PermissionComponent extends Object {
         return false;
     }
 
+    /*
+     * @name : isAdministrator
+     * @description : Accepts an array and search through looking for the current user
+     * id in the ['id']. Returns a bool.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isAdministrator() {
+
+		if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.administrator') == true )
+                    return true;
+        return false;
+    }
+        
     /*
      * @name : __isModerator
      * @description : Accepts an array and search through looking for the current user
@@ -285,17 +300,46 @@ class PermissionComponent extends Object {
 	
     /*
      * @name : isAdminRouting
-     * @description : Return a bool
-     * @updated : 1st June 2011
+     * @description : Checks to see if the current URL is an admin page and returns a boolean.
+     * @updated : 31st May 2011
      * @by : Charles Jackson
      */
     function isAdminRouting() {
 
-		return isSet( $this->params['admin'] );
+        if( substr( $this->controller->action, 0, 6 ) == 'admin_' )
+            return true;
+        
+        return false;
     }
-
-
     
+    /*
+     * @name : isItunesRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isItunesRouting() {
+
+        if( substr( $this->controller->action, 0, 7 ) == 'itunes_' )
+            return true;
+        
+        return false;
+    }
+    
+    /*
+     * @name : isYoutubeRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isYoutubeRouting() {
+
+    	
+        if( substr( $this->controller->action, 0, 8 ) == 'youtube_' )
+            return true;
+        
+        return false;
+    }
 }
 
 ?>

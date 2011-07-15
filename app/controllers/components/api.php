@@ -5,8 +5,7 @@ class ApiComponent extends Object {
     var $params = array();
     var $response = array();
 
-    const ADMIN_API = 'http://podcast-api-dev.open.ac.uk/';
-    
+   
     /*
      * @name : startup
      * @description : Grab the controller reference for later use.
@@ -21,7 +20,7 @@ class ApiComponent extends Object {
 
     function deleteFolderOnMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', self::ADMIN_API, $data, count( $data ) ), 1 );
+        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
 
     }
@@ -35,7 +34,7 @@ class ApiComponent extends Object {
     function deleteFileOnMediaServer( $data = array() ) {
 
 		
-        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', self::ADMIN_API, $data, count( $data ) ), 1 );
+        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', ADMIN_API, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -47,7 +46,7 @@ class ApiComponent extends Object {
      */
     function transferFileMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', self::ADMIN_API, $data, count( $data ) ), 1 );
+        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -63,7 +62,7 @@ class ApiComponent extends Object {
 		$this->params = array(  $data );
 		
 		
-        $this->response = json_decode( $this->__sendMessage('deliver-without-transcoding', self::ADMIN_API, $this->params, count( $data ) ), 1 );
+        $this->response = json_decode( $this->__sendMessage('deliver-without-transcoding', ADMIN_API, $this->params, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
     }
         
@@ -75,7 +74,7 @@ class ApiComponent extends Object {
      */
     function renameFileMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('rename-file-on-media-server', self::ADMIN_API, $data ), 1 );
+        $this->response = json_decode( $this->__sendMessage('rename-file-on-media-server', ADMIN_API, $data ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -95,7 +94,7 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->response = json_decode( $this->__sendMessage('transcode-media', self::ADMIN_API, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params ), 1 );
         return $this->getStatus( $this->response );
     }
 
@@ -107,7 +106,7 @@ class ApiComponent extends Object {
      */
     function metaInjection( $data ) {
     	
-        $this->response = json_decode( $this->__sendMessage('update-file-metadata', self::ADMIN_API, $data ), 1 );
+        $this->response = json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), 1 );
     }
     
     /*
@@ -128,7 +127,7 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->response = json_decode( $this->__sendMessage('transcode-media-and-deliver', self::ADMIN_API, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('transcode-media-and-deliver', ADMIN_API, $this->params ), 1 );
 
 		return $this->getStatus( $this->response );
 
@@ -149,7 +148,7 @@ class ApiComponent extends Object {
             )
         );
 
-        $this->response = json_decode( $this->__sendMessage('checkFile', self::ADMIN_API, $this->params ), 1 );
+        $this->response = json_decode( $this->__sendMessage('checkFile', ADMIN_API, $this->params ), 1 );
         return (int)$this->response['data']['status'];
     }
 

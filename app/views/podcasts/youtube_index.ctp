@@ -28,7 +28,9 @@
             <th><?php echo $this->Paginator->sort('title');?></th>
             <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
             <th><?php echo $this->Paginator->sort('Created');?></th>
-            <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
+            <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
+            <th>Approved</th>                
+            <th>Published</th>
             <th class="actions"><?php __('Actions');?></th>
         </tr>
         <?php
@@ -57,6 +59,12 @@
                     </td>
                     <td>
                         <?php echo count( $podcast['PodcastItems'] ); ?>
+                    </td>
+                    <td>
+                    	<img src="/img<?php echo $this->Object->intendedForYoutube( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
+                    </td>
+                    <td>
+                    	<img src="/img<?php echo $this->Object->youtubePublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
                     </td>
                     <td class="actions">
 						<?php if( $this->Object->waitingYoutubeApproval( $podcast['Podcast'] ) ) : ?>                    

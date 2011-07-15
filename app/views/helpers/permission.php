@@ -138,12 +138,42 @@ class PermissionHelper extends AppHelper {
      */
     function isAdminRouting() {
 
-        if( isSet( $this->params['admin'] ) && ( $this->params['admin'] == true ) )
+    	
+        if( substr( $params['action'], 0, 6 ) == 'admin_' )
             return true;
         
         return false;
     }
+    
+    /*
+     * @name : isItunesRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isItunesRouting() {
 
+        if( substr( $params['action'], 0, 6 ) == 'itunes_' )
+            return true;
+        
+        return false;
+    }
+    
+    /*
+     * @name : isYoutubeRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isYoutubeRouting() {
+
+    	
+        if( substr( $params['action'], 0, 6 ) == 'youtube_' )
+            return true;
+        
+        return false;
+    }
+        
     /*
      * @name : youTubePrivileges
      * @description : 

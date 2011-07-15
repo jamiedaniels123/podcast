@@ -12,7 +12,7 @@
     <div class="input select">
 	    <form name="PodcastItunesUForm" action="/itunes/podcasts" method="post">
             <select name="data[Podcast][filter]" id="PodcastFilter">
-		<option value="">Select a filter</option>
+				<option value="">Select a filter</option>
                 <option value="consideration" <?php echo $filter == 'consideration' ? 'selected=true' : ''; ?>>For Consideration</option>
                 <option value="intended" <?php echo $filter == 'intended' ? 'selected=true' : ''; ?>>Approved</option>
                 <option value="publish" <?php echo $filter == 'publish' ? 'selected=true' : ''; ?>>Published</option>            
@@ -28,7 +28,9 @@
             <th><?php echo $this->Paginator->sort('title');?></th>
             <th><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
             <th><?php echo $this->Paginator->sort('Created');?></th>
-            <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
+            <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
+			<th>Approved</th>                
+            <th>Published</th>
             <th class="actions"><?php __('Actions');?></th>
         </tr>
         <?php
@@ -57,6 +59,12 @@
                     </td>
                     <td>
                         <?php echo count( $podcast['PodcastItems'] ); ?>
+                    </td>
+                    <td>
+                    	<img src="/img<?php echo $this->Object->intendedForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
+                    </td>
+                    <td>
+                    	<img src="/img<?php echo $this->Object->itunesPublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
                     </td>
                     <td class="actions">
 						<?php if( $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ) : ?>                    

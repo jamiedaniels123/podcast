@@ -145,3 +145,4 @@ DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');
 
 // processed state of media
 DEFINE('MEDIA_AVAILABLE',9);
+DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');

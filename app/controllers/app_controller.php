@@ -18,7 +18,7 @@ class AppController extends Controller {
      * @by : Charles Jackson
      */
     function beforeFilter() {
-
+    	
 		if( $this->RequestHandler->isAjax() == false ) {
 			
 			// If the current user is attempting to view an admin method ensure the "administrator" flag on their
@@ -27,11 +27,27 @@ class AppController extends Controller {
 	
 				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
 				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
-			}
-	
-			$this->get_breadcrumbs();
+				
+			} 
 			
+			if( $this->Permission->isItunesRouting() && $this->Permission->isItunesUser() == false ) {
+				
+				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
+				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
+			
+			} elseif( $this->Permission->isYoutubeRouting() && $this->Permission->isYoutubeUser() == false ) {
+	
+				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
+				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
+			}
+			
+			$this->get_breadcrumbs();
+
+			// Set the page title in the browser
+			$this->set('title_for_layout', ucwords( $this->params['controller'].' &rarr; '.$this->params['action'] ) );
 		}
+		
+		$this->set('params', $this->params );
     }
 
     /*

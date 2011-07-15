@@ -303,12 +303,12 @@ class Podcast extends AppModel {
         // get the value of the field being passed
         $private = array_shift( $check );
 
-        if( $private == self::YES )
+        if( !isSet( $this->data['private'] ) || $private == self::YES )
             return true;
 
-        $this->PodcastItem = ClassRegistry::init('PodcastItem');
+        $podcastItem = ClassRegistry::init('PodcastItem');
 
-        return $this->PodcastItem->find( 'count', array('conditions' => array('PodcastItem.podcast_id' => $this->data['Podcast']['id'], 'PodcastItem.published_flag' => 1 ) ) );
+        return $podcastItem->find( 'count', array('conditions' => array('PodcastItem.podcast_id' => $this->data['Podcast']['id'], 'PodcastItem.published_flag' => 1 ) ) );
     }
 
     /*
@@ -759,14 +759,14 @@ class Podcast extends AppModel {
             case 'consideration':
                 return array(
                 	'Podcast.consider_for_itunesu' => true,
-                	'Podcast.intended_itunesu_flag' => 'N',
+                	'Podcast.intended_itunesu_flag !=' => 'Y',
                 	'Podcast.deleted' => 0 
                 );
                 break;
             case 'intended':
                 return array( 
 	                'Podcast.intended_itunesu_flag' => 'Y',
-                	'Podcast.publish_itunes_u' => 'N',
+                	'Podcast.publish_itunes_u !=' => 'Y',
 	                'Podcast.deleted' => 0 
                 );
                 break;
@@ -799,14 +799,14 @@ class Podcast extends AppModel {
             case 'consideration':
                 return array(
                 	'Podcast.consider_for_youtube' => true,
-                	'Podcast.intended_youtube_flag' => 'N',
+                	'Podcast.intended_youtube_flag !=' => 'Y',
                 	'Podcast.deleted' => 0 
                 );
                 break;
             case 'intended':
                 return array( 
 	                'Podcast.intended_youtube_flag' => 'Y',
-                	'Podcast.publish_youtube' => 'N',
+                	'Podcast.publish_youtube !=' => 'Y',
 	                'Podcast.deleted' => 0 
                 );
                 break;

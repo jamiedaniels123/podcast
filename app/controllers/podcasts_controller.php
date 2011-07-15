@@ -90,11 +90,13 @@ class PodcastsController extends AppController {
 			
 			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
 			$this->set('filter',$this->data['Podcast']['filter'] );	
+			
 		} else {
 			
 			$this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.consider_for_youtube' => 'Y' ) );
 			$this->set('filter',null );			
 		}
+
     }
         
     /*
@@ -367,6 +369,7 @@ class PodcastsController extends AppController {
     /*
      * @name : delete
      * @desscription : Enables a user to perform a soft delete on a podcast and the associated media if they are the current owner.
+     * @todo : Very inefficient, making a call for every deletion. Should be refactored.
      * @name : Charles Jackson
      * @by : 19th May 2011
      */
@@ -374,7 +377,7 @@ class PodcastsController extends AppController {
 
         $this->autoRender = false;
         $this->recursive = -1;
-
+		
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
         // was posted.
@@ -385,13 +388,6 @@ class PodcastsController extends AppController {
 
             $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
-            $this->Podcast->begin();
-
-            // Delete the podcast
-            $podcast['Podcast']['deleted'] = true;
-            $this->Podcast->set( $podcast ); // Hydrate the object
-            $this->Podcast->save();
-
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
 				array( 
@@ -399,14 +395,18 @@ class PodcastsController extends AppController {
 					'target_path' => $podcast['Podcast']['custom_id'].'/', 
 					'filename' => '.htaccess' 
 					)
-				) ) {						
-				
-                $this->Podcast->commit();
+				) ) {
+											
+	            // Delete the podcast
+	            $podcast['Podcast']['deleted'] = true;
+	            $this->Podcast->set( $podcast ); // Hydrate the object
+	            $this->Podcast->save();
+					
                 $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
 
             } else {
-
-                $this->Podcast->rollback();
+            	
+				$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
                 $this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
                 break; // Break out of the loop
             }
@@ -717,7 +717,6 @@ class PodcastsController extends AppController {
         
             // If we did no find the podcast that redirect to the referer.
             if( empty( $podcast ) == false ) {
-
 
 				// Hard delete this podcast by deleting the whole folder structure.
 				if( $this->Api->deleteFolderOnMediaServer( array( 

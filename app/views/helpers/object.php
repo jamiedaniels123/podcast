@@ -67,9 +67,14 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function itunesPublished( $podcast = array() ) {
+    function itunesPublished( $object = array() ) {
+    	
+    	if( isSet( $object['publish_itunes_u'] ) )
+        	return $object['publish_itunes_u'] == strtoupper( YES );
 
-        return $podcast['itunes_flag'] == strtoupper( YES );
+    	if( isSet( $object['itunes_flag'] ) )
+        	return $object['itunes_flag'] == strtoupper( YES );
+        	
     }
 
     /*
@@ -78,9 +83,15 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function youtubePublished( $podcast = array() ) {
+    function youtubePublished( $object = array() ) {
 
-        return $podcast['youtube_flag'] == strtoupper( YES );
+    	// Podcast level
+    	if( isSet( $object['publish_youtube'] ) )
+        	return $object['publish_youtube'] == strtoupper( YES );
+    	
+		// Item level
+    	if( isSet( $object['youtube_flag'] ) )
+        	return $object['youtube_flag'] == strtoupper( YES );
     }
 
     /*

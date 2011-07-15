@@ -19,7 +19,7 @@
         <div class="float_left two_column">    
             <dl>
                 <dt>Published: </dt>
-                <dd><img src="/img<?php echo ( $this->data['Podcast']['publish_itunes_u'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
+                <dd><img src="/img<?php echo ( $this->data['Podcast']['publish_itunes_u'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
                 <dt>Author: </dt>
                 <dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
                 <dt>Explicit: </dt>

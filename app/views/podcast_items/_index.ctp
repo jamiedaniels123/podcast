@@ -4,16 +4,16 @@
 	    <table>
 	    	<thead>
 	            <tr>
-	            	<th>Select</th>
+	            	<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) ) : ?>
+	            		<th>Select</th>
+            		<?php endif; ?>
 	            	<th>Image</th>
 	            	<th>Name</th>
 	                <th>Uploaded</th>
 	                <th>Processed State</th>
 	            	<th>iTunes</th>                
 	            	<th>U Tube</th>
-					<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) ) : ?>
-		            	<th>Actions</th>
-	            	<?php endif; ?>     
+	            	<th>Actions</th>
 	            </tr>
 	        </thead>
 	        <?php foreach( $this->data['PodcastItems'] as $podcast_item ) : ?>
@@ -49,7 +49,7 @@
 	    </table>
 	    
         <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
-        <a class="button white multiple_action_button" type="button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span>delete</span></button>
+        <a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span>delete</span></button>
     </form>
     
 </fieldset>

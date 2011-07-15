@@ -28,18 +28,18 @@ class emailTemplatesComponent extends Object {
      */
     function __sendNewRegistrationEmail( $data, $administrators = array() ) {
 
+        $this->Email->to = $administrator['User']['email'];
+        $this->Email->subject = "New Registration at ".$_SERVER['HTTP_HOST'];
+        $this->Email->replyTo = $data['User']['email'];
+        $this->Email->template = 'new_registration'; // note no '.ctp'
+
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+        //Do not pass any args to send()
+                	
         /* Set delivery method */
         foreach( $administrators as $administrator ) {
-            
-            $this->Email->to = $administrator['User']['email'];
-            $this->Email->subject = "New Registration at ".$_SERVER['HTTP_HOST'];
-            $this->Email->replyTo = $data['User']['email'];
-            $this->Email->template = 'new_registration'; // note no '.ctp'
-
-            $this->Email->sendAs = 'html'; // because we like to send pretty mail
-            //Set view variables as normal
-            $this->controller->set('data', $data);
-            //Do not pass any args to send()
 
             $this->Email->send();
         }
@@ -71,11 +71,8 @@ class emailTemplatesComponent extends Object {
      */
     function __sendCallbackErrorEmail( $recipients=array(),$data ,$errormessage) {
 
-        /* Set delivery method */
-        //$this->Email->to = 'j.d.daniels@open.ac.uk';
-		//$this->Email->to = 'cj3998@openmail.open.ac.uk';
-		$this->Email->to = 'i.newton@open.ac.uk';
-        $this->Email->subject = "callback error at ".$_SERVER['HTTP_HOST'];
+        /* Set delivery details */
+        $this->Email->subject = "Podcast Admin Issue - Notification ".$_SERVER['HTTP_HOST'];
         $this->Email->replyTo = DEFAULT_EMAIL_ADDRESS;
         $this->Email->template = 'callback_error'; // note no '.ctp'
 
@@ -84,12 +81,38 @@ class emailTemplatesComponent extends Object {
         $this->controller->set('data', $data);
         $this->controller->set('errormessage', $errormessage);
         //Do not pass any args to send()
-
-        $this->Email->send();
-		$this->Email->to = 'cj3998@openmail.open.ac.uk';
-		$this->Email->send();
+        
+        foreach( $recipients as $recipient ) {
+        	
+        	$this->Email->to = $recipient['User']['email'];
+        	$this->Email->send();
+        }
     }
-	
+
+    /*
+     * @name : __sendCallbackErrorEmail
+     * @description : 
+     */
+    function __sendVleErrorEmail( $recipients=array(),$data ,$errormessage) {
+
+        /* Set delivery details */
+        $this->Email->subject = "Podcast Admin VLE Issue - Notification ".$_SERVER['HTTP_HOST'];
+        $this->Email->replyTo = DEFAULT_EMAIL_ADDRESS;
+        $this->Email->template = 'callback_error'; // note no '.ctp'
+
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+        $this->controller->set('errormessage', $errormessage);
+        //Do not pass any args to send()
+        
+        foreach( $recipients as $recipient ) {
+        	
+        	$this->Email->to = $recipient['User']['email'];
+        	$this->Email->send();
+        }
+    }
+        
     /*
      * @name : __sendPodcastRejectionEmail
      * @description : Called when a podcast is rejected for either itunes ot youtube

@@ -56,7 +56,7 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : view
-     * @desscription : Enables a moderator or member to view details of an individual media file.
+     * @desscription : Enables owners, moderators and member to view details of an individual media file.
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
@@ -66,7 +66,7 @@ class PodcastItemsController extends AppController {
         
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->PodcastItem->findById( $id );
-        
+
         // We did not find the podcast, error and redirect.
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
@@ -85,18 +85,11 @@ class PodcastItemsController extends AppController {
 
            if ( !empty( $this->data ) ) {
 
-        	// Unset this relationship so we can "saveAll" without touching the parent collection
-        	//unset( $this->PodcastItem->belongsTo['Podcast'] );
-        	
-			$this->PodcastItem->begin(); // Begin a transaction so we can rollback if needed.
-			
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-
-            	
+				
 				$this->PodcastItem->set( $this->data );
             	$this->PodcastItem->saveAll();
-				$this->PodcastItem->commit();
-				
+								
 				// If the meta injection fails alert the user but do not roll back the database.
 				if( $this->Api->metaInjection( $this->PodcastItem->buildInjectionFlavours( $this->data['PodcastItem']['id'] ) ) ) {
 					
@@ -113,7 +106,6 @@ class PodcastItemsController extends AppController {
 			
             $this->errors = $this->PodcastItem->invalidFields( $this->data );
             $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
-			$this->PodcastItem->rollback();
 
         } else {
 
@@ -332,7 +324,8 @@ class PodcastItemsController extends AppController {
 	
     /*
      * @name : delete
-     * @desscription : Enables a user to delete an individual item of media assuming they have permission
+     * @desscription : Enables a user to delete an individual item of media assuming they have permission.
+     * @todo : Very inefficient, making an API call for every deletion. Should be refactored. 
      * @name : Charles Jackson
      * @by : 5th May 2011
      */

@@ -29,11 +29,11 @@ class CallbacksController extends AppController {
 		$this->Callback->setData(file_get_contents("php://input"));
 		$user = ClassRegistry::init('User');
 		
-		$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Callback ALERT');
+		
 
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
-			
+			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'I UNDERSTAND');
 			$this->set('status', json_encode( array('status'=>'ACK', 'data'=>'Message received', 'timestamp'=>time() ) ) );
 
 			if( $this->Callback->hasErrors() )
@@ -97,9 +97,9 @@ class CallbacksController extends AppController {
 		} else {
 			
 			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Failed to understand command');
-			$m_data = array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time());
-			$jsonData = json_encode($m_data);
-			$this->set('status',$jsonData);
+//			$m_data = array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time());
+//			$jsonData = json_encode($m_data);
+			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}
 
