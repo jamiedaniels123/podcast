@@ -4,6 +4,7 @@ class Vle extends AppModel {
 	var $name = 'Vle';
 	var $validate = array();
 	var $useTable = false;
+	var $commands = array('create-container','delete-container','submit-media','delete-media','get-media-endpoint-url','metadata-update');
 	var $data = array();
 
 	/*
@@ -54,4 +55,61 @@ class Vle extends AppModel {
 		
 		return false;
 	}
+	
+	/*
+	 * @name : createCollection
+	 * @description : Will create a row on the podcasts table for every row in the data array passed as a parameter to
+	 * the VLE ADD action.
+	 * @updated : 15th July 2011
+	 * @by : Charles Jackson
+	 */
+	function createCollection() {
+		
+		$podcasts = array();
+		$podcast = ClassRegistry('Podcast');
+		$podcast->create();
+		$podcast->recursive = -1;
+		
+		foreach( $this->data['data'] as $row ) {
+			
+			$this->data['Podcast']['title'] = $row['title'];
+			$podcast->set( $this->data );
+		
+			if( $podcast->save() )
+				$podcasts[] = array( 'id' => $podcast->getLastInsertId(), 'title' => $row['title'] );
+		}
+		
+		return $podcasts;
+	}
+
+	/*
+	 * @name : deleteCollection
+	 * @description : Will delete a row on the podcasts table for every row in the data array passed as a parameter to
+	 * the VLE ADD action. Will also make an API call scheduling deletion of the data.
+	 * @updated : 15th July 2011
+	 * @by : Charles Jackson
+	 */
+	function deleteCollection() {
+		
+		$podcasts = array();
+		$podcast = ClassRegistry('Podcast');
+		$podcast->recursive = -1;
+
+		
+		foreach( $this->data['data'] as $row ) {
+			
+			$data = $podcast->findById( $row['id'] );
+			if( !empty( $data ) ) {
+				
+				$podcasts[] = array( 'id' => $podcast->getLastInsertId(), 'title' => $row['title'], 'status' => 1 );
+			}
+			$this->data['Podcast']['title'] = $row['title'];
+			$podcast->set( $this->data );
+		
+			if( $podcast->save() )
+				
+		}
+		
+		return $podcasts;
+	}	
 }

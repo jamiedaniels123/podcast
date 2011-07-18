@@ -157,7 +157,7 @@ class PodcastItemsController extends AppController {
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 					
 					// Capture aspects of the $getId3_information in the PodcastItem array
-					$this->PodcastItem->captureId3Information( $this->data, $getId3_information );
+					$this->data = $this->PodcastItem->captureId3Information( $this->data, $getId3_information );
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
 					
@@ -529,14 +529,17 @@ class PodcastItemsController extends AppController {
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
+            
         } else {
 
 			if( $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 
-				// Delete the podcast
-				$this->PodcastItem->delete( $id );
+				// Set the deleted status to "2", scheduled for deletion.
+				$this->data['PodcastItem']['deleted'] = 2;
+				$this->Podcast->set( $this->data );
+				$this->PodcastItem->save();
 				
-				$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+				$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );
 				
 			} else {
 				

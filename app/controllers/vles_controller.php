@@ -28,12 +28,52 @@ class VlesController extends AppController {
 
 		// Is it a valid command
 		if ( $this->Vle->understand() ) {
+			
+			
 			$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$this->Vle->data,'I UNDERSTAND VLE POST');
-			$this->set('status', json_encode( array('status'=>'ACK', 'data'=>'Message received', 'timestamp'=>time() ) ) );
+			
 
 			if( $this->Vle->hasErrors() )
 				$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$row,'This Vle call has errors');
 				
+			if( strtolower( $this->Vle->data['command'] ) = 'create-container' ) {
+
+				$this->set('status', json_encode( array( 'status' => 'ACK', 'data' => $this->Vle->createCollection(), 'timestamp' => time() ) ) );
+				
+			} elseif( strtolower( $this->Vle->data['command'] ) = 'delete-container' ) {
+				
+				// We are not deferring to the model so we can easily access to API component class.
+				$podcasts = array();
+				$podcast = ClassRegistry('Podcast');
+				$podcast->recursive = -1;
+				$podcast->begin();
+				
+				foreach( $this->data['data'] as $row ) {
+					
+					$data = $podcast->findById( $row['id'] );
+					
+					if( !empty( $data ) ) {
+						
+						$podcast->delete( $data['Podcast']['id'] );
+						$podcasts[] = array( 
+							'source_path' => $data['Podcast']['custom_id'].'/',
+						);
+					}
+				}
+				
+				if( $this->Api->deleteFolderOnMediaServer( $podcasts ) ) {
+					
+					$this->Vle->data['status'] = 'ACK';
+					$this->set('status', json_encode( $this->Vle->data ) );
+					$podcast->commit();
+					
+				} else {
+					
+					$this->Vle->data['status'] = 'NACK';
+					$this->set('status', json_encode( $this->Vle->data ) );
+					$podcast->rollback();
+				}
+			}
 
 		} else {
 			

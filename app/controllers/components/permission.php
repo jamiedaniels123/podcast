@@ -126,7 +126,7 @@ class PermissionComponent extends Object {
      */
 
     /*
-     * @name : startup
+     * @name : initialize
      * @description : Grab the controller reference for later use.
      * @updated : 24th May 2011
      * @by : Charles Jackson

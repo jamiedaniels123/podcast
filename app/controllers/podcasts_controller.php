@@ -39,12 +39,28 @@ class PodcastsController extends AppController {
         // Unset this join else we will get duplicate rows on the various joins.
         unset( $this->Podcast->hasOne['UserPodcast'] );
         
+        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+        unset( $this->Podcast->hasMany['PublishedPodcastItems'] );
+        unset( $this->Podcast->hasMany['PodcastLinks'] );
+        unset( $this->Podcast->hasMany['PodcastModerators'] );
+        unset( $this->Podcast->hasMany['ModeratorUserGroups'] );
+		unset( $this->Podcast->hasAndBelongsToMany['Categories'] );
+		unset( $this->Podcast->hasAndBelongsToMany['Nodes'] );
+		unset( $this->Podcast->hasAndBelongsToMany['iTuneCategories'] );
+		unset( $this->Podcast->hasAndBelongsToMany['ModeratorGroups'] );
+		unset( $this->Podcast->hasAndBelongsToMany['MemberGroups'] );
+		unset( $this->Podcast->hasAndBelongsToMany['Members'] );
+		unset( $this->Podcast->hasAndBelongsToMany['Moderators'] );
 
         // Have they posted the filter form?
         if( isSet( $this->data['Podcast']['filter'] ) == false )
             $this->data['Podcast']['filter'] = null;
-
-        $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast']['filter'] );
+            
+        // Have they posted the filter form?
+        if( isSet( $this->data['Podcast']['search'] ) == false )
+            $this->data['Podcast']['search'] = null;
+            
+        $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast']['filter'], $this->data['Podcast']['search'] );
 
         $this->Podcast->recursive = 2;
         $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
@@ -521,13 +537,20 @@ class PodcastsController extends AppController {
         if( isSet( $this->data['Podcast']['filter'] ) ) {
 
             $conditions = $this->Podcast->buildFilters( $this->data['Podcast']['filter'] );
-
-            $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+	        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+	        $this->data['Podcast']['search'] = null;
+	                    
+        } elseif( isSet( $this->data['Podcast']['search'] ) ) {
+        	
+        	$conditions = $this->Podcast->buildAdminSearchCriteria( $this->data['Podcast']['search'] ); 
+	        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+			$this->data['Podcast']['filter'] = null;
 
         } else {
 
             // Create a null PodcastFilter to prevent an unwanted notice in the view
             $this->data['Podcast']['filter'] = null;
+            $this->data['Podcast']['search'] = null;
             $this->data['Podcasts'] = $this->paginate('Podcast');
         }
     }
@@ -704,6 +727,7 @@ class PodcastsController extends AppController {
 
         $this->autoRender = false;
         $this->recursive = -1;
+        $podcasts_for_deletion = array();
 
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast we pass into an array and loop through as if the data
@@ -715,28 +739,33 @@ class PodcastsController extends AppController {
 
             $podcast = $this->Podcast->findById( $key );
         
-            // If we did no find the podcast that redirect to the referer.
-            if( empty( $podcast ) == false ) {
+            // Did we find the podcast else, ignore.
+            if( !empty( $podcast ) ) {
 
-				// Hard delete this podcast by deleting the whole folder structure.
-				if( $this->Api->deleteFolderOnMediaServer( array( 
-					array( 
-						'source_path' => $podcast['Podcast']['custom_id'].'/',
-						)
-					)
-				) ) {
-
-                    // Delete the podcast
-                    $this->Podcast->delete( $podcast['Podcast']['id'] );
-                    $this->Session->setFlash('We successfully deleted the collection and all associated media.', 'default', array( 'class' => 'success' ) );
-
-                } else {
-
-                     $this->Session->setFlash('We were unable to delete the collection from the media server. Please try again.', 'default', array( 'class' => 'error' ) );
-                }
-            }
+            	$podcasts_for_deletion[] = array( 
+					'source_path' => $podcast['Podcast']['custom_id'].'/',
+            		'collection_deletion' => 1
+				);
+            	
+                // Set the podcast deleted flag to "2" signifying scheduled with Api
+                $podcast['Podcast']['deleted'] = 2;
+                $this->Podcast->set( $podcast );
+                $this->Podcast->save();
+			}
         }
         
+		// Schedule a hard delete of these podcasts
+		if( $this->Api->deleteFolderOnMediaServer( $podcasts_for_deletion ) ) {
+			
+			$this->Session->setFlash('We have successfully scheduled these collections for deletion.', 'default', array( 'class' => 'success' ) );
+			$this->Podcast->commit();
+			
+		} else {
+			
+			$this->Session->setFlash('We have been unable to schedule these collections for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			$this->Podcast->rollback();
+		}
+		
         $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 

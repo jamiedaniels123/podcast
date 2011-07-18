@@ -16,18 +16,33 @@ class ObjectHelper extends AppHelper {
 	
     /*
      * @name : isDeleted
-     * @description : Accepts an array and returns a bool on whether deleted. 
+     * @description : Accepts an array and returns a bool on whether soft deleted.
+     * We return false if it has already been scheduled for deletion 
      * @updated : 1st June 2011
      * @by : Charles Jackson
      */
     function isDeleted( $object = array() ) {
 
-        if( $object['deleted'] )
+        if( $object['deleted'] == 1 )
             return true;
 
         return false;
     }
 
+    /*
+     * @name : scheduledForDeletion
+     * @description :  
+     * @updated : 18th July 2011
+     * @by : Charles Jackson
+     */
+    function scheduledForDeletion( $object = array() ) {
+
+        if( $object['deleted'] == 2 )
+            return true;
+
+        return false;
+    }
+    
     /*
      * @name : considerForItunes
      * @description : Retruns a bool depending up the value of the flag.

@@ -15,8 +15,8 @@
     	<div class="right"><?php echo $this->element('../podcasts/_filter'); ?></div>
     </div>
     <div class="clear"></div>
-    
-    
+	<?php echo $this->element('../podcasts/_search'); ?>    
+    <div class="clear"></div>
     <form method="post" action="">
 
             <table cellpadding="0" cellspacing="0" border="0">

@@ -136,7 +136,7 @@ class Podcast extends AppModel {
         'Owner' => array(
             'className' => 'User',
             'foreignKey' => 'owner_id',
-            'fields' => 'Owner.id, Owner.full_name, Owner.email'
+            'fields' => 'Owner.id, Owner.full_name, Owner.email,Owner.firstname,Owner.lastname'
         ),
         'PreferredNode' => array(
             'className' => 'Nodes',
@@ -162,7 +162,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PublishedPodcastItems.id, PublishedPodcastItems.podcast_id, PublishedPodcastItems.title, PublishedPodcastItems.summary, PublishedPodcastItems.filename,
-                PublishedPodcastItems.published_flag, PublishedPodcastItems.itunes_flag, PublishedPodcastItems.youtube_flag, PublishedPodcastItems.created, PublishedPodcastItems.created_when,
+                PublishedPodcastItems.published_flag, PublishedPodcastItems.itunes_flag, PublishedPodcastItems.youtube_flag, PublishedPodcastItems.created,
                 PublishedPodcastItems.author, PublishedPodcastItems.image_filename, PublishedPodcastItems.publication_date, PublishedPodcastItems.explicit',
             'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
         ),
@@ -619,13 +619,14 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id = null, $filter = null ) {
+     function getUserPodcasts( $user_id = null, $filter = null, $search_criteria = null ) {
 
        $this->recursive = -1;
 
         $list = array();
         $conditions = $this->buildConditions(  $user_id );
         $conditions = $this->buildFilters( $filter, $conditions );
+        $conditions = $this->buildSearchCriteria( $search_criteria, $conditions );
 
 
         $data = $this->find('all',array(
@@ -746,6 +747,76 @@ class Podcast extends AppModel {
         return $conditions;
      }
 
+    /*
+     * @name : buildSearchCriteria
+     * @description : 
+     * @updated : 18th July 2011
+     * @by : Charles Jackson
+     */
+     function buildSearchCriteria( $search_criteria = null , $conditions = array() ) {
+     	
+     	if( !empty( $search_criteria ) ) {
+     		
+
+	        $conditions[] = array(
+	            array('OR' => array(
+	                array(
+	                    'Podcast.title LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Owner.firstname LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Owner.lastname LIKE ' => '%'.$search_criteria.'%'
+	                    )
+                    )
+	            )
+	        );
+     	}
+        
+        return $conditions;
+     
+     }
+
+    /*
+     * @name : buildAdminSearchCriteria
+     * @description : 
+     * @updated : 18th July 2011
+     * @by : Charles Jackson
+     */
+     function buildAdminSearchCriteria( $search_criteria = null ) {
+     	
+     	$conditions = array();
+     	
+     	if( !empty( $search_criteria ) ) {
+     		
+
+	        $conditions[] = array(
+	            array('OR' => array(
+	                array(
+	                    'Podcast.title LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Owner.firstname LIKE ' => '%'.$search_criteria.'%'
+	                    ),
+	                array(
+	                    'Owner.lastname LIKE ' => '%'.$search_criteria.'%'
+	                    )
+                    )
+	            )
+	        );
+     	}
+        
+        return $conditions;
+     
+     }
+     
     /*
      * @name : buildiTunesFilters
      * @description : Exploited from the "/itunes/podcasts/index" URL, it builds the filters

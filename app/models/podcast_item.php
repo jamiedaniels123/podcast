@@ -80,13 +80,13 @@ class PodcastItem extends AppModel {
      */
     function captureId3Information( $data = array(), $media_info = array() ) {
 
-        if( !is_array( $media_info ) ) {
+        if( is_array( $media_info ) ) {
 
-            $data['PodcastItem']['duration'] = $info['length'];
-            $data['PodcastItem']['fileformat'] = $info['fileformat']; 
-            $data['PodcastItem']['original_filename'] = $info['filename']; 
-			$data['PodcastItem']['shortcode'] = $this->buildShortcode( $info['filename'] );
-			$data['PodcastItem']['fullMD5code'] = $this->buildMd5Code( $data['Podcast']['custom_id'], $info['filename'] );			 
+            $data['PodcastItem']['duration'] = $media_info['length'];
+            $data['PodcastItem']['fileformat'] = $media_info['fileformat']; 
+            $data['PodcastItem']['original_filename'] = $media_info['filename']; 
+			$data['PodcastItem']['shortcode'] = $this->buildShortcode( $media_info['filename'] );
+			$data['PodcastItem']['fullMD5code'] = $this->buildMd5Code( $data['Podcast']['custom_id'], $media_info['filename'] );			 
 			$data['PodcastItem']['processed_state'] = 1; // 1 signifies it has been uploaded.
         }
 		
@@ -138,14 +138,6 @@ class PodcastItem extends AppModel {
 		
 		$media_files = array();
 		
-		$media_files[] = array(
-			'source_path' => $data['Podcast']['custom_id'].'/',
-			'target_path' => $data['Podcast']['custom_id'].'/',
-			'filename' => $data['PodcastItem']['filename'],
-			'target_filename' => '.'.$data['PodcastItem']['filename']			
-		);
-		
-
 		// Loop through the media and append to an array
         foreach( $data['PodcastMedia'] as $media ) {
         	
@@ -153,7 +145,9 @@ class PodcastItem extends AppModel {
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',
 				'target_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
 				'filename' => $media['filename'],
-				'target_filename' => '.'.$media['filename']			
+				'target_filename' => '.'.$media['filename'],
+        		'podcast_item_id' => '.'.$media['podcast_item'],
+        		'podcast_item_media_id' => '.'.$media['id']
 				);
         }
 			
@@ -164,7 +158,10 @@ class PodcastItem extends AppModel {
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'target_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'filename' => $data['Transcript']['filename'],
-				'target_filename' => '.'.$data['PodcastMedia']['filename']
+				'target_filename' => '.'.$data['PodcastMedia']['filename'],
+        		'podcast_item_id' => '.'.$media['podcast_item'],
+        		'podcast_item_media_id' => '.'.$media['id'],
+				'podcast_item_deletion' => 1
 				);
 		}
 

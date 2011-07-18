@@ -4,6 +4,9 @@
         Below is a list of all podcasts on the system.
     </p>
     <?php echo $this->element('../podcasts/_filter'); ?>
+    <div class="clear"></div>
+	<?php echo $this->element('../podcasts/_search'); ?>    
+    <div class="clear"></div>    
     <p>
         <?php
             echo $this->Paginator->counter(array(
@@ -27,17 +30,24 @@
                 $i = 0;
                 foreach ($this->data['Podcasts'] as $podcast ) :
 
-                    $class = null;
-                    if ($i++ % 2 == 0) :
-						 if( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
-	                        $class = ' class="altrow deleted"';
-						else :
-							$class = ' class="altrow"';
-						endif;
-                    elseif( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
-						$class = ' class="deleted"';
-					endif;
-            ?>
+		    if( $this->Object->scheduledForDeletion( $podcast['Podcast'] ) == false ) :
+
+	                    $class = null;
+        	            if ($i++ % 2 == 0) :
+
+				if( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+	
+		                	$class = ' class="altrow deleted"';
+				else :
+					$class = ' class="altrow"';
+				endif;
+
+	                    elseif( $this->Object->isDeleted( $podcast['Podcast'] ) ) :
+	
+				$class = ' class="deleted"';
+
+			    endif;
+        	    ?>
                     <tr<?php echo $class;?>>
                         <td>
                             <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
@@ -69,6 +79,9 @@
                         </td>
                     </tr>
             <?php
+
+		endif;
+
                 endforeach;
             endif; ?>
         </table>

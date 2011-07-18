@@ -5,6 +5,7 @@ class CallbacksController extends AppController {
 	var $requires_local_deletion = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
 	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
+	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
 	
     /*
      * @name : beforeFilter
@@ -33,6 +34,7 @@ class CallbacksController extends AppController {
 
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
+			
 			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'I UNDERSTAND');
 			$this->set('status', json_encode( array('status'=>'ACK', 'data'=>'Message received', 'timestamp'=>time() ) ) );
 
@@ -64,6 +66,11 @@ class CallbacksController extends AppController {
 				
 				$podcastItem->set( $data );
 				$podcastItem->save();
+				
+			} elseif( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
+				
+				$this->Callback->processDeletions();				
+				
 			}			
 				
 			// Does the API command signify a need to delete a local file structure?

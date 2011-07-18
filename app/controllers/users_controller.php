@@ -146,7 +146,10 @@ class UsersController extends AppController {
 
                 // Update their profile to reflect their agreement to the terms and conditions.
                 $this->data['User']['terms'] = true;
-
+                
+				if( empty( $this->data['User']['email'] ) )
+					$this->data['User']['email'] = SAMS_EMAIL;
+				
                 if( $this->User->set( $this->data ) && ( $this->User->validates( $this->data ) ) ) {
 
                     $this->User->save($this->data);

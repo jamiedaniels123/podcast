@@ -4,7 +4,7 @@ class Getid3Component extends Object {
 	var $controller;
 	var $result = array();
 
-	function __construct()	{
+	function initialize()	{
 
             set_time_limit(20*3600);
             ignore_user_abort(false);

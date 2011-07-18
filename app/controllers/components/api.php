@@ -7,12 +7,12 @@ class ApiComponent extends Object {
 
    
     /*
-     * @name : startup
+     * @name : initialize
      * @description : Grab the controller reference for later use.
      * @updated : 7th May 2011
      * @by : Charles Jackson
      */
-    function startup( & $controller) {
+    function initialize( & $controller) {
 
        $this->controller = & $controller;
     }
@@ -20,8 +20,8 @@ class ApiComponent extends Object {
 
     function deleteFolderOnMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('delete-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+        return $this->getStatus();
 
     }
 
@@ -34,8 +34,8 @@ class ApiComponent extends Object {
     function deleteFileOnMediaServer( $data = array() ) {
 
 		
-        $this->response = json_decode( $this->__sendMessage('delete-file-on-media-server', ADMIN_API, $data, count( $data ) ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('delete-file-on-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+        return $this->getStatus();
     }
 
     /*
@@ -46,8 +46,8 @@ class ApiComponent extends Object {
      */
     function transferFileMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data ) ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+        return $this->getStatus();
     }
 
     /*
@@ -62,8 +62,8 @@ class ApiComponent extends Object {
 		$this->params = array(  $data );
 		
 		
-        $this->response = json_decode( $this->__sendMessage('deliver-without-transcoding', ADMIN_API, $this->params, count( $data ) ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('deliver-without-transcoding', ADMIN_API, $this->params, count( $data ) ), 1 ) );
+        return $this->getStatus();
     }
         
     /*
@@ -74,8 +74,8 @@ class ApiComponent extends Object {
      */
     function renameFileMediaServer( $data = array() ) {
 
-        $this->response = json_decode( $this->__sendMessage('rename-file-on-media-server', ADMIN_API, $data ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('rename-file-on-media-server', ADMIN_API, $data ), 1 ) );
+        return $this->getStatus();
     }
 
     /*
@@ -94,8 +94,8 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->response = json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params ), 1 );
-        return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params ), 1 ) );
+        return $this->getStatus();
     }
 
     /*
@@ -106,7 +106,8 @@ class ApiComponent extends Object {
      */
     function metaInjection( $data ) {
     	
-        $this->response = json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), 1 );
+        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), 1 ) );
+        return $this->getStatus();
     }
     
     /*
@@ -127,9 +128,8 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->response = json_decode( $this->__sendMessage('transcode-media-and-deliver', ADMIN_API, $this->params ), 1 );
-
-		return $this->getStatus( $this->response );
+        $this->setResponse( json_decode( $this->__sendMessage('transcode-media-and-deliver', ADMIN_API, $this->params ), 1 ) );
+		return $this->getStatus();
 
     }
     
@@ -148,8 +148,8 @@ class ApiComponent extends Object {
             )
         );
 
-        $this->response = json_decode( $this->__sendMessage('checkFile', ADMIN_API, $this->params ), 1 );
-        return (int)$this->response['data']['status'];
+        $this->setResponse( json_decode( $this->__sendMessage('checkFile', ADMIN_API, $this->params ), 1 ) );
+        return $this->getStatus();
     }
 
     // NOTHING TO SEE HERE FOLKS
@@ -218,12 +218,37 @@ class ApiComponent extends Object {
 	
 	/*
 	 * @name : getStatus
-	 * @dfescription : Checks the "status" field for an ACK or NACK and returns a bool for ACK (acknowledged) or NACK
+	 * @description : Checks the "status" field for an ACK or NACK and returns a bool for ACK (acknowledged) or NACK
 	 * (Knackered).
 	 * @updated : 17th June 2011
 	 * @by : Charles Jackson
 	 */
-	function getStatus( $response = array() ) {
-		return strtoupper( $response['status'] ) == 'ACK' ? true : false;
+	function getStatus() {
+		
+		return strtoupper( $this->response['status'] ) == 'ACK' ? true : false;
 	}
+
+	/*
+	 * @name : setResponse
+	 * @dfescription : Contains the value of the completed data array
+	 * @updated : 17th June 2011
+	 * @by : Charles Jackson
+	 */
+	function setResponse( $response = array() ) {
+		
+		$this->response = $response;	
+	}
+
+	/*
+	 * @name : getResponse
+	 * @dfescription : Returns the data array aspect of the response so we may work through the individual 
+	 * elements for realtime commands (such as delete).
+	 * @updated : 17th June 2011
+	 * @by : Charles Jackson
+	 */
+	function getResponse( $response = array() ) {
+		
+		return $this->response['data'];	
+	}
+	
 }

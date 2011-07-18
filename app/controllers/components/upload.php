@@ -294,12 +294,12 @@ class UploadComponent extends Object {
      */
 
     /*
-     * @name : startup
+     * @name : initialize
      * @description : Grab the controller reference for later use.
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
-    function startup( & $controller) {
+    function initialize( & $controller) {
 
        $this->controller = & $controller;
     }

@@ -6,12 +6,12 @@ class VleApiComponent extends Object {
     var $response = array();
 
     /*
-     * @name : startup
+     * @name : initialize
      * @description : Grab the controller reference for later use.
      * @updated : 7th May 2011
      * @by : Charles Jackson
      */
-    function startup( & $controller) {
+    function initialize( & $controller) {
 
        $this->controller = & $controller;
     }
@@ -21,7 +21,6 @@ class VleApiComponent extends Object {
 
         $this->response = json_decode( $this->__sendMessage('delete-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 );
         return $this->getStatus( $this->response );
-
     }
 
     /*
@@ -109,12 +108,12 @@ class VleApiComponent extends Object {
     }
     
     /*
-     * @name : transcodeMediaAndDeliver
+     * @name : VLEtranscodeMediaAndDeliver
      * @description : Called from the controller, formats parameters passed into a JSON encoded array
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id ) {
+    function VLEtranscodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id ) {
 
         $this->params = array(
 			array(
@@ -122,7 +121,8 @@ class VleApiComponent extends Object {
 				'source_path' => $path.'/',
 				'destination_path' => $path.'/',
 				'filename' => $filename,
-				'podcast_item_id' => $podcast_item_id
+				'podcast_item_id' => $podcast_item_id,
+				'vle' => true
 			)
         );
 
