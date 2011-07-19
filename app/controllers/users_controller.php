@@ -217,7 +217,17 @@ class UsersController extends AppController {
      */
     function admin_index() {
 
-        $this->data['Users'] = $this->paginate('User');
+            // Have they posted the filter form?
+        if( isSet( $this->data['User']['search'] ) ) {
+        	
+	        $this->set('search_criteria', $this->data['User']['search'] );
+        	
+        } else {
+        	
+	        $this->set('search_criteria', null );
+        }
+            	
+        $this->data['Users'] = $this->paginate('User', $this->User->buildFilters( $this->data['User'] ) );
     }
 
     /*

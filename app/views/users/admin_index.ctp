@@ -3,6 +3,7 @@
     <p>
         Below is a list of all users on the system.
     </p>
+    <?php echo $this->element('../users/_filter'); ?>
     <p>
         <?php
             echo $this->Paginator->counter(array(

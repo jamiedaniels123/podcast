@@ -43,14 +43,18 @@ class PodcastsController extends AppController {
         
 
         // Have they posted the filter form?
-        if( isSet( $this->data['Podcast']['filter'] ) == false )
-            $this->data['Podcast']['filter'] = null;
+        if( isSet( $this->data['Podcast']['filter'] ) ) {
+        	
+	        $this->set('search_criteria', $this->data['Podcast']['search'] );
+	        $this->set('filter', $this->data['Podcast']['filter'] );
+        	
+        } else {
+        	
+	        $this->set('search_criteria', null );
+	        $this->set('filter', null );
+        }
             
-        // Have they posted the filter form?
-        if( isSet( $this->data['Podcast']['search'] ) == false )
-            $this->data['Podcast']['search'] = null;
-            
-        $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast']['filter'], $this->data['Podcast']['search'] );
+        $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
 
         $this->Podcast->recursive = 2;
         $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
@@ -522,25 +526,20 @@ class PodcastsController extends AppController {
     function admin_index() {
 
         unset( $this->Podcast->hasOne['UserPodcast'] );
-        
+
         // Have they posted the filter form?
         if( isSet( $this->data['Podcast']['filter'] ) ) {
 
-            $conditions = $this->Podcast->buildFilters( $this->data['Podcast']['filter'] );
-	        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
-	        $this->data['Podcast']['search'] = null;
-	                    
-        } elseif( isSet( $this->data['Podcast']['search'] ) ) {
-        	
-        	$conditions = $this->Podcast->buildAdminSearchCriteria( $this->data['Podcast']['search'] ); 
-	        $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
-			$this->data['Podcast']['filter'] = null;
+            $conditions = $this->Podcast->buildFilters( $this->data['Podcast'] );
+            $this->data['Podcasts'] = $this->paginate('Podcast', $conditions );
+	        $this->set('search_criteria', $this->data['Podcast']['search'] );
+	        $this->set('filter', $this->data['Podcast']['filter'] );
 
         } else {
 
             // Create a null PodcastFilter to prevent an unwanted notice in the view
-            $this->data['Podcast']['filter'] = null;
-            $this->data['Podcast']['search'] = null;
+	        $this->set('search_criteria', null );
+	        $this->set('filter', null );
             $this->data['Podcasts'] = $this->paginate('Podcast');
         }
     }

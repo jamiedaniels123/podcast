@@ -619,14 +619,13 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id = null, $filter = null, $search_criteria = null ) {
+     function getUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
         $list = array();
         $conditions = $this->buildConditions(  $user_id );
-        $conditions = $this->buildFilters( $filter, $conditions );
-        $conditions = $this->buildSearchCriteria( $search_criteria, $conditions );
+        $conditions = $this->buildFilters( $podcast, $conditions );
 
 
         $data = $this->find('all',array(
@@ -635,6 +634,14 @@ class Podcast extends AppModel {
                 ),
             'conditions'=> $conditions,
             'joins' => array(
+                array(
+                    'table'=>'users',
+                    'alias'=>'Owner',
+                    'type'=>'INNER',
+                    'conditions'=>array(
+                        'Podcast.owner_id = Owner.id'
+                        )
+                    ),
                 array(
                     'table'=>'user_podcasts',
                     'alias'=>'UserPodcasts',
@@ -709,9 +716,9 @@ class Podcast extends AppModel {
      * @updated : 31st May 2011
      * @by : Charles Jackson
      */
-    function buildFilters( $filter, $conditions = array() ) {
+    function buildFilters( $podcast, $conditions = array() ) {
 
-        switch( $filter ) {
+        switch( $podcast['filter'] ) {
             case PUBLIC_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
@@ -744,68 +751,28 @@ class Podcast extends AppModel {
                 $conditions[0]['Podcast.deleted'] = 1;
         }
 
-        return $conditions;
-     }
-
-    /*
-     * @name : buildSearchCriteria
-     * @description : 
-     * @updated : 18th July 2011
-     * @by : Charles Jackson
-     */
-     function buildSearchCriteria( $search_criteria = null , $conditions = array() ) {
-     	
-     	if( !empty( $search_criteria ) ) {
+         if( !empty( $podcast['search'] ) ) {
      		
-
 	        $conditions[] = array(
 	            array('OR' => array(
 	                array(
-	                    'Podcast.title LIKE ' => '%'.$search_criteria.'%'
+	                    'Podcast.title LIKE ' => '%'.$podcast['search'].'%'
 	                    ),
 	                array(
-	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
-	                    ),
-	                    )
-	            )
-	        );
-     	}
-        
-        return $conditions;
-     
-     }
-
-    /*
-     * @name : buildAdminSearchCriteria
-     * @description : 
-     * @updated : 18th July 2011
-     * @by : Charles Jackson
-     */
-     function buildAdminSearchCriteria( $search_criteria = null ) {
-     	
-     	$conditions = array();
-     	
-     	if( !empty( $search_criteria ) ) {
-     		
-
-	        $conditions[] = array(
-	            array('OR' => array(
-	                array(
-	                    'Podcast.title LIKE ' => '%'.$search_criteria.'%'
+	                    'Podcast.summary LIKE ' => '%'.$podcast['search'].'%'
 	                    ),
 	                array(
-	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
+	                    'Owner.firstname LIKE ' => '%'.$podcast['search'].'%'
 	                    ),
 	                array(
-	                    'Owner__fullname LIKE ' => '%'.$search_criteria.'%'
+	                    'Owner.lastname LIKE ' => '%'.$podcast['search'].'%'
 	                    )
                     )
 	            )
 	        );
      	}
-        
+     	        
         return $conditions;
-     
      }
      
     /*

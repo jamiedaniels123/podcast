@@ -147,4 +147,34 @@ class User extends AppModel {
             )
         );
     }
+
+    /*
+     * @name : buildFilters
+     * @description : Builds the filters for the admin_index method.
+     * @updated : 19th July 2011
+     * @by : Charles Jackson
+     */
+    function buildFilters( $user = array() ) {
+    	
+    	
+    	$conditions = array();
+    	
+         if( !empty( $user['search'] ) ) {
+     		
+	        $conditions[] = array(
+	            array('OR' => array(
+	                array(
+	                    'User.firstname LIKE ' => '%'.$user['search'].'%'
+	                    ),
+	                array(
+	                    'User.lastname LIKE ' => '%'.$user['search'].'%'
+	                    )
+                    )
+	            )
+	        );
+     	}
+     	
+     	return $conditions;
+    	
+    }
 }

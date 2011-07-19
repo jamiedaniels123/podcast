@@ -5,8 +5,6 @@
     </p>
     <?php echo $this->element('../podcasts/_filter'); ?>
     <div class="clear"></div>
-	<?php echo $this->element('../podcasts/_search'); ?>    
-    <div class="clear"></div>    
     <p>
         <?php
             echo $this->Paginator->counter(array(
