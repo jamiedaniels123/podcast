@@ -12,6 +12,11 @@ class PodcastsController extends AppController {
 
     var $paginate = array( 'limit' => 20, 'page' => 1, 'order' => 'Podcast.id DESC' );
 
+    function beforeFilter() {
+    	
+    	$this->Podcast->stripJoinsByAction( $this->action );
+    	parent::beforeFilter();
+    }
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
@@ -36,21 +41,6 @@ class PodcastsController extends AppController {
 
         $id_numbers = array();
         
-        // Unset this join else we will get duplicate rows on the various joins.
-        unset( $this->Podcast->hasOne['UserPodcast'] );
-        
-        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
-        unset( $this->Podcast->hasMany['PublishedPodcastItems'] );
-        unset( $this->Podcast->hasMany['PodcastLinks'] );
-        unset( $this->Podcast->hasMany['PodcastModerators'] );
-        unset( $this->Podcast->hasMany['ModeratorUserGroups'] );
-		unset( $this->Podcast->hasAndBelongsToMany['Categories'] );
-		unset( $this->Podcast->hasAndBelongsToMany['Nodes'] );
-		unset( $this->Podcast->hasAndBelongsToMany['iTuneCategories'] );
-		unset( $this->Podcast->hasAndBelongsToMany['ModeratorGroups'] );
-		unset( $this->Podcast->hasAndBelongsToMany['MemberGroups'] );
-		unset( $this->Podcast->hasAndBelongsToMany['Members'] );
-		unset( $this->Podcast->hasAndBelongsToMany['Moderators'] );
 
         // Have they posted the filter form?
         if( isSet( $this->data['Podcast']['filter'] ) == false )
@@ -164,7 +154,7 @@ class PodcastsController extends AppController {
         $this->data = $this->Podcast->findById( $id );
 
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
+        if( empty( $this->data ) || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );

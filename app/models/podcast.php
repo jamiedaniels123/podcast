@@ -766,13 +766,7 @@ class Podcast extends AppModel {
 	                array(
 	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
 	                    ),
-	                array(
-	                    'Owner.firstname LIKE ' => '%'.$search_criteria.'%'
-	                    ),
-	                array(
-	                    'Owner.lastname LIKE ' => '%'.$search_criteria.'%'
 	                    )
-                    )
 	            )
 	        );
      	}
@@ -803,10 +797,7 @@ class Podcast extends AppModel {
 	                    'Podcast.summary LIKE ' => '%'.$search_criteria.'%'
 	                    ),
 	                array(
-	                    'Owner.firstname LIKE ' => '%'.$search_criteria.'%'
-	                    ),
-	                array(
-	                    'Owner.lastname LIKE ' => '%'.$search_criteria.'%'
+	                    'Owner__fullname LIKE ' => '%'.$search_criteria.'%'
 	                    )
                     )
 	            )
@@ -1060,5 +1051,40 @@ class Podcast extends AppModel {
 		$data['ModeratorUserGroups'] = array();  // Clear down the associated hasMany array so we don't resave the data we just deleted
 		
 		return $data;
+	}
+	
+	/* 
+	 * @name : stripJoinsByAction
+	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
+	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
+	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
+	 * database.  
+	 * @updated : 19th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function stripJoinsByAction( $action = null ) {
+		
+		switch ( $action ) {
+			case 'index':
+			case 'admin_index':
+			case 'itunes_index':
+		        // Unset this join else we will get duplicate rows on the various joins.
+		        unset( $this->hasOne['UserPodcast'] );
+		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+		        unset( $this->hasMany['PublishedPodcastItems'] );
+		        unset( $this->hasMany['PodcastLinks'] );
+		        unset( $this->hasMany['PodcastModerators'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasAndBelongsToMany['Categories'] );
+				unset( $this->hasAndBelongsToMany['Nodes'] );
+				unset( $this->hasAndBelongsToMany['iTuneCategories'] );
+				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
+				unset( $this->hasAndBelongsToMany['MemberGroups'] );
+				unset( $this->hasAndBelongsToMany['Members'] );
+				unset( $this->hasAndBelongsToMany['Moderators'] );
+				break;
+			default:
+				break;	
+		}
 	}
 }
