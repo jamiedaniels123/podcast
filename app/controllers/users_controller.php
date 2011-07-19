@@ -218,12 +218,14 @@ class UsersController extends AppController {
     function admin_index() {
 
         // Have they posted the filter form?
-        if( isSet( $this->data['User']['search'] ) ) {
+        if( isSet( $this->data['User']['filter'] ) ) {
         	
+	        $this->set('filter', $this->data['User']['filter'] );
 	        $this->set('search_criteria', $this->data['User']['search'] );
         	
         } else {
         	
+	        $this->set('filter', null );
 	        $this->set('search_criteria', null );
         }
             	

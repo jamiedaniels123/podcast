@@ -157,6 +157,21 @@ class User extends AppModel {
     function buildFilters( $user = array() ) {
     	
     	$conditions = array();
+
+        switch( $user['filter'] ) {
+            case 'ADMINISTRATOR':
+                $conditions[0]['User.administrator'] = true;
+                break;
+            case 'YOUTUBE':
+                $conditions[0]['User.iTunesU'] = 'Y';            	
+                break;
+            case 'ITUNES':
+                $conditions[0]['User.YouTube'] = 'Y';            	
+                break;
+            case 'OPEN_LEARN':
+                $conditions[0]['User.openlearn_explore'] = 'Y';            	
+                break;
+        }
     	
          if( !empty( $user['search'] ) ) {
      		
