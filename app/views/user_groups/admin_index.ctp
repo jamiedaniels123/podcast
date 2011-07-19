@@ -3,6 +3,7 @@
     <p>
         Below is a list of all user groups on the system.
     </p>
+    <?php echo $this->element('../user_groups/_filter'); ?>    
     <p>
         <?php
             echo $this->Paginator->counter(array(

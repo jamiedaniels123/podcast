@@ -136,7 +136,7 @@ class Podcast extends AppModel {
         'Owner' => array(
             'className' => 'User',
             'foreignKey' => 'owner_id',
-            'fields' => 'Owner.id, Owner.full_name, Owner.email,Owner.firstname,Owner.lastname'
+            'fields' => 'Owner.id, Owner.full_name, Owner.email, Owner.firstname, Owner.lastname'
         ),
         'PreferredNode' => array(
             'className' => 'Nodes',
@@ -629,8 +629,8 @@ class Podcast extends AppModel {
 
 
         $data = $this->find('all',array(
-            'fields'=>array(
-                'DISTINCT(Podcast.id)'
+            'fields' => array(
+                'DISTINCT(Podcast.id)',
                 ),
             'conditions'=> $conditions,
             'joins' => array(

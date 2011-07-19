@@ -156,7 +156,6 @@ class User extends AppModel {
      */
     function buildFilters( $user = array() ) {
     	
-    	
     	$conditions = array();
     	
          if( !empty( $user['search'] ) ) {
@@ -164,10 +163,7 @@ class User extends AppModel {
 	        $conditions[] = array(
 	            array('OR' => array(
 	                array(
-	                    'User.firstname LIKE ' => '%'.$user['search'].'%'
-	                    ),
-	                array(
-	                    'User.lastname LIKE ' => '%'.$user['search'].'%'
+	                    'User.full_name LIKE ' => '%'.$user['search'].'%'
 	                    )
                     )
 	            )
@@ -175,6 +171,5 @@ class User extends AppModel {
      	}
      	
      	return $conditions;
-    	
     }
 }

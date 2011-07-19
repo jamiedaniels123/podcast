@@ -233,4 +233,28 @@ class UserGroup extends AppModel {
         return $list;
      }
 
+    /*
+     * @name : buildFilters
+     * @description : Builds the filters for the admin_index method.
+     * @updated : 19th July 2011
+     * @by : Charles Jackson
+     */
+    function buildFilters( $user = array() ) {
+    	
+    	$conditions = array();
+    	
+         if( !empty( $user['search'] ) ) {
+     		
+	        $conditions[] = array(
+	            array('OR' => array(
+	                array(
+	                    'UserGroup.group_title LIKE ' => '%'.$user['search'].'%'
+	                    )
+                    )
+	            )
+	        );
+     	}
+     	
+     	return $conditions;
+    }     
 }

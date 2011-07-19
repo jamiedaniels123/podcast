@@ -215,7 +215,18 @@ class UserGroupsController extends AppController {
     function admin_index() {
 
         unset( $this->UserGroup->hasOne['UserUserGroup'] );
-        $this->data['UserGroups'] = $this->paginate('UserGroup');
+        
+        // Have they posted the filter form?
+        if( isSet( $this->data['UserGroup']['search'] ) ) {
+        	
+	        $this->set('search_criteria', $this->data['UserGroup']['search'] );
+        	
+        } else {
+        	
+	        $this->set('search_criteria', null );
+        }
+        
+        $this->data['UserGroups'] = $this->paginate('UserGroup', $this->UserGroup->buildFilters( $this->data['UserGroup'] ) );
     }
 
     /*
