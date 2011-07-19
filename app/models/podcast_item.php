@@ -233,4 +233,24 @@ class PodcastItem extends AppModel {
 		
 		return $flavours;
 	}
+	
+	/* 
+	 * @name : stripJoinsByAction
+	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
+	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
+	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
+	 * database.  
+	 * @updated : 19th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function stripJoinsByAction( $action = null ) {
+		
+		switch ( $action ) {
+			case 'view':
+			case 'admin_view':
+				break;
+			default:
+				break;	
+		}
+	}	
 }

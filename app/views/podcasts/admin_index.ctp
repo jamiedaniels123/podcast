@@ -73,7 +73,7 @@
                             <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>
                             <a href="/admin/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>" id="edit_podcast_<?php echo $podcast['Podcast']['id']; ?>">edit</a>
                             <a href="/admin/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" id="delete_podcast_<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you with to delete this podcast and all associated media? This action cannot be undone.');">delete</a>
-                            <a href="/admin/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>" id="view_media_<?php echo $podcast['Podcast']['id']; ?>">media</a>
+                            <a href="/admin/podcast_items/add/<?php echo $podcast['Podcast']['id']; ?>" id="view_media_<?php echo $podcast['Podcast']['id']; ?>">add media</a>
                         </td>
                     </tr>
             <?php

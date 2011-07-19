@@ -23,13 +23,13 @@ class PodcastItemsController extends AppController {
     }
 
     /*
-     * @name : index
+     * @name : add
      * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
      * @todo : Move this code to the 'add' method. Change of functionality mid project.
      * @updated : 13th May 2011
      * @by : Charles Jackson
      */
-    function index( $podcast_id ) {
+    function add( $podcast_id ) {
 
         $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
 
@@ -121,13 +121,13 @@ class PodcastItemsController extends AppController {
     }
 
     /*
-     * @name : add
+     * @name : filechucker
      * @description : Called by the filechucker script directly after a successful upload. It is used by both
      * users and administrators and will create a row on the podcast items table using parameters passed and session information.
      * @updated : 26th May 2011
      * @by : Charles Jackson
      */
-    function add() {
+    function filechucker() {
 	
         $this->autoRender = false; // We don't want to render a view
 		$getId3_information = array();

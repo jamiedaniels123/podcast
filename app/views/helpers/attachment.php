@@ -91,7 +91,6 @@ class AttachmentHelper extends AppHelper {
         if ( !$i ) { return $file_name; }
 
         return substr( $file_name, 0, $i );
-
     }
 	
 	/*
@@ -106,8 +105,6 @@ class AttachmentHelper extends AppHelper {
 		if( empty( $filename ) )
 			return('None');
 		
-		
-		
 		// Check to see if the file is there
 		if(	file_exists( DEFAULT_MEDIA_URL.$path.'/transcript/'.$filename ) )
 			return '<a href="'.DEFAULT_MEDIA_URL.$path.'/transcript/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
@@ -119,7 +116,20 @@ class AttachmentHelper extends AppHelper {
 		return 'Transcript missing on media server.';
 	}
 	
-
+    /*
+     * @name : getMediaLink
+     * @description : 
+     * @updated : 19th July 2011
+     * @by : Charles Jackson
+     */
+    function getMediaLink( $custom_id = null, $media = array() ) {
+    	if( empty( $media['media_type'] ) )
+			return DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['filename'];	
+    	
+    	return DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].'/'.$media['filename'];    	
+		
+		
+    }
 
 }
 ?>

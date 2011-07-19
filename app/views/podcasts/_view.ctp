@@ -102,10 +102,10 @@
 
     <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
         <a class="button light-blue" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/admin/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+        <a class="button light-blue" href="/admin/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
     <?php else : ?>
         <a class="button light-blue" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/podcast_items/index/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+        <a class="button light-blue" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
     <?php endif; ?>
 
 <?php endif; ?>
