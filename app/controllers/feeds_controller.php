@@ -4,8 +4,6 @@ class FeedsController extends AppController {
 
     var $name = 'Feeds';
 
-
-
     /*
      * @name : beforeFilter
      * @description : The following methods can be accessed without logging in.

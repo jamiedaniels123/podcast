@@ -1,9 +1,7 @@
 <?php
 class Podcast extends AppModel {
-	
 
     const AVAILABLE = 9;
-    const YES = 'Y';
     
     var $name = 'Podcast';
     var $backup_table = 'podcasts_backup';
@@ -289,7 +287,7 @@ class Podcast extends AppModel {
         // get the value of the field being passed
         $private = array_shift( $check );
 
-        if( !isSet( $this->data['private'] ) || $private == self::YES )
+        if( !isSet( $this->data['private'] ) || $private == YES )
             return true;
 
         $podcastItem = ClassRegistry::init('PodcastItem');
@@ -324,7 +322,7 @@ class Podcast extends AppModel {
         $this->PodcastItem = ClassRegistry::init('PodcastItem');
         $data = $this->PodcastItem->find('all', array(
             'conditions' => array(
-                'PodcastItem.published_flag' => self::YES,
+                'PodcastItem.published_flag' => YES,
                 'PodcastItem.podcast_id' => $this->data['Podcast']['id'],
                 'PodcastItem.processed_state' => self::AVAILABLE
                 ),
@@ -1088,5 +1086,28 @@ class Podcast extends AppModel {
 			default:
 				break;	
 		}
+	}
+	
+	
+	/*
+	 * @name : softDelete
+	 * @description : Builds the array that is passed to the API when building a soft delete
+	 * by writing a htaccess file or when restoring a podcast by the same method ( ie: overwriting the
+	 * existing .htaccess file )
+	 * @updated : 26th July 2011
+	 * @by : Charles Jackson
+	 */
+	function softDelete( $podcast = array() ) {
+		
+		$data = array();
+		
+		$data[] = array( 
+			
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'target_path' => $podcast['Podcast']['custom_id'].'/', 
+			'filename' => '.htaccess' 
+		);
+		
+		return $data;
 	}
 }

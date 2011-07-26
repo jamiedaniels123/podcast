@@ -435,6 +435,7 @@ class PodcastsController extends AppController {
 
         $this->autoRender = false;
         $this->recursive = -1;
+		$data = array();
 		
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast we pass into an array and loop through as is the data
@@ -447,14 +448,8 @@ class PodcastsController extends AppController {
             $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
 
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( 
-				array( 
-					'source_path' => $podcast['Podcast']['custom_id'].'/',
-					'target_path' => $podcast['Podcast']['custom_id'].'/', 
-					'filename' => '.htaccess' 
-					)
-				) ) {
-											
+            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
+            
 	            // Delete the podcast
 	            $podcast['Podcast']['deleted'] = true;
 	            $this->Podcast->set( $podcast ); // Hydrate the object
@@ -823,13 +818,7 @@ class PodcastsController extends AppController {
 
 			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->buildHtaccessFile( $this->data ) && $this->Api->transferFileMediaServer( 
-				array( 
-					'source_path' => $this->data['Podcast']['custom_id'].'/',
-					'target_path' => $this->data['Podcast']['custom_id'].'/', 
-					'filename' => '.htaccess' 
-					)
-				) ) {						
+            if( $this->Folder->buildHtaccessFile( $this->data ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $this->data ) ) ) {
 				
                 $this->Session->setFlash('We successfully restored the collection and all associated media.', 'default', array( 'class' => 'success' ) );
 
@@ -837,7 +826,6 @@ class PodcastsController extends AppController {
 
                 $this->Session->setFlash('We were unable to restore the collection. Please try again.', 'default', array( 'class' => 'error' ) );
             }
-
         }
 
         $this->redirect( $this->referer() );
