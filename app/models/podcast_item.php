@@ -253,7 +253,5 @@ class PodcastItem extends AppModel {
 			default:
 				break;	
 		}
-	}
-
-	
+	}	
 }

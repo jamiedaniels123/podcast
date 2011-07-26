@@ -1102,4 +1102,26 @@ class Podcast extends AppModel {
 				break;	
 		}
 	}
+	
+	/*
+	 * @name : softDelete
+	 * @description : Builds the array that is passed to the API when building a soft delete
+	 * by writing a htaccess file or when restoring a podcast by the same method ( ie: overwriting the
+	 * existing .htaccess file )
+	 * @updated : 26th July 2011
+	 * @by : Charles Jackson
+	 */
+	function softDelete( $podcast = array() ) {
+		
+		$data = array();
+		
+		$data[] = array( 
+			
+			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'target_path' => $podcast['Podcast']['custom_id'].'/', 
+			'filename' => '.htaccess' 
+		);
+		
+		return $data;
+	}	
 }
