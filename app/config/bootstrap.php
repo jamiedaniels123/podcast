@@ -83,6 +83,7 @@ if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
     }
 }
+
 DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
 DEFINE('PUBLIC_ITUNEU_PODCAST', 1 );
 DEFINE('PUBLISHED_ITUNEU_PODCAST', 2 );
