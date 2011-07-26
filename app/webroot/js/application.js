@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 
     // The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastConsiderForItunesu').length ) {
+    /*if( jQuery('#PodcastConsiderForItunesu').length ) {
 
         show_hide_itune_elements();
 
@@ -31,11 +31,11 @@ jQuery(document).ready(function($) {
 
             show_hide_itune_elements();
         });
-    }
+    }*/
 
     // The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastConsiderForYoutube').length ) {
+    /*if( jQuery('#PodcastConsiderForYoutube').length ) {
 
         show_hide_youtube_elements();
 
@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
 
             show_hide_youtube_elements();
         });
-    }
+    }*/
 
     // These methods are called on every page when a user wishes to inspect
     // the menu options.
@@ -85,12 +85,12 @@ jQuery(document).ready(function($) {
     });
 
     // This method shows/hides the iTune elements of the podcast form.
-    jQuery('a.itunes').live('click', function(e) {
+    /*jQuery('a.itunes').live('click', function(e) {
 
         e.preventDefault();
         jQuery('div.itunes').toggle('slow');
         return false;
-    });
+    });*/
 
     // Will toggle the notification checkboxes from ticked to unticked
     jQuery('.toggler').click( function(e) {
@@ -122,12 +122,18 @@ jQuery(document).ready(function($) {
         }
     });
 	
-	jQuery('.reject_podcast').click( function(e) {
-
-		e.preventDefault();
-		jQuery(this).siblings('form').toggle('slow');
-		
-	});
+    jQuery('.itunes_toggler').click( function(e) {
+    	
+    	e.preventDefault();
+    	jQuery('div.itunes').toggle('slow');
+    });
+    
+    jQuery('.youtube_toggler').click( function(e) {
+    	
+    	e.preventDefault();
+    	jQuery('div.youtube').toggle('slow');
+    });    
+	
 });
 
 // Will show or hide the podcast container div depending
@@ -150,7 +156,7 @@ function show_hide_podcast_elements() {
 // user clicks the checkbox.
 // NOTE: We have to check to see if the iTunes element actually exists on the page. It is possible
 // for a podcast to have iTune settings but the user does not have iTunes permissions.
-function show_hide_itune_elements() {
+/*function show_hide_itune_elements() {
 
     if( jQuery('#PodcastConsiderForItunesu').is(':checked') ) {
 
@@ -160,14 +166,14 @@ function show_hide_itune_elements() {
 
         jQuery('.itunes_container').hide('slow');
     }
-}
+}*/
 
 // Will show or hide the youtube container divs depending
 // upon the status of the checkbox. Called on page load and when the
 // user clicks the checkbox.
 // NOTE: We have to check to see if the Youtube element actually exists on the page. It is possible
 // for a podcast to have Youtube settings but the user does not have Youtube permissions.
-function show_hide_youtube_elements() {
+/*function show_hide_youtube_elements() {
 
     if( jQuery('#PodcastConsiderForYoutube').is(':checked') ) {
 
@@ -177,7 +183,7 @@ function show_hide_youtube_elements() {
 
         jQuery('.youtube_container').hide('slow');
     }
-}
+}*/
 
 // Will tick all the checkboxes on the dashboard, at time of publication the only
 // checkboxes are those associated with the podcast listing.

@@ -29,6 +29,8 @@ class PodcastsController extends AppController {
         // If there are any errors assign them to the view
         if( count( $this->errors ) )
             $this->set('errors', $this->errors );
+            
+		parent::beforeRender();
     }
 
     /*
@@ -69,46 +71,92 @@ class PodcastsController extends AppController {
      */
     function itunes_index() {
 
-        // Unset this join else we will get duplicate rows on the various joins.
-        unset( $this->Podcast->hasOne['UserPodcast'] );
 		$this->Podcast->recursive = 2;
 		
-		if( isSet( $this->data['Podcast']['filter'] ) ) {
+		if( isSet( $this->data['Podcast']['filter'] ) && !empty( $this->data['Podcast']['filter'] ) ) {
 			
-			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildItunesFilters( $this->data['Podcast']['filter'] ) );
-			$this->set('filter',$this->data['Podcast']['filter'] );	
+			$this->set('filter',$this->data['Podcast']['filter'] );
+			
+			if( $this->data['Podcast']['filter'] == 'consideration' ) {
+				
+				$this->data['Podcasts'] = $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] );
+				$this->autoRender = false;
+				$this->render('itunes_consideration');
+
+			} else {
+				
+				$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
+			}
+			
 		} else {
-			
-			$this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.consider_for_itunesu' => 'Y' ) );
+
+			$this->data['Podcasts'] = $this->paginate('Podcast', array(
+
+            'OR' => array(
+                array(
+                    'Podcast.intended_itunesu_flag' => 'Y',
+                    	),
+                array(
+                    'Podcast.publish_itunes_u' => 'Y',
+                    	)
+                	),
+            	'Podcast.deleted' => 0
+                )
+        	);			
+
 			$this->set('filter',null );
 		}
     }
 
     /*
      * @name : youtube_index
-     * @desscription : Displays a paginated list of all podcasts that are youtube related.
+     * @desscription : Displays a paginated list of all podcasts that are itunes related.
      * @name : Charles Jackson
      * @by : 8th July 2011
      */
     function youtube_index() {
 
-        // Unset this join else we will get duplicate rows on the various joins.
-        unset( $this->Podcast->hasOne['UserPodcast'] );
 		$this->Podcast->recursive = 2;
 		
-		if( isSet( $this->data['Podcast']['filter'] ) ) {
+		if( isSet( $this->data['Podcast']['filter'] ) && !empty( $this->data['Podcast']['filter'] ) ) {
+
+			// Grab the filter and assign to the view so the select box retains the current selection
+			$this->set('filter', $this->data['Podcast']['filter'] );
 			
-			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
-			$this->set('filter',$this->data['Podcast']['filter'] );	
+			// If we are filtering on podcasts that have items waiting for approval we do not paginate
+			// the response
+			if( $this->data['Podcast']['filter'] == 'consideration' ) {
+				
+				$this->data['Podcasts'] = $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] );
+				$this->autoRender = false;
+				$this->render('youtube_consideration');
+
+			} else {
+				
+				// We are looking for "intended" or "published" therefore paginate as listing will be very long
+				$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
+			}
 			
 		} else {
-			
-			$this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.consider_for_youtube' => 'Y' ) );
-			$this->set('filter',null );			
-		}
 
-    }
-        
+			$this->data['Podcasts'] = $this->paginate('Podcast', array(
+
+            'OR' => array(
+                array(
+                    'Podcast.intended_youtube_flag' => 'Y',
+                    	),
+                array(
+                    'Podcast.publish_youtube' => 'Y',
+                    	)
+                	),
+            	'Podcast.deleted' => 0
+                )
+        	);
+        				
+			// Grab the filter and assign to the view so the select box retains the current selection
+			$this->set('filter',null );
+		}
+    }        
     /*
      * @name : add
      * @desscription : Displays a form that enables peeps to add a row to the podcasts table. If the form is populated
@@ -158,7 +206,7 @@ class PodcastsController extends AppController {
         $this->data = $this->Podcast->findById( $id );
 
         // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
+        if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -425,48 +473,42 @@ class PodcastsController extends AppController {
         $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
-   /*
-     * @name : approval
-     * @description : Enables an approver to update the status flags for itunes and youtube to 'Y', in essence
-     * approving them.
-     * @updated : 20th June 2011
+    /*
+     * @name : consider
+     * @description : Enables a user to submit a podcast for consideration on itunes or youtube. 
+     * @updated : 25th July 2011
      * @by : Charles Jackson
      */
-    function approval( $media_channel, $id ) {
+    function consider( $media = null, $id = null ) {
 
-        $this->data = $this->Podcast->findById( $id );
+    	$this->Podcast->recursive = -1;
+    	$this->data = $this->Podcast->findById( $id );
+    	
+    	if( !empty( $this->data ) ) {
+    	
+    		if( strtoupper( $media ) == 'ITUNES' ) {
 
-        if( !empty( $this->data ) ) {
-
-            if( strtoupper( $media_channel ) == self::ITUNES ) {
-                $this->data['Podcast']['intended_itunesu_flag'] = YES;
-				$media_channel = self::ITUNES;
-			}
-				            
-            if( strtoupper( $media_channel ) == self::YOUTUBE ) {
-                $this->data['Podcast']['intended_youtube_flag'] = YES;
-				$media_channel = self::YOUTUBE;				
-			}
-
-			$this->Podcast->set( $this->data );
-			$this->Podcast->save(); 
-			
-			$this->data = $this->Podcast->findById( $id );
-
-
-			$this->emailTemplates->__sendPodcastApprovalEmail( strtolower( $media_channel ), $this->data );
-            
-            $this->Session->setFlash('The collection has been approved and a notification email has been sent to the end user.', 'default', array( 'class' => 'success' ) );
-
-        } else {
-
-            $this->Session->setFlash('We could not find the collection.', 'default', array( 'class' => 'error' ) );
-
-        }
-
-        $this->redirect( $this->referer() );
+    			$this->data['Podcast']['consider_for_itunesu'] = true;
+    			//$this->data['Podcast']['itunes_justification'] = 'This collection was last submitted to the itunes team on '.date('D, jS F Y').' by '.$this->Session->read('Auth.User.full_name');
+    			
+    		} else {
+    			
+	    		$this->data['Podcast']['consider_for_youtube'] = true;
+	    		//$this->data['Podcast']['youtube_justification'] = 'This collection was last submitted to the youtube team on '.date('D, jS F Y').' by '.$this->Session->read('Auth.User.full_name');
+    		}
+    		
+    		$this->Podcast->set( $this->data );
+    		$this->Podcast->save();
+    		$this->Session->setFlash('We have successfully submitted your request for consideration. Good luck.', 'default', array( 'class' => 'success' ) );
+    		
+    	} else {
+    		
+    		$this->Session->setFlash('We could not submit your request. If the problem persists please contact and administrator.', 'default', array( 'class' => 'error' ) );	
+    	}
+    	
+    	$this->redirect( $this->referer() );
     }
-
+    
     /*
      * @name : rejection
      * @description : Enables a user to update the 'intended' status flags for itunes and youtube to 'N', in essence
@@ -482,13 +524,11 @@ class PodcastsController extends AppController {
 			
             if( strtoupper( $this->data['Podcast']['media_channel'] ) == self::ITUNES ) {
                 $this->data['Podcast']['intended_itunesu_flag'] = NO;
-                $this->data['Podcast']['consider_for_itunesu'] = false;
 				$media_channel = self::ITUNES;
             }
             
             if( strtoupper( $this->data['Podcast']['media_channel'] ) == self::YOUTUBE ) {
                 $this->data['Podcast']['intended_youtube_flag'] = NO;
-                $this->data['Podcast']['consider_for_youtube'] = false;
 				$media_channel = self::YOUTUBE;				
             }
 			
@@ -848,7 +888,7 @@ class PodcastsController extends AppController {
      * @updated : 9th May 2011
      * @by : Charles Jackson
      */
-    function __updateImages() {
+    protected function __updateImages() {
     	
     	$statusOK = true;
     	
@@ -905,7 +945,7 @@ class PodcastsController extends AppController {
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function __generateRSSFeeds( $id = null ) {
+    protected function __generateRSSFeeds( $id = null ) {
 
         $podcast = null;
 
@@ -932,7 +972,7 @@ class PodcastsController extends AppController {
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    function __setPodcastFormOptions() {
+    protected function __setPodcastFormOptions() {
 
         // Get all the nodes
         $Node = ClassRegistry::init('Node');

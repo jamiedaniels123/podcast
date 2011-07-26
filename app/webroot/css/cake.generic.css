@@ -185,7 +185,6 @@ table .altrow td {
 td.actions {
 	text-align: center;
 	white-space: nowrap;
-	width: 500px;
 }
 
 table td.actions a {

@@ -120,10 +120,6 @@ class Podcast extends AppModel {
                 'allowEmpty' => true,
                 'message' => 'If entered, you must provide a valid web address.'
             )
-        ),
-        'itunesu_justification' => array(
-            'rule' => array('ifConsiderForItunesu'),
-            'message' => 'If you wish this collection to be considered for publication on iTunesU please provide a brief justification.'
         )
     );
 
@@ -155,7 +151,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, PodcastItems.consider_for_youtube, PodcastItems.consider_for_itunesu, PodcastItems.youtube_flag, PodcastItems.itunes_flag',
             'order' => 'PodcastItems.publication_date DESC',
         ),
         'PublishedPodcastItems' => array(
@@ -173,6 +169,18 @@ class Podcast extends AppModel {
         'ModeratorUserGroups' => array(
             'className' => 'UserGroupPodcasts',
             'foreignKey' => 'podcast_id'
+        ),
+        'WaitingItunesApproval' => array(
+            'className' => 'PodcastItem',
+            'foreignKey' => 'podcast_id',
+        	'conditions' => 'WaitingItunesApproval.consider_for_itunesu = 1 AND WaitingItunesApproval.itunes_flag != "Y"',
+        	'fields' => 'WaitingItunesApproval.id'
+        ),
+        'WaitingYoutubeApproval' => array(
+            'className' => 'PodcastItem',
+            'foreignKey' => 'podcast_id',
+        	'conditions' => 'WaitingYoutubeApproval.consider_for_youtube= 1 AND WaitingYoutubeApproval.youtube_flag != "Y"',
+        	'fields' => 'WaitingYoutubeApproval.id'
         )
     );
 
@@ -267,29 +275,6 @@ class Podcast extends AppModel {
 
         return true;
     }
-
-    /*
-     * @name : ifConsiderForItunesu
-     * @description : Custom validation method called from the validation array. If the user wishes to publish
-     * this collection on Itunes they must provide a justification.
-     * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
-     * @updated : 22nd June 2011
-     * @by : Charles Jackson
-     */
-    function ifConsiderForItunesu( $check = array() ) {
-
-        if( $this->data['Podcast']['consider_for_itunesu'] == true ) {
-
-            // get the value of the field being passed
-            $value = array_shift( $check );
-
-            if( empty( $value ) )
-                return false;
-        }
-
-        return true;
-    }
-
 
     /*
      * @name : privateUntilPublishedMedia
@@ -783,14 +768,31 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function buildiTunesFilters( $filter = null ) {
-
+    	    	
         switch( strtolower( $filter ) ) {
             case 'consideration':
-                return array(
-                	'Podcast.consider_for_itunesu' => true,
-                	'Podcast.intended_itunesu_flag !=' => 'Y',
-                	'Podcast.deleted' => 0 
-                );
+				return $this->find('all',array(
+		            'fields' => array(
+		                'DISTINCT(Podcast.id)',
+						'Podcast.*',
+		                ),
+		            'conditions' => array( 
+			                'Podcast.deleted' => 0 
+		                ),
+		            'joins' => array(
+		                array(
+		                    'table'=>'podcast_items',
+		                    'alias'=>'PodcastItems',
+		                    'type'=>'INNER',
+		                    'conditions' => array(
+		                        'Podcast.id = PodcastItems.podcast_id',
+		                		'PodcastItems.consider_for_itunesu' => 1,
+		                		'PodcastItems.itunes_flag !=' => 'Y',
+		                        )
+		                    )
+		                )
+		            ) 
+	            );
                 break;
             case 'intended':
                 return array( 
@@ -807,7 +809,6 @@ class Podcast extends AppModel {
                 break;
             default :
                 return array(
-                	'Podcast.consider_for_itunesu' => true,
                 	'Podcast.deleted' => 0 
                 );
                 break;                
@@ -826,11 +827,28 @@ class Podcast extends AppModel {
         switch( strtolower( $filter ) ) {
         	
             case 'consideration':
-                return array(
-                	'Podcast.consider_for_youtube' => true,
-                	'Podcast.intended_youtube_flag !=' => 'Y',
-                	'Podcast.deleted' => 0 
-                );
+				return $this->find('all',array(
+		            'fields' => array(
+		                'DISTINCT(Podcast.id)',
+						'Podcast.*',
+		                ),
+		            'conditions' => array( 
+			                'Podcast.deleted' => 0 
+		                ),
+		            'joins' => array(
+		                array(
+		                    'table'=>'podcast_items',
+		                    'alias'=>'PodcastItems',
+		                    'type'=>'INNER',
+		                    'conditions' => array(
+		                        'Podcast.id = PodcastItems.podcast_id',
+		                		'PodcastItems.consider_for_youtube' => 1,
+		                		'PodcastItems.youtube_flag !=' => 'Y',
+		                        )
+		                    )
+		                )
+		            ) 
+	            );
                 break;
             case 'intended':
                 return array( 
@@ -847,7 +865,6 @@ class Podcast extends AppModel {
                 break;
             default :
                 return array(
-                	'Podcast.consider_for_youtube' => true,
                 	'Podcast.deleted' => 0 
                 );
                 break;
@@ -865,12 +882,10 @@ class Podcast extends AppModel {
         $conditions = array(
             array('OR' => array(
                 array(
-                    'Podcast.consider_for_itunesu' => true,
                     'Podcast.intended_itunesu_flag' => 'N',
                     'Podcast.publish_itunes_u' => 'N'
                     ),
                 array(
-                    'Podcast.consider_for_youtube' => true,
                     'Podcast.intended_youtube_flag' => 'N',
                     'Podcast.publish_youtube' => 'N'
                     )
@@ -1034,7 +1049,6 @@ class Podcast extends AppModel {
 		switch ( $action ) {
 			case 'index':
 			case 'admin_index':
-			case 'itunes_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
@@ -1049,6 +1063,26 @@ class Podcast extends AppModel {
 				unset( $this->hasAndBelongsToMany['MemberGroups'] );
 				unset( $this->hasAndBelongsToMany['Members'] );
 				unset( $this->hasAndBelongsToMany['Moderators'] );
+				unset( $this->belongsTo['PreferredNode'] );
+				break;
+			case 'itunes_index':
+			case 'youtube_index':
+		        // Unset this join else we will get duplicate rows on the various joins.
+		        unset( $this->hasOne['UserPodcast'] );
+		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+		        unset( $this->hasMany['PublishedPodcastItems'] );
+		        unset( $this->hasMany['PodcastLinks'] );
+		        unset( $this->hasMany['PodcastModerators'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasAndBelongsToMany['Categories'] );
+				unset( $this->hasAndBelongsToMany['Nodes'] );
+				unset( $this->hasAndBelongsToMany['iTuneCategories'] );
+				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
+				unset( $this->hasAndBelongsToMany['MemberGroups'] );
+				unset( $this->hasAndBelongsToMany['Members'] );
+				unset( $this->hasAndBelongsToMany['Moderators'] );
+				unset( $this->belongsTo['PreferredNode'] );
+				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
 			default:
 				break;	

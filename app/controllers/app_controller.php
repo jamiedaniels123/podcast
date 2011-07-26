@@ -41,13 +41,21 @@ class AppController extends Controller {
 				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
 			}
 			
-			$this->get_breadcrumbs();
+			
 
 			// Set the page title in the browser
 			$this->set('title_for_layout', ucwords( $this->params['controller'].' &rarr; '.$this->params['action'] ) );
 		}
 		
 		$this->set('params', $this->params );
+    }
+    
+    function beforeRender() {
+    	
+    	if( $this->RequestHandler->isAjax() == false ) {
+    		
+    		$this->get_breadcrumbs();
+    	}
     }
 
     /*
@@ -58,47 +66,60 @@ class AppController extends Controller {
      */
     function get_breadcrumbs() {
 
+    	$current_breadcrumb = array(); // Holds details of the currently loaded page
         $breadcrumb = array();
-        $breadcrumbs = array();
+        $breadcrumbs = array(); // Holds the final array of breadcrumbs
 
         $this->Breadcrumb = ClassRegistry::init('Breadcrumb');
         $this->Breadcrumb->recursive = -1;
 
         if( isSet( $this->params['url']['url'] ) ) {
             
-            $breadcrumb =
+            $current_breadcrumb =
 
             $this->Breadcrumb->find('first', array(
                 'conditions' => array(
                     'OR' => array (
-                        array( 'Breadcrumb.url' => $this->params['url']['url'] ),
                         array(
                             'Breadcrumb.controller' => $this->params['controller'],
-                            'Breadcrumb.action' => $this->params['action'],
-                            )
-                        )
-                    )
+                            'Breadcrumb.action' => $this->params['action']
+                            ),
+                        array( 'Breadcrumb.url' => $this->params['url']['url'] )
+						)
+                    ),
+                    'order' => 'Breadcrumb.id DESC'
                 )
             );
-
-            $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
-            $breadcrumbs[] = $breadcrumb;
-
-            while( (int)$breadcrumb['Breadcrumb']['parent_id'] ) {
-
+			
+            $parent_id = $current_breadcrumb['Breadcrumb']['parent_id'];
+            $breadcrumbs[] = $current_breadcrumb;
+            while( (int)$parent_id ) {
+	                            	
                 $breadcrumb =
 
-                $this->Breadcrumb->find('first', array(
-                    'conditions' => array(
-                        'Breadcrumb.id' => $parent_id,
-                        )
-                    )
-                );
+	                $this->Breadcrumb->find('first', array(
+	                    'conditions' => array(
+	                        'Breadcrumb.id' => $parent_id,
+	                        )
+	                    )
+	                );
 
-                $breadcrumbs[] = $breadcrumb;
-                $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
+					if( $current_breadcrumb['Breadcrumb']['controller'] == 'podcast_items' && $breadcrumb['Breadcrumb']['controller'] == 'podcasts' ) {
+
+	                	 if( in_array( $current_breadcrumb['Breadcrumb']['action'], array( 'add', 'admin_add' ) ) && !in_array( $breadcrumb['Breadcrumb']['action'], array( 'index', 'admin_index' ) ) ) {
+
+							$breadcrumb['Breadcrumb']['url'] .= '/'.substr( $this->params['url']['url'], ( mb_strrpos( $this->params['url']['url'],'/' ) +1 ) );
+							
+	                	 } elseif( !in_array( $breadcrumb['Breadcrumb']['action'], array( 'index','admin_index' ) ) ) {
+
+	                	 	$breadcrumb['Breadcrumb']['url'] .= '/'.$this->data['PodcastItem']['podcast_id'];
+	                	 	
+	                	 }
+	                }
+	                
+	                $breadcrumbs[] = $breadcrumb;
+	                $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
             }
-
 
             $this->set('breadcrumbs', array_reverse( $breadcrumbs ) );
         }

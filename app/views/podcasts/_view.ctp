@@ -89,38 +89,52 @@
 
 <div class="two-column-controls">
 
-<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
-	<?php echo $this->element('../podcasts/_itunes'); ?>
-	<div class="clear"></div>
-<?php endif; ?>
-<?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
-    <?php echo $this->element('../podcasts/_youtube'); ?>
-    <div class="clear"></div>
-<?php endif; ?>
+<?php echo $this->element('../podcasts/_itunes'); ?>
+<div class="clear"></div>
+<?php echo $this->element('../podcasts/_youtube'); ?>
+<div class="clear"></div>
 
-<?php if( $this->Miscellaneous->isAdminRouting() || $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) ) : ?>
+<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['Moderators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 
-    <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
+    <a class="button light-blue" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+	        
+    <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+    
         <a class="button light-blue" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/admin/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+        
     <?php else : ?>
+    
         <a class="button light-blue" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-        <a class="button light-blue" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+        
+    <?php endif; ?>
+
+	<a class="button" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+	
+<?php endif; ?>
+
+<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+
+    <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+    
+        <?php if( $this->Object->isDeleted( $this->data['Podcast'] ) ) : ?>
+        
+	        <a class="button white" href="/admin/podcasts/restore/<?php echo $this->data['Podcast']['id'];?>" title="restore" onclick="return confirm('Are you sure you wish to restore this collection?');" ><img src="/img/icon-16-restore.png" alt="Restore" class="icon" />Restore</a>
+	        
+        <?php else : ?>
+        
+	        <a class="button white" href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to PERMANENTLY delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+	        
+        <?php endif; ?>
+        
+    <?php else : ?>
+
+    	<a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+	        	        
     <?php endif; ?>
 
 <?php endif; ?>
+<?php if( $this->Permission->isYoutubeUser() || $this->Permission->isItunesUser() ) : ?>
 
-<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Miscellaneous->isAdminRouting() ) : ?>
-
-    <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
-        <?php if( $this->Object->isDeleted( $this->data['Podcast'] ) ) : ?>
-	        <a class="button white" href="/admin/podcasts/restore/<?php echo $this->data['Podcast']['id'];?>" title="restore" onclick="return confirm('Are you sure you wish to restore this collection?');" ><img src="/img/icon-16-restore.png" alt="Restore" class="icon" />Restore</a>
-        <?php else : ?>
-	        <a class="button white" href="/admin/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
-        <?php endif; ?>
-    <?php else : ?>
-        <a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
-        </div>
-    <?php endif; ?>
-
+	<a class="button white" href="/podcasts/clone/<?php echo $this->data['Podcast']['id'];?>" title="clone" onclick="return confirm('You are about to clone this collection adding it to your library with yourself as owner. Are you sure?');" >Clone</a>
+	
 <?php endif; ?>

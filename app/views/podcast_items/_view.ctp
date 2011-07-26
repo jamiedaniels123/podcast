@@ -8,8 +8,6 @@
             <dd><?php echo $this->data['PodcastItem']['title']; ?>&nbsp;</dd>
             <dt>Summary: </dt>
             <dd><?php echo nl2br( $this->data['PodcastItem']['summary'] ); ?>&nbsp;</dd>
-            <dt>Filename: </dt>
-            <dd><?php echo $this->data['PodcastItem']['filename']; ?>&nbsp;</dd>
             <dt>Author: </dt>
             <dd><?php echo $this->data['PodcastItem']['author']; ?>&nbsp;</dd>
             <dt>Created: </dt>
@@ -37,18 +35,7 @@
         </dl>
     </div>
 </div>
-       
 <div class="clear"></div>
-<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
-    <?php echo $this->element('../podcast_items/_itunes'); ?>
-	<div class="clear"></div>
-<?php endif; ?>
-<?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
-    <?php echo $this->element('../podcast_items/_youtube'); ?>
-    <div class="clear"></div>
-<?php endif; ?>
-<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) || $this->Object->considerForYoutube( $this->data['Podcast'] ) ) : ?>
-    <?php echo $this->element('../podcast_items/_itunes_and_youtube'); ?>
-    <div class="clear"></div>
-<?php endif; ?>
+<?php echo $this->element('../podcast_items/_itunes'); ?>
+<?php echo $this->element('../podcast_items/_youtube'); ?>
 

@@ -93,8 +93,8 @@ DEFINE('DELETED_PODCAST', 6 );
 
 DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
 DEFINE('LOCAL_FILE_REPOSITORY_URL', APPLICATION_URL.'/upload/files/');
-//DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
-DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
+DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+//DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
 
 DEFINE('AMAZON_S3_SERVER', 'http://media-podcast.open.ac.uk.s3.amazonaws.com');
 DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://podcast.open.ac.uk/');
@@ -110,6 +110,8 @@ DEFINE('NO_IMAGE_AVAILABLE', '/img/default-project-thumbnail.png');
 DEFINE('CORRECT_IMAGE', '/correct.png');
 DEFINE('INCORRECT_IMAGE', '/incorrect.png');
 DEFINE('ERROR_IMAGE', '/error.png');
+DEFINE('QUESTION_MARK', '/question_mark.png');
+
 
 DEFINE('RSS_VIEW', 'http://'.$_SERVER['SERVER_NAME'].'/feeds/view/');
     

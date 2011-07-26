@@ -4,7 +4,7 @@
     <img src="/img/collection-large.png" />
     
     <p class="leader">
-        Below is a list of all yoouutube collections podcasts on the system.
+        Below is a list of all youtube collections podcasts on the system.
     </p>
     
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->

@@ -47,36 +47,12 @@ class PermissionComponent extends Object {
 
 		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
 		// then let them view it.
-		if( $this->isItunesUser() )  {
+		if( $this->isItunesUser() )
+			return true;
 
-			if( isSet( $data['Podcast']['consider_for_itunesu'] ) && ( $data['Podcast']['consider_for_itunesu'] == true ) )
-				return true;
-				
-			if( isSet( $data['Podcast']['intended_itunesu_flag'] ) && ( $data['Podcast']['intended_itunesu_flag'] == 'Y' ) )
-				return true;
-
-			if( isSet( $data['consider_for_itunesu'] ) && ( $data['consider_for_itunesu'] == true ) )
-				return true;
-				
-			if( isSet( $data['intended_itunesu_flag'] ) && ( $data['intended_itunesu_flag'] == 'Y' ) )
-				return true;
-		}
-
-		if( $this->isYoutubeUser() )  {
-
-			if( isSet( $data['Podcast']['consider_for_youtube'] ) && ( $data['Podcast']['consider_for_youtube'] == true ) )
-				return true;
-				
-			if( isSet( $data['Podcast']['intended_youtube_flag'] ) && ( $data['Podcast']['intended_youtube_flag'] == 'Y' ) )
-				return true;
+		if( $this->isYoutubeUser() )
+			return true;
 			
-			if( isSet( $data['consider_for_youtube'] ) && ( $data['consider_for_youtube'] == true ) )
-				return true;
-				
-			if( isSet( $data['intended_youtube_flag'] ) && ( $data['intended_youtube_flag'] == 'Y' ) )
-				return true;
-		}
-
         return false;
     }
 
@@ -105,37 +81,11 @@ class PermissionComponent extends Object {
    		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
 		// then let them view it.
 		// NOTE: Podcast details can be passed at two levels hence the need to check with "['Podcast']" and without.
-		if( $this->isItunesUser() )  {
+		if( $this->isItunesUser() )
+			return true;
 
-			if( isSet( $data['Podcast']['consider_for_itunesu'] ) && ( $data['Podcast']['consider_for_itunesu'] == true ) )
-				return true;
-				
-			if( isSet( $data['Podcast']['intended_itunesu_flag'] ) && ( $data['Podcast']['intended_itunesu_flag'] == 'Y' ) )
-				return true;
-				
-			if( isSet( $data['consider_for_itunesu'] ) && ( $data['consider_for_itunesu'] == true ) )
-				return true;
-				
-			if( isSet( $data['intended_itunesu_flag'] ) && ( $data['intended_itunesu_flag'] == 'Y' ) )
-				return true;
-				
-		}
-
-		if( $this->isYoutubeUser() )  {
-
-			if( isSet( $data['Podcast']['consider_for_youtube'] ) && ( $data['Podcast']['consider_for_youtube'] == true ) )
-				return true;
-				
-			if( isSet( $data['Podcast']['intended_youtube_flag'] ) && ( $data['Podcast']['intended_youtube_flag'] == 'Y' ) )
-				return true;
-
-			if( isSet( $data['consider_for_youtube'] ) && ( $data['consider_for_youtube'] == true ) )
-				return true;
-				
-			if( isSet( $data['intended_youtube_flag'] ) && ( $data['intended_youtube_flag'] == 'Y' ) )
-				return true;
-				
-		}
+		if( $this->isYoutubeUser() )
+			return true;
 		            
         return false;
     }

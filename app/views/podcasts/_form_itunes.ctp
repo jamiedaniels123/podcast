@@ -1,7 +1,6 @@
 <fieldset class="itunes">
-	<legend>Itunes Specific</legend>
-	<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
-    <div class="itunes_container">
+	<legend>Itunes</legend>
+    <div class="itunes_container itunes" style="display:none">
         <div class="input checkbox">
             <label for="PodcastPublishItunesU">Published</label>
             <input type="hidden" value="N" id="PodcastPublishItunesU_" name="data[Podcast][publish_itunes_u]">

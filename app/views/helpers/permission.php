@@ -1,7 +1,7 @@
 <?php
 class PermissionHelper extends AppHelper {
 
-    var $helpers = array('Session','Object');
+    var $helpers = array('Session','Object','Miscellaneous');
     
     /*
      * @name : isModerator
@@ -96,7 +96,7 @@ class PermissionHelper extends AppHelper {
      */
     function isItunesUser() {
 
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES )
             return true;
 
         return false;
@@ -110,7 +110,7 @@ class PermissionHelper extends AppHelper {
      */
     function isYouTubeUser() {
 
-        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == 'Y' )
+        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == YES )
             return true;
 
         return false;
@@ -124,7 +124,7 @@ class PermissionHelper extends AppHelper {
      */
     function isOpenLearnUser() {
 
-        if( strtoupper( $this->Session->read('Auth.User.openlearn_explore') ) == 'Y' )
+        if( strtoupper( $this->Session->read('Auth.User.openlearn_explore') ) == YES )
             return true;
 
         return false;
@@ -136,7 +136,7 @@ class PermissionHelper extends AppHelper {
      * @updated : 31st May 2011
      * @by : Charles Jackson
      */
-    function isAdminRouting() {
+    function isAdminRouting( $params = array() ) {
 
     	
         if( substr( $params['action'], 0, 6 ) == 'admin_' )
@@ -196,10 +196,17 @@ class PermissionHelper extends AppHelper {
      */    
     function iTunesPrivileges( $podcast = array() ) {
   	
-    	if( $this->isItunesUser() && $this->Object->considerForItunes( $podcast ) )
+    	if( $this->isItunesUser() || $this->Object->considerForItunes( $podcast ) )
     		return true;
     		
     	return false;
-    }    
+    }
+
+    function editPodcast( $podcast = array() ) {
+    	return true;
+		//$this->Miscellaneous->isAdminRouting() || $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() ) :    	
+    	
+    }
+
 }
 ?>

@@ -25,7 +25,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.consider_for_itunesu, Podcast.consider_for_youtube',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag',
             'dependent' => true
         )
     );
@@ -87,7 +87,7 @@ class PodcastItem extends AppModel {
             $data['PodcastItem']['original_filename'] = $media_info['filename']; 
 			$data['PodcastItem']['shortcode'] = $this->buildShortcode( $media_info['filename'] );
 			$data['PodcastItem']['fullMD5code'] = $this->buildMd5Code( $data['Podcast']['custom_id'], $media_info['filename'] );			 
-			$data['PodcastItem']['processed_state'] = 1; // 1 signifies it has been uploaded.
+			$data['PodcastItem']['processed_state'] = 2; // 2 signifies transcoding is in progress
         }
 		
 		return $data;
@@ -246,11 +246,14 @@ class PodcastItem extends AppModel {
 	function stripJoinsByAction( $action = null ) {
 		
 		switch ( $action ) {
-			case 'view':
-			case 'admin_view':
+			case 'itunes_approve':
+			case 'youtube_approve':
+				unset( $this->hasOne['Transcript'] );
 				break;
 			default:
 				break;	
 		}
-	}	
+	}
+
+	
 }

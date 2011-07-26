@@ -68,12 +68,5 @@
 	    <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>
     <?php endif; ?>
 </div>
-<?php if( $this->Permission->iTunesPrivileges( $this->data['Podcast'] ) || ( $this->Permission->isAdministrator() && $this->Permission->isAdminRouting() ) ) : ?>
-	<?php echo $this->element('../podcast_items/_form_itunes'); ?>
-<?php endif; ?>
-<?php if( $this->Permission->youTubePrivileges( $this->data['Podcast'] ) || ( $this->Permission->isAdministrator() && $this->Permission->isAdminRouting() ) ) : ?>
-	<?php echo $this->element('../podcast_items/_form_youtube'); ?>
-<?php endif; ?>
-<?php if( $this->Permission->youTubePrivileges( $this->data['Podcast'] ) || $this->Permission->iTunesPrivileges( $this->data['Podcast'] ) || ( $this->Permission->isAdministrator() && $this->Permission->isAdminRouting() ) ) : ?>
-	<?php echo $this->element('../podcast_items/_form_itunes_and_youtube'); ?>
-<?php endif; ?>
+<?php echo $this->element('../podcast_items/_form_itunes'); ?>
+<?php echo $this->element('../podcast_items/_form_youtube'); ?>

@@ -18,6 +18,8 @@ class PodcastItemMediasController extends AppController {
         // If there are any errors assign them to the view
         if( count( $this->errors ) )
             $this->set('errors', $this->errors );
+            
+		parent::beforeRender();
     }
 
     /*

@@ -241,7 +241,7 @@ class Workflow extends AppModel {
 	 * @updated : 29th June 2011
 	 * @by : Charles Jackson
 	 */
-	function __select() {
+	protected function __select() {
 
 		if( $this->screencast ) {
 

@@ -29,9 +29,7 @@ class VlesController extends AppController {
 		// Is it a valid command
 		if ( $this->Vle->understand() ) {
 			
-			
 			$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$this->Vle->data,'I UNDERSTAND VLE POST');
-			
 
 			if( $this->Vle->hasErrors() )
 				$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$row,'This Vle call has errors');

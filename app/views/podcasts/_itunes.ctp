@@ -1,6 +1,16 @@
 <fieldset class="itunes">
-	<legend>iTunes Specific</legend>
-    <div class="wrapper">
+	<legend>iTunes</legend>
+	<dl>
+	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
+	    <?php if( $this->Permission->isItunesUser() == false ) : ?>
+		    <?php if( $this->data['Podcast']['consider_for_itunesu'] ) : ?>
+		    	<dt><?php echo $this->data['Podcast']['itunes_justification']; ?></dt>
+		    <?php else : ?>
+				<dt><a href="/podcasts/consider/itunes/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the iTunes team so they may consider it for publication on iTunes. Are you sure you wish to continue?');">Submit to itunes team for consideration</a></dt>	    	
+	    	<?php endif; ?>
+		<?php endif; ?>	    	
+    </dl>
+    <div class="wrapper itunes" style="display:none">
         <div class="float_right images_container">
             <div>
                 <h2>Collection Image Logoless</h2>
@@ -18,8 +28,6 @@
         </div>
         <div class="float_left two_column">    
             <dl>
-                <dt>Published: </dt>
-                <dd><img src="/img<?php echo ( $this->data['Podcast']['publish_itunes_u'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
                 <dt>Author: </dt>
                 <dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
                 <dt>Explicit: </dt>
@@ -62,7 +70,6 @@
                 <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['rights_date'] ); ?>&nbsp;</dd>
                 <dt>Metadata Date: </dt>
                 <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['metadata_date'] ); ?>&nbsp;</dd>
-
             </dl>    
         </div>
     </div>

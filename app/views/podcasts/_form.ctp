@@ -1,8 +1,4 @@
-<input type="hidden" id="PodcastDeleted" name="data[Podcast][deleted]" value="<?php echo $this->data['Podcast']['deleted']; ?>">
-<input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">
-<input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
-<input type="hidden" value="0" id="PodcastConsiderForYoutube_" name="data[Podcast][consider_for_youtube]">
-<input type="hidden" value="0" id="PodcastConsiderForItunesu_" name="data[Podcast][consider_for_itunesu]">
+<input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
 <div class="input text">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
@@ -206,7 +202,7 @@
             </div>
         </div>
         <div class="clear"></div>
-        <?php if( $this->Miscellaneous->isAdminRouting() || ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
+        <?php if( ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
         
             <div class="input text">
                 <label for="PodcastOwnerId">Podcast Owner</label>
@@ -224,36 +220,10 @@
                 <?php echo $this->Form->error('Podcast.owner_id'); ?>
             </div>
         <?php endif; ?>
-        
-        <?php if( $this->Miscellaneous->isAdminRouting() ) : ?>
-        
-	        <?php echo $this->element('../podcasts/_form_admin'); ?>
-        
-        <?php else : ?>
-        
-	        <input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
-            
-        <?php endif; ?>
-        
-        <?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
-        
-	        <?php echo $this->element('../podcasts/_form_itunes'); ?>
-            
-        <?php else : ?>
-        
-        	<?php echo $this->element('../podcasts/_form_itunes_apply'); ?>
-            
-		<?php endif; ?>
-            
-        <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) ) : ?>
-        
-	        <?php echo $this->element('../podcasts/_form_youtube'); ?>
-        
-        <?php else : ?>
-        
-        	<?php echo $this->element('../podcasts/_form_youtube_apply'); ?>
-            
-		<?php endif; ?>
-       
+        <?php echo $this->element('../podcasts/_form_admin'); ?>
+		<?php echo $this->element('../podcasts/_form_itunes_lite'); ?>
+    		
+		<?php echo $this->element('../podcasts/_form_youtube_lite'); ?>
+		
     </div>
 <?php endif; ?>

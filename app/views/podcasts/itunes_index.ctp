@@ -13,9 +13,9 @@
 	    <form name="PodcastItunesUForm" action="/itunes/podcasts" method="post">
             <select name="data[Podcast][filter]" id="PodcastFilter">
 				<option value="">Select a filter</option>
-                <option value="consideration" <?php echo $filter == 'consideration' ? 'selected=true' : ''; ?>>For Consideration</option>
-                <option value="intended" <?php echo $filter == 'intended' ? 'selected=true' : ''; ?>>Approved</option>
-                <option value="publish" <?php echo $filter == 'publish' ? 'selected=true' : ''; ?>>Published</option>            
+				<option value="consideration" <?php echo $filter == 'consideration' ? 'selected=true' : ''; ?>>For Consideration</option>
+                <option value="intended" <?php echo $filter == 'intended' ? 'selected=true' : ''; ?>>Intended</option>
+                <option value="published" <?php echo $filter == 'published' ? 'selected=true' : ''; ?>>Published</option>
             </select>
             <button type="submit" id="PodcastFilterSubmit"><span>Filter</span></button>
         </form>
@@ -31,7 +31,7 @@
             <th><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
 			<th>Approved</th>                
             <th>Published</th>
-            <th class="actions"><?php __('Actions');?></th>
+            <th class="actions">Actions</th>
         </tr>
         <?php
         // Check to see if there is an incremental count on this->data, the ['Meta'] exists so just looking for integer count
@@ -49,7 +49,7 @@
                         <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" class="thumbnail" title="podcast image" />
                     </td>
                     <td>
-                        <a href="#"><?php echo $podcast['Podcast']['title']; ?></a>
+                        <?php echo $podcast['Podcast']['title']; ?>
                     </td>
                     <td>
                         <span class="podcast-owner">Owned by <?php echo $podcast['Owner']['full_name']; ?></span>
@@ -67,14 +67,7 @@
                     	<img src="/img<?php echo $this->Object->itunesPublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" />
                     </td>
                     <td class="actions">
-						<?php if( $this->Object->waitingItunesApproval( $podcast['Podcast'] ) ) : ?>                    
-                       		<a href="/podcasts/justification/<?php echo $podcast['Podcast']['id']; ?>" id="view_podcast_<?php echo $podcast['Podcast']['id']; ?>">view</a>
-                       	<?php else : ?>
-                        	<a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">view</a>
-                        <?php endif; ?>
-                        <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>
-                        <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">edit</a>
-                        <a href="/podcast_items/index/<?php echo $podcast['Podcast']['id']; ?>">media</a>
+                    	<a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">view</a>
                     </td>
                 </tr>
     <?php

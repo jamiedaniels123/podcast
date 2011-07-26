@@ -8,6 +8,12 @@ class PodcastItemsController extends AppController {
 
     var $paginate = array( 'limit' => 5, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
 
+    function beforeFilter() {
+    	
+    	$this->PodcastItem->stripJoinsByAction( $this->action );
+    	parent::beforeFilter();
+    }
+        
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
@@ -20,6 +26,8 @@ class PodcastItemsController extends AppController {
         // If there are any errors assign them to the view
         if( count( $this->errors ) )
             $this->set('errors', $this->errors );
+            
+		parent::beforeRender();
     }
 
     /*
@@ -56,7 +64,7 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : view
-     * @desscription : Enables owners, moderators and member to view details of an individual media file.
+     * @desscription : Enables owners, moderators and members to view details of an individual media file.
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
@@ -120,6 +128,205 @@ class PodcastItemsController extends AppController {
         }
     }
 
+   /*
+     * @name : consider_itunes
+     * @description : Enables a peeps to submit an item of media for itunesu consideration
+     * approving them.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+	function consider_itunes( $id = null ) {
+
+    	$this->PodcastItem->recursive = -1;
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+	        if( !empty( $this->data ) ) {
+	        	
+                $this->data['PodcastItem']['consider_for_itunesu'] = true;
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+	        }
+        }
+        
+        $this->Session->setFlash('Your media has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );
+    }
+
+   /*
+     * @name : itunes_approve
+     * @description : Enables an itunes user to approve an item of media for publication on
+     * itunes. If the parent collection has not been approved it will also publish the parent.
+     * @updated : 21st July 2011
+     * @by : Charles Jackson
+     */
+	function itunes_approve( $id = null ) {
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+            // Make sure it has already been converted into a podcast if they want to publish it.
+	        if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
+	        	
+                $this->data['PodcastItem']['itunes_flag'] = 'Y';
+                $this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
+                	                
+                // If the parent has not been published, publish it now.
+                if( $this->data['Podcast']['publish_itunes_u'] != 'Y' ) {
+
+	                $this->data['Podcast']['publish_itunes_u'] = 'Y';
+	                $this->data['Podcast']['publish_itunes_date'] = date('Y-m-d');
+                }
+                
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->saveAll();
+			}
+        }
+
+        $this->Session->setFlash('Your media has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );	
+    }
+    
+   /*
+     * @name : itunes_reject
+     * @description : Enables an itunes user to reject an item of media for publication on
+     * itunes.
+     * @updated : 21st July 2011
+     * @by : Charles Jackson
+     */
+	function itunes_reject( $id = null ) {
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+            // Make sure it has already been converted into a podcast if they want to publish it.
+	        if( !empty( $this->data ) ) {
+	        	
+                $this->data['PodcastItem']['itunes_flag'] = 'N';
+                $this->data['PodcastItem']['consider_for_itunesu'] = false;
+                
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+			}
+        }
+        
+        $this->Session->setFlash('Your media has been successfully rejected and, if appropriate scheduled for removal from Youtube.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );	
+    }
+    
+        
+   /*
+     * @name : consider_youtube
+     * @description : Enables a peeps to submit an item of media for youtube consideration
+     * approving them.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function consider_youtube( $id = null ) {
+
+    	$this->PodcastItem->recursive = -1;
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+	        if( !empty( $this->data ) ) {
+	        	
+                $this->data['PodcastItem']['consider_for_youtube'] = true;
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save(); 
+	        }
+        }
+        
+        $this->Session->setFlash('The media has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );
+    }
+
+   /*
+     * @name : youtube_approve
+     * @description : Enables an itunes user to approve an item of media for publication on
+     * youtube. If the parent collection has not been approved it will also publish the parent.
+     * @updated : 21st July 2011
+     * @by : Charles Jackson
+     */
+	function youtube_approve( $id = null ) {
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+            // Make sure it has already been converted into a podcast if they want to publish it.
+	        if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
+	        	
+                $this->data['PodcastItem']['youtube_flag'] = 'Y';
+                $this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
+                	                
+                // If the parent has not been published, publish it now.
+                if( $this->data['Podcast']['publish_youtube'] != 'Y' ) {
+                	
+	                $this->data['Podcast']['publish_youtube'] = 'Y';
+	                $this->data['Podcast']['publish_youtube_date'] = date('Y-m-d');
+                }
+                
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->saveAll();
+			}
+        }
+        
+        $this->Session->setFlash('Your media has been successfully approved and acheduled for publication on Youtube.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );	
+    }
+
+    /*
+     * @name : youtube_reject
+     * @description : Enables a youtube user to reject an item of media for publication on
+     * youtube.
+     * @updated : 21st July 2011
+     * @by : Charles Jackson
+     */
+	function youtube_reject( $id = null ) {
+    	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+            $this->data = $this->PodcastItem->findById( $key );
+    	
+            // Make sure it has already been converted into a podcast if they want to publish it.
+	        if( !empty( $this->data ) ) {
+	        	
+                $this->data['PodcastItem']['youtube_flag'] = 'N';
+				$this->data['PodcastItem']['consider_for_youtube'] = false;
+				                
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+			}
+        }
+        
+        $this->Session->setFlash('Your media has been successfully rejected and, if appropriate scheduled for removal from Youtube.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( $this->referer() );	
+    }
+        
     /*
      * @name : filechucker
      * @description : Called by the filechucker script directly after a successful upload. It is used by both
@@ -421,13 +628,12 @@ class PodcastItemsController extends AppController {
      */
 
     /*
-     * @name : admin_index
-     * @desscription : Displays a list of all available podcast media for the podcast passed as a parameter and
-     * includes a partial _form element that renders filechucker.cgi.
+     * @name : admin_add
+     * @desscription : Enables a peep to upload a piece of media
      * @updated : 13th May 2011
      * @by : Charles Jackson
      */
-    function admin_index( $podcast_id ) {
+    function admin_add( $podcast_id ) {
 
         $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
 
@@ -438,7 +644,7 @@ class PodcastItemsController extends AppController {
             // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
             // in the session.
             $this->Session->write('Podcast.podcast_id', $podcast_id);
-            $this->Session->write('Podcast.admin', false);
+            $this->Session->write('Podcast.admin', true);
         }
 
         if( empty( $this->data ) ) {

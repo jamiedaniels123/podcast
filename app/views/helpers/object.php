@@ -49,9 +49,9 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function considerForItunes( $podcast = array() ) {
+    function considerForItunes( $object = array() ) {
 
-        return $podcast['consider_for_itunesu'];
+        return $object['consider_for_itunesu'];
     }
 
     /*
@@ -60,9 +60,9 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function considerForYoutube( $podcast = array() ) {
+    function considerForYoutube( $object = array() ) {
 
-        return $podcast['consider_for_youtube'];
+        return $object['consider_for_youtube'];
     }
 
     /*
@@ -71,9 +71,11 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function intendedForItunes( $podcast = array() ) {
+    function intendedForItunes( $object = array() ) {
 
-        return $podcast['intended_itunesu_flag'] == strtoupper( YES );
+    	// Podcast level
+    	if( isSet( $object['intended_itunesu_flag'] ) )
+        	return $object['intended_itunesu_flag'] == strtoupper( YES );
     }
 
     /*
@@ -84,9 +86,11 @@ class ObjectHelper extends AppHelper {
      */
     function itunesPublished( $object = array() ) {
     	
+    	// Podcast level
     	if( isSet( $object['publish_itunes_u'] ) )
         	return $object['publish_itunes_u'] == strtoupper( YES );
 
+        // PodcastItem level
     	if( isSet( $object['itunes_flag'] ) )
         	return $object['itunes_flag'] == strtoupper( YES );
         	
@@ -104,9 +108,21 @@ class ObjectHelper extends AppHelper {
     	if( isSet( $object['publish_youtube'] ) )
         	return $object['publish_youtube'] == strtoupper( YES );
     	
-		// Item level
+		// PodcastItem level
     	if( isSet( $object['youtube_flag'] ) )
         	return $object['youtube_flag'] == strtoupper( YES );
+    }
+    
+    function isPublished( $object = array() ) {
+    	
+    	if( $this->youtubePublished( $object ) )
+    		return true;
+    		
+    	if( $this->itunesPublished( $object ) )
+    		return true;
+    		
+    	return false;
+    		
     }
 
     /*
@@ -149,11 +165,6 @@ class ObjectHelper extends AppHelper {
 	 */	
 	function waitingYoutubeApproval( $podcast = array() ) {
 	
-		// Is this podcast under consideration?
-		if( $this->considerForYoutube( $podcast ) == false )	{
-			return false;
-		}
-		
 		// Has it already been approved?
 		if( $this->intendedForYoutube( $podcast ) ) {
 			return false;
@@ -172,10 +183,6 @@ class ObjectHelper extends AppHelper {
 	 */	
 	function waitingItunesApproval( $podcast = array() ) {
 	
-		// Is this podcast under consideration?
-		if( $this->considerForItunes( $podcast ) == false )	
-			return false;
-			
 		// Has it already been approved?
 		if( $this->intendedForItunes( $podcast ) )
 			return false;
@@ -205,6 +212,43 @@ class ObjectHelper extends AppHelper {
 		}
 		
 		return $html;
+		
+	}
+	
+	function getApprovalStatus( $object, $media ) {
+
+		if( strtolower( $media ) == 'itunes' ) {
+			
+			if( $object['itunes_flag'] == 'Y' )
+				return CORRECT_IMAGE;
+			
+			if( $object['consider_for_itunesu'] )
+				return QUESTION_MARK;
+				
+			return INCORRECT_IMAGE;				
+			
+		} elseif( strtolower( $media ) == 'youtube' ) {	
+
+			if( $object['youtube_flag'] == 'Y' )
+				return CORRECT_IMAGE;
+			
+			if( $object['consider_for_youtube'] )
+				return QUESTION_MARK;
+				
+			return INCORRECT_IMAGE;				
+		}
+	}
+	
+	/*
+	 * @name : isPodcast
+	 * @description : Checks to ensure the podcast_flag column is set to true. Used to ensure
+	 * a collection is a "podcast" before it can be submitted to itunes or youtube.
+	 * @updated : 22nd July 29011
+	 * @by : Charles Jackson
+	 */
+	function isPodcast( $flag = null ) {
+		
+		return ( $flag == true );
 		
 	}
 }

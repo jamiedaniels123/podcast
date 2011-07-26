@@ -26,6 +26,7 @@ class UsersController extends AppController {
         
         $this->errors = $this->User->invalidFields();
         $this->set('errors', $this->errors );
+        parent::beforeRender();
     }
 
     /*

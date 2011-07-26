@@ -36,7 +36,6 @@
             <?php if( $this->Session->check('Auth.User.id') ) : ?>
             <ol>
                 <li><a href="/users/logout" title="logout link" id="logout_link">Logout <?php echo $this->Session->read('Auth.User.full_name'); ?></a></li>
-                <li><a href="/users/dashboard" title="dashboard link" id="dashboard_link">Dashboard</a></li>
             </ol>
             <?php endif; ?>
             <?php echo $this->element('breadcrumb', array('breadcrumbs' => $breadcrumbs ) ); ?>

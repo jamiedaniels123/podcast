@@ -26,6 +26,7 @@ class UserGroupsController extends AppController {
         $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
         $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
         $this->set('users', $this->users );
+        parent::beforeRender();
     }
 
 

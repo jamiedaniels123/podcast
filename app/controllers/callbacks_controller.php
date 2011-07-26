@@ -29,9 +29,7 @@ class CallbacksController extends AppController {
 		$this->layout='callback';
 		$this->Callback->setData(file_get_contents("php://input"));
 		$user = ClassRegistry::init('User');
-		
-		
-
+		$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),json_decode(file_get_contents("php://input")),'Callback Alert');
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
@@ -56,6 +54,16 @@ class CallbacksController extends AppController {
 					if( strtoupper( $row['status'] ) == YES ) {
 						
 						$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE; // Media available
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Creating flavour of media');
+						$podcastItem->PodcastMedia->create();
+						$data['PodcastMedia']['filename'] = $row['filename'];
+						$data['PodcastMedia']['original_filename'] = $row['original_filename'];
+						$data['PodcastMedia']['media_type'] = $row['media_type'];
+						$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
+						$data['PodcastMedia']['duration'] = $row['duration'];
+						$podcastItem->PodcastMedia->set( $data );
+						if( $podcastItem->PodcastMedia->save( $data ) == false )
+							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$podcastItem->PodcastMedia->invalidFields( $data ),'Creating flavour of media');
 						
 					} else {
 						
@@ -69,7 +77,6 @@ class CallbacksController extends AppController {
 			} elseif( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
 				
 				$this->Callback->processDeletions();				
-				
 			}			
 				
 			// Does the API command signify a need to delete a local file structure?

@@ -40,9 +40,7 @@
         ?>
                     <tr<?php echo $class;?>>
                         <td width="15px" align="center">
-                            <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                                <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
-                            <?php endif; ?>
+                            <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                         </td>
                         <td width="82px" align="center">
                             <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" class="thumbnail" title="podcast image" />
@@ -64,14 +62,9 @@
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="View collection contents" class="icon" />View</a>
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
-                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="Edit collection" class="icon" />Edit</a>
-                                <a href="/podcast_items/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                             <?php elseif( $this->Permission->isModerator( $podcast['Moderators'] ) || $this->Permission->inModeratorGroup( $podcast['ModeratorGroups'] ) ) : ?>
-                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Generate RSS</a>
-                                <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>">Moderate</a>
-                                <a href="/podcast_items/add/<?php echo $podcast['Podcast']['id']; ?>">Media</a>
-                                
+                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <?php endif; ?>
                         </td>
                     </tr>

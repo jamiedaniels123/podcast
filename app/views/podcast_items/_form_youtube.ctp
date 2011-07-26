@@ -1,11 +1,11 @@
-<fieldset class="itunes">
-	<legend>Youtube Specific</legend>
-    <div class="input checkbox">
-        <input type="hidden" value="N" id="PodcastItemYoutubeFlag_" name="data[PodcastItem][youtube_flag]">
-        <input type="checkbox" id="PodcastItemYoutubeFlag" value="Y" <?php echo $this->data['PodcastItem']['youtube_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][youtube_flag]">
-        <label for="PodcastItemYoutubeFlag">Published?</label>
-        <?php echo $this->Form->error('PodcastItem.youtube_flag'); ?>
-    </div>
+<fieldset class="youtube">
+	<legend>Youtube</legend>
+	<dl>
+	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
+	    <dt>Published: </dt>
+	    <dd><img src="/img<?php echo $this->data['PodcastItem']['youtube_flag'] == YES ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
+    </dl>
+    <div class="wrapper youtube" style="display:none">		
     <div class="input text">
         <label for="PodcastItemYoutubeTitle">Title</label>
         <input type="text" id="PodcastItemYoutubeTitle" name="data[PodcastItem][youtube_title]" value="<?php echo $this->data['PodcastItem']['youtube_title']; ?>">
