@@ -163,10 +163,10 @@ class User extends AppModel {
                 $conditions[0]['User.administrator'] = true;
                 break;
             case 'YOUTUBE':
-                $conditions[0]['User.iTunesU'] = 'Y';            	
+                $conditions[0]['User.YouTube'] = 'Y';            	
                 break;
             case 'ITUNES':
-                $conditions[0]['User.YouTube'] = 'Y';            	
+                $conditions[0]['User.iTunesU'] = 'Y';            	
                 break;
             case 'OPEN_LEARN':
                 $conditions[0]['User.openlearn_explore'] = 'Y';            	
