@@ -1,5 +1,6 @@
 <?php
 class Podcast extends AppModel {
+	
 
     const AVAILABLE = 9;
     
@@ -1083,11 +1084,17 @@ class Podcast extends AppModel {
 				unset( $this->belongsTo['PreferredNode'] );
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
+			case 'copy':
+		        unset( $this->hasMany['PodcastModerators'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
+				unset( $this->hasAndBelongsToMany['MemberGroups'] );
+				unset( $this->hasAndBelongsToMany['Members'] );
+				unset( $this->hasAndBelongsToMany['Moderators'] );
 			default:
 				break;	
 		}
 	}
-	
 	
 	/*
 	 * @name : softDelete
@@ -1109,5 +1116,5 @@ class Podcast extends AppModel {
 		);
 		
 		return $data;
-	}
+	}	
 }

@@ -135,6 +135,6 @@
 <?php endif; ?>
 <?php if( $this->Permission->isYoutubeUser() || $this->Permission->isItunesUser() ) : ?>
 
-	<a class="button white" href="/podcasts/clone/<?php echo $this->data['Podcast']['id'];?>" title="clone" onclick="return confirm('You are about to clone this collection adding it to your library with yourself as owner. Are you sure?');" >Clone</a>
+	<a class="button white" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
 	
 <?php endif; ?>

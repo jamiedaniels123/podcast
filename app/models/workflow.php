@@ -37,8 +37,6 @@ class Workflow extends AppModel {
 		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
 			$this->setWorkflow( DELIVER_WITHOUT_TRANSCODING );
-			return true;
-			exit;
 			
 		} elseif( in_array( $this->file_extension, $this->video_transcoding ) ) {
 
@@ -47,18 +45,20 @@ class Workflow extends AppModel {
 			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setWorkflow( $this->__select() );			
-			return true;
+
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
 			$this->setWorkflow( AUDIO );
-			return true;
-		}
 
-		// If we reached this point the user has uploaded an unsupported file type. Should never happen because validation
-		// also exists in the file chucker upload.
-		$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
-		return false;
+		} else {
+
+			// If we reached this point the user has uploaded an unsupported file type. Should never happen because validation
+			// also exists in the file chucker upload.
+			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
+		}
+		
+		return count( $this->errors );
 		
 	}
 
