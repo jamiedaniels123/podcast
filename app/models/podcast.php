@@ -1,5 +1,6 @@
 <?php
 class Podcast extends AppModel {
+	
 
     const AVAILABLE = 9;
     const YES = 'Y';
