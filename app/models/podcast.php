@@ -2,7 +2,6 @@
 class Podcast extends AppModel {
 
     const AVAILABLE = 9;
-    const YES = 'Y';
     
     var $name = 'Podcast';
     var $backup_table = 'podcasts_backup';
@@ -288,7 +287,7 @@ class Podcast extends AppModel {
         // get the value of the field being passed
         $private = array_shift( $check );
 
-        if( !isSet( $this->data['private'] ) || $private == self::YES )
+        if( !isSet( $this->data['private'] ) || $private == YES )
             return true;
 
         $podcastItem = ClassRegistry::init('PodcastItem');
@@ -323,7 +322,7 @@ class Podcast extends AppModel {
         $this->PodcastItem = ClassRegistry::init('PodcastItem');
         $data = $this->PodcastItem->find('all', array(
             'conditions' => array(
-                'PodcastItem.published_flag' => self::YES,
+                'PodcastItem.published_flag' => YES,
                 'PodcastItem.podcast_id' => $this->data['Podcast']['id'],
                 'PodcastItem.processed_state' => self::AVAILABLE
                 ),
@@ -1084,6 +1083,13 @@ class Podcast extends AppModel {
 				unset( $this->belongsTo['PreferredNode'] );
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
+			case 'copy':
+		        unset( $this->hasMany['PodcastModerators'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
+				unset( $this->hasAndBelongsToMany['MemberGroups'] );
+				unset( $this->hasAndBelongsToMany['Members'] );
+				unset( $this->hasAndBelongsToMany['Moderators'] );
 			default:
 				break;	
 		}

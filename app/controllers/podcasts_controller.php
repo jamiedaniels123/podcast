@@ -110,7 +110,7 @@ class PodcastsController extends AppController {
 
     /*
      * @name : youtube_index
-     * @desscription : Displays a paginated list of all podcasts that are itunes related.
+     * @desscription : Displays a paginated list of all podcasts that are youtube related.
      * @name : Charles Jackson
      * @by : 8th July 2011
      */
@@ -550,6 +550,33 @@ class PodcastsController extends AppController {
 
         $this->redirect( $this->referer() );
     }
+    
+    /*
+     * @name : clone
+     * @description :
+     * @updated : 26th July 2011
+     * @by : Charles Jackson
+     */ 
+    function copy( $id = null ) {
+		
+		$this->data = $this->Podcast->findById( $id ) ;
+		if( empty( $this->data ) ) {
+			
+			
+			
+		} else {
+			
+			$this->data['Podcast']['id'] == null;
+			$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+			$this->Podcast->set( $this->data );
+			$this->Podcast->saveAll( $this->data );
+			
+			$new_podcast_id = $this->Podcast->getLastInsertId();
+			
+		}
+		
+		$this->redirect( $this->referer() );
+	}
 
     /*
      * ADMIN FUNCTIONALITY
