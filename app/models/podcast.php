@@ -1085,8 +1085,12 @@ class Podcast extends AppModel {
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
 			case 'copy':
-		        unset( $this->hasMany['PodcastModerators'] );
-		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasMany['PodcastLinks'] );
+				unset( $this->hasMany['PublishedPodcastItems'] );
+				unset( $this->hasMany['PodcastModerators'] );
+				unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasMany['WaitingItunesApproval'] );
+				unset( $this->hasMany['WaitingYoutubeApproval'] );
 				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
 				unset( $this->hasAndBelongsToMany['MemberGroups'] );
 				unset( $this->hasAndBelongsToMany['Members'] );
@@ -1095,9 +1099,7 @@ class Podcast extends AppModel {
 				unset( $this->belongsTo['PreferredNode'] );
 				unset( $this->belongsTo['Language'] );
 				unset( $this->belongsTo['Owner'] );
-				unset( $this->hasMany['WaitingItunesApproval'] );
-				unset( $this->hasMany['WaitingYoutubeApproval'] );
-				unset( $this->hasMany['PublishedPodcastItems'] );
+				break;
 			default:
 				break;	
 		}
@@ -1124,4 +1126,52 @@ class Podcast extends AppModel {
 		
 		return $data;
 	}	
+
+    /*
+     * @name : copy
+     * @description : Will make a copy of the podcast contained within the class property data and return a boolean.
+     * @updated : 27th July 2011
+     * @by : Charles Jackson
+     */ 	
+	function copy() {
+
+		$data = $this->data;
+		
+		$this->begin();
+		
+		$this->data['Podcast']['id'] = null;
+		$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+		$this->set( $this->data );
+		$this->save( $this->data );
+		$this->data['Podcast']['id'] = $this->getLastInsertId();
+		
+		$this->data['iTuneCategories'] = $this->copyAssociations('iTuneCategories' );
+		$this->data['Nodes'] = $this->copyAssociations('Nodes' );
+		$this->data['Categories'] = $this->copyAssociations('Categories' );
+					
+		$this->data['Podcast']['custom_id'] = str_replace( $data['Podcast']['id'] . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
+
+		$this->set( $this->data );							
+		
+		if ( $this->saveAll( $this->data ) ) {
+		
+			$this->commit();
+			return true;
+			
+		} else {
+			
+			$this->rollback();
+			return false;
+		}
+	}
+	
+	function copyAssociations( $key ) {
+		
+		$data = array();
+		
+		foreach( $this->data[$key] as $association ) {
+
+			$this->data[$key][] = $association['id'];
+		}
+	}
 }

@@ -245,10 +245,7 @@ class PodcastsController extends AppController {
         $this->Podcast->recursive = 2;
         
         if ( !empty( $this->data ) ) {
-			echo "<pre>";
-				print_r( $this->data );
-			echo "</pre>";
-			die('end');
+
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
             
             $this->Podcast->data = $this->data;
@@ -551,62 +548,29 @@ class PodcastsController extends AppController {
     
     /*
      * @name : copy
-     * @description : Will make a copy of a podcast and all associated media.
+     * @description : Will make a copy of a podcast and all associated media and if successfull send a request to the API.
      * @updated : 26th July 2011
      * @by : Charles Jackson
      */ 
     function copy( $id = null ) {
 		
-    	$data = array();
 		$this->data = $this->Podcast->findById( $id ) ;
 		
-		if( empty( $this->data ) ) {
+		if( !empty( $this->data ) ) {
 			
-			$this->Session->setFlash('We could not find the collection you wish to copy. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			$this->Podcast->data = $this->data;
 			
-		} else {
-			
-			
-			$data = $this->data;
+			if( $this->Podcast->copy() ) {
+		
+				$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
 				
-			$this->data['Podcast']['id'] = null;
-			$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-			$this->Podcast->set( $this->data );
-			$this->Podcast->save( $this->data );
-			$this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
-			
-			for( $x = 0; $x < count( $this->data['PodcastItems'] ); $x++ ) {
-
-				$this->data['PodcastItems'][$x]['podcast_id'] = $this->data['Podcast']['id'];
-				$this->data['PodcastItems'][$x]['id'] = null;
+			} else {
+				
+				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );	
 			}
-			
-			for( $x = 0; $x < count( $this->data['iTuneCategories'] ); $x++ ) {
-
-				$this->data['PodcastItems'][$x]['PodcastsItunesuCategory']['podcast_id'] = $this->data['Podcast']['id'];
-				$this->data['PodcastItems'][$x]['PodcastsItunesuCategory']['id'] = null;
-			}
-			
-			for( $x = 0; $x < count( $this->data['Nodes'] ); $x++ ) {
-
-				$this->data['PodcastItems'][$x]['PodcastLink']['podcast_id'] = $this->data['Podcast']['id'];
-				$this->data['PodcastItems'][$x]['PodcastLink']['id'] = null;
-			}
-
-			for( $x = 0; $x < count( $this->data['Categories'] ); $x++ ) {
-
-				$this->data['PodcastItems'][$x]['PodcastsCategory']['podcast_id'] = $this->data['Podcast']['id'];
-				$this->data['PodcastItems'][$x]['PodcastsCategory']['id'] = null;
-			}
-						
-			$this->data['Podcast']['custom_id'] = str_replace( $data['Podcast']['id'] . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
-			
-			$this->Podcast->set( $this->data );							
-			$this->Podcast->saveAll( $this->data );
-			
-			$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
 		}
 		
+		$this->Session->setFlash('We could not copy your chosen collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 		$this->redirect( $this->referer() );
 	}
 
