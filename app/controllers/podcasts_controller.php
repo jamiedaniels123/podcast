@@ -176,7 +176,7 @@ class PodcastsController extends AppController {
 
             if( $this->Podcast->saveAll() ) {
 
-				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
+				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId() . '_' . $this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
 	            $this->Podcast->save( $this->data );
 				
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
@@ -245,7 +245,10 @@ class PodcastsController extends AppController {
         $this->Podcast->recursive = 2;
         
         if ( !empty( $this->data ) ) {
-
+			echo "<pre>";
+				print_r( $this->data );
+			echo "</pre>";
+			die('end');
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
             
             $this->Podcast->data = $this->data;
@@ -548,12 +551,13 @@ class PodcastsController extends AppController {
     
     /*
      * @name : copy
-     * @description :
+     * @description : Will make a copy of a podcast and all associated media.
      * @updated : 26th July 2011
      * @by : Charles Jackson
      */ 
     function copy( $id = null ) {
 		
+    	$data = array();
 		$this->data = $this->Podcast->findById( $id ) ;
 		
 		if( empty( $this->data ) ) {
@@ -562,23 +566,45 @@ class PodcastsController extends AppController {
 			
 		} else {
 			
-			$original_podcast_id = $this->data['Podcast']['id'];
+			
+			$data = $this->data;
+				
 			$this->data['Podcast']['id'] = null;
 			$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
 			$this->Podcast->set( $this->data );
-			if( $this->Podcast->saveAll( $this->data ) == false ) {
-				
-				print_r( $this->Podcast->invalidFields( $this->data ) );
-				die('llll');
-				
-			} else {
+			$this->Podcast->save( $this->data );
+			$this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
+			
+			for( $x = 0; $x < count( $this->data['PodcastItems'] ); $x++ ) {
 
-				$this->Session->setFlash('The podcast has been successfully cloned and added to your personal library.', 'default', array( 'class' => 'success' ) );			
-				$this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
-				$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id.'_', $this->data['Podcast']['id'].'_', $this->data['Podcast']['custom_id'] );
-				$this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );	
+				$this->data['PodcastItems'][$x]['podcast_id'] = $this->data['Podcast']['id'];
+				$this->data['PodcastItems'][$x]['id'] = null;
 			}
 			
+			for( $x = 0; $x < count( $this->data['iTuneCategories'] ); $x++ ) {
+
+				$this->data['PodcastItems'][$x]['PodcastsItunesuCategory']['podcast_id'] = $this->data['Podcast']['id'];
+				$this->data['PodcastItems'][$x]['PodcastsItunesuCategory']['id'] = null;
+			}
+			
+			for( $x = 0; $x < count( $this->data['Nodes'] ); $x++ ) {
+
+				$this->data['PodcastItems'][$x]['PodcastLink']['podcast_id'] = $this->data['Podcast']['id'];
+				$this->data['PodcastItems'][$x]['PodcastLink']['id'] = null;
+			}
+
+			for( $x = 0; $x < count( $this->data['Categories'] ); $x++ ) {
+
+				$this->data['PodcastItems'][$x]['PodcastsCategory']['podcast_id'] = $this->data['Podcast']['id'];
+				$this->data['PodcastItems'][$x]['PodcastsCategory']['id'] = null;
+			}
+						
+			$this->data['Podcast']['custom_id'] = str_replace( $data['Podcast']['id'] . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
+			
+			$this->Podcast->set( $this->data );							
+			$this->Podcast->saveAll( $this->data );
+			
+			$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );	
 		}
 		
 		$this->redirect( $this->referer() );
