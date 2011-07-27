@@ -143,7 +143,7 @@ class PodcastItem extends AppModel {
         	
         	$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',
-				'target_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
+				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
 				'filename' => $media['filename'],
 				'target_filename' => '.'.$media['filename'],
         		'podcast_item_id' => '.'.$media['podcast_item'],
@@ -156,7 +156,7 @@ class PodcastItem extends AppModel {
 			
 			$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'target_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
+				'destination_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'filename' => $data['Transcript']['filename'],
 				'target_filename' => '.'.$data['PodcastMedia']['filename'],
         		'podcast_item_id' => '.'.$media['podcast_item'],
@@ -203,7 +203,7 @@ class PodcastItem extends AppModel {
 			
 			$flavours[] = array(
 			
-				'target_path' => $data['Podcast']['custom_id'].'/',
+				'destination_path' => $data['Podcast']['custom_id'].'/',
 				'filename' => $data['PodcastItem']['filename'],
 				'podcast_item_id' => $id,
 				'title' => $data['PodcastItem']['title'],
@@ -218,7 +218,7 @@ class PodcastItem extends AppModel {
 				
 				$flavours[] = array(
 				
-					'target_path' => $data['Podcast']['custom_id'].'/'.$flavour['media_type'].'/',
+					'destination_path' => $data['Podcast']['custom_id'].'/'.$flavour['media_type'].'/',
 					'filename' => $flavour['filename'],
 					'podcast_item_id' => $id,
 					'title' => $data['PodcastItem']['title'],

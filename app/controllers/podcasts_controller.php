@@ -547,7 +547,7 @@ class PodcastsController extends AppController {
     }
     
     /*
-     * @name : clone
+     * @name : copy
      * @description :
      * @updated : 26th July 2011
      * @by : Charles Jackson
@@ -555,18 +555,29 @@ class PodcastsController extends AppController {
     function copy( $id = null ) {
 		
 		$this->data = $this->Podcast->findById( $id ) ;
+		
 		if( empty( $this->data ) ) {
 			
-			
+			$this->Session->setFlash('We could not find the collection you wish to copy. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 			
 		} else {
 			
-			$this->data['Podcast']['id'] == null;
+			$original_podcast_id = $this->data['Podcast']['id'];
+			$this->data['Podcast']['id'] = null;
 			$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
 			$this->Podcast->set( $this->data );
-			$this->Podcast->saveAll( $this->data );
-			
-			$new_podcast_id = $this->Podcast->getLastInsertId();
+			if( $this->Podcast->saveAll( $this->data ) == false ) {
+				
+				print_r( $this->Podcast->invalidFields( $this->data ) );
+				die('llll');
+				
+			} else {
+
+				$this->Session->setFlash('The podcast has been successfully cloned and added to your personal library.', 'default', array( 'class' => 'success' ) );			
+				$this->data['Podcast']['id'] = $this->Podcast->getLastInsertId();
+				$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id.'_', $this->data['Podcast']['id'].'_', $this->data['Podcast']['custom_id'] );
+				$this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );	
+			}
 			
 		}
 		

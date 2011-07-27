@@ -388,7 +388,7 @@ class PodcastItemsController extends AppController {
 						if( $this->Api->deliverWithoutTranscoding( 
 							array( 
 								'source_path' => $this->data['Podcast']['custom_id'].'/',
-								'target_path' => $this->data['Podcast']['custom_id'].'/', 
+								'destination_path' => $this->data['Podcast']['custom_id'].'/', 
 								'filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
 									)

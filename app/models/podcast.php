@@ -1091,6 +1091,13 @@ class Podcast extends AppModel {
 				unset( $this->hasAndBelongsToMany['MemberGroups'] );
 				unset( $this->hasAndBelongsToMany['Members'] );
 				unset( $this->hasAndBelongsToMany['Moderators'] );
+				unset( $this->hasOne['UserPodcast'] );
+				unset( $this->belongsTo['PreferredNode'] );
+				unset( $this->belongsTo['Language'] );
+				unset( $this->belongsTo['Owner'] );
+				unset( $this->hasMany['WaitingItunesApproval'] );
+				unset( $this->hasMany['WaitingYoutubeApproval'] );
+				unset( $this->hasMany['PublishedPodcastItems'] );
 			default:
 				break;	
 		}
