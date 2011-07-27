@@ -282,7 +282,7 @@ class PodcastsController extends AppController {
 					
 						array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
-							'target_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
+							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
 							'filename' => '.htaccess' 
 							)
 						) ) == false ) {		
@@ -711,7 +711,7 @@ class PodcastsController extends AppController {
 					
 						array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
-							'target_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
+							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
 							'filename' => '.htaccess' 
 							)
 						) ) == false ) {		

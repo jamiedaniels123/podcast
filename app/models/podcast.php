@@ -1111,7 +1111,7 @@ class Podcast extends AppModel {
 		$data[] = array( 
 			
 			'source_path' => $podcast['Podcast']['custom_id'].'/',
-			'target_path' => $podcast['Podcast']['custom_id'].'/', 
+			'destination_path' => $podcast['Podcast']['custom_id'].'/', 
 			'filename' => '.htaccess' 
 		);
 		
