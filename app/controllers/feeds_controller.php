@@ -20,8 +20,8 @@ class FeedsController extends AppController {
 
     /*
      * @name : add
-     * @description : Creates the various flavours of RSS feed by calling the 'add' method with various parameters. It then
-     * captures the output and writes content to a flat file ready to be moved across to the media server
+     * @description : Creates the various flavours of RSS feed. It then captures the output and writes
+     * content to a flat file ready to be moved across to the media server.
      * @updated : 16th June 2011
      * @by : Charles Jackson
      */

@@ -561,12 +561,10 @@ class PodcastsController extends AppController {
 			$this->Podcast->data = $this->data;
 			
 			if( $this->Podcast->copy() ) {
-		
+				
+				$this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] );
 				$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
-				
-			} else {
-				
-				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );	
+				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );
 			}
 		}
 		

@@ -1085,20 +1085,20 @@ class Podcast extends AppModel {
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
 			case 'copy':
-				unset( $this->hasMany['PodcastLinks'] );
-				unset( $this->hasMany['PublishedPodcastItems'] );
-				unset( $this->hasMany['PodcastModerators'] );
-				unset( $this->hasMany['ModeratorUserGroups'] );
-				unset( $this->hasMany['WaitingItunesApproval'] );
-				unset( $this->hasMany['WaitingYoutubeApproval'] );
-				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );
-				unset( $this->hasAndBelongsToMany['MemberGroups'] );
-				unset( $this->hasAndBelongsToMany['Members'] );
-				unset( $this->hasAndBelongsToMany['Moderators'] );
-				unset( $this->hasOne['UserPodcast'] );
-				unset( $this->belongsTo['PreferredNode'] );
-				unset( $this->belongsTo['Language'] );
-				unset( $this->belongsTo['Owner'] );
+				$this->unBindModel( array( 'hasMany' => array('PodcastLinks' ) ) );
+				$this->unBindModel( array( 'hasMany' => array('PublishedPodcastItems' ) ) );
+				$this->unBindModel( array( 'hasMany' => array('PodcastModerators' ) ) );
+				$this->unBindModel( array( 'hasMany' => array('ModeratorUserGroups' ) ) );
+				$this->unBindModel( array( 'hasMany' => array('WaitingItunesApproval' ) ) );
+				$this->unBindModel( array( 'hasMany' => array('WaitingYoutubeApproval' ) ) );
+				$this->unBindModel( array( 'hasAndBelongsToMany' => array('ModeratorGroups' ) ) );
+				$this->unBindModel( array( 'hasAndBelongsToMany' => array('MemberGroups' ) ) );
+				$this->unBindModel( array( 'hasAndBelongsToMany' => array('Members' ) ) );
+				$this->unBindModel( array( 'hasAndBelongsToMany' => array('Moderators' ) ) );
+				$this->unBindModel( array( 'hasOne' => array('UserPodcast' ) ) );
+				$this->unBindModel( array( 'belongsTo' => array('PreferredNode' ) ) );
+				$this->unBindModel( array( 'belongsTo' => array('Language' ) ) );
+				$this->unBindModel( array( 'belongsTo' => array('Owner' ) ) );				
 				break;
 			default:
 				break;	
@@ -1133,28 +1133,62 @@ class Podcast extends AppModel {
      * @updated : 27th July 2011
      * @by : Charles Jackson
      */ 	
-	function copy() {
+	function copy( $user_id = null ) {
 
+		$original_podcast_id = $this->data['Podcast']['id'];
+		$this->data['Podcast']['id'] = null;
+		
+		// Make a local copy.
 		$data = $this->data;
 		
+		// Start a transaction
 		$this->begin();
 		
-		$this->data['Podcast']['id'] = null;
-		$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+		// We only pass a user_id when it is being called using the "copy" method in the
+		// podcast controller. If being called by the VLE we do not update ownership.
+		if( !empty( $user_id ) )
+			$this->data['Podcast']['owner_id'] = $user_id;
+			
 		$this->set( $this->data );
-		$this->save( $this->data );
-		$this->data['Podcast']['id'] = $this->getLastInsertId();
 		
-		$this->data['iTuneCategories'] = $this->copyAssociations('iTuneCategories' );
-		$this->data['Nodes'] = $this->copyAssociations('Nodes' );
-		$this->data['Categories'] = $this->copyAssociations('Categories' );
-					
-		$this->data['Podcast']['custom_id'] = str_replace( $data['Podcast']['id'] . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
+		// Because we have unset the majority of association force a save without validation else it will cause
+		// errors on the automagical 'function before***' methods.
+		$this->save( $this->data, array('validate' => false ) );
+		
+		// Now we need to copy the data back in the class propertry from our local copy because it has been wiped by the
+		// set/save combination above.
+		$this->data = $data;
+		
+		$this->data['Podcast']['id'] = $this->getLastInsertId();
+		$data['Podcast']['id'] = $this->getLastInsertId();
+
+		
+		if( isSet( $this->data['PodcastItems'] ) && count( $this->data['PodcastItems'] ) ) {
+			
+			for( $x = 0; $x < count( $this->data['PodcastItems'] ); $x++ ) {
+				
+				$this->data['PodcastItems'][$x]['id'] = null;
+				$this->data['PodcastItems'][$x]['podcast_id'] = $this->data['Podcast']['id'];
+			}
+		}
+		
+		if( isSet( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) )
+			$this->data['iTuneCategories'] = $this->copyAssociations('iTuneCategories' );
+			
+		if( isSet( $this->data['Nodes'] ) && count( $this->data['Nodes'] ) )			
+			$this->data['Nodes'] = $this->copyAssociations('Nodes' );
+			
+		if( isSet( $this->data['Categories'] ) && count( $this->data['Categories'] ) )			
+			$this->data['Categories'] = $this->copyAssociations('Categories' );
+
+			
+		$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
 
 		$this->set( $this->data );							
 		
-		if ( $this->saveAll( $this->data ) ) {
+		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {
 		
+			$this->data = $data;
 			$this->commit();
 			return true;
 			
@@ -1164,7 +1198,14 @@ class Podcast extends AppModel {
 			return false;
 		}
 	}
-	
+
+    /*
+     * @name : copyAssociations
+     * @description : When we are copying a podcast we need to copy certain associated data specifically,
+     * iTunesCategories, Nodes and Categories.
+     * @updated : 28th July 2011
+     * @by : Charles Jackson
+     */ 	
 	function copyAssociations( $key ) {
 		
 		$data = array();
