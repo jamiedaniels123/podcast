@@ -9,25 +9,9 @@
         <p>
             Use the form below to create/update a new podcast container
         </p>
-		<?php if( $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() || $this->Miscellaneous->isAdminRouting( $this->params ) ) : ?>
-		
-			<?php if( $this->Permission->isItunesUser() || $this->Miscellaneous->isAdminRouting( $this->params ) ) : ?>
-			
-				<?php echo $this->element('../podcasts/_form_itunes_published'); ?>
-				
-			<?php endif; ?>
-			
-			<?php if( $this->Permission->isYoutubeUser() || $this->Miscellaneous->isAdminRouting( $this->params ) ) : ?>
-			
-				<?php echo $this->element('../podcasts/_form_youtube_published'); ?>
-				
-			<?php endif; ?> 
-		
-		<?php else : ?>
 		        
-        	<?php echo $this->element('../podcasts/_form'); ?>
+		<?php echo $this->element('../podcasts/_form'); ?>
         	
-    	<?php endif; ?>
         <button id="PodcastUpdateButton" type="submit" class="auto_select_and_submit">update podcast</button>
     </fieldset>
 <form>

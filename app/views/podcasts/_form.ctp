@@ -221,9 +221,26 @@
             </div>
         <?php endif; ?>
         <?php echo $this->element('../podcasts/_form_admin'); ?>
-		<?php echo $this->element('../podcasts/_form_itunes_lite'); ?>
-    		
-		<?php echo $this->element('../podcasts/_form_youtube_lite'); ?>
+        
+        <?php if( $this->Permission->isItunesUser() ) : ?>
+        
+			<?php echo $this->element('../podcasts/_form_itunes'); ?>
+			
+        <?php else : ?>
+        
+			<?php echo $this->element('../podcasts/_form_itunes_lite'); ?>
+			
+		<?php endif; ?>
+
+        <?php if( $this->Permission->isYoutubeUser() ) : ?>
+        
+			<?php echo $this->element('../podcasts/_form_youtube'); ?>
+
+        <?php else : ?>
+
+			<?php echo $this->element('../podcasts/_form_youtube_lite'); ?>
+			
+		<?php endif; ?>
 		
     </div>
 <?php endif; ?>

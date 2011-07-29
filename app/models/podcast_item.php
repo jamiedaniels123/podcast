@@ -48,6 +48,16 @@ class PodcastItem extends AppModel {
         )
     );
 
+    var $hasAndBelongsToMany = array(
+
+        'YoutubeSubjectPlaylists' => array(
+            'className' => 'YoutubeSubjectPlaylist',
+            'joinTable' => 'podcasts_subject_playlists',
+            'foreignKey' => 'podcast_id',
+            'associationForeignKey' => 'youtube_subject_playlist_id',
+            'unique' => true
+        )
+	);
     /*
      * @name : createFromUrlVariables
      * @description : Called from the ADD method directly after a successful filechucker upload

@@ -207,6 +207,43 @@ class PermissionHelper extends AppHelper {
 		//$this->Miscellaneous->isAdminRouting() || $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() ) :    	
     	
     }
+    
+    function toUpdate( $data = array() ) {
+		
+		if( $this->isOwner( $data['Podcast']['owner_id'] ) )
+			return true;
+		
+		if( $this->isModerator( $data['Moderators'] ) )
+			return true;
+		
+		if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )
+			return true;
+	}
+
+
+    function toView( $data = array() ) {
+
+		if( $this->isItunesUser() )
+			return true;
+
+		if( $this->isYoutubeUser() )
+			return true;
+
+		if( $this->isOwner( $data['Podcast']['owner_id'] ) )
+			return true;
+
+		if( $this->isMember( $data['Members'] ) )
+			return true;
+
+		if( $this->inMemberGroup( $data['MemberGroups'] ) )
+			return true;
+		
+		if( $this->isModerator( $data['Moderators'] ) )
+			return true;
+		
+		if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )
+			return true;
+	}
 
 }
 ?>

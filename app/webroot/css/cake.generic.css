@@ -772,3 +772,15 @@ td.status, th.status {
 	text-align: center;	
 }
 	
+ul.itunes, ul.itunes li, ul.youtube, ul.youtube li {
+
+	list-style-type: none;
+	float: left;
+}
+
+legend img {
+
+	height: 20px;
+	padding-right: 5px;
+	margin: 0px;
+}

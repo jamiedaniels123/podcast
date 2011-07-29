@@ -151,7 +151,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, PodcastItems.consider_for_youtube, PodcastItems.consider_for_itunesu, PodcastItems.youtube_flag, PodcastItems.itunes_flag',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, PodcastItems.youtube_flag, PodcastItems.itunes_flag',
             'order' => 'PodcastItems.publication_date DESC',
         ),
         'PublishedPodcastItems' => array(
@@ -169,18 +169,6 @@ class Podcast extends AppModel {
         'ModeratorUserGroups' => array(
             'className' => 'UserGroupPodcasts',
             'foreignKey' => 'podcast_id'
-        ),
-        'WaitingItunesApproval' => array(
-            'className' => 'PodcastItem',
-            'foreignKey' => 'podcast_id',
-        	'conditions' => 'WaitingItunesApproval.consider_for_itunesu = 1 AND WaitingItunesApproval.itunes_flag != "Y"',
-        	'fields' => 'WaitingItunesApproval.id'
-        ),
-        'WaitingYoutubeApproval' => array(
-            'className' => 'PodcastItem',
-            'foreignKey' => 'podcast_id',
-        	'conditions' => 'WaitingYoutubeApproval.consider_for_youtube= 1 AND WaitingYoutubeApproval.youtube_flag != "Y"',
-        	'fields' => 'WaitingYoutubeApproval.id'
         )
     );
 

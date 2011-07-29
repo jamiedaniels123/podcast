@@ -217,23 +217,36 @@ class ObjectHelper extends AppHelper {
 	
 	function getApprovalStatus( $object, $media ) {
 
+
 		if( strtolower( $media ) == 'itunes' ) {
 			
-			if( $object['itunes_flag'] == 'Y' )
+			// Podcast level
+			if( isSet( $object['publish_itunes_u'] ) && $object['publish_itunes_u'] == 'Y' )
+				return CORRECT_IMAGE;
+
+			// Podcast level
+			if( isSet( $object['consider_for_itunesu'] ) && $object['consider_for_itunesu'] == true )
+				return QUESTION_MARK;
+        				
+			// Podcast Item Level
+			if( isSet( $object['itunes_flag'] ) && $object['itunes_flag'] == 'Y' )
 				return CORRECT_IMAGE;
 			
-			if( $object['consider_for_itunesu'] )
-				return QUESTION_MARK;
-				
 			return INCORRECT_IMAGE;				
 			
 		} elseif( strtolower( $media ) == 'youtube' ) {	
 
-			if( $object['youtube_flag'] == 'Y' )
+			// Podcast level
+			if( isSet( $object['publish_youtube'] ) && $object['publish_youtube'] == 'Y' )
 				return CORRECT_IMAGE;
-			
-			if( $object['consider_for_youtube'] )
+
+			// Podcast level
+			if( isSet( $object['consider_for_youtube'] ) && $object['consider_for_youtube'] == true )
 				return QUESTION_MARK;
+
+			// Podcast Item level
+			if( isSet( $object['youtube_flag'] ) && $object['youtube_flag'] == 'Y' )
+				return CORRECT_IMAGE;
 				
 			return INCORRECT_IMAGE;				
 		}

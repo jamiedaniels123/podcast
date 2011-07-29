@@ -50,6 +50,7 @@ class FeedsController extends AppController {
 			$podcast = $this->Podcast->findById( $key );
 			$rss_array = array();
 			
+
 			// If we found a podcast, create the RSS feeds.
 			if( !empty( $podcast ) ) {
 				foreach( $this->Feed->rss_flavours as $flavour ) {

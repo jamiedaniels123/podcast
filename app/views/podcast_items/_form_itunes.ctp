@@ -1,5 +1,5 @@
 <fieldset class="itunes">
-	<legend>iTunes Specific</legend>
+	<legend>iTunes</legend>
 	<dl>
 	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
 	    <dt>Published: </dt>
@@ -22,7 +22,7 @@
 	        <?php echo $this->Form->error('PodcastItem.epub_study_level'); ?>
 	    </div>
 	    <div class="input text">
-	        <label for="PodcastItemItunesTags">iTunes Tags</label>
+	        <label for="PodcastItemItunesTags">Tags</label>
 	        <input type="text" id="PodcastItemItunesTags" name="data[PodcastItem][itunes_tags]" value="<?php echo $this->data['PodcastItem']['itunes_tags']; ?>">
 	        <?php echo $this->Form->error('PodcastItem.itunes_tags'); ?>
 	    </div>
