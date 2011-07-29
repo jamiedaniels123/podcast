@@ -3,11 +3,8 @@
 	<input type="hidden" name="data[Podcast][publish_itunes_u]" id="PodcastPublishItunesU" value="<?php echo $this->data['Podcast']['publish_itunes_u']; ?>" />
 	<dl>
 	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
-	    <?php if( $this->Permission->isItunesUser() == false ) : ?>
-		    <?php if( $this->data['Podcast']['consider_for_itunesu'] ) : ?>
-		    	<dt>This collection is currently under consideration by the itunes team</dt>
-	    	<?php endif; ?>
-		<?php endif; ?>	  	    
+	    <dt>Published: </dt>
+	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>" /></dd>
     </dl>	
 	<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
     <div class="itunes_container itunes" style="display:none">

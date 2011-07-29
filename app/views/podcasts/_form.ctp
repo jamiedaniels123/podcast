@@ -223,7 +223,7 @@
         <?php echo $this->element('../podcasts/_form_admin'); ?>
         
         <?php if( $this->Permission->isItunesUser() ) : ?>
-        
+			
 			<?php echo $this->element('../podcasts/_form_itunes'); ?>
 			
         <?php else : ?>
@@ -233,7 +233,7 @@
 		<?php endif; ?>
 
         <?php if( $this->Permission->isYoutubeUser() ) : ?>
-        
+			
 			<?php echo $this->element('../podcasts/_form_youtube'); ?>
 
         <?php else : ?>

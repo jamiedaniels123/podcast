@@ -1,5 +1,11 @@
 <fieldset class="itunes">
 	<legend>Itunes</legend>
+	<input type="hidden" name="data[Podcast][publish_itunes_u]" id="PodcastPublishItunesU" value="<?php echo $this->data['Podcast']['publish_itunes_u']; ?>" />
+	<dl>
+	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
+	    <dt>Published: </dt>
+	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>" /></dd>
+    </dl>	
     <div class="itunes_container itunes" style="display:none">
         <div class="input checkbox">
             <label for="PodcastPublishItunesU">Published</label>

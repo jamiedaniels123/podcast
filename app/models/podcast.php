@@ -784,7 +784,6 @@ class Podcast extends AppModel {
                 break;
             case 'intended':
                 return array( 
-	                'Podcast.intended_itunesu_flag' => 'Y',
                 	'Podcast.publish_itunes_u !=' => 'Y',
 	                'Podcast.deleted' => 0 
                 );

@@ -182,7 +182,7 @@ class PodcastItemsController extends AppController {
 				$this->data = $this->PodcastItem->findById( $key );
 			
 				// Make sure it has already been converted into a podcast if they want to publish it.
-				if( !empty( $this->data ) $this->data['Podcast']['podcast_flag'] == true ) {
+				if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'Y';
 					$this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward

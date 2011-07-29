@@ -73,26 +73,13 @@ class PodcastsController extends AppController {
 		if( isSet( $this->data['Podcast']['filter'] ) && !empty( $this->data['Podcast']['filter'] ) ) {
 			
 			$this->set('filter',$this->data['Podcast']['filter'] );
-			
-			if( $this->data['Podcast']['filter'] == 'consideration' ) {
-				
-				$this->data['Podcasts'] = $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] );
-				$this->autoRender = false;
-				$this->render('itunes_consideration');
-
-			} else {
-				
-				$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
-			}
+			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
 			
 		} else {
 
 			$this->data['Podcasts'] = $this->paginate('Podcast', array(
 
             'OR' => array(
-                array(
-                    'Podcast.intended_itunesu_flag' => 'Y',
-                    	),
                 array(
                     'Podcast.publish_itunes_u' => 'Y',
                     	)
@@ -119,29 +106,14 @@ class PodcastsController extends AppController {
 
 			// Grab the filter and assign to the view so the select box retains the current selection
 			$this->set('filter', $this->data['Podcast']['filter'] );
-			
-			// If we are filtering on podcasts that have items waiting for approval we do not paginate
-			// the response
-			if( $this->data['Podcast']['filter'] == 'consideration' ) {
-				
-				$this->data['Podcasts'] = $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] );
-				$this->autoRender = false;
-				$this->render('youtube_consideration');
-
-			} else {
-				
-				// We are looking for "intended" or "published" therefore paginate as listing will be very long
-				$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
-			}
+			// We are looking for "intended" or "published" therefore paginate as listing will be very long
+			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
 			
 		} else {
 
 			$this->data['Podcasts'] = $this->paginate('Podcast', array(
 
             'OR' => array(
-                array(
-                    'Podcast.intended_youtube_flag' => 'Y',
-                    	),
                 array(
                     'Podcast.publish_youtube' => 'Y',
                     	)
