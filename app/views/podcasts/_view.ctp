@@ -89,11 +89,13 @@
 
 <div class="two-column-controls">
 
-	<?php if( $this->Object->isPodcast( $this->data['Podcast'] ) ) : ?>
+	<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
+	
 		<?php echo $this->element('../podcasts/_itunes'); ?>
 		<div class="clear"></div>
 		<?php echo $this->element('../podcasts/_youtube'); ?>
 		<div class="clear"></div>
+		
 	<?php endif; ?>
 
 	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>

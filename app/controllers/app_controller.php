@@ -6,7 +6,7 @@ class AppController extends Controller {
 
 	// NOTE: We are loading every component for every class. We should split this down further and only load each component as
 	// needed. However, currently simples...
-    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder', 'Api', 'Getid3', 'emailTemplates' );
+    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder', 'Api', 'Getid3', 'emailTemplates', 'Object' );
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 

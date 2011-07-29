@@ -83,7 +83,7 @@ class emailTemplatesComponent extends Object {
         //Do not pass any args to send()
         
         foreach( $recipients as $recipient ) {
-        	
+
         	$this->Email->to = $recipient['User']['email'];
         	$this->Email->send();
         }

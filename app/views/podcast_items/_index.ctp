@@ -17,7 +17,9 @@
 	            </tr>
 	        </thead>
 	        <?php foreach( $this->data['PodcastItems'] as $podcast_item ) : ?>
+	        
 	        	<?php if( $this->Object->isDeleted( $podcast_item ) == false ) : ?>
+	        	
 		        	<tr>
 						<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 		                    <td width="15px" align="center">
@@ -42,7 +44,7 @@
 								
 									<a href="/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
 									
-									<?php if( ( $podcast_item['processed_state'] == MEDIA_AVAILABLE ) && ( $this->Object->isPublished( $podcast_item ) == false ) ): ?>
+									<?php if( ( ( $podcast_item['processed_state'] == MEDIA_AVAILABLE ) && ( $this->Object->isPublished( $podcast_item ) == false ) ) || ( $this->Permission->isAdminRouting( $this->params ) ) ): ?>
 									
 										<a href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');"><span>delete</span></a>
 										
@@ -52,7 +54,8 @@
 								
 							<?php endif; ?>
 							
-						</td>	                
+						</td>	
+						                
 		            </tr>
 		            
 		    	<?php endif; ?>
@@ -68,15 +71,15 @@
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span>publish on iTunes</span></button>
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span>remove from iTunes</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span>iTunes publish</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span>iTunes unpublish</span></button>
 		        
 			<?php endif; ?>
 			
 			<?php if( $this->Permission->isYoutubeUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span>publish on youtube</span></button>
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span>remove from youtube</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span>youtube publish</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span>youtube unpublish</span></button>
 	        
         	<?php endif; ?>
 	        

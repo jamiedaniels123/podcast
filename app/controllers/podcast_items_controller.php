@@ -182,7 +182,7 @@ class PodcastItemsController extends AppController {
 				$this->data = $this->PodcastItem->findById( $key );
 			
 				// Make sure it has already been converted into a podcast if they want to publish it.
-				if( !empty( $this->data ) $this->data['Podcast']['podcast_flag'] == true ) {
+				if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'Y';
 					$this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
@@ -476,7 +476,7 @@ class PodcastItemsController extends AppController {
 		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );		
 		$this->PodcastItem->rollback();
 		
-        $this->redirect( array( 'action' => 'index', $this->Session->read('Podcast.podcast_id') ) );
+        $this->redirect( array( 'action' => 'add', $this->Session->read('Podcast.podcast_id') ) );
 
     }
 
@@ -566,7 +566,7 @@ class PodcastItemsController extends AppController {
         	$this->data = $this->PodcastItem->findById( $key );
         	        		
     	    // If we did not find the podcast media then redirect to the referer.
-	        if( ( empty( $this->data ) ) || ( $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) || ( $this->Object->isPublished( $this->data ) == false ) ) {
+	        if( ( empty( $this->data ) ) || ( $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) || ( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) ) {
 
 				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 
