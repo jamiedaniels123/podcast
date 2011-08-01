@@ -5,6 +5,113 @@
     <input type="text" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
 </div>
+<div class="link">
+	<a href="/" id="PodcastSharingToggle" class="juggle" data-target="PodcastSharingContainer">Sharing &amp; Ownership</a>
+</div>
+<div id="PodcastSharingContainer" style="display:none">
+	<div class="wrapper" id="user_groups_container">
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move --> </span>
+				<label for="Moderators">Moderator Groups</label>
+				<input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
+				<select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
+					<?php foreach( $this->data['ModeratorGroups'] as $moderator ) : ?>
+						<option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['group_title']; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php echo $this->Form->error('Podcast.ModeratorGroups'); ?>
+			</div>
+		</div>
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="MemberGroups" data-target="ModeratorGroups"><-- Move</span>
+				<span class="move" data-source="MemberGroups" data-target="UserGroups">Move --></span>
+				<label for="MemberGroups">Member Groups</label>
+				<input type="hidden" name="data[MemberGroups]" value="" id="MemberGroups_" />
+				<select id="MemberGroups" multiple="multiple" class="selected" name="data[MemberGroups][]">
+					<?php foreach( $this->data['MemberGroups'] as $member ) : ?>
+						<option value="<?php echo $member['id']; ?>"><?php echo $member['group_title']; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php echo $this->Form->error('Podcast.MemberGroups'); ?>
+			</div>
+		</div>
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="UserGroups" data-target="MemberGroups"><-- Move</span>
+				<label for="UserGroups">All User Groups</label>
+				<input type="hidden" name="data[UserGroups]" value="" id="UserGroups_" />
+				<select name="data[UserGroups][]" class="selected" multiple="multiple" id="UserGroups">
+					<?php foreach( $user_groups as $key => $value ) : ?>
+						<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php echo $this->Form->error('Podcast.UserGroups'); ?>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="wrapper" id="moderator_container">
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="Moderators" data-target="Members">Move --> </span>
+				<label for="Moderators">Podcast Moderators</label>
+				<input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
+				<select id="Moderators" multiple="multiple" class="selected" name="data[Moderators][]">
+					<?php foreach( $this->data['Moderators'] as $moderator ) : ?>
+						<option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['full_name']; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php echo $this->Form->error('Podcast.Moderators'); ?>
+			</div>
+		</div>
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="Members" data-target="Moderators"><-- Move</span>
+				<span class="move" data-source="Members" data-target="UsersUsers">Move --></span>
+				<label for="Members">Podcast Members</label>
+				<input type="hidden" name="data[Members]" value="" id="Members_" />
+				<select id="Members" multiple="multiple" class="selected" name="data[Members][]">
+					<?php foreach( $this->data['Members'] as $member ) : ?>
+						<option value="<?php echo $member['id']; ?>"><?php echo $member['full_name']; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php echo $this->Form->error('Podcast.Members'); ?>
+			</div>
+		</div>
+		<div class="float_left">
+			<div class="input select">
+				<span class="move" data-source="UsersUsers" data-target="Members"><-- Move</span>
+				<label for="UsersUsers">All Users</label>
+				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
+					<?php foreach( $users as $key => $value ) : ?>
+						<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<?php if( ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
+	
+		<div class="input text">
+			<label for="PodcastOwnerId">Podcast Owner</label>
+			<?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
+				<input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
+				<input type="hidden" name="data[Podcast][confirmed]" value="<?php echo isSet( $this->data['Podcast']['confirmed'] ) ? '1' : '0'; ?>" id="PodcastConfirmed" />
+			<?php endif; ?>
+			
+			<select name="data[Podcast][owner_id]" id="PodcastOwnerId">
+				<option value="">Please select</option>
+				<?php foreach( $all_users as $user_id => $name ) : ?>
+					<option value="<?php echo $user_id; ?>" <?php echo $this->data['Podcast']['owner_id'] == $user_id ? 'selected="true"' : ''; ?>><?php echo $name; ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php echo $this->Form->error('Podcast.owner_id'); ?>
+		</div>
+	<?php endif; ?>
+</div>
 <?php if( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) : ?>
     <div class="clear"></div>
     <div class="input checkbox">
@@ -117,109 +224,6 @@
                 </div>
             </div>
         </div>
-        <div class="clear"></div>
-        <div class="wrapper" id="user_groups_container">
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move --> </span>
-                    <label for="Moderators">Moderator Groups</label>
-                    <input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
-                    <select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
-                        <?php foreach( $this->data['ModeratorGroups'] as $moderator ) : ?>
-                            <option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['group_title']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->Form->error('Podcast.ModeratorGroups'); ?>
-                </div>
-            </div>
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="MemberGroups" data-target="ModeratorGroups"><-- Move</span>
-                    <span class="move" data-source="MemberGroups" data-target="UserGroups">Move --></span>
-                    <label for="MemberGroups">Member Groups</label>
-                    <input type="hidden" name="data[MemberGroups]" value="" id="MemberGroups_" />
-                    <select id="MemberGroups" multiple="multiple" class="selected" name="data[MemberGroups][]">
-                        <?php foreach( $this->data['MemberGroups'] as $member ) : ?>
-                            <option value="<?php echo $member['id']; ?>"><?php echo $member['group_title']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->Form->error('Podcast.MemberGroups'); ?>
-                </div>
-            </div>
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="UserGroups" data-target="MemberGroups"><-- Move</span>
-                    <label for="UserGroups">All User Groups</label>
-                    <input type="hidden" name="data[UserGroups]" value="" id="UserGroups_" />
-                    <select name="data[UserGroups][]" class="selected" multiple="multiple" id="UserGroups">
-                        <?php foreach( $user_groups as $key => $value ) : ?>
-                            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->Form->error('Podcast.UserGroups'); ?>
-                </div>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <div class="wrapper" id="moderator_container">
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="Moderators" data-target="Members">Move --> </span>
-                    <label for="Moderators">Podcast Moderators</label>
-                    <input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
-                    <select id="Moderators" multiple="multiple" class="selected" name="data[Moderators][]">
-                        <?php foreach( $this->data['Moderators'] as $moderator ) : ?>
-                            <option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['full_name']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->Form->error('Podcast.Moderators'); ?>
-                </div>
-            </div>
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="Members" data-target="Moderators"><-- Move</span>
-                    <span class="move" data-source="Members" data-target="UsersUsers">Move --></span>
-                    <label for="Members">Podcast Members</label>
-                    <input type="hidden" name="data[Members]" value="" id="Members_" />
-                    <select id="Members" multiple="multiple" class="selected" name="data[Members][]">
-                        <?php foreach( $this->data['Members'] as $member ) : ?>
-                            <option value="<?php echo $member['id']; ?>"><?php echo $member['full_name']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->Form->error('Podcast.Members'); ?>
-                </div>
-            </div>
-            <div class="float_left">
-                <div class="input select">
-                    <span class="move" data-source="UsersUsers" data-target="Members"><-- Move</span>
-                    <label for="UsersUsers">All Users</label>
-                    <select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
-                        <?php foreach( $users as $key => $value ) : ?>
-                            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <?php if( ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
-        
-            <div class="input text">
-                <label for="PodcastOwnerId">Podcast Owner</label>
-                <?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
-                    <input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
-                    <input type="hidden" name="data[Podcast][confirmed]" value="<?php echo isSet( $this->data['Podcast']['confirmed'] ) ? '1' : '0'; ?>" id="PodcastConfirmed" />
-                <?php endif; ?>
-                
-                <select name="data[Podcast][owner_id]" id="PodcastOwnerId">
-                    <option value="">Please select</option>
-                    <?php foreach( $all_users as $user_id => $name ) : ?>
-                        <option value="<?php echo $user_id; ?>" <?php echo $this->data['Podcast']['owner_id'] == $user_id ? 'selected="true"' : ''; ?>><?php echo $name; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <?php echo $this->Form->error('Podcast.owner_id'); ?>
-            </div>
-        <?php endif; ?>
         <?php echo $this->element('../podcasts/_form_admin'); ?>
         
         <?php if( $this->Permission->isItunesUser() ) : ?>

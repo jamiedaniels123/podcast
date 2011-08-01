@@ -221,6 +221,10 @@ class ObjectHelper extends AppHelper {
 		if( strtolower( $media ) == 'itunes' ) {
 			
 			// Podcast level
+			if( isSet( $object['intended_itunesu_flag'] ) && $object['intended_itunesu_flag'] == 'Y' )
+				return CORRECT_IMAGE;
+				
+			// Podcast level
 			if( isSet( $object['publish_itunes_u'] ) && $object['publish_itunes_u'] == 'Y' )
 				return CORRECT_IMAGE;
 
@@ -235,6 +239,10 @@ class ObjectHelper extends AppHelper {
 			return INCORRECT_IMAGE;				
 			
 		} elseif( strtolower( $media ) == 'youtube' ) {	
+
+			// Podcast level
+			if( isSet( $object['intended_youtube_flag'] ) && $object['intended_youtube_flag'] == 'Y' )
+				return CORRECT_IMAGE;
 
 			// Podcast level
 			if( isSet( $object['publish_youtube'] ) && $object['publish_youtube'] == 'Y' )

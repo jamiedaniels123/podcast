@@ -132,8 +132,14 @@ jQuery(document).ready(function($) {
     	
     	e.preventDefault();
     	jQuery('div.youtube').toggle('slow');
-    });    
-	
+    });  
+    
+    jQuery('.juggle').click( function(e) {
+		
+		e.preventDefault();
+		var target = jQuery(this).attr('data-target');
+		jQuery('#'+target).toggle('slow');
+	});
 });
 
 // Will show or hide the podcast container div depending

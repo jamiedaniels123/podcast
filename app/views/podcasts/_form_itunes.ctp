@@ -1,6 +1,5 @@
 <fieldset class="itunes">
 	<legend>Itunes</legend>
-	<input type="hidden" name="data[Podcast][publish_itunes_u]" id="PodcastPublishItunesU" value="<?php echo $this->data['Podcast']['publish_itunes_u']; ?>" />
 	<dl>
 	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
 	    <dt>Published: </dt>
@@ -10,7 +9,7 @@
         <div class="input checkbox">
             <label for="PodcastPublishItunesU">Published</label>
             <input type="hidden" value="N" id="PodcastPublishItunesU_" name="data[Podcast][publish_itunes_u]">
-            <input type="checkbox" id="PodcastPublishItunesU" value="Y" <?php echo (int)$this->data['Podcast']['publish_itunes_u'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][publish_itunes_u]">
+            <input type="checkbox" id="PodcastPublishItunesU" value="Y" <?php echo $this->data['Podcast']['publish_itunes_u'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][publish_itunes_u]">
             <?php echo $this->Form->error('Podcast.publish_itunes_u'); ?>
         </div>
         <div class="input file">

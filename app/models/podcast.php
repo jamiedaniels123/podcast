@@ -308,6 +308,9 @@ class Podcast extends AppModel {
      */
     function __checkExplicitStatus() {
 
+		if( !isSet( $this->data['Podcast']['id'] ) || empty( $this->data['Podcast']['id'] ) )
+			return 'clean';
+
         $this->PodcastItem = ClassRegistry::init('PodcastItem');
         $data = $this->PodcastItem->find('all', array(
             'conditions' => array(
@@ -759,46 +762,27 @@ class Podcast extends AppModel {
     	    	
         switch( strtolower( $filter ) ) {
             case 'consideration':
-				return $this->find('all',array(
-		            'fields' => array(
-		                'DISTINCT(Podcast.id)',
-						'Podcast.*',
-		                ),
-		            'conditions' => array( 
-			                'Podcast.deleted' => 0 
-		                ),
-		            'joins' => array(
-		                array(
-		                    'table'=>'podcast_items',
-		                    'alias'=>'PodcastItems',
-		                    'type'=>'INNER',
-		                    'conditions' => array(
-		                        'Podcast.id = PodcastItems.podcast_id',
-		                		'PodcastItems.consider_for_itunesu' => 1,
-		                		'PodcastItems.itunes_flag !=' => 'Y',
-		                        )
-		                    )
-		                )
-		            ) 
-	            );
+                return array( 
+					'Podcast.consider_for_itunesu' => true,
+					'Podcast.intended_itunesu_flag != ' => 'Y',
+                	'Podcast.publish_itunes_u != ' => 'Y',
+	                'Podcast.deleted' => 0 
+                );
                 break;
             case 'intended':
                 return array( 
-                	'Podcast.publish_itunes_u !=' => 'Y',
+					'Podcast.intended_itunesu_flag' => 'Y',
+                	'Podcast.publish_itunes_u != ' => 'Y',
 	                'Podcast.deleted' => 0 
                 );
                 break;
             case 'published':
+            default :
             	return array(
 	                'Podcast.publish_itunes_u' => 'Y',
 	                'Podcast.deleted' => 0
             	);
                 break;
-            default :
-                return array(
-                	'Podcast.deleted' => 0 
-                );
-                break;                
         }
      }
 
