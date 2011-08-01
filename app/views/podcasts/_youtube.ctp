@@ -37,8 +37,12 @@
 				<?php endif; ?>
 				
 			<?php endif; ?>
+
+		<?php elseif( $this->Permission->isYouTubeUser() && $this->Object->considerForItunes( $this->data['Podcast'] ) && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>
 			
-		<?php endif; ?>
+			<li><a href="/podcasts/status/itunes/0/N/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to reject this collection. Are you sure?');">Reject</a></li>
+			
+		<?php endif; ?>			
     </ul>	
     <div class="wrapper youtube" style="display:none">
         <div class="float_right images_container">
