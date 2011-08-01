@@ -326,6 +326,27 @@ class PermissionComponent extends Object {
         
         return false;
     }
+    
+	/*
+	 * @name : statusUpdate
+	 * @description : When a user trys to update the status of a collection this method ensure they permission.
+	 * It is called from the podcasts controller / "status" method.
+	 * @updated : 1st August 2011
+	 * @by : Charles Jackson
+	 */ 
+	function statusUpdate( $media = null, $consider = null, $intended = null, $publish = null ) {
+		
+		if( $this->isItunesUser() && strtoupper( $media ) == 'ITUNES' )
+			return true;
+			
+		if( $this->isYoutubeUser() && strtoupper( $media ) == 'YOUTUBE' )
+			return true;
+
+		if( $consider == 1 && strtoupper( $intended == NO ) && strtoupper( $publish == NO ) )
+			return true;
+
+		return false;
+	}    
 }
 
 ?>

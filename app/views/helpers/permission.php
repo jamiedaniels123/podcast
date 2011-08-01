@@ -244,6 +244,7 @@ class PermissionHelper extends AppHelper {
 		if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )
 			return true;
 	}
+	
 
 }
 ?>

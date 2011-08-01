@@ -70,26 +70,13 @@ class PodcastsController extends AppController {
 
 		$this->Podcast->recursive = 2;
 		
-		if( isSet( $this->data['Podcast']['filter'] ) && !empty( $this->data['Podcast']['filter'] ) ) {
+		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 			
-			$this->set('filter',$this->data['Podcast']['filter'] );
-			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
-			
-		} else {
-
-			$this->data['Podcasts'] = $this->paginate('Podcast', array(
-
-            'OR' => array(
-                array(
-                    'Podcast.publish_itunes_u' => 'Y',
-                    	)
-                	),
-            	'Podcast.deleted' => 0
-                )
-        	);			
-
-			$this->set('filter',null );
-		}
+			$this->data['Podcast']['filter'] = 'published';
+		}	
+		
+		$this->set('filter',$this->data['Podcast']['filter'] );
+		$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
     }
 
     /*
@@ -102,30 +89,17 @@ class PodcastsController extends AppController {
 
 		$this->Podcast->recursive = 2;
 		
-		if( isSet( $this->data['Podcast']['filter'] ) && !empty( $this->data['Podcast']['filter'] ) ) {
+		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 
-			// Grab the filter and assign to the view so the select box retains the current selection
-			$this->set('filter', $this->data['Podcast']['filter'] );
-			// We are looking for "intended" or "published" therefore paginate as listing will be very long
-			$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
-			
-		} else {
-
-			$this->data['Podcasts'] = $this->paginate('Podcast', array(
-
-            'OR' => array(
-                array(
-                    'Podcast.publish_youtube' => 'Y',
-                    	)
-                	),
-            	'Podcast.deleted' => 0
-                )
-        	);
-        				
-			// Grab the filter and assign to the view so the select box retains the current selection
-			$this->set('filter',null );
-		}
+			$this->data['Podcast']['filter'] = 'published';
+		}	
+		
+		// Grab the filter and assign to the view so the select box retains the current selection
+		$this->set('filter', $this->data['Podcast']['filter'] );
+		// We are looking for "intended" or "published" therefore paginate as listing will be very long
+		$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
     }        
+    
     /*
      * @name : add
      * @desscription : Displays a form that enables peeps to add a row to the podcasts table. If the form is populated
@@ -137,17 +111,32 @@ class PodcastsController extends AppController {
 
         if ( !empty( $this->data ) ) {
 
-            // Assign the podcast to the current user.
-            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+			$data = array();
+			$data = $this->data;
+			
+            // Assign the podcast to the current user is they have not chosen one.
+            if( empty( $this->data['Podcast']['owner_id'] ) )
+				$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
+				
             $this->data['Podcast']['private'] = YES;
 			
             $this->Podcast->set( $this->data );
 
-            if( $this->Podcast->saveAll() ) {
+            if( $this->Podcast->save() ) {
 
-				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId() . '_' . $this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
-	            $this->Podcast->save( $this->data );
+				$data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId() . '_' . $this->Podcast->buildSafeFilename( $data['Podcast']['title'] );
+
+				$data['Podcast']['id'] = $this->Podcast->getLastInsertId();
 				
+				$this->Podcast->data = $data;
+				
+				// Create the PodcastModerators that are saved using a hasMany relationship.
+				$this->Podcast->createPodcastModerators();
+				// Create the ModeratorUserGroups that are saved using a hasMany relationship.
+				$this->Podcast->createModeratorUserGroups();
+				
+				$this->Podcast->saveAll();
+
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
 
             } else {
@@ -159,6 +148,9 @@ class PodcastsController extends AppController {
                 $this->Session->setFlash('Could not create your collection. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
         }
+        
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastFormOptions();
     }
 
     /*
@@ -176,27 +168,6 @@ class PodcastsController extends AppController {
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
-
-            $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
-        }
-    }
-
-    /*
-     * @name : justification
-     * @desscription : Enables an itunes or youtube user to view details of a collection and the associated justifiication
-     * for inclusion on youtube or itunesu.
-     * @name : Charles Jackson
-     * @by : 22nd June 2011
-     */
-    function justification( $id = null ) {
-
-        $this->Podcast->recursive = 2;
-        // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->Podcast->findById( $id );
-
-        // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) || ( $this->Permission->isItunesUser() == false && $this->Permission->isYoutubeUser() == false ) ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
@@ -363,68 +334,57 @@ class PodcastsController extends AppController {
     }
 
     /*
-     * @name : consider
-     * @description : Enables a user to submit a podcast for consideration on itunes or youtube. 
-     * @updated : 25th July 2011
+     * @name : status
+     * @description : Enables a user to set the status of a collection for any channel. The options include
+     * "consider for channel", "intended on channel" and "published on channel".
+     * @updated : 1st August 2011
      * @by : Charles Jackson
      */
-    function consider( $media = null, $id = null ) {
+    function status( $media = null, $consider = 0, $intended = 'N', $publish = 'N', $id = null ) {
 
     	$this->Podcast->recursive = -1;
     	$this->data = $this->Podcast->findById( $id );
     	
-    	if( !empty( $this->data ) ) {
+    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $published ) ) {
     	
     		if( strtoupper( $media ) == 'ITUNES' ) {
-
-    			$this->data['Podcast']['consider_for_itunesu'] = true;
+				
+    			$this->data['Podcast']['consider_for_itunesu'] = $consider;
+    			$this->data['Podcast']['intended_itunesu_flag'] = $intended;
+    			$this->data['Podcast']['publish_itunes_u'] = $publish;
     			
-    		} else {
+    			if( strtoupper( $publish ) == YES ) {
+					
+					$this->data['Podcast']['publish_itunes_date'] = date('Y-m-d');
+					
+				} else {
+					
+					$this->data['Podcast']['publish_itunes_date'] = null;
+				}
     			
-	    		$this->data['Podcast']['consider_for_youtube'] = true;
-    		}
-    		
-    		$this->Podcast->set( $this->data );
-    		$this->Podcast->save();
-    		$this->Session->setFlash('We have successfully submitted your request for consideration. Good luck.', 'default', array( 'class' => 'success' ) );
-    		
-    	} else {
-    		
-    		$this->Session->setFlash('We could not submit your request. If the problem persists please contact and administrator.', 'default', array( 'class' => 'error' ) );	
-    	}
-    	
-    	$this->redirect( $this->referer() );
-    }
-
-    /*
-     * @name : publish
-     * @description : Enables an itunes or youtube user user to publish a collection
-     * @updated : 25th July 2011
-     * @by : Charles Jackson
-     */
-    function publish( $media = null, $id = null ) {
-
-    	$this->Podcast->recursive = -1;
-    	$this->data = $this->Podcast->findById( $id );
-    	
-    	if( !empty( $this->data ) && ( $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() ) ) {
-    	
-			
-    		if( ( strtoupper( $media ) == 'ITUNES' ) && ( $this->Permission->isItunesUser() ) ) {
-
-    			$this->data['Podcast']['publish_itunes_u'] = 'Y';
-    			$this->data['Podcast']['consider_for_itunesu'] = true;
-    			$this->Session->setFlash('We have successfully scheduled this collection for publication on itunes.', 'default', array( 'class' => 'success' ) );	
+    			$this->Session->setFlash('You have successfully updated this collection.', 'default', array( 'class' => 'success' ) );	
     			
-    		} elseif( ( strtoupper( $media ) == 'YOUTUBE' ) && ( $this->Permission->isYoutubeUser() ) ) {
+    		} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
+
+
+    			$this->data['Podcast']['consider_for_youtube'] = $consider;
+    			$this->data['Podcast']['intended_youtube_flag'] = $intended;
+    			$this->data['Podcast']['publish_youtube'] = $publish;
     			
-	    		$this->data['Podcast']['publish_youtube'] = 'Y';
-	    		$this->data['Podcast']['consider_for_youtube'] = true;
-				$this->Session->setFlash('We have successfully scheduled this collection for publication on youtube.', 'default', array( 'class' => 'success' ) );	
+    			if( strtoupper( $publish ) == YES ) {
+					
+					$this->data['Podcast']['publish_youtube_date'] = date('Y-m-d');
+					
+				} else {
+					
+					$this->data['Podcast']['publish_youtube_date'] = null;
+				}
+
+				$this->Session->setFlash('You have successfully approved this collection for publication on youtube.', 'default', array( 'class' => 'success' ) );	
 				
     		} else {
     		
-				$this->Session->setFlash('You do not have the necessary permissions to publish this collection.', 'default', array( 'class' => 'error' ) );	
+				$this->Session->setFlash('You do not have the necessary permissions to update this collection.', 'default', array( 'class' => 'error' ) );	
     		
 			}
 			
@@ -433,53 +393,12 @@ class PodcastsController extends AppController {
     		
     	} else {
     		
-    		$this->Session->setFlash('We could not publish this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
+    		$this->Session->setFlash('We could not approve this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
     	}
     	
     	$this->redirect( $this->referer() );
     }
 
-    /*
-     * @name : unpublish
-     * @description : Enables an itunes or youtube user user to unpublish a collection
-     * @updated : 25th July 2011
-     * @by : Charles Jackson
-     */
-    function unpublish( $media = null, $id = null ) {
-
-    	$this->Podcast->recursive = -1;
-    	$this->data = $this->Podcast->findById( $id );
-    	
-    	if( !empty( $this->data ) && ( $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() ) ) {
-			
-    		if( ( strtoupper( $media ) == 'ITUNES' ) && ( $this->Permission->isItunesUser() ) ) {
-
-    			$this->data['Podcast']['publish_itunes_u'] = 'N';
-    			$this->data['Podcast']['consider_for_itunesu'] = false;
-    			$this->Session->setFlash('We have successfully scheduled this collection for removal from itunes.', 'default', array( 'class' => 'success' ) );	
-    			
-    		} elseif( ( strtoupper( $media ) == 'YOUTUBE' ) && ( $this->Permission->isYoutubeUser() ) ) {
-    			
-	    		$this->data['Podcast']['publish_youtube'] = 'N';
-	    		$this->data['Podcast']['consider_for_youtube'] = false;
-				$this->Session->setFlash('We have successfully scheduled this collection for removal from youtube.', 'default', array( 'class' => 'success' ) );	
-				
-    		} else {
-    		
-				$this->Session->setFlash('You do not have the necessary permissions to unpublish this collection.', 'default', array( 'class' => 'error' ) );	
-			}
-			
-    		$this->Podcast->set( $this->data );
-    		$this->Podcast->save();
-    		
-    	} else {
-    		
-    		$this->Session->setFlash('We could not unpublish this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
-    	}
-    	
-    	$this->redirect( $this->referer() );
-    }
-    
     /*
      * @name : copy
      * @description : Will make a copy of a podcast and all associated media and if successfull send a request to the API.
@@ -573,6 +492,10 @@ class PodcastsController extends AppController {
                 $this->Session->setFlash('Could not create your collection. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
         }
+        
+        // Need to retrieve form options such as additional users and catagories etc... on the system.
+        $this->__setPodcastFormOptions();
+        
     }
 
     /*
