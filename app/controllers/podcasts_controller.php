@@ -345,7 +345,7 @@ class PodcastsController extends AppController {
     	$this->Podcast->recursive = -1;
     	$this->data = $this->Podcast->findById( $id );
     	
-    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $published ) ) {
+    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $publish ) ) {
     	
     		if( strtoupper( $media ) == 'ITUNES' ) {
 				
@@ -384,8 +384,7 @@ class PodcastsController extends AppController {
 				
     		} else {
     		
-				$this->Session->setFlash('You do not have the necessary permissions to update this collection.', 'default', array( 'class' => 'error' ) );	
-    		
+				$this->Session->setFlash('We could not identify the channel status you are attempting to update. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
 			}
 			
     		$this->Podcast->set( $this->data );

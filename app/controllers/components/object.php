@@ -22,6 +22,52 @@ class ObjectComponent extends Object {
 		
        $this->controller = & $controller;
     }
+
+    /*
+     * @name : considerForItunes
+     * @description : Retruns a bool depending up the value of the flag.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function considerForItunes( $object = array() ) {
+
+        return $object['consider_for_itunesu'];
+    }
+
+    /*
+     * @name : considerForYoutube
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function considerForYoutube( $object = array() ) {
+
+        return $object['consider_for_youtube'];
+    }
+
+    /*
+     * @name : intendedForItunes
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function intendedForItunes( $object = array() ) {
+
+    	// Podcast level
+    	if( isSet( $object['intended_itunesu_flag'] ) )
+        	return $object['intended_itunesu_flag'] == strtoupper( YES );
+    }
+
+    /*
+     * @name : intendedForItunes
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function intendedForYoutube( $podcast = array() ) {
+
+        return $podcast['intended_youtube_flag'] == strtoupper( YES );
+    }
     
     /*
      * @name : itunesPublished
