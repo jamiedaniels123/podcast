@@ -12,11 +12,14 @@ class PermissionHelper extends AppHelper {
      */
     function isModerator( $moderators = array() ) {
         
-        foreach( $moderators as $moderator ) {
-            
-            if( $moderator['id'] == $this->Session->read('Auth.User.id') )
-                    return true;
-        }
+        if( is_array( $moderators ) ) {
+			
+			foreach( $moderators as $moderator ) {
+				
+				if( $moderator['id'] == $this->Session->read('Auth.User.id') )
+						return true;
+			}
+		}
         
         return false;
     }
@@ -30,14 +33,16 @@ class PermissionHelper extends AppHelper {
      */
     function inModeratorGroup( $moderator_groups = array() ) {
 
-        foreach( $moderator_groups as $moderator_group ) {
+		if( is_array( $moderator_groups ) ) {
+			foreach( $moderator_groups as $moderator_group ) {
 
-            foreach( $moderator_group['Users'] as $user ) {
+				foreach( $moderator_group['Users'] as $user ) {
 
-                if( $user['id'] == $this->Session->read('Auth.User.id') )
-                    return true;
-            }
-        }
+					if( $user['id'] == $this->Session->read('Auth.User.id') )
+						return true;
+				}
+			}
+		}
 
         return false;
     }
