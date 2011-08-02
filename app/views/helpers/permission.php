@@ -174,39 +174,6 @@ class PermissionHelper extends AppHelper {
         return false;
     }
         
-    /*
-     * @name : youTubePrivileges
-     * @description : 
-     * @updated : 8th July 2011
-     * @by : Charles Jackson
-     */    
-    function youTubePrivileges( $podcast = array() ) {
-  	
-    	if( $this->isYoutubeUser() && $this->Object->considerForYoutube( $podcast ) )
-    		return true;
-    		
-    	return false;
-    }
-
-    /*
-     * @name : iTunesPrivileges
-     * @description : 
-     * @updated : 8th July 2011
-     * @by : Charles Jackson
-     */    
-    function iTunesPrivileges( $podcast = array() ) {
-  	
-    	if( $this->isItunesUser() || $this->Object->considerForItunes( $podcast ) )
-    		return true;
-    		
-    	return false;
-    }
-
-    function editPodcast( $podcast = array() ) {
-    	return true;
-		//$this->Miscellaneous->isAdminRouting() || $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) || $this->Permission->isModerator( $this->data['PodcastModerators'] ) || $this->Permission->inModeratorGroup( $this->data['ModeratorGroups'] ) || $this->Permission->isItunesUser() || $this->Permission->isYoutubeUser() ) :    	
-    	
-    }
     
     function toUpdate( $data = array() ) {
 		
@@ -245,6 +212,32 @@ class PermissionHelper extends AppHelper {
 			return true;
 	}
 	
+    /*
+     * @name : youTubePrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function youTubePrivileges( $podcast = array() ) {
+  	
+    	if( ( $this->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
+    		return true;
+    		
+    	return false;
+    }
 
+    /*
+     * @name : iTunesPrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function iTunesPrivileges( $podcast = array() ) {
+  	
+    	if( ( $this->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
+    		return true;
+    		
+    	return false;
+    }
 }
 ?>

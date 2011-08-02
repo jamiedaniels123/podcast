@@ -96,6 +96,7 @@ class PodcastsController extends AppController {
 		
 		// Grab the filter and assign to the view so the select box retains the current selection
 		$this->set('filter', $this->data['Podcast']['filter'] );
+
 		// We are looking for "intended" or "published" therefore paginate as listing will be very long
 		$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildYoutubeFilters( $this->data['Podcast']['filter'] ) );
     }        
@@ -345,7 +346,7 @@ class PodcastsController extends AppController {
     	$this->Podcast->recursive = -1;
     	$this->data = $this->Podcast->findById( $id );
     	
-    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $published ) ) {
+    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $publish ) ) {
     	
     		if( strtoupper( $media ) == 'ITUNES' ) {
 				
@@ -380,12 +381,11 @@ class PodcastsController extends AppController {
 					$this->data['Podcast']['publish_youtube_date'] = null;
 				}
 
-				$this->Session->setFlash('You have successfully approved this collection for publication on youtube.', 'default', array( 'class' => 'success' ) );	
+				$this->Session->setFlash('You have successfully updated this collection.', 'default', array( 'class' => 'success' ) );	
 				
     		} else {
     		
-				$this->Session->setFlash('You do not have the necessary permissions to update this collection.', 'default', array( 'class' => 'error' ) );	
-    		
+				$this->Session->setFlash('We could not identify the channel status you are attempting to update. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
 			}
 			
     		$this->Podcast->set( $this->data );
@@ -393,7 +393,7 @@ class PodcastsController extends AppController {
     		
     	} else {
     		
-    		$this->Session->setFlash('We could not approve this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
+    		$this->Session->setFlash('We could not update this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
     	}
     	
     	$this->redirect( $this->referer() );

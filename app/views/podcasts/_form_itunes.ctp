@@ -1,17 +1,9 @@
 <fieldset class="itunes">
-	<legend>Itunes</legend>
+	<legend>ItunesU</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>" /></dd>
+	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
     </dl>	
     <div class="itunes_container itunes" style="display:none">
-        <div class="input checkbox">
-            <label for="PodcastPublishItunesU">Published</label>
-            <input type="hidden" value="N" id="PodcastPublishItunesU_" name="data[Podcast][publish_itunes_u]">
-            <input type="checkbox" id="PodcastPublishItunesU" value="Y" <?php echo $this->data['Podcast']['publish_itunes_u'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][publish_itunes_u]">
-            <?php echo $this->Form->error('Podcast.publish_itunes_u'); ?>
-        </div>
         <div class="input file">
             <label for="PodcastNewImageLogoless">Logoless image</label>
             <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">

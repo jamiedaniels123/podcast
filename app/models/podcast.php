@@ -798,28 +798,12 @@ class Podcast extends AppModel {
         switch( strtolower( $filter ) ) {
         	
             case 'consideration':
-				return $this->find('all',array(
-		            'fields' => array(
-		                'DISTINCT(Podcast.id)',
-						'Podcast.*',
-		                ),
-		            'conditions' => array( 
-			                'Podcast.deleted' => 0 
-		                ),
-		            'joins' => array(
-		                array(
-		                    'table'=>'podcast_items',
-		                    'alias'=>'PodcastItems',
-		                    'type'=>'INNER',
-		                    'conditions' => array(
-		                        'Podcast.id = PodcastItems.podcast_id',
-		                		'PodcastItems.consider_for_youtube' => 1,
-		                		'PodcastItems.youtube_flag !=' => 'Y',
-		                        )
-		                    )
-		                )
-		            ) 
-	            );
+                return array( 
+					'Podcast.consider_for_youtube' => true,
+					'Podcast.intended_youtube_flag != ' => 'Y',
+                	'Podcast.publish_youtube != ' => 'Y',
+	                'Podcast.deleted' => 0 
+                );
                 break;
             case 'intended':
                 return array( 
@@ -829,15 +813,11 @@ class Podcast extends AppModel {
                 );
                 break;
             case 'publish':
+            default:
             	return array(
 	                'Podcast.publish_youtube' => 'Y',
 	                'Podcast.deleted' => 0
             	);
-                break;
-            default :
-                return array(
-                	'Podcast.deleted' => 0 
-                );
                 break;
         }
      }
@@ -848,7 +828,7 @@ class Podcast extends AppModel {
       * @updated : 23rd June 2011
       * @by : Charles Jackson
       */
-     function waitingApproval() {
+     /*function waitingApproval() {
 
         $conditions = array(
             array('OR' => array(
@@ -866,7 +846,7 @@ class Podcast extends AppModel {
         );
 
         return $conditions;
-     }
+     }*/
 
     /*
      * @name : unconfirmedChangeOfOwnership
@@ -985,7 +965,7 @@ class Podcast extends AppModel {
 	 * @updated : 6th June 2011
 	 * @by : Charles Jackson
 	 */	
-	function makeEveryoneReadOnly( $data = array() ) {
+	/*function makeEveryoneReadOnly( $data = array() ) {
 		
 	
 		foreach( $data['ModeratorGroups'] as $moderator_group ) {
@@ -1004,7 +984,7 @@ class Podcast extends AppModel {
 		$data['ModeratorUserGroups'] = array();  // Clear down the associated hasMany array so we don't resave the data we just deleted
 		
 		return $data;
-	}
+	}*/
 	
 	/* 
 	 * @name : stripJoinsByAction

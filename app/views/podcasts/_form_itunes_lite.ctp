@@ -1,10 +1,7 @@
 <fieldset class="itunes">
-	<legend>Itunes</legend>
-	<input type="hidden" name="data[Podcast][publish_itunes_u]" id="PodcastPublishItunesU" value="<?php echo $this->data['Podcast']['publish_itunes_u']; ?>" />
+	<legend>ItunesU</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle details</a></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>" /></dd>
+	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
     </dl>	
 	<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
     <div class="itunes_container itunes" style="display:none">

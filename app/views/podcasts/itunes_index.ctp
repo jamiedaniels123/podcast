@@ -10,16 +10,7 @@
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
     <div class="input select">
-
-	    <form name="PodcastItunesUForm" action="/itunes/podcasts" method="post">
-            <select name="data[Podcast][filter]" id="PodcastFilter">
-				<option value="">Select a filter</option>
-				<option value="consideration" <?php echo $filter == 'consideration' ? 'selected=true' : ''; ?>>For Consideration</option>
-                <option value="intended" <?php echo $filter == 'intended' ? 'selected=true' : ''; ?>>Approved</option>
-                <option value="published" <?php echo $filter == 'published' ? 'selected=true' : ''; ?>>Published</option>
-            </select>
-            <button type="submit" id="PodcastFilterSubmit"><span>Filter</span></button>
-        </form>
+		<?php echo $this->element('../podcasts/_itunes_youtube_filter'); ?>
     </div>
     <div class="clear"></div>
     

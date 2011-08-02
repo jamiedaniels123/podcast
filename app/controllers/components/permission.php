@@ -8,7 +8,7 @@ class PermissionComponent extends Object {
     * @by : Charles Jackson
     */
 
-    var $components = array('Session');
+    var $components = array('Session','Object');
 
     var $controller = null;
     private $errors = array();
@@ -21,7 +21,7 @@ class PermissionComponent extends Object {
      * @by : Charles Jackson
      */
     function toView( $data = array() ) {
-
+		
         // Only podcast containers have owners and moderator groups so check they exist before we call the routine
         if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) ) {
 
@@ -47,10 +47,10 @@ class PermissionComponent extends Object {
 
 		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
 		// then let them view it.
-		if( $this->isItunesUser() )
+		if( $this->youtubePrivileges( $data['Podcast'] ) )
 			return true;
 
-		if( $this->isYoutubeUser() )
+		if( $this->isYoutubeUser( $data['Podcast'] ) )
 			return true;
 			
         return false;
@@ -77,15 +77,6 @@ class PermissionComponent extends Object {
 
         if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
-            
-   		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
-		// then let them view it.
-		// NOTE: Podcast details can be passed at two levels hence the need to check with "['Podcast']" and without.
-		if( $this->isItunesUser() )
-			return true;
-
-		if( $this->isYoutubeUser() )
-			return true;
 		            
         return false;
     }
@@ -347,6 +338,38 @@ class PermissionComponent extends Object {
 
 		return false;
 	}    
+	
+	
+    /*
+     * @name : youTubePrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function youTubePrivileges( $podcast = array() ) {
+  	
+
+    	if( ( $this->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
+    		return true;
+    		
+    	return false;
+    }
+
+    /*
+     * @name : iTunesPrivileges
+     * @description : 
+     * @updated : 8th July 2011
+     * @by : Charles Jackson
+     */    
+    function iTunesPrivileges( $podcast = array() ) {
+		
+    	if( ( $this->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
+    		return true;
+    		
+    	return false;
+    }
+
+	
 }
 
 ?>
