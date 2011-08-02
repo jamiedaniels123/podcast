@@ -181,7 +181,7 @@ class PermissionHelper extends AppHelper {
         
     
     function toUpdate( $data = array() ) {
-		
+
 		if( $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
 		
