@@ -54,6 +54,7 @@ class PodcastsController extends AppController {
         }
             
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
+
 		$this->Podcast->recursive = 1;
         $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
 

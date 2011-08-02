@@ -181,7 +181,7 @@ table .altrow td {
 }
 
 td.checkbox	{
-	width:48px;
+	width:24px;
 	margin: 0 auto;
 }
 
@@ -191,7 +191,7 @@ td.thumbnail	{
 }
 
 td.collection-title	{
-	width:312px;
+	width:280px;
 }
 
 td.owner	{
@@ -199,7 +199,7 @@ td.owner	{
 }
 
 td.created	{
-	width:24px;
+	width:72px;
 }
 
 td.media	{

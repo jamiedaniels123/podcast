@@ -19,12 +19,12 @@
 
             <table cellpadding="0" cellspacing="0" border="0">
             <tr>
-                <th>Select</th>
-                <th width="72px" align="center">Image</th>
-                <th><?php echo $this->Paginator->sort('title');?></th>
-                <th width="240px"><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
-                <th width="120px"><?php echo $this->Paginator->sort('Created');?></th>
-                <th width="15px"><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
+                <th class="checkbox">Select</th>
+                <th class="thumbnail">Image</th>
+                <th  class="collection-title"><?php echo $this->Paginator->sort('title');?></th>
+                <th class="owner"><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
+                <th class="created"><?php echo $this->Paginator->sort('Created');?></th>
+                <th class="media"><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>                
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
@@ -49,7 +49,7 @@
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
                         </td>
                         <td class="owner">
-                            <span class="podcast-owner">Created by <?php echo $podcast['Owner']['full_name']; ?></span>
+                            <span class="podcast-owner"><!--Created by --><?php echo $podcast['Owner']['full_name']; ?></span>
                             <!--<?php echo $podcast['Owner']['full_name']; ?>-->
                         </td>
                         <td class="created">
@@ -59,13 +59,13 @@
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
-                            <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="View collection contents" class="icon" />View</a>
+                            	<a class="button light-blue" href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">View</a>
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-                                <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
-                                <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
+                                <a class="button light-blue" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+                                <a class="button white" href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                             <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
-                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
+                            	<a class="button white" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <?php endif; ?>
                         </td>

@@ -13,7 +13,7 @@
     
     <div class="input-filter text">
     	<h3>Search: </h3>
-        <input type="text" id="PodcastSearch" name="data[Podcast][search]" value="Enter your search here<?php echo $search_criteria; ?>" onFocus="this.value='';this.onfocus='';" onblur="this.value='Enter your search here';" /><button id="filter_button" type="submit" class="button white"><img src="../../webroot/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
+        <input type="text" id="PodcastSearch" title="Enter your search here" class="input_greeting" name="data[Podcast][search]" value="<?php echo $search_criteria; ?>" /><button id="filter_button" type="submit" class="button white"><img src="../../webroot/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
     </div> 
        
 </form>

@@ -1,5 +1,5 @@
 <fieldset id="podcast_media">
-    <legend>Podcast Media</legend>
+    <legend><span>Podcast Media</span></legend>
 	<form method="post" action="">
 	    <table>
 	    	<thead>
@@ -12,7 +12,7 @@
 	                <th>Uploaded</th>
 	                <th>Processed State</th>
 	            	<th>iTunes</th>                
-	            	<th>U Tube</th>
+	            	<th>You Tube</th>
 	            	<th>Actions</th>
 	            </tr>
 	        </thead>
