@@ -12,7 +12,7 @@
 	<div class="wrapper" id="user_groups_container">
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move --> </span>
+				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
 				<label for="Moderators">Moderator Groups</label>
 				<input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
 				<select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
@@ -25,8 +25,8 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="MemberGroups" data-target="ModeratorGroups"><-- Move</span>
-				<span class="move" data-source="MemberGroups" data-target="UserGroups">Move --></span>
+				<span class="move" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
+				<span class="move" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
 				<label for="MemberGroups">Member Groups</label>
 				<input type="hidden" name="data[MemberGroups]" value="" id="MemberGroups_" />
 				<select id="MemberGroups" multiple="multiple" class="selected" name="data[MemberGroups][]">
@@ -39,7 +39,7 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="UserGroups" data-target="MemberGroups"><-- Move</span>
+				<span class="move" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
 				<label for="UserGroups">All User Groups</label>
 				<input type="hidden" name="data[UserGroups]" value="" id="UserGroups_" />
 				<select name="data[UserGroups][]" class="selected" multiple="multiple" id="UserGroups">
@@ -55,7 +55,7 @@
 	<div class="wrapper" id="moderator_container">
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="Moderators" data-target="Members">Move --> </span>
+				<span class="move" data-source="Moderators" data-target="Members">Move &rarr;</span>
 				<label for="Moderators">Podcast Moderators</label>
 				<input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
 				<select id="Moderators" multiple="multiple" class="selected" name="data[Moderators][]">
@@ -68,8 +68,8 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="Members" data-target="Moderators"><-- Move</span>
-				<span class="move" data-source="Members" data-target="UsersUsers">Move --></span>
+				<span class="move" data-source="Members" data-target="Moderators">&larr; Move</span>
+				<span class="move" data-source="Members" data-target="UsersUsers">Move &rarr;</span>
 				<label for="Members">Podcast Members</label>
 				<input type="hidden" name="data[Members]" value="" id="Members_" />
 				<select id="Members" multiple="multiple" class="selected" name="data[Members][]">
@@ -82,7 +82,7 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="UsersUsers" data-target="Members"><-- Move</span>
+				<span class="move" data-source="UsersUsers" data-target="Members">&larr; Move</span>
 				<label for="UsersUsers">All Users</label>
 				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
 					<?php foreach( $users as $key => $value ) : ?>
@@ -198,7 +198,7 @@
         <div class="wrapper" id="nodes_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="Nodes" data-target="PodcastAllNodes">Move --></span>
+                    <span class="move" data-source="Nodes" data-target="PodcastAllNodes">Move &rarr;</span>
                     <label for="Nodes">Podcast Nodes</label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
                     <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
@@ -213,7 +213,7 @@
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAllNodes" data-target="Nodes"><-- Move</span>
+                    <span class="move" data-source="PodcastAllNodes" data-target="Nodes">&larr; Move</span>
                     <label for="PodcastAllNodes">All Nodes</label>
                     <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
                     <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">

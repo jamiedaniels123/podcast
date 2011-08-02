@@ -118,7 +118,7 @@
         <div class="wrapper" id="itune_categories_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="Categories" data-target="PodcastAllCategories">Move --></span>
+                    <span class="move" data-source="Categories" data-target="PodcastAllCategories">Move &rarr;</span>
                     <label for="Categories">Podcast iTune Categories</label>
                     <input type="hidden" name="data[Categories]" value="" id="Categories_" />
                     <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
@@ -133,7 +133,7 @@
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAllCategories" data-target="Categories"><-- Move</span>
+                    <span class="move" data-source="PodcastAllCategories" data-target="Categories">&larr; Move</span>
                     <label for="PodcastAllCategories">All iTune Categories</label>
                     <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
                     <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
@@ -148,7 +148,7 @@
         <div class="wrapper" id="ituneu_categories_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories">Move --></span>
+                    <span class="move" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories">Move &rarr;</span>
                     <label for="iTuneCategories">Podcast iTune U Categories</label>
                     <input type="hidden" name="data[iTuneCategories]" value="" id="iTuneCategories_" />
                     <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="iTuneCategories">
@@ -163,7 +163,7 @@
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories"><-- Move</span>
+                    <span class="move" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories">&larr; Move</span>
                     <label for="PodcastAlliTuneCategories">All iTune U Categories</label>
                     <input type="hidden" name="data[Podcast][PodcastAlliTuneCategories]" value="" id="PodcastAlliTuneCategories_" />
                     <select name="data[Podcast][PodcastAlliTuneCategories][]" multiple="multiple" id="PodcastAlliTuneCategories">

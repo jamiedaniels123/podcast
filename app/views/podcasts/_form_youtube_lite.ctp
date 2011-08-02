@@ -4,6 +4,16 @@
 	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
     </dl>		
 	<div class="youtube_container youtube" style="display:none">
+        <div class="input text">
+            <label for="PodcastYoutubeSeriesPlaylistText">Series Playlist</label>
+            <input type="text" id="PodcastYoutubeSeriesPlaylistText" value="<?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>" name="data[Podcast][youtube_series_playlist_text]">
+            <?php echo $this->Form->error('Podcast.youtube_series_playlist_text'); ?>
+        </div>
+        <div class="input text">
+            <label for="PodcastYoutubeSeriesPlaylistLink">Series Playlist Link</label>
+            <input type="text" id="PodcastYoutubeSeriesPlaylistLink" value="<?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>" name="data[Podcast][youtube_series_playlist_link]">
+            <?php echo $this->Form->error('Podcast.youtube_series_playlist_link'); ?>
+        </div>
         <div class="input select">
             <label for="PodcastYoutubeChannel">Youtube Channel</label>
             <select name="data[Podcast][youtube_channel]" id="PodcastYoutubeChannel">
