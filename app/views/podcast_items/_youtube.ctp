@@ -3,7 +3,7 @@
 	<dl>
 	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
 	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo ( $this->data['PodcastItem']['youtube_flag'] == YES ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
+	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'youtube' ); ?>" /></dd>
     </dl>		
     <div class="wrapper youtube" style="display:none">	
     <dl>
@@ -15,9 +15,10 @@
         <dd><?php echo $this->data['PodcastItem']['youtube_description']; ?>&nbsp;</dd>
         <dt>Subject Playlists: </dt>
         <dd>
-			<?php foreach( $this->data['YoutubeSubjectPlaylist'] as $playlist ) : ?>
+			<?php foreach( $this->data['YoutubeSubjectPlaylists'] as $playlist ) : ?>
 				&nbsp;<?php echo $playlist['title']; ?>,
 			<?php endforeach; ?>
+			&nbsp;
 		</dd>
 		<dt>Openlearn Link: </dt>
         <dd>
@@ -35,8 +36,6 @@
         <dd>
 			<a href="<?php echo $this->data['PodcastItem']['youtube_link_3']; ?>" title="additional link 3" target="blank"><?php echo $this->data['PodcastItem']['youtube_link_3']; ?></a>&nbsp;
         </dd>
-
-
         <dt>Tags: </dt>
         <dd><?php echo $this->data['PodcastItem']['youtube_tags']; ?>&nbsp;</dd>
         <dt>Geo Location: </dt>

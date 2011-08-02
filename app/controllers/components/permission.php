@@ -21,16 +21,17 @@ class PermissionComponent extends Object {
      * @by : Charles Jackson
      */
     function toView( $data = array() ) {
-		
+
+
         // Only podcast containers have owners and moderator groups so check they exist before we call the routine
-        if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) ) {
+        if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) && count( $data['Owner'] ) ) {
 
             if( $this->__isOwner( $data['Owner']['id'] ) )
                 return true;
-
-            if( $this->__inModeratorGroup( $data['ModeratorGroups'] ) )
-                return true;
         }
+        
+		if( ( isSet( $data['ModeratorGroups'] ) ) && ( $this->__inModeratorGroup( $data['ModeratorGroups'] ) ) )
+                return true;
 
         if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
@@ -38,19 +39,15 @@ class PermissionComponent extends Object {
         if( ( isSet( $data['Members'] ) ) && ( $this->__isMember( $data['Members'] ) ) )
             return true;
 
-        // Only podcast containers have member groups so check they exist before we call the routine
-        if( isSet( $data['MemberGroups'] ) && is_array( $data['MemberGroups'] ) ) {
-
-            if( $this->__inMemberGroup( $data['MemberGroups'] ) )
-                return true;
-        }
+        if( isSet( $data['MemberGroups'] ) && ( $this->__inMemberGroup( $data['MemberGroups'] ) ) )
+			return true;
 
 		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
 		// then let them view it.
-		if( $this->youtubePrivileges( $data['Podcast'] ) )
+		if( $this->youTubePrivileges( $data['Podcast'] ) )
 			return true;
 
-		if( $this->isYoutubeUser( $data['Podcast'] ) )
+		if( $this->iTunesPrivileges( $data['Podcast'] ) )
 			return true;
 			
         return false;
@@ -348,7 +345,6 @@ class PermissionComponent extends Object {
      */    
     function youTubePrivileges( $podcast = array() ) {
   	
-
     	if( ( $this->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
     		return true;
     		
@@ -362,7 +358,6 @@ class PermissionComponent extends Object {
      * @by : Charles Jackson
      */    
     function iTunesPrivileges( $podcast = array() ) {
-		
     	if( ( $this->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
     		return true;
     		

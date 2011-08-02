@@ -48,6 +48,46 @@ class PermissionHelper extends AppHelper {
     }
 
     /*
+     * @name : isMember
+     * @description : Accepts an array and search through looking for the current user
+     * id in the ['id'].
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isMember( $members = array() ) {
+
+        foreach( $members as $member ) {
+
+            if( $member['id'] == $this->Session->read('Auth.User.id') )
+                    return true;
+        }
+
+        return false;
+    }
+    
+    
+    /*
+     * @name : inMemberGroup
+     * @description : Accepts an array and performs a recursive search through looking for the current user
+     * id in the ['id'].
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function inMemberGroup( $member_groups = array() ) {
+
+        foreach( $member_groups as $member_group ) {
+
+            foreach( $member_group['Users'] as $user ) {
+
+                if( $user['id'] == $this->Session->read('Auth.User.id') )
+                    return true;
+            }
+        }
+
+        return false;
+    }
+        
+    /*
      * @name : isAdministrator
      * @description : If set, returns the value of Auth.User.administrator in session else returns false.
      * @updated : 20th May 2011
@@ -182,9 +222,13 @@ class PermissionHelper extends AppHelper {
     
     function toUpdate( $data = array() ) {
 
-		if( $this->isOwner( $data['Podcast']['owner_id'] ) )
+    	
+		if( isSet( $data['Podcast']['owner_id'] ) && $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
-		
+
+		if( isSet( $data['owner_id'] ) && $this->isOwner( $data['owner_id'] ) )
+			return true;
+			
 		if( isSet( $data['Moderators'] ) ) {
 			if( $this->isModerator( $data['Moderators'] ) )
 				return true;
