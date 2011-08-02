@@ -1,17 +1,19 @@
+
 <form action="" method="post" id="UserFilter">
-    <div class="input select"><h3>View: </h3> 
+    
+    <div class="input-filter select"><h3>View: </h3> 
         <select id="UserFilter" name="data[User][filter]">
-            <option value=""></option>
+            <option value="Select">Select from the list</option>
             <option value="ADMINISTRATOR" <?php echo strtoupper( $filter ) == 'ADMINISTRATOR' ? 'selected="selected"' : ''; ?>>Administrators</option>
-            <option value="ITUNES" <?php echo strtoupper( $filter ) == 'ITUNES' ? 'selected="selected"' : ''; ?>>Itunes</option>
-            <option value="YOUTUBE" <?php echo strtoupper( $filter ) == 'YOUTUBE' ? 'selected="selected"' : ''; ?>>Youtube</option>
-            <option value="OPEN_LEARN" <?php echo strtoupper( $filter ) == 'OPEN_LEARN' ? 'selected="selected"' : ''; ?>>Open Learn</option>
+            <option value="ITUNES" <?php echo strtoupper( $filter ) == 'ITUNES' ? 'selected="selected"' : ''; ?>>iTunes</option>
+            <option value="YOUTUBE" <?php echo strtoupper( $filter ) == 'YOUTUBE' ? 'selected="selected"' : ''; ?>>YouTube</option>
+            <option value="OPEN_LEARN" <?php echo strtoupper( $filter ) == 'OPEN_LEARN' ? 'selected="selected"' : ''; ?>>OpenLearn</option>
         </select>
     </div>
-    <div class="input text">
-    	<input type="text" id="UserSearch" name="data[User][search]" value="<?php echo $search_criteria; ?>" />
-    </div>
-	<div class="input submit">
-		<button id="UserFilterButton" type="submit" class="button white"><img src="/img/change-view.png" alt="Change view" class="icon" /><span>Filter</span></button>
-	</div>    
+    
+    <div class="input-filter text">
+    	<h3>Search: </h3>
+        <input type="text" id="PodcastSearch" name="data[Podcast][search]" value="Enter your search here<?php echo $search_criteria; ?>" onFocus="this.value='';this.onfocus='';" onblur="this.value='Enter your search here';" /><button id="filter_button" type="submit" class="button white"><img src="../../webroot/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
+    </div> 
+       
 </form>

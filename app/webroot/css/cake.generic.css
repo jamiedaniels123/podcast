@@ -154,7 +154,7 @@ th a {
 }
 
 td a {
-	font-size: 1.1em
+	font-size: 1em
 	}
 
 th a.asc:after {
@@ -165,7 +165,7 @@ th a.desc:after {
 }
 table tr td {
 	background: #fff;
-	padding: 6px;
+	padding: 4px;
 	/*text-align: left;*/
 	vertical-align: center;
 	border-bottom: 0px solid #fff;
@@ -180,12 +180,39 @@ table .altrow td {
 	background: #fff;
 }
 
-/*  Actions*/
+td.checkbox	{
+	width:48px;
+	margin: 0 auto;
+}
 
-td.actions {
+td.thumbnail	{
+	width:50px;
+	margin: 0 auto;
+}
+
+td.collection-title	{
+	width:312px;
+}
+
+td.owner	{
+	width:24px;
+}
+
+td.created	{
+	width:24px;
+}
+
+td.media	{
+	width:12px;
+	text-align:right;
+}
+
+td.actions	{
 	text-align: center;
 	white-space: nowrap;
 }
+
+/*  Actions*/
 
 table td.actions a {
 	margin: 0px 6px;
@@ -285,7 +312,7 @@ fieldset {
 }
 fieldset legend {
 	/*background:#fff;*/
-	color: #1a1a1a;
+	color: #999;
 	font-size: 1.4em;
 	font-weight: normal;
 	padding: 0 0 0 0;
@@ -309,8 +336,15 @@ form div {
 	vertical-align:middle;
 }
 form .input {
-	color: #1a1a1a;
+	color: #999;
+
+}
+
+form .input-filter {
+	color: #999;
 	line-height: 1.2em;
+	display:inline;
+	margin:0;
 }
 
 form .required {
@@ -328,26 +362,24 @@ form div.submit {
 }
 label {
 	display: block;
-	font-size: 110%;
-	margin-bottom:3px;
+	font-size: 100%;
+	margin-bottom:2px;
 }
 input, textarea {
 	clear: both;
-	padding: 1%;
-	width:98%;
-	border:1px solid #1a1a1a;
+	padding: 2px;
+	border:1px solid #999;
 	background: #fff;
 }
 select {
 	clear: both;
-	vertical-align: middle;
-	border:1px solid #1a1a1a;
+	border:1px solid #999;
 	background: #fff;
-	padding: 0.2em;
+	padding: 2px 4px 2px 2px;
 }
 select[multiple=multiple] {
 	width: 100%;
-	border:1px solid #1a1a1a;
+	border:1px solid #999;
 }
 option {
 	padding: 0 3px;
@@ -357,7 +389,7 @@ input[type=checkbox] {
 	float: left;
 	margin: 0px 6px 7px 2px;
 	width: auto;
-	border:1px solid #1a1a1a;
+	border:1px solid #999;
 }
 div.checkbox label {
 	display: inline;
@@ -379,7 +411,7 @@ form .submit input[type=submit] {
 	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
 	background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);*/
 	border-color: #fff;
-	color: #1a1a1a;
+	color: #999;
 	text-shadow: #8cee7c 0px 1px 0px;
 }
 form .submit input[type=submit]:hover {

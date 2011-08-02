@@ -39,23 +39,23 @@
                     endif;
         ?>
                     <tr<?php echo $class;?>>
-                        <td width="15px" align="center">
+                        <td class="checkbox">
                             <input type="checkbox" name="data[Podcast][Checkbox][<?php echo $podcast['Podcast']['id']; ?>]" class="podcast_selection" id="PodcastCheckbox<?php echo $podcast['Podcast']['id']; ?>">
                         </td>
-                        <td width="82px" align="center">
+                        <td class="thumbnail" >
                             <img src="<?php echo $this->Attachment->getMediaImage( $podcast['Podcast']['image'], $podcast['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" class="thumbnail" title="podcast image" />
                         </td>
-                        <td>
+                        <td class="collection-title">
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
                         </td>
-                        <td>
+                        <td class="owner">
                             <span class="podcast-owner">Created by <?php echo $podcast['Owner']['full_name']; ?></span>
                             <!--<?php echo $podcast['Owner']['full_name']; ?>-->
                         </td>
-                        <td>
+                        <td class="created">
                             <span class="podcast-owner"><?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?></span>
                         </td>
-                        <td align="right">
+                        <td class="media">
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
@@ -73,7 +73,7 @@
         endif; ?>
         </table>
         
-        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
+        <a href="/" class="toggler button blue" data-status="unticked">Select/Unselect all</a>
 		<a class="button white multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts"><span><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</span></a>
         <a class="button white multiple_action_button" type="button" href="/podcasts/delete" id="delete_multiple_podcasts"><span><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</span></a>
        
