@@ -1,10 +1,7 @@
 <fieldset class="youtube">
 	<legend>Youtube</legend>
-	<input type="hidden" name="data[Podcast][publish_youtube]" id="PodcastPublishYoutube" value="<?php echo $this->data['Podcast']['publish_youtube']; ?>" />
 	<dl>
 	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>" /></dd>
     </dl>		
 	<div class="youtube_container youtube" style="display:none">
         <div class="input select">
