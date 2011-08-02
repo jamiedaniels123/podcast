@@ -1,7 +1,7 @@
 <fieldset class="itunes">
 	<legend>iTunesU <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/></legend>
 	<ul class="itunes">
-	    <li><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></li>
+	    <li><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItunesContainer" class="juggle">Toggle</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
 			<?php if( ( $this->Permission->isItunesUser() == false ) && ( $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) && ( $this->Object->considerForItunes( $this->data['Podcast'] ) == false ) ) : ?>
@@ -44,7 +44,7 @@
 			
 		<?php endif; ?>
     </ul>
-    <div class="wrapper itunes" style="display:none">
+    <div class="wrapper itunes" id="PodcastItunesContainer" style="display:none">
         <div class="float_right images_container">
             <div>
                 <h2>Collection Image Logoless</h2>

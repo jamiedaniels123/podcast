@@ -21,30 +21,6 @@ jQuery(document).ready(function($) {
         });
     }
 
-    // The following optional method is called on page load and sets the initial status if the DOM element
-    // actually exist. It shows/hides podcast specific elements.
-    /*if( jQuery('#PodcastConsiderForItunesu').length ) {
-
-        show_hide_itune_elements();
-
-        jQuery('#PodcastConsiderForItunesu').live('click',function(e) {
-
-            show_hide_itune_elements();
-        });
-    }*/
-
-    // The following optional method is called on page load and sets the initial status if the DOM element
-    // actually exist. It shows/hides podcast specific elements.
-    /*if( jQuery('#PodcastConsiderForYoutube').length ) {
-
-        show_hide_youtube_elements();
-
-        jQuery('#PodcastConsiderForYoutube').live('click',function(e) {
-
-            show_hide_youtube_elements();
-        });
-    }*/
-
     // These methods are called on every page when a user wishes to inspect
     // the menu options.
     jQuery('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
@@ -84,14 +60,6 @@ jQuery(document).ready(function($) {
         jQuery("#"+form_id).submit();
     });
 
-    // This method shows/hides the iTune elements of the podcast form.
-    /*jQuery('a.itunes').live('click', function(e) {
-
-        e.preventDefault();
-        jQuery('div.itunes').toggle('slow');
-        return false;
-    });*/
-
     // Will toggle the notification checkboxes from ticked to unticked
     jQuery('.toggler').click( function(e) {
 
@@ -121,25 +89,58 @@ jQuery(document).ready(function($) {
             jQuery(this).closest("form").submit();
         }
     });
-	
-    jQuery('.itunes_toggler').click( function(e) {
-    	
-    	e.preventDefault();
-    	jQuery('div.itunes').toggle('slow');
-    });
-    
-    jQuery('.youtube_toggler').click( function(e) {
-    	
-    	e.preventDefault();
-    	jQuery('div.youtube').toggle('slow');
-    });  
-    
+
+	// Will show or hide a DOM element when a link is clicked.  Probably been better named "toggle"
+	// but heyhoo.
     jQuery('.juggle').click( function(e) {
 		
 		e.preventDefault();
 		var target = jQuery(this).attr('data-target');
 		jQuery('#'+target).toggle('slow');
 	});
+	
+
+    // Will replace the content of an empty text area field with the value of the title field.
+    jQuery('.input_greeting').each( function(e) {
+		
+        var content = jQuery(this).val();
+        if( content.length == 0 ) {
+            var title = jQuery(this).attr('title');
+            jQuery(this).text(title);
+            jQuery(this).val(title);
+        }
+		
+    })
+    
+    jQuery('.input_greeting').each( function(e) {
+
+		jQuery(this).focus( function () {
+
+			var title = jQuery(this).attr('title');
+			var content = jQuery(this).val();
+
+			if( content == title ) {
+					jQuery(this).text('');
+					jQuery(this).val('');
+			}
+		});
+    });
+    
+    jQuery('.input_greeting').each( function(e) {
+
+		jQuery(this).blur( function () {
+			var content = jQuery(this).val();	
+			
+			if( content.length == 0 ) {
+				
+				var title = jQuery(this).attr('title');
+				jQuery(this).text(title);
+				jQuery(this).val(title);
+			
+			}
+		});
+	});
+  	
 });
 
 // Will show or hide the podcast container div depending
