@@ -1,9 +1,9 @@
 <fieldset class="itunes">
-	<legend>iTunes</legend>
+	<legend>iTunesU</legend>
 	<dl>
 	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
 	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo ( $this->data['PodcastItem']['itunes_flag'] == YES ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
+	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'itunes' ); ?>" /></dd>
     </dl>		
     <div class="wrapper itunes" style="display:none">
 	   	<dl>

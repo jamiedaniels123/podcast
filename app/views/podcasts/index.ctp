@@ -32,7 +32,7 @@
             if( isSet( $this->data['Podcasts'] ) ) :
                 $i = 0;
                 foreach ($this->data['Podcasts'] as $podcast ) :
-
+					
                     $class = null;
                     if ($i++ % 2 == 0) :
                         $class = ' class="altrow"';
@@ -61,9 +61,11 @@
                         <td class="actions">
                             <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-link.png" alt="View collection contents" class="icon" />View</a>
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
+                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                             <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
+                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <?php endif; ?>
                         </td>

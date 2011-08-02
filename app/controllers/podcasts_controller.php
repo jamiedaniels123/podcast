@@ -54,8 +54,7 @@ class PodcastsController extends AppController {
         }
             
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
-
-        $this->Podcast->recursive = 2;
+		$this->Podcast->recursive = 1;
         $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
 
     }
@@ -505,8 +504,8 @@ class PodcastsController extends AppController {
      * @by : 20th May 2011
      */
     function admin_view( $id = null ) {
-
-		$this->Podcast->recursive = 2;
+		
+    	$this->Podcast->recursive = 2;
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->Podcast->findById( $id );
 

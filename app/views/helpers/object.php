@@ -51,7 +51,11 @@ class ObjectHelper extends AppHelper {
      */
     function considerForItunes( $object = array() ) {
 
-        return $object['consider_for_itunesu'];
+    	// Podcast level
+    	if( isSet( $object['consider_for_itunesu'] ) )
+        	return $object['consider_for_itunesu'] == true;
+    	
+		return false;
     }
 
     /*
@@ -62,8 +66,28 @@ class ObjectHelper extends AppHelper {
      */
     function considerForYoutube( $object = array() ) {
 
-        return $object['consider_for_youtube'];
+    	// Podcast level
+    	if( isSet( $object['consider_for_youtube'] ) )
+        	return $object['consider_for_youtube'] == true;
+        	
+        return false;
     }
+    
+    /*
+     * @name : intendedForYoutube
+     * @description : Retruns a bool depending up the value of the flag set (Y or N)
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function intendedForYoutube( $object = array() ) {
+
+    	// Podcast level
+    	if( isSet( $object['intended_youtube_flag'] ) )
+        	return $object['intended_youtube_flag'] == strtoupper( YES );
+        	
+        return false;
+    }
+    
 
     /*
      * @name : intendedForItunes
@@ -76,6 +100,8 @@ class ObjectHelper extends AppHelper {
     	// Podcast level
     	if( isSet( $object['intended_itunesu_flag'] ) )
         	return $object['intended_itunesu_flag'] == strtoupper( YES );
+        	
+        return false;
     }
 
     /*
@@ -125,17 +151,7 @@ class ObjectHelper extends AppHelper {
     		
     }
 
-    /*
-     * @name : intendedForItunes
-     * @description : Retruns a bool depending up the value of the flag set (Y or N)
-     * @updated : 20th June 2011
-     * @by : Charles Jackson
-     */
-    function intendedForYoutube( $podcast = array() ) {
 
-        return $podcast['intended_youtube_flag'] == strtoupper( YES );
-    }
-	
 	function editing( $object = array() ) {
 	
 		if( !isSet( $object['id'] ) )
@@ -156,42 +172,6 @@ class ObjectHelper extends AppHelper {
 		return isSet( $podcast['current_owner_id'] );
 	}
 	
-	
-	/*
-	 * @name : waitingYoutubeApproval
-	 * @description : Called from the approver screen it checks to see the status of any podcast on the approval listing.
-	 * @updated : 6th July 2011
-	 * @by : Charles Jackson
-	 */	
-	function waitingYoutubeApproval( $podcast = array() ) {
-	
-		// Has it already been approved?
-		if( $this->intendedForYoutube( $podcast ) ) {
-			return false;
-		}
-			
-		// Not yet been approved.	
-		return true;
-			
-	}
-	
-	/*
-	 * @name : waitingItunesApproval
-	 * @description : Called from the approver screen it checks to see the status of any podcast on the approval listing.
-	 * @updated : 6th July 2011
-	 * @by : Charles Jackson
-	 */	
-	function waitingItunesApproval( $podcast = array() ) {
-	
-		// Has it already been approved?
-		if( $this->intendedForItunes( $podcast ) )
-			return false;
-			
-		// Not yet been approved.	
-		return true;
-			
-	}
-
 	/*
 	 * @name : getProcessedState
 	 * @description : Translate the processed state of any media into 1 of 3 images to give an indication of status.
