@@ -50,6 +50,10 @@
         </div>
         <div class="float_left two_column">    
             <dl>
+                <dt>Series Playlist: </dt>
+                <dd><?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>&nbsp;</dd>
+                <dt>Series Playlist Link: </dt>
+                <dd><?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>&nbsp;</dd>
                 <dt>Channel: </dt>
                 <dd><?php echo $this->data['Podcast']['youtube_channel']; ?>&nbsp;</dd>
                 <dt>Course Code: </dt>
