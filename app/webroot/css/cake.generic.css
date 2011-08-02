@@ -435,7 +435,17 @@ div.error-message {
 	color: #fff;
 	font-weight: bold;
 	background: #ff0000;
+	padding-top: 5px!important;
+	padding-bottom: 5px!important;
 }
+
+#errors ul {
+
+	margin-top: -15px;
+	padding-bottom: 10px!important;
+	margin-bottom: 10px;
+}
+
 p.error {
 	background-color: #e32;
 	color: #fff;
