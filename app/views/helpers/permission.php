@@ -226,6 +226,7 @@ class PermissionHelper extends AppHelper {
 		if( isSet( $data['Podcast']['owner_id'] ) && $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
 
+		// When passed as podcast item
 		if( isSet( $data['owner_id'] ) && $this->isOwner( $data['owner_id'] ) )
 			return true;
 			

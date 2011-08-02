@@ -64,9 +64,8 @@
 	<div class="wrapper" id="youtube_subject_playlists_container">
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="YoutubeSubjectPlaylists" data-target="PodcastItemAllYoutubeSubjectPlaylists">Move --></span>
-				<label for="Nodes">Subject Playlists</label>
-				<input type="hidden" name="data[YoutubeSubjectPlaylists]" value="" id="YoutubeSubjectPlaylists_" />
+				<span class="move" data-source="YoutubeSubjectPlaylists" data-target="PodcastItemAllYoutubeSubjectPlaylists">Move &rarr;</span>
+				<label for="YoutubeSubjectPlaylists">Subject Playlists</label>
 				<select name="data[YoutubeSubjectPlaylists][]" class="selected" multiple="multiple" id="YoutubeSubjectPlaylists">
 					<?php if( isSet( $this->data['YoutubeSubjectPlaylists'] ) && is_array( $this->data['YoutubeSubjectPlaylists'] ) ) : ?>
 						<?php foreach( $this->data['YoutubeSubjectPlaylists'] as $playlist ) : ?>
@@ -79,7 +78,7 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="PodcastItemAllYoutubeSubjectPlaylists" data-target="YoutubeSubjectPlaylists"><-- Move</span>
+				<span class="move" data-source="PodcastItemAllYoutubeSubjectPlaylists" data-target="YoutubeSubjectPlaylists">&larr; Move</span>
 				<label for="PodcastItemAllYoutubeSubjectPlaylists">All Playlists</label>
 				<input type="hidden" name="data[Podcast][PodcastItemAllYoutubeSubjectPlaylists]" value="" id="PodcastItemAllYoutubeSubjectPlaylists_" />
 				<select name="data[PodcastItem][AllYoutubeSubjectPlaylists][]" multiple="multiple" id="PodcastItemAllYoutubeSubjectPlaylists">

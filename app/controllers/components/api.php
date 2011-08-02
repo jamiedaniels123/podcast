@@ -177,7 +177,6 @@ class ApiComponent extends Object {
      */
     function __restHelper( $url, $params = null, $verb = 'GET' ){
 
-		return true;
         $cparams = array( 'http' => array( 'method' => $verb, 'ignore_errors' => true ) );
 
         if ( $params !== null ) {
@@ -226,7 +225,7 @@ class ApiComponent extends Object {
 	 * @by : Charles Jackson
 	 */
 	function getStatus() {
-		return true;
+
 		return strtoupper( $this->response['status'] ) == 'ACK' ? true : false;
 	}
 
