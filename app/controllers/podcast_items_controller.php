@@ -91,7 +91,7 @@ class PodcastItemsController extends AppController {
      */
     function edit( $id = null ) {
 
-           if ( !empty( $this->data ) ) {
+		if ( !empty( $this->data ) ) {
            	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
 				$this->PodcastItem->set( $this->data );
