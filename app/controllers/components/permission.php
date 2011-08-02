@@ -77,15 +77,6 @@ class PermissionComponent extends Object {
 
         if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
-            
-   		// If this podcast is under consideration for iTunes or Youtube and the current user belong to either group
-		// then let them view it.
-		// NOTE: Podcast details can be passed at two levels hence the need to check with "['Podcast']" and without.
-		if( $this->isItunesUser() )
-			return true;
-
-		if( $this->isYoutubeUser() )
-			return true;
 		            
         return false;
     }
@@ -357,6 +348,7 @@ class PermissionComponent extends Object {
      */    
     function youTubePrivileges( $podcast = array() ) {
   	
+
     	if( ( $this->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
     		return true;
     		
@@ -370,7 +362,7 @@ class PermissionComponent extends Object {
      * @by : Charles Jackson
      */    
     function iTunesPrivileges( $podcast = array() ) {
-  	
+		
     	if( ( $this->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
     		return true;
     		
