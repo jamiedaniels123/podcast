@@ -185,20 +185,27 @@ class PermissionHelper extends AppHelper {
 		if( $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
 		
-		if( $this->isModerator( $data['Moderators'] ) )
-			return true;
+		if( isSet( $data['Moderators'] ) ) {
+			if( $this->isModerator( $data['Moderators'] ) )
+				return true;
+		}
 		
-		if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )
-			return true;
+		if( isSet( $data['ModeratorGroups'] ) ) {
+			
+			if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )
+				return true;
+		}
+			
+		return false;
 	}
 
 
     function toView( $data = array() ) {
 
-		if( $this->isItunesUser() )
+		if( $this->iTunesPrivileges( $data['Podcast'] ) )
 			return true;
 
-		if( $this->isYoutubeUser() )
+		if( $this->youTubePrivileges( $data['Podcast'] ) )
 			return true;
 
 		if( $this->isOwner( $data['Podcast']['owner_id'] ) )

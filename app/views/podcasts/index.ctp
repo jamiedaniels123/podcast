@@ -28,7 +28,7 @@
                 <th class="actions"><?php __('Actions');?></th>
             </tr>
             <?php
-            // Check to see if there is an incremental count on this->data, the ['Meta'] exists so just looking for integer count
+            // Check to see if there is an incremental count on this->data
             if( isSet( $this->data['Podcasts'] ) ) :
                 $i = 0;
                 foreach ($this->data['Podcasts'] as $podcast ) :
@@ -63,7 +63,7 @@
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
-                            <?php elseif( $this->Permission->isModerator( $podcast['Moderators'] ) || $this->Permission->inModeratorGroup( $podcast['ModeratorGroups'] ) ) : ?>
+                            <?php elseif( $this->Permission->toUpdate( $this->data ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <?php endif; ?>
                         </td>
