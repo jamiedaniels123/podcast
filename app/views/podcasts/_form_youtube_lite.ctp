@@ -1,9 +1,9 @@
 <fieldset class="youtube">
 	<legend>Youtube</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
+	    <dt><a href="/" id="PodcastItemYoutubeToggle"  class="juggle" data-target="PodcastYoutubeContainer">Toggle</a></dt>
     </dl>		
-	<div class="youtube_container youtube" style="display:none">
+	<div class="youtube_container youtube" id="PodcastYoutubeContainer" style="display:none">
         <div class="input text">
             <label for="PodcastYoutubeSeriesPlaylistText">Series Playlist</label>
             <input type="text" id="PodcastYoutubeSeriesPlaylistText" value="<?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>" name="data[Podcast][youtube_series_playlist_text]">

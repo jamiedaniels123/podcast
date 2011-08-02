@@ -104,6 +104,15 @@ class ObjectHelper extends AppHelper {
         return false;
     }
 
+
+	function intendedForPublication( $podcast = array() ) {
+		
+		if( $this->intendedForItunes( $podcast ) )
+			return true;
+			
+		return $this->intendedForYoutube( $podcast );
+	}
+	
     /*
      * @name : itunesPublished
      * @description : Retruns a bool depending up the value of the flag set (Y or N)

@@ -312,23 +312,34 @@ class PodcastsController extends AppController {
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
             $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
-
-            // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
             
-	            // Delete the podcast
-	            $podcast['Podcast']['deleted'] = true;
-	            $this->Podcast->set( $podcast ); // Hydrate the object
-	            $this->Podcast->save();
-					
-                $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+            if( !empty( $podcast ) ) {
 
-            } else {
-            	
-				$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
-                $this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
-                break; // Break out of the loop
-            }
+				if( $this->Object->intendedForPublication( $podcast['Podcast'] ) == false ) {
+					
+					// We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
+					if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
+					
+						// Delete the podcast
+						$podcast['Podcast']['deleted'] = true;
+						$this->Podcast->set( $podcast ); // Hydrate the object
+						$this->Podcast->save();
+							
+						$this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+
+					} else {
+						
+						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
+						$this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
+						break; // Break out of the loop
+					}
+					
+				} else {
+					
+					$this->Session->setFlash('Cannot delete collections that are intended for publication on iTunes or Youtube.', 'default', array( 'class' => 'error' ) );
+					break; // Break out of the loop
+				}
+			}
         }
         
         $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
@@ -396,7 +407,7 @@ class PodcastsController extends AppController {
     		$this->Session->setFlash('We could not update this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
     	}
     	
-    	$this->redirect( $this->referer() );
+    	$this->redirect( array( 'action' => 'view', $id ) );
     }
 
     /*
