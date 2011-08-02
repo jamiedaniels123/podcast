@@ -63,7 +63,7 @@
                             <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                                 <a href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
-                            <?php elseif( $this->Permission->toUpdate( $this->data ) ) : ?>
+                            <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
                                 <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <?php endif; ?>
                         </td>
