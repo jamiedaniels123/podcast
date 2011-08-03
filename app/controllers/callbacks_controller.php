@@ -58,7 +58,7 @@ class CallbacksController extends AppController {
 						$podcastItem->PodcastMedia->create();
 						$data['PodcastMedia']['filename'] = $row['filename'];
 						$data['PodcastMedia']['original_filename'] = $row['original_filename'];
-						$data['PodcastMedia']['media_type'] = $row['media_type'];
+						$data['PodcastMedia']['media_type'] = $row['flavour'];
 						$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
 						$data['PodcastMedia']['duration'] = $row['duration'];
 						$podcastItem->PodcastMedia->set( $data );
@@ -74,7 +74,9 @@ class CallbacksController extends AppController {
 				$podcastItem->set( $data );
 				$podcastItem->save();
 				
-			} elseif( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
+			}
+			
+			if( in_array( $this->Callback->data['command'], $this->deletion_request ) ) {
 				
 				$this->Callback->processDeletions();				
 			}			

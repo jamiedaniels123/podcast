@@ -612,7 +612,7 @@ class PodcastItemsController extends AppController {
 				
 				if( $this->Api->deleteFileOnMediaServer( 
 					array(
-							'source_path' => $this->data['Podcast']['custom_id'].'/',  
+							'destination_path' => $this->data['Podcast']['custom_id'].'/',  
 							'filename' => $this->data['PodcastItem'][$attachment.'_filename'],  
 						)
 					) 

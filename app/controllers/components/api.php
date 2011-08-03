@@ -91,7 +91,7 @@ class ApiComponent extends Object {
 			array(
 				'workflow' => $workflow,
 				'source_path' => $path.'/',
-				'filename' => $filename
+				'source_filename' => $filename
 			)
         );
 
@@ -124,7 +124,8 @@ class ApiComponent extends Object {
 				'workflow' => $workflow,
 				'source_path' => $path.'/',
 				'destination_path' => $path.'/',
-				'filename' => $filename,
+				'source_filename' => $filename,
+				'destination_filename' => $filename,
 				'podcast_item_id' => $podcast_item_id
 			)
         );
@@ -145,7 +146,7 @@ class ApiComponent extends Object {
         $this->params = array(
             'data' => array(
                 'source_path' => $path,
-                'filename' => $filename
+                'source_filename' => $filename
             )
         );
 

@@ -947,15 +947,15 @@ class Podcast extends AppModel {
 		$media_images = array();
 		
 		$media_images[] = array( 
-			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'destination_path' => $podcast['Podcast']['custom_id'].'/',
 			'filename' => $podcast['Podcast'][$image_type]
 			);
 		$media_images[] = array( 
-			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'destination_path' => $podcast['Podcast']['custom_id'].'/',
 			'filename' => $this->getStandardImageName( $podcast['Podcast'][$image_type] )
 			);
 		$media_images[] = array( 
-			'source_path' => $podcast['Podcast']['custom_id'].'/',
+			'destination_path' => $podcast['Podcast']['custom_id'].'/',
 			'filename' => $this->getThumbnailImageName( $podcast['Podcast'][$image_type] )
 			);
 			
