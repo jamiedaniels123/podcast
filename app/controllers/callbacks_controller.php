@@ -29,7 +29,7 @@ class CallbacksController extends AppController {
 		$this->layout='callback';
 		$this->Callback->setData(file_get_contents("php://input"));
 		$user = ClassRegistry::init('User');
-		//$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),json_decode(file_get_contents("php://input")),'Callback Alert');
+
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			

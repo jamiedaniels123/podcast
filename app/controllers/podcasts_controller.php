@@ -467,7 +467,7 @@ class PodcastsController extends AppController {
             // Create a null PodcastFilter to prevent an unwanted notice in the view
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
-            $this->data['Podcasts'] = $this->paginate('Podcast');
+            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted !=' => 2 ) );
         }
     }
 

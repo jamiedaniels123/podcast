@@ -701,6 +701,7 @@ class Podcast extends AppModel {
             case PUBLIC_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case UNPUBLISHED_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
