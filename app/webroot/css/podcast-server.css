@@ -32,6 +32,8 @@ h3 a:hover {text-decoration: underline;}
 
 .white {background-color:#fff;}
 
+.off-black {background-color:#1a1a1a;color: #fff;}
+
 .blue {
 	background-color: #003d4c;
 	color: #fff;

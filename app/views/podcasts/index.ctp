@@ -59,9 +59,9 @@
                             <?php echo count( $podcast['PodcastItems'] ); ?>
                         </td>
                         <td class="actions">
-                            	<a class="button light-blue" href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>">View</a>
-                            <?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                            	<a class="button light-blue" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
+                            	
+                            	<?php if( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
+                            	<a class="button off-black" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
                                 <a class="button light-blue" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                                 <a class="button white" href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                             <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
