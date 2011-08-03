@@ -121,7 +121,7 @@ class PodcastsController extends AppController {
 				
             $this->data['Podcast']['private'] = YES;
 			
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->data['Podcast'] );
 
             if( $this->Podcast->save() ) {
 
@@ -135,7 +135,7 @@ class PodcastsController extends AppController {
 				$this->Podcast->createPodcastModerators();
 				// Create the ModeratorUserGroups that are saved using a hasMany relationship.
 				$this->Podcast->createModeratorUserGroups();
-				
+
 				$this->Podcast->saveAll();
 
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
@@ -191,8 +191,9 @@ class PodcastsController extends AppController {
             
             $this->Podcast->data = $this->data;
 
-            // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators();
+            // Delete any existing relationships
+            $this->Podcast->deleteExistingAssociations();
+
             // Create the PodcastModerators that are saved using a hasMany relationship.
             $this->Podcast->createPodcastModerators();
             // Create the ModeratorUserGroups that are saved using a hasMany relationship.
@@ -233,6 +234,7 @@ class PodcastsController extends AppController {
 					} else {
 						
 						$this->Podcast->set( $this->Podcast->data );
+
 						$this->Podcast->saveAll();
 
 						$this->Podcast->commit(); // Everything hunky dory, commit the changes.
@@ -546,8 +548,8 @@ class PodcastsController extends AppController {
             
             $this->Podcast->data = $this->data;
 
-            // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators();
+            // Delete any existing associations
+            $this->Podcast->deleteExistingAssociations();
             // Create the PodcastModerators that are saved using a hasMany relationship.
             $this->Podcast->createPodcastModerators();
             // Create the ModeratorUserGroups that are saved using a hasMany relationship.
