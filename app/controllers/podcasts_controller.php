@@ -311,11 +311,11 @@ class PodcastsController extends AppController {
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
+            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key ) ) );
             
             if( !empty( $podcast ) ) {
 
-				if( $this->Object->intendedForPublication( $podcast['Podcast'] ) == false ) {
+				if( ( $this->Object->intendedForPublication( $podcast['Podcast'] ) == false ) && $this->Permission->isOwner( $podcast['Podcast']['owner_id'] ) ) {
 					
 					// We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
 					if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
@@ -336,7 +336,7 @@ class PodcastsController extends AppController {
 					
 				} else {
 					
-					$this->Session->setFlash('Cannot delete collections that are intended for publication on iTunes or Youtube.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot delete collections that are intended for publication on iTunes or Youtube or that you do not own.', 'default', array( 'class' => 'alert' ) );
 					break; // Break out of the loop
 				}
 			}

@@ -26,7 +26,7 @@ class PermissionComponent extends Object {
         // Only podcast containers have owners and moderator groups so check they exist before we call the routine
         if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) && count( $data['Owner'] ) ) {
 
-            if( $this->__isOwner( $data['Owner']['id'] ) )
+            if( $this->isOwner( $data['Owner']['id'] ) )
                 return true;
         }
         
@@ -65,7 +65,7 @@ class PermissionComponent extends Object {
         // Only podcast containers have owners and moderator groups so check they exist before we call the routine
         if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) ) {
 
-            if( $this->__isOwner( $data['Owner']['id'] ) )
+            if( $this->isOwner( $data['Owner']['id'] ) )
                 return true;
 
             if( $this->__inModeratorGroup( $data['ModeratorGroups'] ) )
@@ -88,7 +88,7 @@ class PermissionComponent extends Object {
      */
     function toDelete( $data = array() ) {
 
-        if( $this->__isOwner( $data['Owner']['id'] ) )
+        if( $this->isOwner( $data['Owner']['id'] ) )
             return true;
 
         return false;
@@ -111,13 +111,13 @@ class PermissionComponent extends Object {
     }
     
     /*
-     * @name : __isOwner
+     * @name : isOwner
      * @description : If set, compares the value of Auth.User.id against the user_id passed as a parameter and returns
      * a bool. If the session is not set return false.
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
-    function __isOwner( $user_id = null ) {
+    function isOwner( $user_id = null ) {
 
         if( $this->Session->check('Auth.User.id') == false )
             return false;
