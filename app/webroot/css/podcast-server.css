@@ -110,3 +110,11 @@ h3 a:hover {text-decoration: underline;}
 .two_column dt:last-of-type 	{
 	border-bottom: 0px solid red;
 }
+
+.icon-col	{
+	margin: 0 auto;	
+}
+
+.available	{
+	background-color: #f5f5f6;	
+}

@@ -1,5 +1,5 @@
 <fieldset id="podcast_media">
-    <legend><span>Podcast Media</span></legend>
+    <legend><span><h3>Podcast Media</h3></span></legend>
 	<form method="post" action="">
 	    <table>
 	    	<thead>
@@ -10,9 +10,9 @@
 	            	<th class="thumbnail">Image</th>
 	            	<th class="collection-title">Name</th>
 	                <th class="">Uploaded</th>
-	                <th class="">Processed State</th>
-	            	<th class="">iTunes</th>                
-	            	<th class="">YouTube</th>
+	                <th class="icon-col">Available</th>
+	            	<th class="icon-col">iTunes</th>                
+	            	<th class="icon-col">YouTube</th>
 	            	<th class="actions">Actions</th>
 	            </tr>
 	        </thead>
@@ -26,14 +26,14 @@
 	                            <input type="checkbox" name="data[PodcastItem][Checkbox][<?php echo $podcast_item['id']; ?>]" class="podcast_item_selection" id="PodcastItemCheckbox<?php echo $podcast_item['id']; ?>">
 		                    </td>
 	                    <?php endif; ?>
-			            <td>
+			            <td  class="thumbnail">
 			            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'].'.jpg',$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" class="thumbnail" />
 			            </td>
-		                <td><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></td>
+		                <td  class="collection-title"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></td>
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
-		                <td class="centered"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
-		            	<td class="centered"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
-		            	<td class="centered"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon"></td>
+		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
+		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
+		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon"></td>
 						<td class="actions">
 						
 							<?php if( $this->Permission->toView( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
@@ -66,7 +66,7 @@
 	    
 	    <?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 	    
-	        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
+	        <a href="/" class="toggler button blue" data-status="unticked">Select/deselect all</a>
 			<a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span><img src="../../webroot/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
