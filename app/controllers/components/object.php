@@ -51,11 +51,11 @@ class ObjectComponent extends Object {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function intendedForItunes( $object = array() ) {
+    function intendedForItunes( $podcast = array() ) {
 
     	// Podcast level
-    	if( isSet( $object['intended_itunesu_flag'] ) )
-        	return $object['intended_itunesu_flag'] == strtoupper( YES );
+    	if( isSet( $podcast['intended_itunesu_flag'] ) )
+        	return $podcast['intended_itunesu_flag'] == strtoupper( YES );
     }
 
     /*
@@ -66,7 +66,8 @@ class ObjectComponent extends Object {
      */
     function intendedForYoutube( $podcast = array() ) {
 
-        return $podcast['intended_youtube_flag'] == strtoupper( YES );
+		if( isSet( $podcast['intended_youtube_flag'] ) )
+			return $podcast['intended_youtube_flag'] == strtoupper( YES );
     }
     
     /*
@@ -115,6 +116,14 @@ class ObjectComponent extends Object {
     	return false;
     		
     }    
+    
+	function intendedForPublication( $podcast = array() ) {
+		
+		if( $this->intendedForItunes( $podcast ) )
+			return true;
+			
+		return $this->intendedForYoutube( $podcast );
+	}    
     
 }
 

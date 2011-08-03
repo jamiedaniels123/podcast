@@ -1,9 +1,9 @@
 <fieldset class="itunes">
 	<legend>ItunesU</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
+	    <dt><a href="/" id="PodcastItemItunesToggle" class="juggle" data-target="PodcastItunesContainer">Toggle</a></dt>
     </dl>	
-    <div class="itunes_container itunes" style="display:none">
+    <div id="PodcastItunesContainer" class="itunes_container itunes" style="display:none">
         <div class="input file">
             <label for="PodcastNewImageLogoless">Logoless image</label>
             <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">

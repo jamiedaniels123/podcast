@@ -121,7 +121,7 @@ class PodcastsController extends AppController {
 				
             $this->data['Podcast']['private'] = YES;
 			
-            $this->Podcast->set( $this->data );
+            $this->Podcast->set( $this->data['Podcast'] );
 
             if( $this->Podcast->save() ) {
 
@@ -135,7 +135,7 @@ class PodcastsController extends AppController {
 				$this->Podcast->createPodcastModerators();
 				// Create the ModeratorUserGroups that are saved using a hasMany relationship.
 				$this->Podcast->createModeratorUserGroups();
-				
+
 				$this->Podcast->saveAll();
 
                 $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
@@ -191,8 +191,9 @@ class PodcastsController extends AppController {
             
             $this->Podcast->data = $this->data;
 
-            // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators();
+            // Delete any existing relationships
+            $this->Podcast->deleteExistingAssociations();
+
             // Create the PodcastModerators that are saved using a hasMany relationship.
             $this->Podcast->createPodcastModerators();
             // Create the ModeratorUserGroups that are saved using a hasMany relationship.
@@ -233,6 +234,7 @@ class PodcastsController extends AppController {
 					} else {
 						
 						$this->Podcast->set( $this->Podcast->data );
+
 						$this->Podcast->saveAll();
 
 						$this->Podcast->commit(); // Everything hunky dory, commit the changes.
@@ -311,24 +313,35 @@ class PodcastsController extends AppController {
 
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key, 'Podcast.owner_id' => $this->Session->read('Auth.User.id' ) ) ) );
-
-            // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
-            if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
+            $podcast = $this->Podcast->find('first', array( 'conditions' => array( 'Podcast.id' => $key ) ) );
             
-	            // Delete the podcast
-	            $podcast['Podcast']['deleted'] = true;
-	            $this->Podcast->set( $podcast ); // Hydrate the object
-	            $this->Podcast->save();
-					
-                $this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+            if( !empty( $podcast ) ) {
 
-            } else {
-            	
-				$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
-                $this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
-                break; // Break out of the loop
-            }
+				if( ( $this->Object->intendedForPublication( $podcast['Podcast'] ) == false ) && $this->Permission->isOwner( $podcast['Podcast']['owner_id'] ) ) {
+					
+					// We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
+					if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
+					
+						// Delete the podcast
+						$podcast['Podcast']['deleted'] = true;
+						$this->Podcast->set( $podcast ); // Hydrate the object
+						$this->Podcast->save();
+							
+						$this->Session->setFlash('We successfully deleted the podcast and all associated media.', 'default', array( 'class' => 'success' ) );
+
+					} else {
+						
+						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
+						$this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
+						break; // Break out of the loop
+					}
+					
+				} else {
+					
+					$this->Session->setFlash('Cannot delete collections that are intended for publication on iTunes or Youtube or that you do not own.', 'default', array( 'class' => 'alert' ) );
+					break; // Break out of the loop
+				}
+			}
         }
         
         $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
@@ -396,7 +409,7 @@ class PodcastsController extends AppController {
     		$this->Session->setFlash('We could not update this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
     	}
     	
-    	$this->redirect( $this->referer() );
+    	$this->redirect( array( 'action' => 'view', $id ) );
     }
 
     /*
@@ -454,7 +467,7 @@ class PodcastsController extends AppController {
             // Create a null PodcastFilter to prevent an unwanted notice in the view
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
-            $this->data['Podcasts'] = $this->paginate('Podcast');
+            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted !=' => 2 ) );
         }
     }
 
@@ -535,8 +548,8 @@ class PodcastsController extends AppController {
             
             $this->Podcast->data = $this->data;
 
-            // Delete any existing hasMany moderators.
-            $this->Podcast->deleteExistingModerators();
+            // Delete any existing associations
+            $this->Podcast->deleteExistingAssociations();
             // Create the PodcastModerators that are saved using a hasMany relationship.
             $this->Podcast->createPodcastModerators();
             // Create the ModeratorUserGroups that are saved using a hasMany relationship.

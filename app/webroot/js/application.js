@@ -100,7 +100,8 @@ jQuery(document).ready(function($) {
 	});
 	
 
-    // Will replace the content of an empty text area field with the value of the title field.
+    // The following 3 methods display a default value in an empty input field and empty/populate using the
+    // blur and focus events for any element with a class of input_greeting.
     jQuery('.input_greeting').each( function(e) {
 		
         var content = jQuery(this).val();

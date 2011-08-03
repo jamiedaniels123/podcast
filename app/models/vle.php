@@ -106,7 +106,6 @@ class Vle extends AppModel {
 			$this->data['Podcast']['title'] = $row['title'];
 			$podcast->set( $this->data );
 		
-			if( $podcast->save() )
 				
 		}
 		

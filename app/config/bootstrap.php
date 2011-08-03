@@ -112,6 +112,7 @@ DEFINE('RESIZED_IMAGE_EXTENSION', '_std');
 DEFINE('NO_IMAGE_AVAILABLE', '/img/default-project-thumbnail.png');
 DEFINE('CORRECT_IMAGE', '/correct.png');
 DEFINE('INCORRECT_IMAGE', '/incorrect.png');
+DEFINE('AJAX_IMAGE','/progress.gif');
 DEFINE('ERROR_IMAGE', '/error.png');
 DEFINE('QUESTION_MARK', '/question_mark.png');
 

@@ -176,7 +176,7 @@ class ApiComponent extends Object {
      * @by : Ian Newton / Charles Jackson
      */
     function __restHelper( $url, $params = null, $verb = 'GET' ){
-
+		
         $cparams = array( 'http' => array( 'method' => $verb, 'ignore_errors' => true ) );
 
         if ( $params !== null ) {

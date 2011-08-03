@@ -372,41 +372,40 @@ class Podcast extends AppModel {
      * @updated : 23rd May 2011
      * @by : Charles Jackson
      */
-    function deleteExistingModerators() {
+    function deleteExistingAssociations() {
 
-        $this->deletePodcastModerators( $this->data['Podcast']['id'] );
-        $this->deleteModeratorUserGroups( $this->data['Podcast']['id'] );
+        $this->deletePodcastIndividualAssociations( $this->data['Podcast']['id'] );
+        $this->deleteGroupAssociations( $this->data['Podcast']['id'] );
     }
 
 
     /*
-     * @name : deletePodcastModerators
-     * @description : Before we save the moderators using a hasMany relationship we must delete the existing
+     * @name : deletePodcastIndividualAssociations
+     * @description : Before we save the new moderators and members we must delete the existing
      * rows in the table.
      * @updated : 23rd May 2011
      * @by : Charles Jackson
      */
-    function deletePodcastModerators( $podcast_id = null ) {
+    function deletePodcastIndividualAssociations( $podcast_id = null ) {
 
-        // Now we must delete all rows in the magic join table user_user_groups that belong
-        // to this usergroup and have a moderator flag set  to true.
-        $this->PodcastModerator = ClassRegistry::init('UserPodcast');
+        // Now we must delete all rows in the magic join table user_user_groups.
+        $PodcastIndividual = ClassRegistry::init('UserPodcast');
 
-        $this->PodcastModerator->recursive = -1;
-        $podcast_moderators = $this->PodcastModerator->find( 'all', array( 'conditions' => array( 'podcast_id' => $podcast_id, 'moderator' => true ) ) );
+        $PodcastIndividual->recursive = -1;
+        $individuals = $PodcastIndividual->find( 'all', array( 'conditions' => array( 'podcast_id' => $podcast_id ) ) );
 
 
-        $this->PodcastModerator->begin();
+        $PodcastIndividual->begin();
 
-        foreach( $podcast_moderators as $podcast_moderator ) {
+        foreach( $individuals as $individual ) {
 
-            if( $this->PodcastModerator->delete( $podcast_moderator['UserPodcast']['id'] ) == false ) {
-                $this->PodcastModerator->rollback();
+            if( $PodcastIndividual->delete( $individual['UserPodcast']['id'] ) == false ) {
+                $PodcastIndividual->rollback();
                 return false;
             }
         }
 
-        $this->PodcastModerator->commit();
+        $PodcastIndividual->commit();
 
         // The "HBTM Moderator" array is used for reading only, they are saved under the
         // "hasMany PodcastModerator" respectively. We do this so we can
@@ -417,33 +416,33 @@ class Podcast extends AppModel {
     }
 
     /*
-     * @name : deletePodcastModerators
-     * @description : Before we save the moderator usergroups using a hasMany relationship we must delete the existing
+     * @name : deleteGroupAssociations
+     * @description : Before we save the usergroups we must delete the existing
      * rows in the table.
      * @updated : 23rd May 2011
      * @by : Charles Jackson
      */
-    function deleteModeratorUserGroups( $podcast_id = null ) {
+    function deleteGroupAssociations( $podcast_id = null ) {
 
         // Now we must delete all rows in the magic join table user_user_groups that belong
-        // to this usergroup and have a moderator flag set  to true.
-        $this->ModeratorUserGroup = ClassRegistry::init('UserGroupPodcast');
+        // to this usergroup.
+        $UserGroup = ClassRegistry::init('UserGroupPodcast');
 
-        $this->ModeratorUserGroup->recursive = -1;
-        $moderator_usergroups = $this->ModeratorUserGroup->find( 'all', array( 'conditions' => array( 'podcast_id' => $podcast_id, 'moderator' => true ) ) );
+        $UserGroup->recursive = -1;
+        $usergroups = $UserGroup->find( 'all', array( 'conditions' => array( 'podcast_id' => $podcast_id ) ) );
 
 
-        $this->ModeratorUserGroup->begin();
+        $UserGroup->begin();
 
-        foreach( $moderator_usergroups as $moderator_usergroup ) {
+        foreach( $usergroups as $usergroup ) {
 
-            if( $this->ModeratorUserGroup->delete( $moderator_usergroup['UserGroupPodcast']['id'] ) == false ) {
-                $this->ModeratorUserGroup->rollback();
+            if( $UserGroup->delete( $usergroup['UserGroupPodcast']['id'] ) == false ) {
+                $UserGroup->rollback();
                 return false;
             }
         }
 
-        $this->ModeratorUserGroup->commit();
+        $UserGroup->commit();
 
         // The "HBTM ModeratorGroups" array is used for reading only, they are saved under the
         // "hasMany ModeratoruserGroups" respectively. We do this so we can
@@ -510,7 +509,7 @@ class Podcast extends AppModel {
       */
     function createPodcastModerators() {
 
-        //$data['PodcastModerators'] = array();
+        $data['PodcastModerators'] = array();
 
         if( isSet( $this->data['Moderators'] ) && is_array( $this->data['Moderators'] ) ) {
 
@@ -528,6 +527,8 @@ class Podcast extends AppModel {
                 
                 $x++;
             }
+            
+            unset( $this->data['Moderators'] );
         }
      }
 
@@ -540,7 +541,7 @@ class Podcast extends AppModel {
       */
     function createModeratorUserGroups() {
 
-        //$data['ModeratorUserGroups'] = array();
+        $data['ModeratorUserGroups'] = array();
 
         if( isSet( $this->data['ModeratorGroups'] ) && is_array( $this->data['ModeratorGroups'] ) ) {
 
@@ -557,6 +558,8 @@ class Podcast extends AppModel {
                 
                 $x++;
             }
+            
+            unset( $this->data['ModeratorGroups'] );
         }
      }
 
@@ -698,6 +701,7 @@ class Podcast extends AppModel {
             case PUBLIC_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
                 $conditions[0]['Podcast.itunesu_site'] = 'public';
+                $conditions[0]['Podcast.deleted'] = 0;
                 break;
             case UNPUBLISHED_ITUNEU_PODCAST:
                 $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';

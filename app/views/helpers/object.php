@@ -9,7 +9,7 @@ class ObjectHelper extends AppHelper {
 		'-1' => array('message' => 'error in transcoding', 'icon' => ERROR_IMAGE ),
 		'0' => array('message' => 'no media file at all', 'icon' => INCORRECT_IMAGE ),
 		'1' => array('message' => 'awaiting transcoding choice', 'icon' => INCORRECT_IMAGE ),
-		'2' => array('message' => 'transcoding in progress', 'icon' => INCORRECT_IMAGE ),
+		'2' => array('message' => 'transcoding in progress', 'icon' => AJAX_IMAGE ),
 		'3' => array('message' => 'transcoded but awaiting approval', 'icon' => INCORRECT_IMAGE ),
 		'9' => array('message' => 'media available', 'icon' => CORRECT_IMAGE ),
 	);
@@ -104,6 +104,15 @@ class ObjectHelper extends AppHelper {
         return false;
     }
 
+
+	function intendedForPublication( $podcast = array() ) {
+		
+		if( $this->intendedForItunes( $podcast ) )
+			return true;
+			
+		return $this->intendedForYoutube( $podcast );
+	}
+	
     /*
      * @name : itunesPublished
      * @description : Retruns a bool depending up the value of the flag set (Y or N)

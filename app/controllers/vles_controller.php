@@ -34,11 +34,11 @@ class VlesController extends AppController {
 			if( $this->Vle->hasErrors() )
 				$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$row,'This Vle call has errors');
 				
-			if( strtolower( $this->Vle->data['command'] ) = 'create-container' ) {
+			if( strtolower( $this->Vle->data['command'] ) == 'create-container' ) {
 
 				$this->set('status', json_encode( array( 'status' => 'ACK', 'data' => $this->Vle->createCollection(), 'timestamp' => time() ) ) );
 				
-			} elseif( strtolower( $this->Vle->data['command'] ) = 'delete-container' ) {
+			} elseif( strtolower( $this->Vle->data['command'] ) == 'delete-container' ) {
 				
 				// We are not deferring to the model so we can easily access to API component class.
 				$podcasts = array();
