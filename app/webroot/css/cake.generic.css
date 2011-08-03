@@ -136,7 +136,8 @@ table {
 	color: #333;
 	margin: 15px 0;
 	width: 100%;
-	border-bottom:1px solid #418DB1;	
+	border-bottom:1px solid #418DB1;
+	border-spacing:0;	
 }
 
 th {
@@ -784,6 +785,7 @@ div.float_left dl dd {
 
 .images_container {
 		text-align: center;
+		margin-top:10px;
 }
 .images_container img {
 	margin: 10px;	
