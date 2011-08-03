@@ -2,7 +2,7 @@
     <input type="hidden" id="PodcastItemId" value="<?php echo $this->data['PodcastItem']['id']; ?>" name="data[PodcastItem][id]">
     <input type="hidden" id="PodcastItemPodcastId" value="<?php echo $this->data['PodcastItem']['podcast_id']; ?>" name="data[PodcastItem][podcast_id]">
 	<fieldset>
-        <legend>Media</legend>
+        <legend><span>Media</span></legend>
 		<?php echo $this->element('../podcast_items/_form'); ?>
         <button id="update_podcast_item" type="submit"  class="auto_select_and_submit">update podcast media</button>
     </fieldset>

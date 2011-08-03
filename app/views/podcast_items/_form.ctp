@@ -3,16 +3,19 @@
 <input type="hidden" id="PodcastTitle" name="data[Podcast][title]" value="<?php echo $this->data['Podcast']['title']; ?>">
 <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
 <input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">    
-<div class="input text">
+
+<div class="input text" id="content">
     <label for="PodcastItemTitle">Title</label>
     <input type="text" id="PodcastItemTitle" name="data[PodcastItem][title]" value="<?php echo $this->data['PodcastItem']['title']; ?>">
     <?php echo $this->Form->error('PodcastItem.title'); ?>
 </div>
+
 <div class="input textarea">
     <label for="PodcastItemSummary">Summary</label>
     <textarea id="PodcastItemSummary" name="data[PodcastItem][summary]"><?php echo $this->data['PodcastItem']['summary']; ?></textarea>
     <?php echo $this->Form->error('PodcastItem.summary'); ?>
 </div>
+
 <div class="input text">
     <label for="PodcastItemAuthor">Author</label>
     <textarea id="PodcastItemAuthor" name="data[PodcastItem][author]"><?php echo $this->data['PodcastItem']['author']; ?></textarea>

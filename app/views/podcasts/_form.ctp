@@ -1,13 +1,16 @@
 <input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
-<div class="input text">
+
+<div class="input text" id="content">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
     <input type="text" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
 </div>
+
 <div class="link">
-	<a href="/" id="PodcastSharingToggle" class="juggle" data-target="PodcastSharingContainer">Sharing &amp; Ownership</a>
+	<a href="/" id="PodcastSharingToggle" class="button white juggle" data-target="PodcastSharingContainer"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Sharing &amp; Ownership</a>
 </div>
+
 <div id="PodcastSharingContainer" style="display:none">
 	<div class="wrapper" id="user_groups_container">
 		<div class="float_left">
@@ -114,12 +117,21 @@
 </div>
 <?php if( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) : ?>
     <div class="clear"></div>
-    <div class="input checkbox">
-        <input type="hidden" value="0" id="PodcastPodcastFlag_" name="data[Podcast][podcast_flag]">
-        <input type="checkbox" id="PodcastPodcastFlag" value="1" <?php echo $this->data['Podcast']['podcast_flag'] ? 'checked="checked"' : '';?> name="data[Podcast][podcast_flag]">
-        <label for="PodcastPodcastFlag">Make into Podcast</label>
+    
+    
+    <div class="input checkbox link">
+        <input type="hidden" id="PodcastPodcastFlag" value="<?php echo $this->data['Podcast']['podcast_flag'];?> " name="data[Podcast][podcast_flag]">
+        <label for="PodcastPodcastFlag">Convert Collection into a into Podcast</label>
         <?php echo $this->Form->error('Podcast.podcast_flag'); ?>
     </div>
+    
+    
+    <div class="link">
+	<a href="/" id="PodcastPodcastFlag" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a into Podcast</a>
+</div>
+    
+    
+    
     <div class="clear"></div>
     <div class="podcast_container" style="display:none;">
         <div class="input textarea">
