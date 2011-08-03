@@ -11,7 +11,7 @@ class ObjectHelper extends AppHelper {
 		'1' => array('message' => 'awaiting transcoding choice', 'icon' => INCORRECT_IMAGE ),
 		'2' => array('message' => 'transcoding in progress', 'icon' => AJAX_IMAGE ),
 		'3' => array('message' => 'transcoded but awaiting approval', 'icon' => INCORRECT_IMAGE ),
-		'9' => array('message' => 'media available', 'icon' => CORRECT_IMAGE ),
+		'9' => array('message' => '', 'icon' => CORRECT_IMAGE ),
 	);
 	
     /*

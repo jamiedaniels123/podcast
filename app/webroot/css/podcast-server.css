@@ -32,6 +32,8 @@ h3 a:hover {text-decoration: underline;}
 
 .white {background-color:#fff;}
 
+.off-black {background-color:#1a1a1a;color: #fff;}
+
 .blue {
 	background-color: #003d4c;
 	color: #fff;
@@ -107,4 +109,12 @@ h3 a:hover {text-decoration: underline;}
 
 .two_column dt:last-of-type 	{
 	border-bottom: 0px solid red;
+}
+
+.icon-col	{
+	margin: 0 auto;	
+}
+
+.available	{
+	background-color: #f5f5f6;	
 }
