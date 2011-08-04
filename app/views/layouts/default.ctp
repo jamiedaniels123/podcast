@@ -13,6 +13,7 @@
         echo $this->Javascript->link('jquery-ui.js');
         echo $this->Javascript->link('application.js');
         echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
+        echo $this->Javascript->link('jquery.cookie.js');
 
         echo $this->Html->meta('icon');
         echo $this->Html->meta('rss', '/podcasts/rss.rss');

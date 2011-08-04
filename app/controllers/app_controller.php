@@ -6,7 +6,7 @@ class AppController extends Controller {
 
 	// NOTE: We are loading every component for every class. We should split this down further and only load each component as
 	// needed. However, currently simples...
-    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder', 'Api', 'Getid3', 'emailTemplates', 'Object' );
+    var $components = array( 'Auth', 'Session', 'Permission', 'RequestHandler', 'Folder', 'Api', 'Getid3', 'emailTemplates', 'Object', 'Cookie' => array( 'name' => 'OpenUniversity' ) );
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 
@@ -137,5 +137,24 @@ class AppController extends Controller {
         return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
+    /*
+     * @name : cookie
+     * @description :
+     * @updated : 4th August 2011
+     * @by : Charles Jackson
+     */
+    function cookie() {
+    	
+    	$this->autoRender = false;
+    	$active_columns = array();
+    	
+    	foreach( $this->data['Podcast'] as $key => $value ) {
+    		
+    		$active_columns[] = $key;
+    	}
+    	
+    	$this->Cookie->write('Podcasts',$active_columns, false );
+    	return true;
+    }
 
 }

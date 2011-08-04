@@ -146,8 +146,28 @@ jQuery(document).ready(function($) {
     	var target = jQuery(this).attr('data-target');
     	jQuery('th.'+target).toggle();
     	jQuery('td.'+target).toggle();
+    	write_cookie('OpenUniversity');
 	});
 });
+
+function write_cookie( cookie_name ) {
+	
+    var form_data = $("#PersonaliseForm").serialize();
+
+    jQuery.ajax(
+    {
+            type: "POST",
+            url: "/podcasts/cookie",
+            data: form_data,
+            error:
+                    function()
+                    {
+                            alert('unable to set cookie');
+                    }
+    });
+
+    
+}
 
 // Will show or hide the podcast container div depending
 // upon the status of the checkbox. Called on page load and when the
