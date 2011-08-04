@@ -3,7 +3,7 @@
 class PodcastsController extends AppController {
 
     var $name = 'Podcasts';
-    var $components = array( 'Upload','Cookie' );
+    var $components = array( 'Upload' );
     private $errors = array();
     var $html = null; // Used to store errors created by the images component.
     
@@ -39,27 +39,20 @@ class PodcastsController extends AppController {
     function index() {
 
         $id_numbers = array();
-
-        if( isSet( $this->data['Column'] ) ) {
+		$active_columns = array();
+		
+        if( $this->Cookie->read('Podcasts') ) {
         	
-			$this->Cookie->name = 'PodcastCookie';
-			$this->Cookie->time = '36000';
-			$this->Cookie->domain = DOMAIN_NAME;
-			$this->Cookie->write('Columns', $this->data['Column'] );
-			$this->set('active_columns', $this->data['Column'] );
-			
+        	$this->set('active_columns', $this->Cookie->read('Podcasts') );
+        	
         } else {
-        	
-        	if( $this->Cookie->read() ) {
-        		
-        		$this->set('active_columns', 'PodcastCookie' );
-        		
-        	} else {
-        		
-        		$this->set('active_columns', array('title' => 'Title', 'owner' => 'Owner', 'created' => 'Created') );
-        	}
-        	
+
+        	$active_columns = array('title','owner','created','thumbnail');
+        	$this->set('active_columns', $active_columns );
+
+			$this->Cookie->write('Podcasts',$active_columns, false );
         }
+        	
         // Have they posted the filter form?
     	if( isSet( $this->data['Podcast']['filter'] ) ) {
         	
@@ -72,8 +65,6 @@ class PodcastsController extends AppController {
 	        $this->set('filter', null );
         }
             
-        $column_options = array('preferred_node' => 'Preferred Node', 'title' => 'Title');
-        $this->set('column_options', $column_options );
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
 
 		$this->Podcast->recursive = 1;
@@ -473,6 +464,20 @@ class PodcastsController extends AppController {
      */
     function admin_index() {
 
+    	$active_columns = array();
+		
+        if( $this->Cookie->read('Podcasts') ) {
+        	
+        	$this->set('active_columns', $this->Cookie->read('Podcasts') );
+        	
+        } else {
+
+        	$active_columns = array('title','owner','created','thumbnail');
+        	$this->set('active_columns', $active_columns );
+
+			$this->Cookie->write('Podcasts',$active_columns, false );
+        }
+            	
         unset( $this->Podcast->hasOne['UserPodcast'] );
 
         // Have they posted the filter form?
