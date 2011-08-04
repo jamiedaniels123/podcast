@@ -263,5 +263,35 @@ class PodcastItem extends AppModel {
 			default:
 				break;	
 		}
-	}	
+	}
+
+	/*
+	 * @name : saveFlavours
+	 * @description : Called from the callbacks controller, will save a flavour of media
+	 * and update the status accordingly.
+	 * @updated : 3rd August 2011
+	 * @by : Charles Jackson
+	 */
+	function saveFlavour( $callback_row = array() ) {
+		
+		$data = $podcastItem->findById( $row['data']['podcast_item_id'] );
+															
+		if( strtoupper( $callback_row['status'] ) == YES ) {
+						
+			$data['PodcastMedia']['processed_state'] = MEDIA_AVAILABLE; // Media available
+			
+		} else {
+			
+			$data['PodcastItem']['processed_state'] = -1; // Error in transcoding
+		}
+
+		$this->PodcastMedia->create();
+		$data['PodcastMedia']['filename'] = $row['destination_filename'];
+		$data['PodcastMedia']['original_filename'] = $row['source_filename'];
+		$data['PodcastMedia']['media_type'] = $row['flavour'];
+		$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
+		$data['PodcastMedia']['duration'] = $row['duration'];
+		$this->set( $data );
+		return $this->saveAll();
+	}
 }
