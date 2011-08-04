@@ -96,7 +96,7 @@ ul, li {
 	text-decoration: underline;
 }
 #content{
-	margin: 20px 0;
+
 	background: #fff;
 	clear: both;
 	color: #333;
@@ -372,6 +372,7 @@ input, textarea {
 	padding: 2px;
 	border:1px solid #999;
 	background: #fff;
+	width: 250px;
 }
 select {
 	clear: both;

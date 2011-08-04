@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend><span>Your Collections</span></legend>
+    <legend><h3>Your Collections</h3></legend>
     
     <img src="/img/collection-large.png" />
     

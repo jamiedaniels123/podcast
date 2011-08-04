@@ -4,7 +4,7 @@
 <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
 <input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">    
 
-<div class="input text" id="content">
+<div class="input text form_title" id="content">
     <label for="PodcastItemTitle">Title</label>
     <input type="text" id="PodcastItemTitle" name="data[PodcastItem][title]" value="<?php echo $this->data['PodcastItem']['title']; ?>">
     <?php echo $this->Form->error('PodcastItem.title'); ?>
