@@ -96,10 +96,11 @@ ul, li {
 	text-decoration: underline;
 }
 #content{
+	margin: 20px 0;
 	background: #fff;
 	clear: both;
 	color: #333;
-	padding: 10px 20px 40px 20px;
+	padding: 0px 20px 20px 20px;
 	overflow: auto;
 }
 #footer {
@@ -338,7 +339,6 @@ form div {
 }
 form .input {
 	color: #999;
-
 }
 
 form .input-filter {
@@ -365,6 +365,7 @@ label {
 	display: block;
 	font-size: 100%;
 	margin-bottom:2px;
+	display:inline;
 }
 input, textarea {
 	clear: both;

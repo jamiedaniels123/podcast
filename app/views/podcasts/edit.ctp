@@ -5,13 +5,16 @@
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
     <fieldset>
-        <legend>Update Podcast</legend>
-        <p>
-            Use the form below to create/update a new podcast container
+        <legend><span>Update Collection</span></legend>
+        
+        <img src="/img/collection-large.png" />
+        
+        <p class="leader">
+            Use the form below to create/update a new Collection container
         </p>
 		        
 		<?php echo $this->element('../podcasts/_form'); ?>
         	
-        <button id="PodcastUpdateButton" type="submit" class="auto_select_and_submit">update podcast</button>
+        <button id="PodcastUpdateButton" type="submit" class="button light-blue auto_select_and_submit">Update collection</button>
     </fieldset>
 <form>

@@ -1,5 +1,8 @@
 <fieldset id="podcast_media">
-    <legend><span><h3>Podcast Media</h3></span></legend>
+    <legend><span><h3>Collection Media</h3></span></legend>
+    
+    <img src="/img/collection-large.png" />
+    
 	<form method="post" action="">
 	    <table>
 	    	<thead>
