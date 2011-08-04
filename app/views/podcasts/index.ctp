@@ -1,12 +1,11 @@
 <fieldset class="podcasts index">
     <legend><h3>Your Collections</h3></legend>
     
-    <img src="/img/collection-large.png" />
-    
     <p class="leader">
-        Below is a list of all podcasts on the system to which you have access. You can filter using the options below and
-        sort by column headings.
+        Below is a list of all podcasts on the system to which you have access. You can filter using the options below and sort by column headings.
     </p>
+    
+    <img src="/img/collection-large.png" />
     
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
