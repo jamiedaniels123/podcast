@@ -598,7 +598,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id = null, $podcast = null ) {
+     /*function getUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
@@ -657,8 +657,97 @@ class Podcast extends AppModel {
         }
 
         return $list;
-     }
+     }*/
 
+     /*
+      * @name : getItunesUserPodcasts
+      * @description : We are using the ORM for this complex SQL. It will return all podcasts to which the currently
+      * logged in user has access as follows :
+      * 1) Are they the owner?
+      * 2) Are they a moderator?
+      * 3) Are they a member?
+      * 4) Are they a member of an associated moderator group?
+      * 5) Are they a member of an associated user group?	  
+      * @updated : 24th May 2011
+      * @by : Charles Jackson
+      */
+     function getUserPodcasts( $user_id = null, $podcast = null ) {
+
+       $this->recursive = -1;
+
+        $list = array();
+        $conditions = $this->buildConditions(  $user_id );
+        $conditions = $this->buildFilters( $podcast, $conditions );
+
+        $data = $this->find('all',array(
+            'fields' => array(
+                'DISTINCT(Podcast.id)',
+                ),
+            'conditions'=> $conditions,
+            'joins' => array(
+                array(
+                    'table' => 'users',
+                    'alias' => 'Owner',
+                    'type' => 'INNER',
+                    'conditions' => array(
+                		array( 'OR' => array(
+	                        array(
+	                        	'Owner.iTunesU' => 'Y',
+	                        	'Podcast.intended_itunesu_flag' => 'N',
+	                        	'Podcast.owner_id = Owner.id'
+                        		),
+	                        array(
+	                        	'Owner.iTunesU' => 'N',
+	                        	'Owner.YouTube' => 'N',
+	                        	'Podcast.owner_id = Owner.id'
+                        		),
+	                        array(
+	                        	'Owner.YouTube' => 'N',
+	                        	'Podcast.intended_youtube_flag' => 'N',
+	                        	'Podcast.owner_id = Owner.id'
+                        		),
+                        	)
+                        )
+                    )
+                ),
+                array(
+                    'table'=>'user_podcasts',
+                    'alias'=>'UserPodcasts',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserPodcasts.podcast_id = Podcast.id'
+                        )
+                    ),
+                array(
+                    'table'=>'user_group_podcasts',
+                    'alias'=>'UserGroupPodcasts',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserGroupPodcasts.podcast_id = Podcast.id'
+                        )
+                    ),
+                array(
+                    'table'=>'user_user_groups',
+                    'alias'=>'UserUserGroups',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserUserGroups.user_group_id = UserGroupPodcasts.user_group_id'
+                        )
+                    )
+                ),
+            'order'=>array('Podcast.id DESC')
+            )
+        );
+
+        // Create a simple array of ID numbers.
+        foreach( $data as $podcast ) {
+
+            $list[] = $podcast['Podcast']['id'];
+        }
+
+        return $list;
+     }
+     
     /*
      * @name : buildConditions
      * @description : Exploited from the "/podcasts/index" URL, it defines the rules that only retrieve
