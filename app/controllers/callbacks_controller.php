@@ -49,36 +49,16 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					$data = $podcastItem->findById( $row['data']['podcast_item_id'] );
-															
-					if( strtoupper( $row['status'] ) == YES ) {
-						
-						$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE; // Media available
-						//$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Creating flavour of media');
-						$podcastItem->PodcastMedia->create();
-						$data['PodcastMedia']['filename'] = $row['filename'];
-						$data['PodcastMedia']['original_filename'] = $row['original_filename'];
-						$data['PodcastMedia']['media_type'] = $row['flavour'];
-						$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
-						$data['PodcastMedia']['duration'] = $row['duration'];
-						$podcastItem->PodcastMedia->set( $data );
-						//if( $podcastItem->PodcastMedia->save( $data ) == false )
-							//$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$podcastItem->PodcastMedia->invalidFields( $data ),'Creating flavour of media');
-						
-					} else {
-						
-						$data['PodcastItem']['processed_state'] = -1; // Error in transcoding
-					}
+					if( $podcastItem->saveFlavour( $row ) = false )
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of ice cream');
 				}
-				
-				$podcastItem->set( $data );
-				$podcastItem->save();
 				
 			}
 			
 			if( in_array( $this->Callback->data['command'], $this->deletion_request ) ) {
 				
-				$this->Callback->processDeletions();				
+				$this->Callback->processDeletions();
+								
 			}			
 				
 			// Does the API command signify a need to delete a local file structure?

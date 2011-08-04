@@ -1,11 +1,11 @@
 <fieldset class="youtube">
 	<legend>Youtube</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemYoutubeToggle" class="youtube_toggler">Toggle</a></dt>
+	    <dt><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="juggle">Toggle</a></dt>
 	    <dt>Published: </dt>
 	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'youtube' ); ?>" /></dd>
     </dl>		
-    <div class="wrapper youtube" style="display:none">	
+    <div class="wrapper youtube" id="PodcastItemYoutubeContainer" style="display:none">	
     <dl>
         <dt>Published: </dt>
         <dd><?php echo strtoupper( $this->data['PodcastItem']['youtube_flag'] ) == YES ? 'Yes' : 'No'; ?>&nbsp;</dd>

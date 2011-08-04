@@ -121,8 +121,8 @@ jQuery(document).ready(function($) {
 			var content = jQuery(this).val();
 
 			if( content == title ) {
-					jQuery(this).text('');
-					jQuery(this).val('');
+				jQuery(this).text('');
+				jQuery(this).val('');
 			}
 		});
     });
@@ -137,11 +137,16 @@ jQuery(document).ready(function($) {
 				var title = jQuery(this).attr('title');
 				jQuery(this).text(title);
 				jQuery(this).val(title);
-			
 			}
 		});
 	});
-  	
+    
+    jQuery('.personalise').live('click',function(e) {
+
+    	var target = jQuery(this).attr('data-target');
+    	jQuery('th.'+target).toggle();
+    	jQuery('td.'+target).toggle();
+	});
 });
 
 // Will show or hide the podcast container div depending

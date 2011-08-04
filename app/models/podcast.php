@@ -1012,7 +1012,6 @@ class Podcast extends AppModel {
 		        unset( $this->hasMany['ModeratorUserGroups'] );
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
-				unset( $this->belongsTo['PreferredNode'] );
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.

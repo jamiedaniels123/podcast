@@ -830,3 +830,14 @@ legend img {
 	padding-right: 5px;
 	margin: 0px;
 }
+
+ul#PodcastColumnOptions li {
+	
+	float:left;
+	list-style-type: none;
+}
+
+#PersonaliseContainer {
+	
+	width: 900px;	
+}

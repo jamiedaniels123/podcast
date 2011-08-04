@@ -52,7 +52,7 @@
 
 DEFINE('APPLICATION_URL', 'http://'.$_SERVER['SERVER_NAME']);
 DEFINE('SECURE_APPLICATION_URL', 'https://'.$_SERVER['SERVER_NAME']);
-
+DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
 // Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 

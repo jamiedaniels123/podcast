@@ -9,7 +9,7 @@ class ObjectHelper extends AppHelper {
 		'-1' => array('message' => 'error in transcoding', 'icon' => ERROR_IMAGE ),
 		'0' => array('message' => 'no media file at all', 'icon' => INCORRECT_IMAGE ),
 		'1' => array('message' => 'awaiting transcoding choice', 'icon' => INCORRECT_IMAGE ),
-		'2' => array('message' => 'transcoding in progress', 'icon' => AJAX_IMAGE ),
+		'2' => array('message' => '', 'icon' => AJAX_IMAGE ),
 		'3' => array('message' => 'transcoded but awaiting approval', 'icon' => INCORRECT_IMAGE ),
 		'9' => array('message' => '', 'icon' => CORRECT_IMAGE ),
 	);
@@ -191,7 +191,7 @@ class ObjectHelper extends AppHelper {
 		
 		if( isSet( $this->processed_state[$processed_state] ) ) {
 			$html = '<img src="/img/'.$this->processed_state[$processed_state]['icon'].'" class="icon" alt="'.$this->processed_state[$processed_state]['message'].'" />';
-			$html .= '<span class="tagline">( '.ucwords( $this->processed_state[$processed_state]['message'] ).' )</span>';
+			$html .= '<span class="tagline">'.ucwords( $this->processed_state[$processed_state]['message'] ).'</span>';
 			
 		} else { 
 		

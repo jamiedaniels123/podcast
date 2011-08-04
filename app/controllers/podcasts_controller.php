@@ -3,7 +3,7 @@
 class PodcastsController extends AppController {
 
     var $name = 'Podcasts';
-    var $components = array( 'Upload' );
+    var $components = array( 'Upload','Cookie' );
     private $errors = array();
     var $html = null; // Used to store errors created by the images component.
     
@@ -39,10 +39,29 @@ class PodcastsController extends AppController {
     function index() {
 
         $id_numbers = array();
-        
 
+        if( isSet( $this->data['Column'] ) ) {
+        	
+			$this->Cookie->name = 'PodcastCookie';
+			$this->Cookie->time = '36000';
+			$this->Cookie->domain = DOMAIN_NAME;
+			$this->Cookie->write('Columns', $this->data['Column'] );
+			$this->set('active_columns', $this->data['Column'] );
+			
+        } else {
+        	
+        	if( $this->Cookie->read() ) {
+        		
+        		$this->set('active_columns', 'PodcastCookie' );
+        		
+        	} else {
+        		
+        		$this->set('active_columns', array('title' => 'Title', 'owner' => 'Owner', 'created' => 'Created') );
+        	}
+        	
+        }
         // Have they posted the filter form?
-        if( isSet( $this->data['Podcast']['filter'] ) ) {
+    	if( isSet( $this->data['Podcast']['filter'] ) ) {
         	
 	        $this->set('search_criteria', $this->data['Podcast']['search'] );
 	        $this->set('filter', $this->data['Podcast']['filter'] );
@@ -53,6 +72,8 @@ class PodcastsController extends AppController {
 	        $this->set('filter', null );
         }
             
+        $column_options = array('preferred_node' => 'Preferred Node', 'title' => 'Title');
+        $this->set('column_options', $column_options );
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
 
 		$this->Podcast->recursive = 1;
