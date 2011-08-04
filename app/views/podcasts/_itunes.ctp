@@ -1,5 +1,5 @@
 <fieldset class="itunes">
-	<legend>iTunesU <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/></legend>
+	<legend><h3>iTunesU</h3> <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/></legend>
 	<ul class="itunes">
 	    <li><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItunesContainer" class="juggle">Toggle</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>

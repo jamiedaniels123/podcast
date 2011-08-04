@@ -1,5 +1,5 @@
 <fieldset class="youtube">
-	<legend>Youtube <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>"/></legend>
+	<legend><h3>Youtube</h3> <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>"/></legend>
 	<ul class="youtube">
 	    <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="juggle">Toggle</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>

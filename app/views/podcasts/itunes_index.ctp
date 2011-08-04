@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend><span>iTunesU collections</span></legend>
+    <legend><h3>iTunesU collections</h3></legend>
     
     <img src="/img/collection-large.png" />
     

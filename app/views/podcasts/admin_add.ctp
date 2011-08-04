@@ -1,6 +1,6 @@
 <form accept-charset="utf-8" action="/admin/podcasts/add" method="post" id="PodcastAddForm" enctype="multipart/form-data">
     <fieldset>
-        <legend>Create Podcast</legend>
+        <legend><h3>Create Podcast</h3></legend>
         <p>
             Use the form below to create a new podcast container
         </p>

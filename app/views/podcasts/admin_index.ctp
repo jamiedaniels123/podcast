@@ -1,5 +1,5 @@
 <fieldset class="podcasts index">
-    <legend>Podcasts : Administration</legend>
+    <legend><h3>Podcasts : Administration</h3></legend>
     <p>
         Below is a list of all podcasts on the system.
     </p>

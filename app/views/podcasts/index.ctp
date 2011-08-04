@@ -134,27 +134,35 @@
         <?php
                 endforeach;
         endif; ?>
+        
         </table>
         
-        <a href="/" class="toggler button blue" data-status="unticked">Select/Unselect all</a>
-		<a class="button white multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts"><span><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</span></a>
-        <a class="button white multiple_action_button" type="button" href="/podcasts/delete" id="delete_multiple_podcasts"><span><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</span></a>
-       
-    </form>
-    <div class="paging">
-    
-     <p>
-        <?php
-            echo $this->Paginator->counter(array(
-            'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-            ));
-        ?>
-    </p>    
+        <div class="paging">
+     
        <div class="page-controls">
 	   	<?php echo $this->Paginator->prev(''.__('Previous', true), array(), null, array('class'=>'disabled previous'));?>
      | 	<?php echo $this->Paginator->numbers();?>
         <?php echo $this->Paginator->next(__('Next', true).'', array(), null, array('class'=>'disabled next'));?>
+        
+        
+        <Span class="paging-text"><?php
+            echo $this->Paginator->counter(array(
+            'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
+            ));
+        ?></Span>
+     
         </div>
     </div>
-	<?php echo $this->element('../podcasts/_personalise'); ?>    
+    
+    
+        
+        <div class="left">
+        <a href="/" class="toggler button blue" data-status="unticked">Select/Unselect all</a>
+		<a class="button white multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts"><span><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</span></a>
+        <a class="button white multiple_action_button" type="button" href="/podcasts/delete" id="delete_multiple_podcasts"><span><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</span></a>
+        </div>  
+    </form>
+    
+    <div style="float:right;"><?php echo $this->element('../podcasts/_personalise'); ?></div>
+	    
 </fieldset>

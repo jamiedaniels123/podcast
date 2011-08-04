@@ -5,7 +5,7 @@
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
     <fieldset>
-        <legend><span>Update Collection</span></legend>
+        <legend><h3>Update Collection</h3></legend>
         
         <img src="/img/collection-large.png" />
         
