@@ -1,6 +1,6 @@
 <input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
 
-<div class="input text" id="content">
+<div class="input text form_title" id="content">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
     <input type="text" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
@@ -127,7 +127,7 @@
     
     
     <div class="link">
-	<a href="/" id="PodcastPodcastFlag" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a into Podcast</a>
+	<a href="/" id="PodcastPodcastFlag" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
 </div>
     
     

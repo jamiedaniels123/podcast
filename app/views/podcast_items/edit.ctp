@@ -4,6 +4,6 @@
 	<fieldset>
         <legend><span>Media</span></legend>
 		<?php echo $this->element('../podcast_items/_form'); ?>
-        <button id="update_podcast_item" type="submit"  class="auto_select_and_submit">update podcast media</button>
+        <button id="update_podcast_item" type="submit"  class="button light-blue auto_select_and_submit">Update Collection Media</button>
     </fieldset>
 </form>
