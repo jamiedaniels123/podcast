@@ -135,7 +135,7 @@ table {
 	border-right:0;
 	clear: both;
 	color: #333;
-	margin: 25px 0;
+	margin: 25px 0 10px 0;
 	width: 100%;
 	border-bottom:1px solid #418DB1;
 	border-spacing:0;	
@@ -243,13 +243,22 @@ table td.actions a img {
 div.paging {
 	background:#fff;
 	color: #ccc;
-	margin-top: 2.7em;
+	margin-bottom: 1.7em;
 	clear:both;
 }
 
+div.paging.p	{
+	display:inline;	
+}
+
 .page-controls {
-	margin-top:1em;
+	margin-top:0.7em;
 	height: 20px;}
+	
+span.paging-text	{
+	margin: 0 0 0 32px;
+	vertical-align: middle;
+	}
 
 div.paging .page-controls span span.disabled {
 	color: #ddd;
@@ -839,7 +848,7 @@ ul#PodcastColumnOptions li {
 	list-style-type: none;
 }
 
-#PersonaliseContainer {
-	
-	width: 900px;	
+#PersonaliseContainer {	
+	width: 700px;
+	text-align: right;	
 }

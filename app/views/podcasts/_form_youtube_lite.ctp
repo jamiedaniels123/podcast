@@ -1,5 +1,5 @@
 <fieldset class="youtube">
-	<legend>Youtube</legend>
+	<legend><h3>Youtube</h3></legend>
 	<dl>
 	    <dt><a href="/" id="PodcastItemYoutubeToggle"  class="juggle" data-target="PodcastYoutubeContainer">Toggle</a></dt>
     </dl>		

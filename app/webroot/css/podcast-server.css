@@ -20,17 +20,30 @@ fieldset legend span {
 	margin:0; 
 	padding:0;
 	}*/
+
 	
 legend h3 {
 	display:block;
 	position: absolute;
 	font-style:normal;
-	margin: 20px 0px 0 64px;
-	background: red;
+	margin: 18px 0px 20px 64px;
+	}
+	
+@-moz-document url-prefix() {
+    legend h3 { left:5px; } /*Corrects an error in FF placement of page legend*/
 	}
 
 
-/*.leader	{position:absolute;top:30px;text-indent:64px;margin:0;padding:0;}*/
+.leader	{
+	display:block;
+	position:absolute;
+	margin: 05px 0px 0 64px;
+	padding:20px 0 0 0px;
+	}
+	
+@-moz-document url-prefix() {
+    .leader { margin-left: 68px; } /*Corrects an error in FF placement of page leader*/
+	}
 
 .collection-top {margin: 30px 0 0 0; width: 100%;}
 

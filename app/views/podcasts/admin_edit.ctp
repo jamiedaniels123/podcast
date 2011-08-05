@@ -2,7 +2,7 @@
     <input type="hidden" id="PodcastId" name="data[Podcast][id]" value="<?php echo $this->data['Podcast']['id']; ?>">
     <input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
     <fieldset>
-        <legend>Update Podcast</legend>
+        <legend><h3>Update Podcast</h3></legend>
         <p>
             Use the form below to create a new podcast container
         </p>

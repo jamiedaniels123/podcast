@@ -1,11 +1,11 @@
 <fieldset class="podcasts index youtube">
-    <legend><span>Youtube collections</span></legend>
-    
-    <img src="/img/collection-large.png" />
+    <legend><h3>Youtube collections</h3></legend>
     
     <p class="leader">
         Below is a list of all youtube collections podcasts on the system.
     </p>
+    
+    <img src="/img/collection-large.png" />
     
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
