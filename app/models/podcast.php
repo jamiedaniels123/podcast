@@ -598,7 +598,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id = null, $podcast = null ) {
+     function xgetUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
@@ -671,7 +671,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function xgetUserPodcasts( $user_id = null, $podcast = null ) {
+     function getUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
@@ -697,13 +697,13 @@ class Podcast extends AppModel {
 	                        	'Podcast.owner_id = Owner.id'
                         		),
 	                        array(
+	                        	'Owner.YouTube' => 'Y',
+	                        	'Podcast.intended_youtube_flag' => 'N',
+	                        	'Podcast.owner_id = Owner.id'
+                        		),                        		
+	                        array(
 	                        	'Owner.iTunesU' => 'N',
 	                        	'Owner.YouTube' => 'N',
-	                        	'Podcast.owner_id = Owner.id'
-                        		),
-	                        array(
-	                        	'Owner.YouTube' => 'N',
-	                        	'Podcast.intended_youtube_flag' => 'N',
 	                        	'Podcast.owner_id = Owner.id'
                         		),
                         	)
