@@ -712,8 +712,9 @@ class Feed extends AppModel {
 		return
 			array(
 				'source_path' => $custom_id.'/'.$media_type,
+				'source_filename' => $file_name,
 				'destination_path' => $custom_id.'/'.$media_type,
-				'filename' => $file_name
+				'destination_filename' => $file_name
 			);
     }
 

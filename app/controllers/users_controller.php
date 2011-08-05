@@ -62,7 +62,6 @@ class UsersController extends AppController {
 
                     $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'apply' ) );
                     exit;
-
                 }
 
             // We found the user but the terms and conditions have been updated since they last logged in.
@@ -99,10 +98,12 @@ class UsersController extends AppController {
         }
     }
 
-    function home() {
-
-    }
-    
+	/*
+	 * @name : dashboard
+	 * @description : Default page when the user logs in.
+	 * @updated : 5th August 2011
+	 * @by : Charles Jackson
+	 */    
     function dashboard() {
 
         $this->data = $this->User->getDashboardData( $this->Session->read('Auth.User.id' ) );

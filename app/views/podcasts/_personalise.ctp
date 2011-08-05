@@ -27,8 +27,8 @@
             <li><input type="checkbox" name="data[Podcast][media]" class="personalise" data-target="media" <?php echo $this->Miscellaneous->columnActive($active_columns, 'media'); ?>>media</li>
             <li><input type="checkbox" name="data[Podcast][owner]" class="personalise" data-target="owner" <?php echo $this->Miscellaneous->columnActive($active_columns, 'owner'); ?>>Owner</li>
             <li><input type="checkbox" name="data[Podcast][preferred_node]" class="personalise" data-target="preferred_node" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_node'); ?>>Preferred Node</li>
-				<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
-                <li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
+			<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
+			<li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
  
 			</ul>
 		</div>

@@ -820,7 +820,7 @@ class Podcast extends AppModel {
                 $conditions[0]['Podcast.deleted'] = 1;
         }
 
-         if( !empty( $podcast['search'] ) ) {
+         if( !empty( $podcast['search'] ) && ( $podcast['search'] != INPUT_GREETING ) ) {
      		
 	        $conditions[] = array(
 	            array('OR' => array(

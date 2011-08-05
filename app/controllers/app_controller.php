@@ -156,5 +156,28 @@ class AppController extends Controller {
     	$this->Cookie->write('Podcasts',$active_columns, false );
     	return true;
     }
+    
+    /*
+     * @name : cookieStanding
+     * @description :
+     * @updated : 5th August 2011 
+     * @by : Charles Jackson
+     */
+    function cookieStanding( $cookie_name = null ) {
+    	
+    	$active_columns = array();
+    	
+		if( $this->Cookie->read($cookie_name) ) {
+        
+        	$active_columns = $this->Cookie->read($cookie_name);
+        
+        } else {
+
+	        $active_columns = array('title','owner','created','thumbnail');
+			$this->Cookie->write($cookie_name,$active_columns, false );
+       }
+       
+       return $active_columns;
+    }    
 
 }
