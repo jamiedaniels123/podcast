@@ -598,7 +598,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     /*function getUserPodcasts( $user_id = null, $podcast = null ) {
+     function getUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
@@ -657,7 +657,7 @@ class Podcast extends AppModel {
         }
 
         return $list;
-     }*/
+     }
 
      /*
       * @name : getItunesUserPodcasts
@@ -671,7 +671,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function getUserPodcasts( $user_id = null, $podcast = null ) {
+     function xgetUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 

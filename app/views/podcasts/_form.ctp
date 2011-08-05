@@ -118,19 +118,10 @@
 <?php if( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) : ?>
     <div class="clear"></div>
     
-    
-    <div class="input checkbox link">
-        <input type="hidden" id="PodcastPodcastFlag" value="<?php echo $this->data['Podcast']['podcast_flag'];?> " name="data[Podcast][podcast_flag]">
-        <label for="PodcastPodcastFlag">Convert Collection into a into Podcast</label>
-        <?php echo $this->Form->error('Podcast.podcast_flag'); ?>
-    </div>
-    
-    
     <div class="link">
-	<a href="/" id="PodcastPodcastFlag" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
-</div>
-    
-    
+		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
+    	<input type="hidden" id="PodcastPodcastFlag" value="<?php echo $this->data['Podcast']['podcast_flag'];?> " name="data[Podcast][podcast_flag]">
+	</div>
     
     <div class="clear"></div>
     <div class="podcast_container" style="display:none;">

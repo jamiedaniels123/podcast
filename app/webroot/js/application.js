@@ -11,13 +11,28 @@ jQuery(document).ready(function($) {
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastPodcastFlag').length ) {
+    if( jQuery('#PodcastFlagLink').length ) {
 
-        show_hide_podcast_elements();
+    	var is_podcast = jQuery('#PodcastPodcastFlag').val();
+    	
+        show_hide_podcast_elements( is_podcast );
+        
+        jQuery('#PodcastFlagLink').live('click',function(e) {
+        	
+        	var is_podcast = jQuery('#PodcastPodcastFlag').val();
 
-        jQuery('#PodcastPodcastFlag').live('click',function(e) {
+        	if( is_podcast == 1 ) {
+        		
+        		jQuery('#PodcastPodcastFlag').val(0);
+        		show_hide_podcast_elements( 0 );
+        		
+        	} else {
 
-            show_hide_podcast_elements();
+        		jQuery('#PodcastPodcastFlag').val(1);
+        		show_hide_podcast_elements( 1 );
+        	}
+        	
+            
         });
     }
 
@@ -150,31 +165,32 @@ jQuery(document).ready(function($) {
 	});
 });
 
+// Makes an ajax call to a method in the app_controller
+// that will write a cookie to the workstation based on the
+// checkboxes that have been ticked in the form.
 function write_cookie( cookie_name ) {
 	
     var form_data = $("#PersonaliseForm").serialize();
 
     jQuery.ajax(
     {
-            type: "POST",
-            url: "/podcasts/cookie",
-            data: form_data,
-            error:
-                    function()
-                    {
-                            alert('unable to set cookie');
-                    }
+        type: "POST",
+        url: "/podcasts/cookie",
+        data: form_data,
+        error:
+            function()
+            {
+                    alert('unable to set cookie');
+            }
     });
-
-    
 }
 
 // Will show or hide the podcast container div depending
 // upon the status of the checkbox. Called on page load and when the
 // user clicks the checkbox.
-function show_hide_podcast_elements() {
+function show_hide_podcast_elements( is_podcast ) {
 
-    if( jQuery('#PodcastPodcastFlag').is(':checked') ) {
+    if( is_podcast == 1 ) {
 
         jQuery('.podcast_container').show('slow');
 
