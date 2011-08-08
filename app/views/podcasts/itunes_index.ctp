@@ -10,7 +10,7 @@
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
     <div class="input select">
-		<?php echo $this->element('../podcasts/_itunes_youtube_filter'); ?>
+		<?php echo $this->element('../podcasts/_itunes_filter'); ?>
     </div>
     <div class="clear"></div>
     <?php echo $this->element('../podcasts/_table'); ?>

@@ -854,6 +854,24 @@ class Podcast extends AppModel {
     function buildiTunesFilters( $filter = null ) {
     	    	
         switch( strtolower( $filter ) ) {
+            case 'all':
+	            return array('OR' => array(
+	                array(
+	                    'Podcast.consider_for_itunesu' => true
+	                    ),
+	                array(
+	                    'Podcast.intended_itunesu_flag' => 'Y'
+	                    ),
+	                array(
+	                    'Podcast.publish_itunes_u' => 'Y'
+	                    ),
+	                array(
+	                    'Podcast.openlearn_epub' => 'Y',
+	                    )
+                    ),
+                    'Podcast.deleted' => 0
+	            );
+                break;
             case 'consideration':
                 return array( 
 					'Podcast.consider_for_itunesu' => true,
@@ -862,17 +880,24 @@ class Podcast extends AppModel {
 	                'Podcast.deleted' => 0 
                 );
                 break;
-            case 'intended':
+			case 'intended':
                 return array( 
 					'Podcast.intended_itunesu_flag' => 'Y',
                 	'Podcast.publish_itunes_u != ' => 'Y',
 	                'Podcast.deleted' => 0 
                 );
                 break;
+            case 'openlearn':
+            	return array(
+	                'Podcast.openlearn_epub' => 'Y',
+	                'Podcast.deleted' => 0
+            	);
+                break;
             case 'published':
             default :
             	return array(
 	                'Podcast.publish_itunes_u' => 'Y',
+            		'Podcast.openlearn_epub' => 'N',
 	                'Podcast.deleted' => 0
             	);
                 break;
