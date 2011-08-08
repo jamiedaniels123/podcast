@@ -154,7 +154,7 @@ class PodcastItem extends AppModel {
         	$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
-				'filename' => $media['filename'],
+				'source_filename' => $media['filename'],
 				'destination_filename' => '.'.$media['filename'],
         		'podcast_item_id' => '.'.$media['podcast_item'],
         		'podcast_item_media_id' => '.'.$media['id']
@@ -167,7 +167,7 @@ class PodcastItem extends AppModel {
 			$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'filename' => $data['Transcript']['filename'],
+				'source_filename' => $data['Transcript']['filename'],
 				'destination_filename' => '.'.$data['PodcastMedia']['filename'],
         		'podcast_item_id' => '.'.$media['podcast_item'],
         		'podcast_item_media_id' => '.'.$media['id'],

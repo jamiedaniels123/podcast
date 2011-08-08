@@ -1,11 +1,11 @@
 <fieldset class="itunes">
 	<legend>iTunes</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="itunes_toggler">Toggle</a></dt>
+	    <dt><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItunesContainer" class="juggle">Toggle</a></dt>
 	    <dt>Published: </dt>
 	    <dd><img src="/img<?php echo $this->data['PodcastItem']['itunes_flag'] == YES ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
     </dl>
-    <div class="wrapper itunes" style="display:none">		
+    <div id="PodcastItemItunesContainer" class="wrapper itunes" style="display:none">		
 	    <div class="input text">
 	        <label for="PodcastItemEpubIsbn">ePub ISBN</label>
 	        <input type="text" id="PodcastItemEpubIsbn" name="data[PodcastItem][epub_isbn]" value="<?php echo $this->data['PodcastItem']['epub_isbn']; ?>">

@@ -10,6 +10,7 @@ class AppController extends Controller {
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 
+    var $alert = false; // A flag used to determine if an alter has been set that overrides any defacto flash message.
     /*
      * @name : beforeFilter
      * @description : Called before the controller is executed. Currently using this to ensure only administrators 
@@ -18,6 +19,8 @@ class AppController extends Controller {
      * @by : Charles Jackson
      */
     function beforeFilter() {
+    	
+    	$this->alert = false;
     	
 		if( $this->RequestHandler->isAjax() == false ) {
 			
@@ -156,5 +159,28 @@ class AppController extends Controller {
     	$this->Cookie->write('Podcasts',$active_columns, false );
     	return true;
     }
+    
+    /*
+     * @name : cookieStanding
+     * @description :
+     * @updated : 5th August 2011 
+     * @by : Charles Jackson
+     */
+    function cookieStanding( $cookie_name = null ) {
+    	
+    	$active_columns = array();
+    	
+		if( $this->Cookie->read($cookie_name) ) {
+        
+        	$active_columns = $this->Cookie->read($cookie_name);
+        
+        } else {
+
+	        $active_columns = array('title','owner','created','thumbnail');
+			$this->Cookie->write($cookie_name,$active_columns, false );
+       }
+       
+       return $active_columns;
+    }    
 
 }

@@ -39,19 +39,8 @@ class PodcastsController extends AppController {
     function index() {
 
         $id_numbers = array();
-		$active_columns = array();
 		
-        if( $this->Cookie->read('Podcasts') ) {
-        	
-        	$this->set('active_columns', $this->Cookie->read('Podcasts') );
-        	
-        } else {
-
-        	$active_columns = array('title','owner','created','thumbnail');
-        	$this->set('active_columns', $active_columns );
-
-			$this->Cookie->write('Podcasts',$active_columns, false );
-        }
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
         	
         // Have they posted the filter form?
     	if( isSet( $this->data['Podcast']['filter'] ) ) {
@@ -81,10 +70,11 @@ class PodcastsController extends AppController {
     function itunes_index() {
 
 		$this->Podcast->recursive = 2;
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 			
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		$this->set('filter',$this->data['Podcast']['filter'] );
@@ -100,10 +90,11 @@ class PodcastsController extends AppController {
     function youtube_index() {
 
 		$this->Podcast->recursive = 2;
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		// Grab the filter and assign to the view so the select box retains the current selection
@@ -134,7 +125,7 @@ class PodcastsController extends AppController {
             $this->data['Podcast']['private'] = YES;
 			
             $this->Podcast->set( $this->data['Podcast'] );
-
+			$this->Podcast->begin();
             if( $this->Podcast->save() ) {
 
 				$data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId() . '_' . $this->Podcast->buildSafeFilename( $data['Podcast']['title'] );
@@ -148,9 +139,26 @@ class PodcastsController extends AppController {
 				// Create the ModeratorUserGroups that are saved using a hasMany relationship.
 				$this->Podcast->createModeratorUserGroups();
 
-				$this->Podcast->saveAll();
+				if( $this->Podcast->saveAll() ) {
+					
+					$this->Podcast->commit();					
+					if( $this->__generateRSSFeeds( $this->Podcast->getLastInsertId() ) ) {
 
-                $this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
+						$this->Session->setFlash('Collection has been successfully created.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+						$this->Session->setFlash('We were unable to generate RSS feeds. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					}
+					
+					$this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
+										
+				} else {
+					
+					$this->Session->setFlash('We were unable to create this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				}	
+							
+                $this->Podcast->rollback();
 
             } else {
 
@@ -158,7 +166,6 @@ class PodcastsController extends AppController {
                 $this->data = $this->Podcast->rebuild( $this->data );
 
                 $this->errors = $this->Podcast->invalidFields( $this->data );
-                $this->Session->setFlash('Could not create your collection. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
         }
         
@@ -412,7 +419,7 @@ class PodcastsController extends AppController {
     		
 				$this->Session->setFlash('We could not identify the channel status you are attempting to update. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
 			}
-			
+			$this->__generateRSSFeeds( $this->data['Podcast']['id'] );
     		$this->Podcast->set( $this->data );
     		$this->Podcast->save();
     		
@@ -806,6 +813,7 @@ class PodcastsController extends AppController {
         // of the uploaded file else it will return false.
         if( $this->Upload->podcastImage( $this->Podcast->data, 'new_image' ) ) {
 			
+        	
 			$this->Podcast->data['Podcast']['image'] = $this->Upload->getUploadedFileName();
 			
 		} else {
@@ -865,13 +873,8 @@ class PodcastsController extends AppController {
         if( empty( $podcast ) )
             return false;
 
-        if( $podcast['Podcast']['podcast_flag'] == true ) {
-
-            // Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-            $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
-        }
-
-        return true; // No RSS Feed needed so return a default of true to signify everything OK.
+			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+            return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
     }
 
     /*

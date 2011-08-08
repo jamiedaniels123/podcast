@@ -29,11 +29,12 @@ class CallbacksController extends AppController {
 		$this->layout='callback';
 		$this->Callback->setData(file_get_contents("php://input"));
 		$user = ClassRegistry::init('User');
-
+		$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'Callback Alert' );
+		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
-			$this->set('status', json_encode( array('status'=>'ACK', 'data'=>'Message received', 'timestamp'=>time() ) ) );
+			$this->set('status', json_encode( array( 'status'=>'ACK', 'data'=>'Message received', 'timestamp' => time() ) ) );
 
 			if( $this->Callback->hasErrors() )
 				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'This callback has errors');
@@ -49,25 +50,25 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					if( $podcastItem->saveFlavour( $row ) = false )
+					if( $podcastItem->saveFlavour( $row ) == false )
 						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of ice cream');
 				}
-				
 			}
 			
 			if( in_array( $this->Callback->data['command'], $this->deletion_request ) ) {
 				
+				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'processing a deletion');
 				$this->Callback->processDeletions();
-								
 			}			
 				
 			// Does the API command signify a need to delete a local file structure?
 			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
 
 				foreach( $this->Callback->data['data'] as $row ) {
-					
+
+					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'deleting local file');
 					// Delete the local file structure or error.
-					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['filename'] );
+					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['source_filename'] );
 				}
 			}
 			
@@ -83,8 +84,8 @@ class CallbacksController extends AppController {
 					if( strtoupper( $row['status'] ) == YES ) {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						//if( $this->Api->metaInjection( $podcastItem->buildInjectionFlavours( $row['data']['podcast_item_id'] ) ) == false )
-							//$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Error injecting meta data');
+						if( $this->Api->metaInjection( $podcastItem->buildInjectionFlavours( $row['data']['podcast_item_id'] ) ) == false )
+							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Error injecting meta data');
  					}
 				}
 			}
@@ -94,12 +95,6 @@ class CallbacksController extends AppController {
 			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Failed to understand command');
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
-	}
-
-
-
-	function post() {
-
 	}
 }
 ?>
