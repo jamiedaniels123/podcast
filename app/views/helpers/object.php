@@ -88,7 +88,21 @@ class ObjectHelper extends AppHelper {
         return false;
     }
     
+    /*
+     * @name : isOpenLearn
+     * @description : Returns a bool
+     * @updated : 8th August 2011
+     * @by : Charles Jackson
+     */
+    function isOpenLearn( $object = array() ) {
 
+    	// Podcast level
+    	if( isSet( $object['openlearn_epub'] ) )
+        	return $object['openlearn_epub'] == strtoupper( YES );
+        	
+        return false;
+    }
+    
     /*
      * @name : intendedForItunes
      * @description : Retruns a bool depending up the value of the flag set (Y or N)
@@ -130,6 +144,8 @@ class ObjectHelper extends AppHelper {
         	return $object['itunes_flag'] == strtoupper( YES );
         	
     }
+
+    
 
     /*
      * @name : youtubePublished

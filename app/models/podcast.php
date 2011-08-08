@@ -914,7 +914,21 @@ class Podcast extends AppModel {
     function buildYoutubeFilters( $filter = null ) {
 
         switch( strtolower( $filter ) ) {
-        	
+            case 'all':
+	            return array('OR' => array(
+	                array(
+	                    'Podcast.consider_for_youtube' => true
+	                    ),
+	                array(
+	                    'Podcast.intended_youtube_flag' => 'Y'
+	                    ),
+	                array(
+	                    'Podcast.publish_youtube' => 'Y'
+	                    )
+                    ),
+                    'Podcast.deleted' => 0
+	            );
+                break;        	
             case 'consideration':
                 return array( 
 					'Podcast.consider_for_youtube' => true,

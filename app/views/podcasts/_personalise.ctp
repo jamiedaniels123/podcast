@@ -37,6 +37,7 @@
 			<li><input type="checkbox" name="data[Podcast][consider_for_youtube]" class="personalise" data-target="consider_for_youtube" <?php echo $this->Miscellaneous->columnActive($active_columns, 'consider_for_youtube'); ?>>Consider Youtube</li>
 			<li><input type="checkbox" name="data[Podcast][intended_youtube_flag]" class="personalise" data-target="intended_youtube_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'intended_youtube_flag'); ?>>Intended Youtube</li>
 			<li><input type="checkbox" name="data[Podcast][publish_youtube]" class="personalise" data-target="publish_youtube" <?php echo $this->Miscellaneous->columnActive($active_columns, 'publish_youtube'); ?>>Youtube Published</li> 
+			<li><input type="checkbox" name="data[Podcast][openlearn_epub]" class="personalise" data-target="openlearn_epub" <?php echo $this->Miscellaneous->columnActive($active_columns, 'openlearn_epub'); ?>>Open Learn</li>
 			</ul>
 		</div>
 	</form>

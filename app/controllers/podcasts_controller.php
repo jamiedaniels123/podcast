@@ -74,7 +74,7 @@ class PodcastsController extends AppController {
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 			
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		$this->set('filter',$this->data['Podcast']['filter'] );
@@ -90,10 +90,11 @@ class PodcastsController extends AppController {
     function youtube_index() {
 
 		$this->Podcast->recursive = 2;
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		// Grab the filter and assign to the view so the select box retains the current selection
