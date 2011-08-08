@@ -125,6 +125,12 @@ class PodcastItemsController extends AppController {
                 $this->cakeError('error404');
             }
         }
+
+        // Get the pricavy settings
+        $this->set('youtube_privacy', array('Public','Hidden','Private') );
+        $this->set('youtube_licenses', array('Standard Youtube License','Creative Commons Attribution License') );
+        $this->set('youtube_comments', array('Allow','Friends and Approval','Approval Only','Disallow') );
+        $this->set('youtube_video_responses', array('Yes','Approval','No') );
         
 		// Get the possible playlists for youtube.
         $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
@@ -252,8 +258,6 @@ class PodcastItemsController extends AppController {
      * @by : Charles Jackson
      */
     function consider_youtube( $id = null ) {
-
-    	$this->PodcastItem->recursive = -1;
     	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
@@ -283,15 +287,13 @@ class PodcastItemsController extends AppController {
      */
 	function youtube_approve( $id = null ) {
     	
-    	$this->PodcastItem->recursive = -1;
-    	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
         foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
             $this->data = $this->PodcastItem->findById( $key );
-    	
+
             // Make sure it has already been converted into a podcast if they want to publish it.
 	        if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 	        	

@@ -80,6 +80,17 @@ class ApiComponent extends Object {
     }
 
     /*
+     * @name : youtubeUpload
+     * @description : Will upload a file to youtube
+     * @updated : 8th August 2011
+     * @by : Charles Jackson
+     */
+    function youtubeUpload( $data = array() ) {
+    	
+        $this->setResponse( json_decode( $this->__sendMessage('upload-file-to-youtube', ADMIN_API, $data ), 1 ) );
+        return $this->getStatus();
+    }
+    /*
      * @name : transcodeMedia
      * @description : Called from the controller, formats parameters passed into a JSON encoded array
      * @updated : 7th June 2011

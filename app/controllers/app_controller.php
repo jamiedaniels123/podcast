@@ -10,6 +10,7 @@ class AppController extends Controller {
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 
+    var $alert = false; // A flag used to determine if an alter has been set that overrides any defacto flash message.
     /*
      * @name : beforeFilter
      * @description : Called before the controller is executed. Currently using this to ensure only administrators 
@@ -18,6 +19,8 @@ class AppController extends Controller {
      * @by : Charles Jackson
      */
     function beforeFilter() {
+    	
+    	$this->alert = false;
     	
 		if( $this->RequestHandler->isAjax() == false ) {
 			

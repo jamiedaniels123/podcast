@@ -163,6 +163,18 @@ jQuery(document).ready(function($) {
     	jQuery('td.'+target).toggle();
     	write_cookie('OpenUniversity');
 	});
+    
+    // When a youtube user wishes to automatically generate a description
+    // based on the information provided within the form.
+    jQuery('#PodcastItemGenerateYoutubeDescription').live('click', function(e) {
+
+		e.preventDefault();
+    	var answer = confirm('You are about to automatically generate a description based on the values held in related form fields. Are you sure?');
+    	if( answer ) {
+    			text = 'Generated description to be decided';
+		    	jQuery('#PodcastItemYoutubeDescription').val(text);
+    	}
+    });
 });
 
 // Makes an ajax call to a method in the app_controller

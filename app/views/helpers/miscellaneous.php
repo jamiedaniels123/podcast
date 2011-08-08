@@ -22,4 +22,12 @@ class MiscellaneousHelper extends AppHelper {
 		return $style;
 		
 	}
+	
+	function yesNo( $bool = false ) {
+		
+		if( $bool )
+			return 'Yes';
+			
+		return 'No';
+	}
 }
