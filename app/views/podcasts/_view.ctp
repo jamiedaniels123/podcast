@@ -123,7 +123,7 @@
 		<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) && $this->Object->intendedForPublication( $this->data['Podcast'] ) == false ) : ?>
 			<a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
 		<?php endif; ?>
-		<a class="button white" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
+		<a class="button blue" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
 		
 	<?php endif; ?>
 

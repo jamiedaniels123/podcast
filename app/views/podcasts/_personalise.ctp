@@ -1,9 +1,11 @@
 <div id="PersonaliseContainer">
-	<a href="/" class="button blue juggle" data-target="PersonaliseForm">Personalise your table</a>
+	<a href="/" class="button blue juggle" data-target="PersonaliseForm"><img src="/img/icon-16-settings.png" alt="Personalise" class="icon" />Personalise your table</a>
 	
-	<form action="" method="post" id="PersonaliseForm" style="display:none;">
 	
-	    <div class="input checkbox">
+
+    <form action="" method="post" id="PersonaliseForm" style="display:none;margin-top:10px;">
+	
+	    <div class="input checkbox" >
 		    <ul id="PodcastColumnOptions">
             
             <li><input type="checkbox" name="data[Podcast][author]" class="personalise" data-target="author" <?php echo $this->Miscellaneous->columnActive($active_columns, 'author'); ?>>Author</li>
@@ -31,6 +33,9 @@
                 <li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
  
 			</ul>
-		</div>
-	</form>
-</div>
+            
+            
+		</div><!--/input checkbox-->
+        
+	</form> 
+</div><!--/PersonaliseContainer-->

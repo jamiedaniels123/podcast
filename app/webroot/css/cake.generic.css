@@ -732,6 +732,10 @@ div.clear {
     display: block;
 }
 
+.move	{
+	float:left;	
+}
+
 .move:hover {
     cursor: pointer;
 }
@@ -763,7 +767,7 @@ ul#breadcrumb li {
 
 	float: left;
 	margin-right: 10px;
-        list-style-type: none;
+    list-style-type: none;
 
 
 }
@@ -776,8 +780,11 @@ tr.deleted td {
 }
 
 #user_groups_container .float_left, #nodes_container .float_left, #moderator_container .float_left, #itune_categories_container .float_left, #ituneu_categories_container .float_left {
-	width: 30%;	
-	
+	width: 25%;		
+}
+
+#user_groups_container label	{
+		font-weight:bold;
 }
 
 button {
@@ -851,4 +858,8 @@ ul#PodcastColumnOptions li {
 #PersonaliseContainer {	
 	width: 700px;
 	text-align: right;	
+}
+
+#ridiculous	{
+background: green;	
 }

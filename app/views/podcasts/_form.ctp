@@ -13,24 +13,32 @@
 
 <div id="PodcastSharingContainer" style="display:none">
 	<div class="wrapper" id="user_groups_container">
-		<div class="float_left">
-			<div class="input select">
-				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
-				<label for="Moderators">Moderator Groups</label>
+		
+        <div class="float_left">
+			<div class="input select" style="background:red;">
+            <label for="Moderators">Moderator Groups</label>
+            
+				<span class="move right" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
+				
 				<input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
 				<select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
 					<?php foreach( $this->data['ModeratorGroups'] as $moderator ) : ?>
 						<option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['group_title']; ?></option>
 					<?php endforeach; ?>
-				</select>
+				</select>                
 				<?php echo $this->Form->error('Podcast.ModeratorGroups'); ?>
 			</div>
-		</div>
-		<div class="float_left">
+         </div>
+		
+        <div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
-				<span class="move" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
 				<label for="MemberGroups">Member Groups</label>
+               	<span class="left move" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
+               
+                
+               
+				<span class="move right" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
+				
 				<input type="hidden" name="data[MemberGroups]" value="" id="MemberGroups_" />
 				<select id="MemberGroups" multiple="multiple" class="selected" name="data[MemberGroups][]">
 					<?php foreach( $this->data['MemberGroups'] as $member ) : ?>
@@ -40,10 +48,13 @@
 				<?php echo $this->Form->error('Podcast.MemberGroups'); ?>
 			</div>
 		</div>
-		<div class="float_left">
+		
+        <div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
 				<label for="UserGroups">All User Groups</label>
+                
+                <span class="left move" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
+				
 				<input type="hidden" name="data[UserGroups]" value="" id="UserGroups_" />
 				<select name="data[UserGroups][]" class="selected" multiple="multiple" id="UserGroups">
 					<?php foreach( $user_groups as $key => $value ) : ?>

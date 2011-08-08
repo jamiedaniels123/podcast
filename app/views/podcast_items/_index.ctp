@@ -32,7 +32,7 @@
 			            <td  class="thumbnail">
 			            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'].'.jpg',$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" class="thumbnail" />
 			            </td>
-		                <td  class="collection-title"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></td>
+		                <td  class="collection-title"><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></td>
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
 		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
@@ -40,8 +40,7 @@
 						<td class="actions">
 						
 							<?php if( $this->Permission->toView( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
-							
-								<a class="button white" href="/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view media details"><span>view</span></a>
+						
 								
 								<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 								
