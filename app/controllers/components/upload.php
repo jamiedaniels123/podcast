@@ -531,18 +531,21 @@ class UploadComponent extends Object {
             array(
                 array(
                     'source_path' => $this->custom_id.'/',
+                	'source_filename' => $this->file_name.'.'.$this->file_extension,
                     'destination_path' => $this->custom_id.'/',
-                    'filename' => $this->file_name.'.'.$this->file_extension
+                    'destination_filename' => $this->file_name.'.'.$this->file_extension
                 ),
                 array(
                     'source_path' => $this->custom_id.'/',
+                	'source_filename' => $this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension,
                     'destination_path' => $this->custom_id.'/',
-                    'filename' => $this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension
+                    'destination_filename' => $this->file_name.RESIZED_IMAGE_EXTENSION.'.'.$this->file_extension
                 ),
                 array(
                     'source_path' => $this->custom_id.'/',
+                	'destination_filename' => $this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension,
                     'destination_path' => $this->custom_id.'/',
-                    'filename' => $this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension
+                    'source_filename' => $this->file_name.THUMBNAIL_EXTENSION.'.'.$this->file_extension
                     )
                 )
             )

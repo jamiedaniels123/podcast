@@ -27,9 +27,16 @@
             <li><input type="checkbox" name="data[Podcast][media]" class="personalise" data-target="media" <?php echo $this->Miscellaneous->columnActive($active_columns, 'media'); ?>>media</li>
             <li><input type="checkbox" name="data[Podcast][owner]" class="personalise" data-target="owner" <?php echo $this->Miscellaneous->columnActive($active_columns, 'owner'); ?>>Owner</li>
             <li><input type="checkbox" name="data[Podcast][preferred_node]" class="personalise" data-target="preferred_node" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_node'); ?>>Preferred Node</li>
-				<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
-                <li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
- 
+			<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
+			<li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
+			
+			<li><input type="checkbox" name="data[Podcast][consider_for_itunes]" class="personalise" data-target="consider_for_itunes" <?php echo $this->Miscellaneous->columnActive($active_columns, 'consider_for_itunes'); ?>>Consider iTunes</li>
+			<li><input type="checkbox" name="data[Podcast][intended_itunesu_flag]" class="personalise" data-target="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'intended_itunesu_flag'); ?>>Intended iTunes</li>
+			<li><input type="checkbox" name="data[Podcast][publish_itunes_u]" class="personalise" data-target="publish_itunes_u" <?php echo $this->Miscellaneous->columnActive($active_columns, 'publish_itunes_u'); ?>>iTunes Published</li> 
+
+			<li><input type="checkbox" name="data[Podcast][consider_for_youtube]" class="personalise" data-target="consider_for_youtube" <?php echo $this->Miscellaneous->columnActive($active_columns, 'consider_for_youtube'); ?>>Consider Youtube</li>
+			<li><input type="checkbox" name="data[Podcast][intended_youtube_flag]" class="personalise" data-target="intended_youtube_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'intended_youtube_flag'); ?>>Intended Youtube</li>
+			<li><input type="checkbox" name="data[Podcast][publish_youtube]" class="personalise" data-target="publish_youtube" <?php echo $this->Miscellaneous->columnActive($active_columns, 'publish_youtube'); ?>>Youtube Published</li> 
 			</ul>
 		</div>
 	</form>

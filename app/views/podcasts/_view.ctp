@@ -114,7 +114,7 @@
 			
 		<?php endif; ?>
 
-		<a class="button" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+		<a class="button" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
 		
 	<?php endif; ?>
 

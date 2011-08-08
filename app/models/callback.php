@@ -111,6 +111,7 @@ class Callback extends AppModel {
 				}
 			}
 		}
+		
 		// If we were deleting a podcast_item we need to check to see if any flavours are left,
 		// If no flavours are left ( ie: rows on the media table ) then we can delete the record
 		// else we need to update the status to "1" so it reappears on the admin panels		

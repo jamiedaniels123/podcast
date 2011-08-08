@@ -226,13 +226,20 @@ class FolderComponent extends Object {
      */
 	function cleanUp( $path, $filename ) {
 		
+		$folders = array();
+		
 		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
 			return false;
 		
 		unlink( FILE_REPOSITORY.$path.$filename );
 			
 		if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
-			return ( rmdir( FILE_REPOSITORY.$path ) );
+			rmdir( FILE_REPOSITORY.$path );
+			
+		$folders = explode('/',$path );
+		$custom_id = $folders[0];
+		if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
+			return ( rmdir( FILE_REPOSITORY.$custom_id ) );
 		
 		return true;
 	}

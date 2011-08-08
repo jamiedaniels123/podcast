@@ -173,7 +173,7 @@ class User extends AppModel {
                 break;
         }
     	
-         if( !empty( $user['search'] ) ) {
+         if( !empty( $user['search'] ) && $user['search'] != INPUT_GREETING ) {
      		
 	        $conditions[] = array(
 	            array('OR' => array(
