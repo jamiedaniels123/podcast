@@ -126,16 +126,7 @@ class PodcastItemsController extends AppController {
             }
         }
 
-        // Get the pricavy settings
-        $this->set('youtube_privacy', array('Public','Hidden','Private') );
-        $this->set('youtube_licenses', array('Standard Youtube License','Creative Commons Attribution License') );
-        $this->set('youtube_comments', array('Allow','Friends and Approval','Approval Only','Disallow') );
-        $this->set('youtube_video_responses', array('Yes','Approval','No') );
-        
-		// Get the possible playlists for youtube.
-        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
-        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
-        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
+		$this->__setYoutubeOptions        
     }
 
    /*
@@ -727,12 +718,8 @@ class PodcastItemsController extends AppController {
                 $this->cakeError('error404');
             }
         }
-        
-		// Get the possible playlists for youtube.
-        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
-        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
-        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
 
+		$this->__setYoutubeOptions        
     }
 
     /*
@@ -808,6 +795,21 @@ class PodcastItemsController extends AppController {
         }
 
         $this->redirect( $this->referer() );
+    }
+    
+    function __setYoutubeOptions() {
+    	
+        // Get the pricavy settings
+        $this->set('youtube_privacy', array('Public','Hidden','Private') );
+        $this->set('youtube_licenses', array('Standard Youtube License','Creative Commons Attribution License') );
+        $this->set('youtube_comments', array('Allow','Friends and Approval','Approval Only','Disallow') );
+        $this->set('youtube_video_responses', array('Yes','Approval','No') );
+
+		// Get the possible playlists for youtube.
+        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
+        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
+        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
+        
     }
 	
 }
