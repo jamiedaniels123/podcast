@@ -139,7 +139,7 @@
         <div class="input textarea">
             <label for="summary">Summary</label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
-            <textarea id="summary" rows="6" cols="30" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
+            <textarea id="summary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
         <div class="input file">
@@ -147,16 +147,15 @@
             <input type="file" id="PodcastNewImage" name="data[Podcast][new_image]">
             <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
             <?php echo $this->Form->error('Podcast.image'); ?>
-        </div>
-        <div class="image thumbnail">
-           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
-            <a href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete podcast image" onclick="return confirm('Are you sure you wish to delete the podcast image?')">delete</a>
-        </div>
-        <div class="input text">
-            <label for="PodcastImageCopyright">Image Copyright</label>
-            <input type="text" id="PodcastImageCopyright" value="<?php echo $this->data['Podcast']['image_copyright']; ?>" name="data[Podcast][image_copyright]">
-            <?php echo $this->Form->error('Podcast.image_copyright'); ?>
-        </div>
+ 
+            <div class="image thumbnail" style="line-height:32px;">
+          	<img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
+            <a class="button blue"  style="vertical-align: middle;" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')">delete</a>
+        	</div>
+        
+		</div>
+        
+        
         <div class="input select">
             <label for="PodcastLanguage">Language</label>
             <select name="data[Podcast][language]" id="PodcastLanguage">
@@ -199,13 +198,13 @@
         <div class="input checkbox">
             <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
             <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
-            <label for="PodcastPrivate">Private</label>
+            <label for="PodcastPrivate">Private</label><br />
             <?php echo $this->Form->error('Podcast.private'); ?>
         </div>
         <div class="input checkbox">
             <input type="hidden" value="N" id="PodcastIntranetOnly_" name="data[Podcast][intranet_only]">
             <input type="checkbox" id="PodcastIntranetOnly" value="Y" <?php echo $this->data['Podcast']['intranet_only'] == 'Y' ? 'checked="checked"' : '';?>  name="data[Podcast][intranet_only]">
-            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label>
+            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label><br />
             <?php echo $this->Form->error('Podcast.intranet_only'); ?>
         </div>
         <div class="clear"></div>
