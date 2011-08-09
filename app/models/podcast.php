@@ -1276,7 +1276,7 @@ class Podcast extends AppModel {
 
 			
 		$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
-
+		$this->data['Podcast']['title'] .= ' (COPY)';
 		$this->set( $this->data );							
 		
 		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {
