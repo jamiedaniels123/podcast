@@ -23,7 +23,7 @@ class ObjectHelper extends AppHelper {
      */
     function isDeleted( $object = array() ) {
 
-        if( $object['deleted'] == 1 )
+        if( (int)$object['deleted'] )
             return true;
 
         return false;
@@ -146,7 +146,14 @@ class ObjectHelper extends AppHelper {
     }
 
     
-
+	function hardDeleted( $podcast_item = array() ) {
+		
+		if( $podcast_item['deleted'] == 2 )
+			return true;
+			
+		return false;
+	}
+	
     /*
      * @name : youtubePublished
      * @description : Retruns a bool depending up the value of the flag set (Y or N)

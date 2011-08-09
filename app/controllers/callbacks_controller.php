@@ -2,7 +2,7 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_local_deletion = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
+	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
 	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
@@ -41,7 +41,7 @@ class CallbacksController extends AppController {
 				
 			// Do we need to update the processed state
 			if( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
-
+					
 				// Save the processed state
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
@@ -49,9 +49,12 @@ class CallbacksController extends AppController {
 				// We only trancode media 1 at a time but it is still wrapped in a forloop to give a generic structure to all
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
-
+					
 					if( $podcastItem->saveFlavour( $row ) == false )
 						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of ice cream');
+
+					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
+						
 				}
 			}
 			
@@ -68,7 +71,9 @@ class CallbacksController extends AppController {
 
 					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'deleting local file');
 					// Delete the local file structure or error.
-					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['source_filename'] );
+					
+					if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'] ) == false )
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'error deleting local file');
 				}
 			}
 			

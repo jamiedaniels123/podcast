@@ -39,18 +39,23 @@
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon"></td>
 						<td class="actions">
 						
-							<?php if( $this->Permission->toView( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+							<?php if( $this->Permission->toView( $this->data ) ) : ?>
 						
 								
-								<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+								<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 								
 									<a class="button off-black" href="/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
 									
-									<?php if( ( ( $podcast_item['processed_state'] == MEDIA_AVAILABLE ) && ( $this->Object->isPublished( $podcast_item ) == false ) ) || ( $this->Permission->isAdminRouting( $this->params ) ) ): ?>
+									<?php if( ( ( $podcast_item['processed_state'] == MEDIA_AVAILABLE ) && ( $this->Object->isPublished( $podcast_item ) == false ) ) ): ?>
 									
 										<a class="button white" href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');"><span>delete</span></a>
-										
+
 									<?php endif; ?>
+									<?php if( ( $podcast_item['processed_state'] != MEDIA_AVAILABLE ) && ( $this->Object->youtubePublished( $podcast_item ) ) ) : ?>
+                                    
+										<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to youtube?');"><span>upload</span></a>
+
+                                    <?php endif; ?>
 									
 								<?php endif; ?>
 								

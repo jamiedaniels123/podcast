@@ -241,12 +241,13 @@ class PodcastsController extends AppController {
 						
 					} elseif( ( $this->Folder->buildHtaccessFile( $this->Podcast->data ) == false ) || ( $this->Api->transferFileMediaServer( 
 					
-						array( 
+						array( array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
 							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
-							'filename' => '.htaccess' 
+							'source_filename' => 'htaccess' ,
+							'destination_filename' => '.htaccess' 
 							)
-						) ) == false ) {		
+						) ) ) == false ) {		
 						
 							$this->Session->setFlash('We were unable to generate the associated permissions. If the problem persists please alert an administrator', 'default', array( 'class' => 'error' ) );
 						
@@ -350,7 +351,7 @@ class PodcastsController extends AppController {
 
 					} else {
 						
-						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
+						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','htaccess' );
 						$this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
 						break; // Break out of the loop
 					}
@@ -444,11 +445,25 @@ class PodcastsController extends AppController {
 		if( !empty( $this->data ) ) {
 			
 			$this->Podcast->data = $this->data;
+			$api_data = $this->Podcast->copy();
 			
-			if( $this->Podcast->copy() ) {
+			if( $api_data ) {
 				
-				$this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] );
-				$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
+				if( $this->Api->copyMediaFolder( $api_data ) ) {
+					
+					if( $this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] ) ) {
+						
+						$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+						$this->Session->setFlash('The collection has been successfully copied but we could not generate the RSS feeds. Please refresh them.', 'default', array( 'class' => 'alert' ) );
+					}
+					
+				} else {
+						$this->Session->setFlash('The collection copied with errors, please delete this collection and try again. If the problem persist contact an administrator', 'default', array( 'class' => 'alert' ) );
+					
+				}
 				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );
 			}
 		}
@@ -611,12 +626,13 @@ class PodcastsController extends AppController {
 						
 					} elseif( ( $this->Folder->buildHtaccessFile( $this->Podcast->data ) == false ) || ( $this->Api->transferFileMediaServer( 
 					
-						array( 
+						array( array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
 							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
-							'filename' => '.htaccess' 
+							'source_filename' => 'htaccess',
+							'destination_filename' => '.htaccess',
 							)
-						) ) == false ) {		
+						) ) ) == false ) {		
 						
 							$this->Session->setFlash('We were unable to generate the necessary .htaccess permissions. If the problem persists please alert an administrator', 'default', array( 'class' => 'error' ) );
 						
