@@ -175,7 +175,7 @@ class ApiComponent extends Object {
      * @by : Ian Newton / Charles Jackson
      */
     function __sendMessage( $command, $mediaUrl, $data, $number = 1 ){
-
+		return true;
         $postData = array( 'command' => $command ,'number' => $number ,'data' => $data,'timestamp' => time() );
         $postData = array( 'mess' => json_encode( $postData ) );
         return( $this->__restHelper( $mediaUrl, $postData, 'POST' ) );
