@@ -69,7 +69,10 @@ h3 a:hover {text-decoration: underline;}
 
 /*Background colours*/
 
-.white {background-color:#fff;}
+.white {background-color:#fff;
+		color: #003d4c;
+		border-radius: 4px;
+		padding: 2px;}
 
 .off-black {background-color:#1a1a1a;color: #fff;}
 

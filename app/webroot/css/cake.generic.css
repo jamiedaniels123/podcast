@@ -364,7 +364,7 @@ form div {
 	color: #999;
 }*/
 
-form input, form textarea, select, input[type=file], input[type=radio], input[type=text] {
+form input, form textarea, select, input[type=file], input[type=radio], input[type=text], input[type=checkbox] {
 	/* display: inline; inline display must not be set or will hide submit buttons in IE 5x mac */
 	width:auto;      /* set width of form elements to auto-size, otherwise watch for wrap on resize */
 	margin:5px 0 0 10px; /* set margin on left of form elements rather than right of label aligns textarea better in IE */
@@ -384,7 +384,7 @@ form .input-filter {
 }
 
 div.thumbnail	{
-	margin:10px 0 0 190px; 
+	margin:10px 0 0 185px; 
 }	
 
 form .required {
@@ -446,8 +446,8 @@ option {
 
 input[type=checkbox] {
 	clear: left;
-	float: left;
-	margin: 0px 6px 7px 2px;
+
+
 	width: auto;
 	border:1px solid #999;
 }
