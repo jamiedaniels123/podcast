@@ -3,12 +3,12 @@
 <div class="input text form_title" id="content">
     <label for="PodcastTitle">Title</label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
-    <input type="text" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
+    <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
 </div>
 
 <div class="link">
-	<a href="/" id="PodcastSharingToggle" class="button white juggle" data-target="PodcastSharingContainer"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Sharing &amp; Ownership</a>
+	<a href="/" id="PodcastSharingToggle" class="button white juggle" data-target="PodcastSharingContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Sharing &amp; Ownership</a>
 </div>
 
 <div id="PodcastSharingContainer" style="display:none">
@@ -130,7 +130,7 @@
     <div class="clear"></div>
     
     <div class="link">
-		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-link.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
+		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
     	<input type="hidden" id="PodcastPodcastFlag" value="<?php echo trim( $this->data['Podcast']['podcast_flag'] );?>" name="data[Podcast][podcast_flag]">
 	</div>
     
@@ -150,7 +150,7 @@
  
             <div class="image thumbnail" style="line-height:32px;">
           	<img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
-            <a class="button white"  style="vertical-align: middle; margin: 0 0 0 10px;" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><img src="../../webroot/img/icon-16-link-delete.png" class="icon" />delete</a>
+            <a class="button white"  style="vertical-align: middle; margin: 0 0 0 10px;" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><img src="/webroot/img/icon-16-link-delete.png" class="icon" />delete</a>
         	</div>
         
 		</div>
@@ -171,12 +171,12 @@
             <?php echo $this->Form->error('Podcast.keywords'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastContactName">Contact Name <img src="../../webroot/img/icon-16-rss.png" alt="RSS Feed" /></label>
+            <label for="PodcastContactName">Contact Name <img src="/img/icon-16-rss.png" alt="RSS Feed" /></label>
             <input type="text" size="60" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">
             <?php echo $this->Form->error('Podcast.contact_name'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastContactEmail">Contact Email <img src="../../webroot/img/icon-16-rss.png" alt="RSS Feed" /></label>
+            <label for="PodcastContactEmail">Contact Email <img src="/img/icon-16-rss.png" alt="RSS Feed" /></label>
             <input type="text" size="60" id="PodcastContactEmail" value="<?php echo $this->data['Podcast']['contact_email']; ?>" name="data[Podcast][contact_email]">
             <?php echo $this->Form->error('Podcast.contact_email'); ?>
         </div>
