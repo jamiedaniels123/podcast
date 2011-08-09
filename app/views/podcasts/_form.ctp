@@ -199,13 +199,13 @@
         <div class="input checkbox">
             <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
             <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
-            <label for="PodcastPrivate">Private</label>
+            <label for="PodcastPrivate">Private</label><br />
             <?php echo $this->Form->error('Podcast.private'); ?>
         </div>
         <div class="input checkbox">
             <input type="hidden" value="N" id="PodcastIntranetOnly_" name="data[Podcast][intranet_only]">
             <input type="checkbox" id="PodcastIntranetOnly" value="Y" <?php echo $this->data['Podcast']['intranet_only'] == 'Y' ? 'checked="checked"' : '';?>  name="data[Podcast][intranet_only]">
-            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label>
+            <label for="PodcastIntranetOnly">Intranet (SAMS) only</label><br />
             <?php echo $this->Form->error('Podcast.intranet_only'); ?>
         </div>
         <div class="clear"></div>
