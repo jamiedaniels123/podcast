@@ -364,11 +364,16 @@ form div {
 	color: #999;
 }*/
 
-form input, form textarea {
+form input, form textarea, select, input[type=file], input[type=radio], input[type=text] {
 	/* display: inline; inline display must not be set or will hide submit buttons in IE 5x mac */
 	width:auto;      /* set width of form elements to auto-size, otherwise watch for wrap on resize */
-	margin:5px 0 0 10px; /* set margin on left of form elements rather than right of
-                              label aligns textarea better in IE */
+	margin:5px 0 0 10px; /* set margin on left of form elements rather than right of label aligns textarea better in IE */
+	background: #fff;
+	border:1px solid #ccc;
+	padding: 0.2em;
+	color: #1a1a1a;
+	font-family: Tahoma,"Lucida Grande",Arial,Helvetica,sans-serif;
+	font-size: 100%;
 }
 
 form .input-filter {
@@ -377,6 +382,10 @@ form .input-filter {
 	display:inline;
 	margin:0;
 }
+
+div.thumbnail	{
+	margin:10px 0 0 190px; 
+}	
 
 form .required {
 	font-weight: bold;
@@ -399,6 +408,7 @@ label {
 	padding: 0; 
 	margin: 5px 0 0; /* set top margin same as form input - textarea etc. elements */
 	text-align: left; 
+	color: #333;
 	/*end of idea*/
 
 	/*font-size: 100%;
@@ -418,19 +428,22 @@ form br {
 	clear:left; /* setting clear on inputs didn't work consistently, so brs added for degrade */
 }
 
+
+
 select {
 	clear: both;
-	border:1px solid #999;
-	background: #fff;
-	padding: 2px 4px 2px 2px;
+	margin-left: 10px;
 }
+
 select[multiple=multiple] {
 	width: 100%;
 	border:1px solid #999;
 }
+
 option {
 	padding: 0 3px;
 }
+
 input[type=checkbox] {
 	clear: left;
 	float: left;
@@ -438,21 +451,26 @@ input[type=checkbox] {
 	width: auto;
 	border:1px solid #999;
 }
+
 div.checkbox label {
 	display: inline;
 }
+
 input[type=radio] {
 	float:left;
 	width:auto;
 	margin: 0 3px 7px 0;
 }
+
 div.radio label {
 	margin: 0 0 6px 20px;
 }
+
 input[type=submit] {
 	display: inline;
 	width: auto;
 }
+
 form .submit input[type=submit] {
 	/*background:#62af56;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
@@ -676,9 +694,9 @@ div.code-coverage-results span.result-good {
 	color: #0a0;
 }
 
-input[type='text'],select,textarea {
+/*input[type='text'],select,textarea {
     background-color: #fff;
-}
+}*/
 
 input.datepicker {
     width: 125px;
