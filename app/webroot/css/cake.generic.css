@@ -309,18 +309,28 @@ dd {
 }
 
 /** Forms **/
+
+.input	{
+		padding: .5em;
+		margin:0.5em 0 0em 24px;
+		background: #e5f3fa;
+		border-radius:4px;
+}
+
 form {
 	clear: both;
 	margin: 0px 20px 00px 0px;
 	padding: 0;
 	width: 100%;
 }
+
 fieldset {
 	border: 1px solid #ccc;
 	margin-bottom: 1em;
 	padding: 16px 20px;
-	border-radius:6px;
+	border-radius:4px;
 }
+
 fieldset legend {
 	/*background:#fff;*/
 	color: #999;
@@ -328,26 +338,42 @@ fieldset legend {
 	font-weight: normal;
 	padding: 0 0 0 0;
 }
+
 fieldset fieldset {
 	margin-top: 25px;
 	margin-bottom: 20px;
 	padding: 16px 10px;
 }
+
 fieldset fieldset legend {
 	font-size: 120%;
 	font-weight: normal;
 }
-fieldset fieldset div {
 
+fieldset fieldset div {
 	margin: 0 20px;
 }
+
 form div {
 	margin-bottom: 0em;
 	padding: 0 .5em;
 	vertical-align:middle;
 }
-form .input {
+
+/*form .input {
 	color: #999;
+}*/
+
+form input, form textarea, select, input[type=file], input[type=radio], input[type=text], input[type=checkbox] {
+	/* display: inline; inline display must not be set or will hide submit buttons in IE 5x mac */
+	width:auto;      /* set width of form elements to auto-size, otherwise watch for wrap on resize */
+	margin:5px 0 0 10px; /* set margin on left of form elements rather than right of label aligns textarea better in IE */
+	background: #fff;
+	border:1px solid #ccc;
+	padding: 0.2em;
+	color: #1a1a1a;
+	font-family: Tahoma,"Lucida Grande",Arial,Helvetica,sans-serif;
+	font-size: 100%;
 }
 
 form .input-filter {
@@ -356,6 +382,10 @@ form .input-filter {
 	display:inline;
 	margin:0;
 }
+
+div.thumbnail	{
+	margin:10px 0 0 185px; 
+}	
 
 form .required {
 	font-weight: bold;
@@ -371,53 +401,76 @@ form div.submit {
 	margin-top: 10px;
 }
 label {
-	display: block;
-	font-size: 100%;
+	/*idea*/
+	display: block;  /* block float the labels to left column, set a width */
+	float: left; 
+	width: 180px; 
+	padding: 0; 
+	margin: 5px 0 0; /* set top margin same as form input - textarea etc. elements */
+	text-align: left; 
+	color: #333;
+	/*end of idea*/
+
+	/*font-size: 100%;
 	margin-bottom:2px;
-	display:inline;
+	display:inline;*/
 }
-input, textarea {
+
+/*input, textarea {
 	clear: both;
 	padding: 2px;
 	border:1px solid #999;
 	background: #fff;
 	width: 250px;
+}*/
+
+form br {
+	clear:left; /* setting clear on inputs didn't work consistently, so brs added for degrade */
 }
+
+
+
 select {
 	clear: both;
-	border:1px solid #999;
-	background: #fff;
-	padding: 2px 4px 2px 2px;
+	margin-left: 10px;
 }
+
 select[multiple=multiple] {
 	width: 100%;
 	border:1px solid #999;
 }
+
 option {
 	padding: 0 3px;
 }
+
 input[type=checkbox] {
 	clear: left;
-	float: left;
-	margin: 0px 6px 7px 2px;
+
+
 	width: auto;
 	border:1px solid #999;
 }
+
 div.checkbox label {
 	display: inline;
 }
+
 input[type=radio] {
 	float:left;
 	width:auto;
 	margin: 0 3px 7px 0;
 }
+
 div.radio label {
 	margin: 0 0 6px 20px;
 }
+
 input[type=submit] {
 	display: inline;
 	width: auto;
 }
+
 form .submit input[type=submit] {
 	/*background:#62af56;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
@@ -641,9 +694,9 @@ div.code-coverage-results span.result-good {
 	color: #0a0;
 }
 
-input[type='text'],select,textarea {
+/*input[type='text'],select,textarea {
     background-color: #fff;
-}
+}*/
 
 input.datepicker {
     width: 125px;

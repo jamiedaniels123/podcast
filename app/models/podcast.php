@@ -1214,7 +1214,8 @@ class Podcast extends AppModel {
 			
 			'source_path' => $podcast['Podcast']['custom_id'].'/',
 			'destination_path' => $podcast['Podcast']['custom_id'].'/', 
-			'filename' => '.htaccess' 
+			'source_filename' => 'htaccess',
+			'destination_filename' => '.htaccess' 
 		);
 		
 		return $data;
@@ -1228,7 +1229,9 @@ class Podcast extends AppModel {
      */ 	
 	function copy( $user_id = null ) {
 
+		$this->recursive = 2;
 		$original_podcast_id = $this->data['Podcast']['id'];
+		$original_custom_id = $this->data['Podcast']['custom_id'];
 		$this->data['Podcast']['id'] = null;
 		
 		// Make a local copy.
@@ -1255,7 +1258,6 @@ class Podcast extends AppModel {
 		$this->data['Podcast']['id'] = $this->getLastInsertId();
 		$data['Podcast']['id'] = $this->getLastInsertId();
 
-		
 		if( isSet( $this->data['PodcastItems'] ) && count( $this->data['PodcastItems'] ) ) {
 			
 			for( $x = 0; $x < count( $this->data['PodcastItems'] ); $x++ ) {
@@ -1276,13 +1278,20 @@ class Podcast extends AppModel {
 
 			
 		$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
-
+		$this->data['Podcast']['title'] .= ' (COPY)';
 		$this->set( $this->data );							
 		
 		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {
 		
 			$this->data = $data;
 			$this->commit();
+			
+			return array(
+				'source_path' => $original_custom_id,
+				'destination_path' => $this->data['Podcast']['custom_id']
+			);
+			
+			
 			return true;
 			
 		} else {

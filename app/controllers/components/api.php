@@ -51,6 +51,20 @@ class ApiComponent extends Object {
         return $this->getStatus();
     }
 
+	/*
+	 * @name : copyMediaFolder
+	 * @description : Will duplicate a folder structure on the media server 
+	 * @updated : 9th August 2011
+	 * @by : Charles Jackson
+	 */
+	function copyMediaFolder( $data = array() ) {
+		
+        $this->setResponse( json_decode( $this->__sendMessage('copy-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+
+        return $this->getStatus();
+	}
+	
+	
     /*
      * @name : deliverWithoutTranscoding
      * @description : The method is identical to the "transferFileMediaServer" method. However we use a seperate
