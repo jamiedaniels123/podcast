@@ -66,7 +66,11 @@
                         <?php echo $podcast['Podcast']['image_wide_copyright']; ?>
                     </td>                        
                     <td class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>>
-                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+						<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+	                        <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+                        <?php else : ?>
+	                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+						<?php endif; ?>
                     </td>
                     <td class="copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'copyright'); ?>>
                         <?php echo $podcast['Podcast']['copyright']; ?>

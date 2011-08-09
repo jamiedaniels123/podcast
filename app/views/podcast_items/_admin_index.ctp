@@ -15,6 +15,7 @@
         <?php 
 			$i = 0;
 			foreach( $this->data['PodcastItems'] as $podcast_item ) :
+				if( $this->Object->hardDeleted( $podcast_item ) == false ) :
                     $class = null;
                     if ($i++ % 2 == 0) :
 						if( $podcast_item['deleted'] ) :					
@@ -38,13 +39,14 @@
             <td>
 				<a href="/admin/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view media details"><span>view</span></a>
                 <a href="/admin/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
-                <?php if( $podcast_item['deleted'] ) : ?>
+                <?php if( (int)$podcast_item['deleted'] == 1 ) : ?>
 		            <a href="/admin/podcast_items/restore/<?php echo $podcast_item['id']; ?>" title="restore media" onclick="return confirm('Are you sure you wish to restore this media?');"><span>restore</span></a>                    
                 <?php else : ?>
-		            <a href="/admin/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to HARD DELETE this media?');"><span>delete</span></a>                    
+		            <a href="/admin/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to permanently delete this media? This action cannot be undone.');"><span>delete</span></a>                    
                 <?php endif; ?>
             </td>                                                
           </tr>
+          <?php endif; ?>
         <?php endforeach; ?>
     </table>
 </fieldset>

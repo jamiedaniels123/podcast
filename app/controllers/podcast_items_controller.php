@@ -62,6 +62,7 @@ class PodcastItemsController extends AppController {
         }
     }
 
+	
     /*
      * @name : view
      * @desscription : Enables owners, moderators and members to view details of an individual media file.
@@ -126,9 +127,29 @@ class PodcastItemsController extends AppController {
             }
         }
 
-		$this->__setYoutubeOptions        
+		$this->__setYoutubeOptions();        
     }
 
+	/*
+	 * @name : youtube_upload
+	 * @description :
+	 * @updated : 9th August 2011
+	 * @by : Charles Jackson
+	 */
+	 function youtube_upload( $id = null ) {
+	
+		$this->data = $this->PodcastItem->findById( $id );
+		
+		if( $this->data['PodcastItem']['youtube_flag'] ) {
+			
+			
+				
+			
+		}
+		 
+	 }
+	 
+	 
    /*
      * @name : consider_itunes
      * @description : Enables a peeps to submit an item of media for itunesu consideration
@@ -395,7 +416,8 @@ class PodcastItemsController extends AppController {
 							array( 
 								'source_path' => $this->data['Podcast']['custom_id'].'/',
 								'destination_path' => $this->data['Podcast']['custom_id'].'/', 
-								'filename' => $this->data['PodcastItem']['filename'],
+								'source_filename' => $this->data['PodcastItem']['filename'],
+								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
 									)
 								)
@@ -719,7 +741,7 @@ class PodcastItemsController extends AppController {
             }
         }
 
-		$this->__setYoutubeOptions        
+		$this->__setYoutubeOptions();
     }
 
     /*
@@ -745,7 +767,7 @@ class PodcastItemsController extends AppController {
 
 				// Set the deleted status to "2", scheduled for deletion.
 				$this->data['PodcastItem']['deleted'] = 2;
-				$this->Podcast->set( $this->data );
+				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
 				
 				$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );

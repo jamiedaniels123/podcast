@@ -272,11 +272,11 @@ class PodcastItem extends AppModel {
 	 * @updated : 3rd August 2011
 	 * @by : Charles Jackson
 	 */
-	function saveFlavour( $callback_row = array() ) {
+	function saveFlavour( $row = array() ) {
 		
-		$data = $podcastItem->findById( $row['data']['podcast_item_id'] );
+		$data = $this->findById( $row['podcast_item_id'] );
 															
-		if( strtoupper( $callback_row['status'] ) == YES ) {
+		if( strtoupper( $row['status'] ) == YES ) {
 						
 			$data['PodcastMedia']['processed_state'] = MEDIA_AVAILABLE; // Media available
 			
@@ -285,13 +285,12 @@ class PodcastItem extends AppModel {
 			$data['PodcastItem']['processed_state'] = -1; // Error in transcoding
 		}
 
-		$this->PodcastMedia->create();
-		$data['PodcastMedia']['filename'] = $row['destination_filename'];
-		$data['PodcastMedia']['original_filename'] = $row['source_filename'];
+		$data['PodcastMedia']['filename'] = str_replace('//','/',$row['destination_filename'] ); // Quick fudge to fix minor API issue;
+		$data['PodcastMedia']['original_filename'] = $row['original_filename'];
 		$data['PodcastMedia']['media_type'] = $row['flavour'];
 		$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
 		$data['PodcastMedia']['duration'] = $row['duration'];
 		$this->set( $data );
-		return $this->saveAll();
+		return $this->save();
 	}
 }
