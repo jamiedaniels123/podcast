@@ -10,6 +10,6 @@
         <img src="/img/add-collection-large.png" width="45" height="33" />
         
         <?php echo $this->element('../podcasts/_form'); ?>
-        <button id="create_podcast" type="submit" class="auto_select_and_submit">Create collection</button>
+        <button id="create_podcast" type="submit" class="button blue auto_select_and_submit">Create collection</button>
     </fieldset>
 <form>
