@@ -1,8 +1,12 @@
 <fieldset class="itunes">
 	<legend><h3>ItunesU</h3></legend>
-	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="juggle" data-target="PodcastItunesContainer">Toggle</a></dt>
-    </dl>	
+    
+     <img src="/img/icon-32-apple.png" width="32" height="32" alt="Apple Computer" />
+     
+	<div class="link" style="margin-top: 20px;">
+	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="PodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
+    </div>	
+    	
     <div id="PodcastItunesContainer" class="itunes_container itunes" style="display:none">
         <div class="input file">
             <label for="PodcastNewImageLogoless">Logoless image</label>
@@ -16,7 +20,7 @@
         </div>
         <div class="input text">
             <label for="PodcastImageLlCopyright">Copyright/credit</label>
-            <input type="text" id="PodcastImageLlCopyright" name="data[Podcast][image_ll_copyright]" value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
+            <input type="text" size="60" id="PodcastImageLlCopyright" name="data[Podcast][image_ll_copyright]" value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
             <?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
         </div>
         <div class="input file">
@@ -27,21 +31,21 @@
         </div>
         <div class="image thumbnail">
            <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
-            <a href="/podcasts/delete_image/image_wide/<?php echo $this->data['Podcast']['id']; ?>" title="delete widescreen image" onclick="return confirm('Are you sure you wish to delete the wide screen image?')">delete</a>
+            <a href="/podcasts/delete_image/image_wide/<?php echo $this->data['Podcast']['id']; ?>" title="delete widescreen image" onclick="return confirm('Are you sure you wish to delete the wide screen image?')">delete</a>   
         </div>
         <div class="input text">
             <label for="PodcastImageWideCopyright">Copyright/credit</label>
-            <input type="text" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
+            <input type="text" size="60" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
             <?php echo $this->Form->error('Podcast.image_wide_copyright'); ?>
         </div>
         <div class="input text">
             <label for="PodcastArtworkFile">Artwork File</label>
-            <input type="text" id="PodcastArtworkFile" value="<?php echo (int)$this->data['Podcast']['artwork_file']; ?>" name="data[Podcast][artwork_file]">
+            <input type="text" size="60" id="PodcastArtworkFile" value="<?php echo (int)$this->data['Podcast']['artwork_file']; ?>" name="data[Podcast][artwork_file]">
             <?php echo $this->Form->error('Podcast.artwork_file'); ?>
         </div>
         <div class="input text">
             <label for="PodcastAuthor">Author</label>
-            <input type="text" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
+            <input type="text" size="60" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
             <?php echo $this->Form->error('Podcast.author'); ?>
         </div>
         <div class="input select">
@@ -54,25 +58,25 @@
         <div class="input text">
             <label for="PodcastItunesUUrl">iTunes U URL</label>
             <input type="hidden" value="" id="PodcastItunesUUrl_" name="data[Podcast][itunes_u_url]">
-            <input type="text" id="PodcastItunesUUrl" name="data[Podcast][itunes_u_url]" value="<?php echo $this->data['Podcast']['itunes_u_url']; ?>">
+            <input type="text" size="60" id="PodcastItunesUUrl" name="data[Podcast][itunes_u_url]" value="<?php echo $this->data['Podcast']['itunes_u_url']; ?>">
             <?php echo $this->Form->error('Podcast.itunes_u_url'); ?>
         </div>
 
         <div class="input text">
             <label for="PodcastCourseCode">Course Code</label>
-            <input type="text" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
+            <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
             <?php echo $this->Form->error('Podcast.course_code'); ?>
         </div>
         <div class="input text">
             <label for="PodcastPublishItunesDate">iTunes U Publish Date</label>
             <input type="hidden" value="" id="PodcastPublishItunesDate_" name="data[Podcast][publish_itunes_date]">
-            <input type="text" id="PodcastPublishItunesDate" value="<?php echo (int)$this->data['Podcast']['publish_itunes_date'] ? $this->data['Podcast']['publish_itunes_date'] : ''; ?>" class="datepicker" name="data[Podcast][publish_itunes_date]">
+            <input type="text" size="60" id="PodcastPublishItunesDate" value="<?php echo (int)$this->data['Podcast']['publish_itunes_date'] ? $this->data['Podcast']['publish_itunes_date'] : ''; ?>" class="datepicker" name="data[Podcast][publish_itunes_date]">
             <?php echo $this->Form->error('Podcast.publish_itunes_date'); ?>
         </div>
         <div class="input text">
             <label for="PodcastUpdateItunesDate">iTunes U Updated Date</label>
             <input type="hidden" value="" id="PodcastUpdateItunesDate_" name="data[Podcast][update_itunes_date]">
-            <input type="text" id="PodcastUpdateItunesDate" value="<?php echo (int)$this->data['Podcast']['update_itunes_date'] ? $this->data['Podcast']['update_itunes_date'] : ''; ?>" class="datepicker" name="data[Podcast][update_itunes_date]">
+            <input type="text" size="60" id="PodcastUpdateItunesDate" value="<?php echo (int)$this->data['Podcast']['update_itunes_date'] ? $this->data['Podcast']['update_itunes_date'] : ''; ?>" class="datepicker" name="data[Podcast][update_itunes_date]">
             <?php echo $this->Form->error('Podcast.update_itunes_date'); ?>
         </div>
 
@@ -93,25 +97,25 @@
         <div class="input text">
             <label for="PodcastTargetItunesuDate">Target iTunes U Date</label>
             <input type="hidden" value="" id="PodcastTargetItunesuDate_" name="data[Podcast][target_itunesu_date]">
-            <input type="text" id="PodcastTargetItunesuDate" value="<?php echo (int)$this->data['Podcast']['target_itunesu_date'] ? $this->data['Podcast']['target_itunesu_date'] : ''; ?>" class="datepicker" name="data[Podcast][target_itunesu_date]">
+            <input type="text" size="60" id="PodcastTargetItunesuDate" value="<?php echo (int)$this->data['Podcast']['target_itunesu_date'] ? $this->data['Podcast']['target_itunesu_date'] : ''; ?>" class="datepicker" name="data[Podcast][target_itunesu_date]">
             <?php echo $this->Form->error('Podcast.target_itunesu_date'); ?>
         </div>
         <div class="input text">
             <label for="PodcastProductionDate">Production Date</label>
             <input type="hidden" value="" id="PodcastProductionDate_" name="data[Podcast][production_date]">
-            <input type="text" id="PodcastProductionDate" value="<?php echo (int)$this->data['Podcast']['production_date'] ? $this->data['Podcast']['production_date'] : ''; ?>" class="datepicker" name="data[Podcast][production_date]">
+            <input type="text" size="60" id="PodcastProductionDate" value="<?php echo (int)$this->data['Podcast']['production_date'] ? $this->data['Podcast']['production_date'] : ''; ?>" class="datepicker" name="data[Podcast][production_date]">
             <?php echo $this->Form->error('Podcast.production_date'); ?>
         </div>
         <div class="input text">
             <label for="PodcastRightsDate">Rights Date</label>
             <input type="hidden" value="" id="PodcastRightsDate_" name="data[Podcast][rights_date]">
-            <input type="text" id="PodcastRightsDate" value="<?php echo (int)$this->data['Podcast']['rights_date'] ? $this->data['Podcast']['rights_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][rights_date]">
+            <input type="text" size="60" id="PodcastRightsDate" value="<?php echo (int)$this->data['Podcast']['rights_date'] ? $this->data['Podcast']['rights_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][rights_date]">
             <?php echo $this->Form->error('Podcast.rights_date'); ?>
         </div>
         <div class="input text">
             <label for="PodcastMetadataDate">Metadata Date</label>
             <input type="hidden" value="" id="PodcastMetadataDate_" name="data[Podcast][metadata_date]">
-            <input type="text" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][metadata_date]">
+            <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][metadata_date]">
             <?php echo $this->Form->error('Podcast.metadata_date'); ?>
         </div>
         <div class="clear"></div>
