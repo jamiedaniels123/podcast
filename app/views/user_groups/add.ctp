@@ -1,10 +1,13 @@
 <form accept-charset="utf-8" action="/user_groups/add" method="post" id="UserGroupAddForm">
     <fieldset>
-        <legend>Create User Group</legend>
-        <p>
-            Use the form below to create a new user group. You will automatically be assigned
-            as the moderator.
+        <legend><h3>Create User Group</h3></legend>
+        <p class="leader">
+            Use the form below to create a new user group. You will automatically be assigned as the moderator.
         </p>
+        
+        <img src="/img/create-usergroups-large.png" width="45" height="33" />
+        
+        
         <div class="input text">
             <label for="title">Title</label>
             <input type="text" id="UserGroupTitle" name="data[UserGroup][group_title]" value="<?php echo $this->data['UserGroup']['group_title']; ?>">

@@ -1,8 +1,12 @@
 <fieldset class="user_groups index">
-    <legend>Your User Groups</legend>
-    <p>
+    <legend><h3>Your User Groups</h3></legend>
+    
+    <p class="leader">
         Below is a list of all user groups of which you are a member.
     </p>
+    
+    <img src="/img/your-usergroups-large.png" width="45" height="33" />
+    
     <p>
         <?php
             echo $this->Paginator->counter(array(
