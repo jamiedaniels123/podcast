@@ -249,6 +249,7 @@ class UploadComponent extends Object {
         
 		$this->setDataCollection('Podcast Media Transcript');
         $this->setData( $data );
+		$this->setCustomId( $this->data['Podcast']['custom_id'] );
         $this->setFolderName( $this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ) );
         $this->setDataKey( $data_key );
         $this->setFileName( $this->data['Podcast']['custom_id'].'.pdf' );
@@ -272,7 +273,8 @@ class UploadComponent extends Object {
 					array(
 						'source_path' => $this->custom_id.'/transcript/',
 						'destination_path' => $this->custom_id.'/transcript/',
-						'filename' => $this->file_name.'.'.$this->file_extension
+						'source_filename' => $this->file_name,
+						'destination_filename' => $this->file_name
 						)
 					)
 				)

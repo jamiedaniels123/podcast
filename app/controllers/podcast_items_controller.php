@@ -580,23 +580,31 @@ class PodcastItemsController extends AppController {
         	$this->data = $this->PodcastItem->findById( $key );
         	        		
     	    // If we did not find the podcast media then redirect to the referer.
-	        if( ( empty( $this->data ) ) || ( $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) || ( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) ) {
+	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
+				
+				if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false && $this->Object->isAvailable( $this->data['PodcastItem'] ) ) {
 
-				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
-
-					// Soft delete the podcast
-					$this->data['PodcastItem']['deleted'] = true;
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
+					if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 	
-					$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+						// Soft delete the podcast
+						$this->data['PodcastItem']['deleted'] = true;
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+		
+						$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+					
+					} else {
+					
+						$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						break;
+					}
+					
+		        } else {
 				
-				} else {
-				
-					$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot delete media that is published or not yet available.', 'default', array( 'class' => 'alert' ) );
 					break;
 				}
-	        }
+			}
         }
 
         $this->redirect( $this->referer() );

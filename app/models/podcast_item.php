@@ -25,7 +25,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code',
             'dependent' => true
         )
     );
@@ -43,8 +43,7 @@ class PodcastItem extends AppModel {
 
         'PodcastMedia' => array(
             'className' => 'PodcastItemMedia',
-            'foreignKey' => 'podcast_item',
-            'conditions' => 'PodcastMedia.media_type != "transcript"'
+            'foreignKey' => 'podcast_item'
         )
     );
 
@@ -265,32 +264,5 @@ class PodcastItem extends AppModel {
 		}
 	}
 
-	/*
-	 * @name : saveFlavours
-	 * @description : Called from the callbacks controller, will save a flavour of media
-	 * and update the status accordingly.
-	 * @updated : 3rd August 2011
-	 * @by : Charles Jackson
-	 */
-	function saveFlavour( $row = array() ) {
-		
-		$data = $this->findById( $row['podcast_item_id'] );
-															
-		if( strtoupper( $row['status'] ) == YES ) {
-						
-			$data['PodcastMedia']['processed_state'] = MEDIA_AVAILABLE; // Media available
-			
-		} else {
-			
-			$data['PodcastItem']['processed_state'] = -1; // Error in transcoding
-		}
 
-		$data['PodcastMedia']['filename'] = str_replace('//','/',$row['destination_filename'] ); // Quick fudge to fix minor API issue;
-		$data['PodcastMedia']['original_filename'] = $row['original_filename'];
-		$data['PodcastMedia']['media_type'] = $row['flavour'];
-		$data['PodcastMedia']['podcast_item'] = $row['podcast_item_id'];
-		$data['PodcastMedia']['duration'] = $row['duration'];
-		$this->set( $data );
-		return $this->save();
-	}
 }

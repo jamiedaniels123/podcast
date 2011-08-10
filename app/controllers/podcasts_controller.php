@@ -14,6 +14,7 @@ class PodcastsController extends AppController {
     	$this->Podcast->stripJoinsByAction( $this->action );
     	parent::beforeFilter();
     }
+	
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
@@ -439,7 +440,7 @@ class PodcastsController extends AppController {
      * @by : Charles Jackson
      */ 
     function copy( $id = null ) {
-		
+		$this->Podcast->recursive = 2;
 		$this->data = $this->Podcast->findById( $id ) ;
 		
 		if( !empty( $this->data ) ) {
@@ -515,7 +516,8 @@ class PodcastsController extends AppController {
             // Create a null PodcastFilter to prevent an unwanted notice in the view
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
-            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted !=' => 2 ) );
+
+            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted != 2' ) );
         }
     }
 

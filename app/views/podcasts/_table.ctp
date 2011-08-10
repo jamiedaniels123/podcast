@@ -39,9 +39,12 @@
         foreach ($this->data['Podcasts'] as $podcast ) :
 
             $class = null;
-            if ($i++ % 2 == 0) :
+			if( $podcast['Podcast']['deleted'] ) :
+				$class = ' class="deleted"';
+            elseif ($i++ % 2 == 0) :
                 $class = ' class="altrow"';
             endif;
+			
 ?>
                 <tr<?php echo $class;?>>
                     <td class="checkbox">

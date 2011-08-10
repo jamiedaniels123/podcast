@@ -96,8 +96,8 @@ DEFINE('DELETED_PODCAST', 6 );
 DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
 
 DEFINE('LOCAL_FILE_REPOSITORY_URL', APPLICATION_URL.'/upload/files/');
-DEFINE('DEFAULT_MEDIA_URL', APPLICATION_URL.'/upload/files/');
-//DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+//DEFINE('DEFAULT_MEDIA_URL', APPLICATION_URL.'/upload/files/');
+DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
 //DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
 
 DEFINE('AMAZON_S3_SERVER', 'http://media-podcast.open.ac.uk.s3.amazonaws.com');

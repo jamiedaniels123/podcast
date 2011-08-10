@@ -6,6 +6,7 @@ class Podcast extends AppModel {
     
     var $name = 'Podcast';
     var $backup_table = 'podcasts_backup';
+	var $order = 'Podcast.id DESC';
     
     var $validate = array(
 
@@ -1229,7 +1230,7 @@ class Podcast extends AppModel {
      */ 	
 	function copy( $user_id = null ) {
 
-		$this->recursive = 2;
+
 		$original_podcast_id = $this->data['Podcast']['id'];
 		$original_custom_id = $this->data['Podcast']['custom_id'];
 		$this->data['Podcast']['id'] = null;
@@ -1254,16 +1255,27 @@ class Podcast extends AppModel {
 		// Now we need to copy the data back in the class propertry from our local copy because it has been wiped by the
 		// set/save combination above.
 		$this->data = $data;
-		
+
 		$this->data['Podcast']['id'] = $this->getLastInsertId();
 		$data['Podcast']['id'] = $this->getLastInsertId();
 
 		if( isSet( $this->data['PodcastItems'] ) && count( $this->data['PodcastItems'] ) ) {
 			
-			for( $x = 0; $x < count( $this->data['PodcastItems'] ); $x++ ) {
+			foreach( $this->data['PodcastItems'] as $podcast_item ) {
 				
-				$this->data['PodcastItems'][$x]['id'] = null;
-				$this->data['PodcastItems'][$x]['podcast_id'] = $this->data['Podcast']['id'];
+				$podcast_item['id'] = null;
+				$podcast_item['podcast_id'] = $this->data['Podcast']['id'];
+				$this->PodcastItems->set( $podcast_item ); 
+				$this->PodcastItems->save();
+				$podcast_item_id = $this->PodcastItems->getLastInsertId();
+				
+				foreach( $podcast_item['PodcastMedia'] as $podcast_media ) {
+				
+					$podcast_media['id'] = null;
+					$podcast_media['podcast_item'] = $podcast_item_id;
+					$this->PodcastItems->PodcastMedia->set( $podcast_media );
+					$this->PodcastItems->PodcastMedia->save();
+				}
 			}
 		}
 		

@@ -37,8 +37,6 @@
            	<td class="centered"><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['itunes_flag'] ); ?>" class="icon"></td>
            	<td class="centered"><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['youtube_flag'] ); ?>" class="icon"></td>
             <td>
-				<a href="/admin/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view media details"><span>view</span></a>
-                <a href="/admin/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
                 <?php if( (int)$podcast_item['deleted'] == 1 ) : ?>
 		            <a href="/admin/podcast_items/restore/<?php echo $podcast_item['id']; ?>" title="restore media" onclick="return confirm('Are you sure you wish to restore this media?');"><span>restore</span></a>                    
                 <?php else : ?>
