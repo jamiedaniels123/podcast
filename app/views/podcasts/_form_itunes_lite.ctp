@@ -1,7 +1,7 @@
 <fieldset class="itunes">
 	<legend><h3>iTunes U</h3></legend>
     
-    <img src="/img/icon-32-apple.png" width="32" height="32" alt="Apple Computer" />
+    <img src="/img/collection-itunes-large.png" width="45" height="33" alt="iTunes" />
     
 	<div class="link" style="margin-top: 20px;">
 	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="PodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>

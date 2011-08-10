@@ -1,4 +1,4 @@
-<div class="input text">
+<div class="input text" style="margin-top: 30px;">
     <label for="title">Title</label>
     <input type="text" id="UserGroupTitle" name="data[UserGroup][group_title]" value="<?php echo $this->data['UserGroup']['group_title']; ?>">
     <?php echo $this->Form->error('UserGroup.group_title'); ?>

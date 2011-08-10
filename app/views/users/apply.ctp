@@ -1,9 +1,12 @@
 <form id="UserApplyForm" method="post" action="/users/apply" accept-charset="utf-8">
     <fieldset id="register_fieldset">
-        <legend>Apply for Access</legend>
-        <p>
+        <legend><h3>Apply for Access</h3></legend>
+        <p class="leader">
             Currently you must apply to use our podcast solution. Please complete the form below
         </p>
+        
+        <img src="/img/apply-user-large.png" width="45" height="33" />
+        
         <div class="input">
             <label for="UserFirstName">First name</label>
             <input type="input" name="data[User][firstname]" id="UserFirstName" value="<?php echo @$this->data['User']['firstname']; ?>">
@@ -13,7 +16,7 @@
             <input type="input" name="data[User][lastname]" id="UserLastName" value="<?php echo @$this->data['User']['lastname']; ?>">
         </div>
         <div class="input">
-            <label for="UserOucu">Your oucu</label>
+            <label for="UserOucu">Your OUCU</label>
             <input type="input" name="data[User][oucu]" id="UserContactOucu" value="<?php echo @$this->data['User']['oucu']; ?>">
         </div>
         <div class="input">
@@ -24,10 +27,8 @@
             <label for="UserJustification">Reason for applying</label>
             <textarea name="data[User][justification]" id="UserJustification"><?php echo @$this->data['User']['justification']; ?></textarea>
         </div>
-        <div class="actions">
-            <ul>
-                <li><button type="submit" id="apply_button"><span>Apply</span></button></li>
-            </ul>
-        </div>
+        
+        <button type="submit" class="button blue" id="apply_button"><span>Apply</span></button>
+        
     </fieldset>
 </form>

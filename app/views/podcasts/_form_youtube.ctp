@@ -1,7 +1,7 @@
 <fieldset class="youtube">
 	<legend><h3>YouTube</h3></legend>
     
-    <img src="/webroot/img/icon-32-youtube.png" width="32" height="32" alt="You Tube" />
+    <img src="/img/collection-youtube-large.png" width="45" height="33" alt="You Tube" />
     
     <div class="link" style="margin-top: 20px;">
     	    <a href="/" id="PodcastItemYoutubeToggle" class="juggle button white" data-target="PodcastYoutubeContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
