@@ -8,6 +8,7 @@
         
         <img src="/img/management.png" />
         
+        
         <?php echo $this->element('../users/_terms'); ?>
         <div class="input text">
             <label for="UserTerms">Agree Terms &amp; Conditions</label>
