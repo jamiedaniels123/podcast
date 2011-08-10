@@ -1,6 +1,6 @@
 <form id="UserRegisterForm" method="post" action="/users/register" accept-charset="utf-8">
     <fieldset id="register_fieldset">
-        <legend><h3>Terms &amp; Conditions</h3></legend>
+        <legend><h3>Terms &amp; Conditionsx</h3></legend>
         
         <p class="leader">
             In order to continue you must agree to our latest terms and conditions.
