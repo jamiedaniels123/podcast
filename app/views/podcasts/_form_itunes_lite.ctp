@@ -1,8 +1,11 @@
 <fieldset class="itunes">
-	<legend><h3>ItunesU</h3></legend>
-	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" class="juggle" data-target="PodcastItunesContainer">Toggle</a></dt>
-    </dl>	
+	<legend><h3>iTunes U</h3></legend>
+    
+    <img src="/img/icon-32-apple.png" width="32" height="32" alt="Apple Computer" />
+    
+	<div class="link" style="margin-top: 20px;">
+	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="PodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
+    </div>	
 	<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
     <div class="itunes_container itunes" id="PodcastItunesContainer" style="display:none">
         <div class="input file">
@@ -17,7 +20,7 @@
         </div>
         <div class="input text">
             <label for="PodcastImageLlCopyright">Copyright/credit</label>
-            <input type="text" id="PodcastImageLlCopyright" name="data[Podcast][image_ll_copyright]" value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
+            <input type="text" size="60" id="PodcastImageLlCopyright" name="data[Podcast][image_ll_copyright]" value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
             <?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
         </div>
         <div class="input file">
@@ -32,17 +35,17 @@
         </div>
         <div class="input text">
             <label for="PodcastImageWideCopyright">Copyright/credit</label>
-            <input type="text" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
+            <input type="text" size="60" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
             <?php echo $this->Form->error('Podcast.image_wide_copyright'); ?>
         </div>
         <div class="input text">
             <label for="PodcastArtworkFile">Artwork File</label>
-            <input type="text" id="PodcastArtworkFile" value="<?php echo (int)$this->data['Podcast']['artwork_file']; ?>" name="data[Podcast][artwork_file]">
+            <input type="text" size="60" id="PodcastArtworkFile" value="<?php echo (int)$this->data['Podcast']['artwork_file']; ?>" name="data[Podcast][artwork_file]">
             <?php echo $this->Form->error('Podcast.artwork_file'); ?>
         </div>
         <div class="input text">
             <label for="PodcastAuthor">Author</label>
-            <input type="text" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
+            <input type="text" size="60" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
             <?php echo $this->Form->error('Podcast.author'); ?>
         </div>
         <div class="input select">
@@ -54,7 +57,7 @@
         </div>
         <div class="input text">
             <label for="PodcastCourseCode">Course Code</label>
-            <input type="text" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
+            <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
             <?php echo $this->Form->error('Podcast.course_code'); ?>
         </div>
         <div class="input checkbox">

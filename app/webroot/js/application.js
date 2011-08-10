@@ -163,6 +163,65 @@ jQuery(document).ready(function($) {
     	jQuery('td.'+target).toggle();
     	write_cookie('OpenUniversity');
 	});
+    
+    // When a youtube user wishes to automatically generate a description
+    // based on the information provided within the form.
+    jQuery('#PodcastItemGenerateYoutubeDescription').live('click', function(e) {
+
+		e.preventDefault();
+    	var answer = confirm('You are about to automatically generate a description based on the values held in related form fields. Are you sure?');
+    	if( answer ) {
+				// Title needs X of Y
+				var course_code = jQuery('#PodcastCourseCode').val();
+				
+    			text = 'Free learning from The Open University http://www.open.ac.uk/openlearn/';
+				text += '\n\n---\n\n';
+    			text += jQuery('#PodcastItemSummary').val();
+    			text += '\n\n';
+    			text += '(Part X of Y)';
+    			text += '\n\n --- \n\n';
+    			
+    			if ( course_code.length ) {
+					text += 'For more information about ';
+					text += jQuery('#PodcastItemTitle').val(); // Should be the same as title
+					text += ' visit http://www3.open.ac.uk/study/';
+					
+					//if first number equals 8 then it's a postgrad course 
+					if( course_code.substring(0,1) == 8 ) {
+						
+						text += 'postgraduate/course/' + course_code +'.htm';
+						
+					} else {
+						
+						text += 'undergraduate/course/' + course_code +'.htm';
+					}
+				}
+				
+				if( jQuery('#PodcastItemYoutubeLink1').length ) {
+					
+					text += '\n\n---\n\n';
+					text +=	jQuery('#PodcastItemYoutubeLink1Text').val();
+					text += '\n';
+					text +=	jQuery('#PodcastItemYoutubeLink1').val();
+				}
+				if( jQuery('#PodcastItemYoutubeLink2').length ) {
+					
+					text += '\n\n---\n\n';
+					text +=	jQuery('#PodcastItemYoutubeLink2Text').val();
+					text += '\n';
+					text +=	jQuery('#PodcastItemYoutubeLink2').val();
+				}
+				if( jQuery('#PodcastItemYoutubeLink3').length ) {
+					
+					text += '\n\n---\n\n';
+					text +=	jQuery('#PodcastItemYoutubeLink3Text').val();
+					text += '\n';
+					text +=	jQuery('#PodcastItemYoutubeLink3').val();
+				}
+				
+		    	jQuery('#PodcastItemYoutubeDescription').val(text);
+    	}
+    });
 });
 
 // Makes an ajax call to a method in the app_controller

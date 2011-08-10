@@ -2,7 +2,7 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_local_deletion = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
+	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
 	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
@@ -37,21 +37,27 @@ class CallbacksController extends AppController {
 			$this->set('status', json_encode( array( 'status'=>'ACK', 'data'=>'Message received', 'timestamp' => time() ) ) );
 
 			if( $this->Callback->hasErrors() )
-				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'This callback has errors');
+				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'This callback has errors');
 				
 			// Do we need to update the processed state
 			if( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
-
-				// Save the processed state
-				if( is_object( $podcastItem ) == false )
-					$podcastItem = ClassRegistry::init('PodcastItem');
 					
-				// We only trancode media 1 at a time but it is still wrapped in a forloop to give a generic structure to all
+				// Save the processed state
+				if( is_object( $podcastItemMedia ) == false )
+					$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
+					
+				// We only trancode media 1 at a time but it is still wrapped in a for loop to give a generic structure to all
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
-
-					if( $podcastItem->saveFlavour( $row ) == false )
+					
+					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'About to save');
+					
+					if( $podcastItemMedia->saveFlavour( $row ) == false )
 						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of ice cream');
+						
+					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
+
+						
 				}
 			}
 			
@@ -68,7 +74,9 @@ class CallbacksController extends AppController {
 
 					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'deleting local file');
 					// Delete the local file structure or error.
-					$this->Folder->cleanUp( $row['data']['source_path'],$row['data']['source_filename'] );
+					
+					if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'] ) == false )
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'error deleting local file');
 				}
 			}
 			
@@ -85,7 +93,7 @@ class CallbacksController extends AppController {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
 						if( $this->Api->metaInjection( $podcastItem->buildInjectionFlavours( $row['data']['podcast_item_id'] ) ) == false )
-							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Error injecting meta data');
+							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data,'Error injecting meta data');
  					}
 				}
 			}

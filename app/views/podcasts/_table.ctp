@@ -29,6 +29,7 @@
 		<th class="consider_for_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_youtube'); ?>><?php echo $this->Paginator->sort('Consider Youtube','consider_for_youtube');?></th>        
 		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('Intended Youtube','intended_youtube_flag');?></th>
 		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('Youtube Published','publish_youtube');?></th>
+		<th class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>><?php echo $this->Paginator->sort('Open Learn','openlearn_epub');?></th>
         <th class="actions">Actions</th>
     </tr>
     <?php
@@ -38,9 +39,12 @@
         foreach ($this->data['Podcasts'] as $podcast ) :
 
             $class = null;
-            if ($i++ % 2 == 0) :
+			if( $podcast['Podcast']['deleted'] ) :
+				$class = ' class="deleted"';
+            elseif ($i++ % 2 == 0) :
                 $class = ' class="altrow"';
             endif;
+			
 ?>
                 <tr<?php echo $class;?>>
                     <td class="checkbox">
@@ -65,7 +69,11 @@
                         <?php echo $podcast['Podcast']['image_wide_copyright']; ?>
                     </td>                        
                     <td class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>>
-                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+						<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+	                        <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+                        <?php else : ?>
+	                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+						<?php endif; ?>
                     </td>
                     <td class="copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'copyright'); ?>>
                         <?php echo $podcast['Podcast']['copyright']; ?>
@@ -124,7 +132,9 @@
                     <td class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>>
                         <img src="/img/<?php echo $this->Object->youtubePublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="youtube published" />
                     </td>
-
+                    <td class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>>
+                        <img src="/img/<?php echo $this->Object->isOpenLearn( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn published" />
+                    </td>
                     <td class="actions">
                         <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
                         

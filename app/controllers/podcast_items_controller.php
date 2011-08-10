@@ -62,6 +62,7 @@ class PodcastItemsController extends AppController {
         }
     }
 
+	
     /*
      * @name : view
      * @desscription : Enables owners, moderators and members to view details of an individual media file.
@@ -125,13 +126,30 @@ class PodcastItemsController extends AppController {
                 $this->cakeError('error404');
             }
         }
-        
-		// Get the possible playlists for youtube.
-        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
-        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
-        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
+
+		$this->__setYoutubeOptions();        
     }
 
+	/*
+	 * @name : youtube_upload
+	 * @description :
+	 * @updated : 9th August 2011
+	 * @by : Charles Jackson
+	 */
+	 function youtube_upload( $id = null ) {
+	
+		$this->data = $this->PodcastItem->findById( $id );
+		
+		if( $this->data['PodcastItem']['youtube_flag'] ) {
+			
+			
+				
+			
+		}
+		 
+	 }
+	 
+	 
    /*
      * @name : consider_itunes
      * @description : Enables a peeps to submit an item of media for itunesu consideration
@@ -252,8 +270,6 @@ class PodcastItemsController extends AppController {
      * @by : Charles Jackson
      */
     function consider_youtube( $id = null ) {
-
-    	$this->PodcastItem->recursive = -1;
     	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
@@ -283,15 +299,13 @@ class PodcastItemsController extends AppController {
      */
 	function youtube_approve( $id = null ) {
     	
-    	$this->PodcastItem->recursive = -1;
-    	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
         foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
             $this->data = $this->PodcastItem->findById( $key );
-    	
+
             // Make sure it has already been converted into a podcast if they want to publish it.
 	        if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 	        	
@@ -402,7 +416,8 @@ class PodcastItemsController extends AppController {
 							array( 
 								'source_path' => $this->data['Podcast']['custom_id'].'/',
 								'destination_path' => $this->data['Podcast']['custom_id'].'/', 
-								'filename' => $this->data['PodcastItem']['filename'],
+								'source_filename' => $this->data['PodcastItem']['filename'],
+								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
 									)
 								)
@@ -565,23 +580,31 @@ class PodcastItemsController extends AppController {
         	$this->data = $this->PodcastItem->findById( $key );
         	        		
     	    // If we did not find the podcast media then redirect to the referer.
-	        if( ( empty( $this->data ) ) || ( $this->Permission->toUpdate( $this->data['Podcast'] ) == false ) || ( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) ) {
+	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
+				
+				if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false && $this->Object->isAvailable( $this->data['PodcastItem'] ) ) {
 
-				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
-
-					// Soft delete the podcast
-					$this->data['PodcastItem']['deleted'] = true;
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
+					if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
 	
-					$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+						// Soft delete the podcast
+						$this->data['PodcastItem']['deleted'] = true;
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+		
+						$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+					
+					} else {
+					
+						$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						break;
+					}
+					
+		        } else {
 				
-				} else {
-				
-					$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot delete media that is published or not yet available.', 'default', array( 'class' => 'alert' ) );
 					break;
 				}
-	        }
+			}
         }
 
         $this->redirect( $this->referer() );
@@ -725,12 +748,8 @@ class PodcastItemsController extends AppController {
                 $this->cakeError('error404');
             }
         }
-        
-		// Get the possible playlists for youtube.
-        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
-        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
-        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
 
+		$this->__setYoutubeOptions();
     }
 
     /*
@@ -756,7 +775,7 @@ class PodcastItemsController extends AppController {
 
 				// Set the deleted status to "2", scheduled for deletion.
 				$this->data['PodcastItem']['deleted'] = 2;
-				$this->Podcast->set( $this->data );
+				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
 				
 				$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );
@@ -806,6 +825,21 @@ class PodcastItemsController extends AppController {
         }
 
         $this->redirect( $this->referer() );
+    }
+    
+    function __setYoutubeOptions() {
+    	
+        // Get the pricavy settings
+        $this->set('youtube_privacy', array('Public','Hidden','Private') );
+        $this->set('youtube_licenses', array('Standard Youtube License','Creative Commons Attribution License') );
+        $this->set('youtube_comments', array('Allow','Friends and Approval','Approval Only','Disallow') );
+        $this->set('youtube_video_responses', array('Yes','Approval','No') );
+
+		// Get the possible playlists for youtube.
+        $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
+        $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
+        $this->set('youtube_subject_playlist', $youtube_subject_playlist );
+        
     }
 	
 }

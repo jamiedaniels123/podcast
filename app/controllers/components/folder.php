@@ -47,7 +47,7 @@ class FolderComponent extends Object {
 			$text .= "RewriteRule ^(.*)$ ".AMAZON_S3_SERVER."/feeds/".$data['Podcast']['custom_id']."/$1 [R=302,NC]\n";
 		}
 
-        if( $this->writeFile( $text, $data['Podcast']['custom_id'],'.htaccess' ) )
+        if( $this->writeFile( $text, $data['Podcast']['custom_id'],'htaccess' ) )
             return true;
 
         return false;
@@ -227,7 +227,7 @@ class FolderComponent extends Object {
 	function cleanUp( $path, $filename ) {
 		
 		$folders = array();
-		
+		$path = str_replace('//','/',$path); // Quick fudge to fix minor API issue
 		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
 			return false;
 		

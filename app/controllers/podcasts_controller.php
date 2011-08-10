@@ -14,6 +14,7 @@ class PodcastsController extends AppController {
     	$this->Podcast->stripJoinsByAction( $this->action );
     	parent::beforeFilter();
     }
+	
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
@@ -74,7 +75,7 @@ class PodcastsController extends AppController {
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 			
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		$this->set('filter',$this->data['Podcast']['filter'] );
@@ -90,10 +91,11 @@ class PodcastsController extends AppController {
     function youtube_index() {
 
 		$this->Podcast->recursive = 2;
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
 		
 		if( !isSet( $this->data['Podcast']['filter'] ) || empty( $this->data['Podcast']['filter'] ) ) {
 
-			$this->data['Podcast']['filter'] = 'published';
+			$this->data['Podcast']['filter'] = 'all';
 		}	
 		
 		// Grab the filter and assign to the view so the select box retains the current selection
@@ -240,12 +242,13 @@ class PodcastsController extends AppController {
 						
 					} elseif( ( $this->Folder->buildHtaccessFile( $this->Podcast->data ) == false ) || ( $this->Api->transferFileMediaServer( 
 					
-						array( 
+						array( array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
 							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
-							'filename' => '.htaccess' 
+							'source_filename' => 'htaccess' ,
+							'destination_filename' => '.htaccess' 
 							)
-						) ) == false ) {		
+						) ) ) == false ) {		
 						
 							$this->Session->setFlash('We were unable to generate the associated permissions. If the problem persists please alert an administrator', 'default', array( 'class' => 'error' ) );
 						
@@ -349,7 +352,7 @@ class PodcastsController extends AppController {
 
 					} else {
 						
-						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','.htaccess' );
+						$this->Folder->cleanup( $podcast['Podcast']['custom_id'].'/','htaccess' );
 						$this->Session->setFlash('We could not delete all associated media. If the problem persists please alert an administrator.', 'default', array( 'class' => 'error' ) );
 						break; // Break out of the loop
 					}
@@ -437,17 +440,31 @@ class PodcastsController extends AppController {
      * @by : Charles Jackson
      */ 
     function copy( $id = null ) {
-		
+		$this->Podcast->recursive = 2;
 		$this->data = $this->Podcast->findById( $id ) ;
 		
 		if( !empty( $this->data ) ) {
 			
 			$this->Podcast->data = $this->data;
+			$api_data = $this->Podcast->copy();
 			
-			if( $this->Podcast->copy() ) {
+			if( $api_data ) {
 				
-				$this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] );
-				$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
+				if( $this->Api->copyMediaFolder( $api_data ) ) {
+					
+					if( $this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] ) ) {
+						
+						$this->Session->setFlash('The collection has been successfully copied.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+						$this->Session->setFlash('The collection has been successfully copied but we could not generate the RSS feeds. Please refresh them.', 'default', array( 'class' => 'alert' ) );
+					}
+					
+				} else {
+						$this->Session->setFlash('The collection copied with errors, please delete this collection and try again. If the problem persist contact an administrator', 'default', array( 'class' => 'alert' ) );
+					
+				}
 				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );
 			}
 		}
@@ -499,7 +516,8 @@ class PodcastsController extends AppController {
             // Create a null PodcastFilter to prevent an unwanted notice in the view
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
-            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted !=' => 2 ) );
+
+            $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.deleted != 2' ) );
         }
     }
 
@@ -610,12 +628,13 @@ class PodcastsController extends AppController {
 						
 					} elseif( ( $this->Folder->buildHtaccessFile( $this->Podcast->data ) == false ) || ( $this->Api->transferFileMediaServer( 
 					
-						array( 
+						array( array( 
 							'source_path' => $this->Podcast->data['Podcast']['custom_id'].'/',
 							'destination_path' => $this->Podcast->data['Podcast']['custom_id'].'/', 
-							'filename' => '.htaccess' 
+							'source_filename' => 'htaccess',
+							'destination_filename' => '.htaccess',
 							)
-						) ) == false ) {		
+						) ) ) == false ) {		
 						
 							$this->Session->setFlash('We were unable to generate the necessary .htaccess permissions. If the problem persists please alert an administrator', 'default', array( 'class' => 'error' ) );
 						

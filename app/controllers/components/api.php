@@ -51,6 +51,20 @@ class ApiComponent extends Object {
         return $this->getStatus();
     }
 
+	/*
+	 * @name : copyMediaFolder
+	 * @description : Will duplicate a folder structure on the media server 
+	 * @updated : 9th August 2011
+	 * @by : Charles Jackson
+	 */
+	function copyMediaFolder( $data = array() ) {
+		
+        $this->setResponse( json_decode( $this->__sendMessage('copy-folder-on-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+
+        return $this->getStatus();
+	}
+	
+	
     /*
      * @name : deliverWithoutTranscoding
      * @description : The method is identical to the "transferFileMediaServer" method. However we use a seperate
@@ -79,6 +93,17 @@ class ApiComponent extends Object {
         return $this->getStatus();
     }
 
+    /*
+     * @name : youtubeUpload
+     * @description : Will upload a file to youtube
+     * @updated : 8th August 2011
+     * @by : Charles Jackson
+     */
+    function youtubeUpload( $data = array() ) {
+    	
+        $this->setResponse( json_decode( $this->__sendMessage('upload-file-to-youtube', ADMIN_API, $data ), 1 ) );
+        return $this->getStatus();
+    }
     /*
      * @name : transcodeMedia
      * @description : Called from the controller, formats parameters passed into a JSON encoded array
@@ -164,7 +189,7 @@ class ApiComponent extends Object {
      * @by : Ian Newton / Charles Jackson
      */
     function __sendMessage( $command, $mediaUrl, $data, $number = 1 ){
-
+		
         $postData = array( 'command' => $command ,'number' => $number ,'data' => $data,'timestamp' => time() );
         $postData = array( 'mess' => json_encode( $postData ) );
         return( $this->__restHelper( $mediaUrl, $postData, 'POST' ) );

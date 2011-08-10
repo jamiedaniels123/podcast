@@ -69,7 +69,10 @@ h3 a:hover {text-decoration: underline;}
 
 /*Background colours*/
 
-.white {background-color:#fff;}
+.white {background-color:#fff;
+		color: #003d4c;
+		border-radius: 4px;
+		padding: 2px;}
 
 .off-black {background-color:#1a1a1a;color: #fff;}
 
@@ -154,14 +157,11 @@ h3 a:hover {text-decoration: underline;}
 	margin: 0 auto;	
 }
 
-.available	{
-	background-color: #f5f5f6;	
-}
-
 .auto_select_and_submit		{
 	margin: 25px 0;	
 }
 
 .form_title	{
-	margin: 25px 0 0 0;	
+	margin: 25px 0 0 0;
+
 }

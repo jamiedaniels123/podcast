@@ -100,30 +100,31 @@
 		
 	<?php endif; ?>
 
-	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
-
-		<a class="button light-blue" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
-				
-		<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+	<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
 		
-			<a class="button light-blue" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-			
-		<?php else : ?>
+		<a class="button light-blue" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
+
+	<?php else : ?>
+
+		<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
+
+			<a class="button light-blue" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/add-new.png" alt="Add media" class="icon" />Add media</a>
+				
 		
 			<a class="button light-blue" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
 			
+
+			<a class="button" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+		
 		<?php endif; ?>
 
-		<a class="button" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+		<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
+
+			<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) && $this->Object->intendedForPublication( $this->data['Podcast'] ) == false ) : ?>
+				<a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
+			<?php endif; ?>
+			<a class="button blue" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
 		
-	<?php endif; ?>
-
-	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
-
-		<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) && $this->Object->intendedForPublication( $this->data['Podcast'] ) == false ) : ?>
-			<a class="button white" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" ><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
 		<?php endif; ?>
-		<a class="button white" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
-		
-	<?php endif; ?>
 
+	<?php endif; ?>

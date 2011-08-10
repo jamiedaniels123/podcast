@@ -23,7 +23,7 @@ class ObjectHelper extends AppHelper {
      */
     function isDeleted( $object = array() ) {
 
-        if( $object['deleted'] == 1 )
+        if( (int)$object['deleted'] )
             return true;
 
         return false;
@@ -88,7 +88,21 @@ class ObjectHelper extends AppHelper {
         return false;
     }
     
+    /*
+     * @name : isOpenLearn
+     * @description : Returns a bool
+     * @updated : 8th August 2011
+     * @by : Charles Jackson
+     */
+    function isOpenLearn( $object = array() ) {
 
+    	// Podcast level
+    	if( isSet( $object['openlearn_epub'] ) )
+        	return $object['openlearn_epub'] == strtoupper( YES );
+        	
+        return false;
+    }
+    
     /*
      * @name : intendedForItunes
      * @description : Retruns a bool depending up the value of the flag set (Y or N)
@@ -131,6 +145,15 @@ class ObjectHelper extends AppHelper {
         	
     }
 
+    
+	function hardDeleted( $podcast_item = array() ) {
+		
+		if( $podcast_item['deleted'] == 2 )
+			return true;
+			
+		return false;
+	}
+	
     /*
      * @name : youtubePublished
      * @description : Retruns a bool depending up the value of the flag set (Y or N)

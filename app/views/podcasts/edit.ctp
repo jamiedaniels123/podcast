@@ -7,11 +7,11 @@
     <fieldset>
         <legend><h3>Update Collection</h3></legend>
         
-        <img src="/img/collection-large.png" />
-        
-        <p class="leader">
+		<p class="leader">
             Use the form below to create/update a new Collection container
         </p>
+        
+        <img src="/img/collection-large.png" />
 		        
 		<?php echo $this->element('../podcasts/_form'); ?>
         	
