@@ -16,10 +16,6 @@
             <!-- This element exists only to ensure some data is present if they submit the form without agreeing to T&Cs. -->
             <input name="data[User][post]" type="hidden" id="UserPost" />
         </div>
-        <div class="actions">
-            <ul>
-                <li><button type="submit" id="proceed_button"><span>Proceed</span></button></li>
-            </ul>
-        </div>
+			<button type="submit" class="button blue" id="proceed_button"><span>Proceed</span></button>
     </fieldset>
 </form>
