@@ -123,7 +123,16 @@ class ObjectComponent extends Object {
 			return true;
 			
 		return $this->intendedForYoutube( $podcast );
-	}    
+	}   
+	
+	function isAvailable( $object = array() ) {
+		
+		// Podcast Item level
+		if( isSet( $object['processed_state'] ) && $object['processed_state'] == MEDIA_AVAILABLE )
+			return true;
+				
+		return false;
+	}
     
 }
 

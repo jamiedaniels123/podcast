@@ -12,7 +12,7 @@
         <dt>Title: </dt>
         <dd><?php echo $this->data['PodcastItem']['youtube_title']; ?>&nbsp;</dd>
         <dt>Description: </dt>
-        <dd><?php echo $this->data['PodcastItem']['youtube_description']; ?>&nbsp;</dd>
+        <dd><?php echo nl2br( $this->data['PodcastItem']['youtube_description'] ); ?>&nbsp;</dd>
         <dt>Subject Playlists: </dt>
         <dd>
 			<?php foreach( $this->data['YoutubeSubjectPlaylists'] as $playlist ) : ?>

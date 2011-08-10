@@ -7,7 +7,7 @@
 	    <table>
 	    	<thead>
 	            <tr>
-					<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+					<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	            		<th class="checkbox">Select</th>
             		<?php endif; ?>
 	            	<th class="thumbnail">Image</th>
@@ -24,7 +24,7 @@
 	        	<?php if( $this->Object->isDeleted( $podcast_item ) == false ) : ?>
 	        	
 		        	<tr>
-						<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+						<?php if( $this->Permission->toUpdate( $this->data ) && $this->Permission->isAdminRouting( $this->params ) == false ) : ?>
 		                    <td width="15px" align="center">
 	                            <input type="checkbox" name="data[PodcastItem][Checkbox][<?php echo $podcast_item['id']; ?>]" class="podcast_item_selection" id="PodcastItemCheckbox<?php echo $podcast_item['id']; ?>">
 		                    </td>
@@ -71,7 +71,7 @@
 	        
 	    </table>
 	    
-	    <?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
+	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
 	        <a href="/" class="toggler button blue" data-status="unticked">Select/deselect all</a>
 			<a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span><img src="../../webroot/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
