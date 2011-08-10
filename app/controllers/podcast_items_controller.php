@@ -419,6 +419,7 @@ class PodcastItemsController extends AppController {
 								'source_filename' => $this->data['PodcastItem']['filename'],
 								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
+								'workflow' => 'audio'
 									)
 								)
 							)

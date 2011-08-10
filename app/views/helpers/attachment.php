@@ -107,10 +107,10 @@ class AttachmentHelper extends AppHelper {
 
 		// Check to see if there is a local image on the admin box first as that will be more topical.
 		if(	file_exists( FILE_REPOSITORY.$path.'/transcript/'.$filename ) )
-			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$path.'/transcript/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$path.'/transcript/'.$filename.'" target="_blank" title="Link to transcript">'.$filename.'</a>';
 
-		if ( fopen( DEFAULT_MEDIA_URL.FEEDS.$path.'/transcript/'.$filename, 'r' ) )
-			return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$path.'/transcript/'.$filename.'" title="Link to transcript">'.$filename.'</a>';
+		if ( @fopen( DEFAULT_MEDIA_URL.FEEDS.$path.'/transcript/'.$filename, 'r' ) )
+			return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$path.'/transcript/'.$filename.'" target="_blank" title="Link to transcript">'.$filename.'</a>';
 					
 		return 'Transcript missing on media server.';
 	}
@@ -122,13 +122,21 @@ class AttachmentHelper extends AppHelper {
      * @by : Charles Jackson
      */
     function getMediaLink( $custom_id = null, $media = array() ) {
-    	if( empty( $media['media_type'] ) )
-			return DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['filename'];	
-    	
-    	return DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].'/'.$media['filename'];    	
 		
+		if( $media['media_type'] == 'default' ) {
+			$media['media_type'] = null;
+		} else {
+			$media['media_type'] .= '/';
+		}
+		// Check to see if there is a local image on the admin box first as that will be more topical.
+		if(	file_exists( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].$media['filename'] ) && is_file( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].'/'.$media['filename'] ) )
+			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
 		
+		if ( @fopen( DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'], 'r' ) )
+			return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
+			
+		// No image, return a default.
+		return ucfirst( $media['media_type'] ).' flavour missing from media server.';
     }
-
 }
 ?>
