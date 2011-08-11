@@ -5,7 +5,7 @@
 
     <form action="" method="post" id="PersonaliseForm" style="display:none;margin-top:10px;">
 	
-	    <div class="input checkbox" >
+	    <div class="checkbox" >
 		    <ul id="PodcastColumnOptions">
             
             <li><input type="checkbox" name="data[Podcast][author]" class="personalise" data-target="author" <?php echo $this->Miscellaneous->columnActive($active_columns, 'author'); ?>>Author</li>
