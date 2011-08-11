@@ -162,6 +162,7 @@ class ObjectHelper extends AppHelper {
      */
     function youtubePublished( $object = array() ) {
 
+
     	// Podcast level
     	if( isSet( $object['publish_youtube'] ) )
         	return $object['publish_youtube'] == strtoupper( YES );

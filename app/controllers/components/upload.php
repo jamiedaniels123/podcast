@@ -282,7 +282,6 @@ class UploadComponent extends Object {
 	
 				$this->setUploadedFileName( $this->file_name );
 				return true;
-
 			}
 		}
 		

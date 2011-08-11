@@ -50,14 +50,10 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'About to save');
-					
 					if( $podcastItemMedia->saveFlavour( $row ) == false )
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of ice cream');
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of media, see details below');
 						
 					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
-
-						
 				}
 			}
 			
@@ -82,18 +78,21 @@ class CallbacksController extends AppController {
 			
 			// If we need to 'kick-off' some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
-				
+
 				// Needed to retrieve the meta data.
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					if( strtoupper( $row['status'] ) == YES ) {
+					if( ( $row['status'] == YES ) && ( $row['workflow'] == 'audio' ) ) {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						if( $this->Api->metaInjection( $podcastItem->buildInjectionFlavours( $row['data']['podcast_item_id'] ) ) == false )
-							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data,'Error injecting meta data');
+						if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false ) {
+							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
+						} else {
+							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Meta data successfully sent');
+						}
  					}
 				}
 			}

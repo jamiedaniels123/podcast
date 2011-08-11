@@ -77,7 +77,7 @@ class ApiComponent extends Object {
 		$this->params = array(  $data );
 		
 		
-        $this->setResponse( json_decode( $this->__sendMessage('deliver-without-transcoding', ADMIN_API, $this->params, count( $data ) ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('deliver-without-transcoding', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
         
@@ -132,7 +132,9 @@ class ApiComponent extends Object {
      */
     function metaInjection( $data ) {
     	
-        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), 1 ) );
+		$this->params = array( $data );
+
+        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $this->params ), count( $this->params ) ) );
         return $this->getStatus();
     }
     

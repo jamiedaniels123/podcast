@@ -183,3 +183,8 @@ h3 a:hover {text-decoration: underline;}
 	font-style:italic;
 	font-size:85%;
 }
+
+.disabled {
+	background: #e1dede!important;
+	
+}

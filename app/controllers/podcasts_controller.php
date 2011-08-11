@@ -339,12 +339,13 @@ class PodcastsController extends AppController {
             if( !empty( $podcast ) ) {
 
 				if( ( $this->Object->intendedForPublication( $podcast['Podcast'] ) == false ) && $this->Permission->isOwner( $podcast['Podcast']['owner_id'] ) ) {
+					// Delete the podcast
+					$podcast['Podcast']['deleted'] = true;
 					
 					// We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
 					if( $this->Folder->buildHtaccessFile( $podcast ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $podcast ) ) ) { 
 					
-						// Delete the podcast
-						$podcast['Podcast']['deleted'] = true;
+
 						$this->Podcast->set( $podcast ); // Hydrate the object
 						$this->Podcast->save();
 							
@@ -449,7 +450,7 @@ class PodcastsController extends AppController {
 			$api_data = $this->Podcast->copy();
 			
 			if( $api_data ) {
-				
+
 				if( $this->Api->copyMediaFolder( $api_data ) ) {
 					
 					if( $this->__generateRSSFeeds( $this->Podcast->data['Podcast']['id'] ) ) {
