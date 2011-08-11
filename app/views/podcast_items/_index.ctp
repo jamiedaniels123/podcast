@@ -40,7 +40,6 @@
 						<td class="actions">
 						
 							<?php if( $this->Permission->toView( $this->data ) ) : ?>
-						
 								
 								<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 								
@@ -54,13 +53,13 @@
                                     
 									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() ) : ?>
                                     
-                                    	<?php if( !empty( $podcast_item['youtube_id'] ) ) : ?>
+                                    	<?php if( empty( $podcast_item['youtube_id'] ) ) : ?>
                                         
-											<a class="button white disabled" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="alert('Your media has already been scheduled/uploaded to youtube'); return false;"><span>youtube uploaded</span></a>
+											<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>youtube upload</span></a>
                                         
                                         <?php else : ?>
-                                    
-											<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>youtube upload</span></a>
+
+											<a class="button disabled" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="alert('Your media has already been scheduled/uploaded to youtube'); return false;"><span>youtube upload</span></a>
                                         
 										<?php endif; ?>
                                     <?php endif; ?>
@@ -95,6 +94,7 @@
 				        
 		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube approve</span></button>
 		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube reject</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube upload</span></button>
 	        
         	<?php endif; ?>
 	        
