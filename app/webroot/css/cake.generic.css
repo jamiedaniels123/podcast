@@ -97,7 +97,7 @@ ul, li {
 	text-decoration: underline;
 }
 #content{
-	margin: 0;
+	margin: 20px 0 0 0;
 	background: #fff;
 	clear: both;
 	color: #333;
@@ -844,7 +844,7 @@ ul#breadcrumb li a	{
 }
 
 ul#breadcrumb li a:hover	{
-	color: white;	
+	color: #1a1a1a;	
 }
 
 img.icon {
