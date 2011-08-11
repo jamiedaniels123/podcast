@@ -40,12 +40,9 @@
         <div id="header">
             <h1>OU Podcast Server</h1>
             <p>For the management of podcast collections</p>
-            <?php if( $this->Session->check('Auth.User.id') ) : ?>
-            <ol>
-                <li><a href="/users/logout" title="logout link" id="logout_link">Logout <?php echo $this->Session->read('Auth.User.full_name'); ?></a></li>
-            </ol>
-            <?php endif; ?>
+
             <?php echo $this->element('breadcrumb', array('breadcrumbs' => $breadcrumbs ) ); ?>
+            
         </div>
         <div id="content">
             <?php echo $this->Session->flash(); ?>

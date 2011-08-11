@@ -436,9 +436,9 @@ select {
 }
 
 select[multiple=multiple] {
-	width: 100%;
-	border:1px solid #999;
+	width: 90%;
 }
+
 
 option {
 	padding: 0 3px;
@@ -716,21 +716,22 @@ th.actions {
     color: #fff;
     font-weight: bold;
     padding: 15px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+	border-radius:4px;
 }
 
 #flashMessage.error, div#errors {
-    background-color: #ff0000;
+    background-color: #e1001a;
     color: #fff;
 }
 
 #flashMessage.success {
-    background-color: green;
+    background-color: #40a52b;
 }
 
 #flashMessage.alert {
-    background-color: orange;
+    background-color: #f19300;
 }
 
 div#errors ul {
@@ -786,7 +787,9 @@ div.clear {
 }
 
 .move	{
-	float:left;	
+	/*float:left;*/
+	display:block;
+	vertical-align:middle;	
 }
 
 .move:hover {
@@ -836,8 +839,9 @@ tr.deleted td {
 	width: 25%;		
 }
 
-#user_groups_container label	{
+#user_groups_container label, #moderator_container label	{
 		font-weight:bold;
+		margin-left:10px;
 }
 
 button {

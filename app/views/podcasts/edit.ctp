@@ -8,13 +8,13 @@
         <legend><h3>Update Collection</h3></legend>
         
 		<p class="leader">
-            Use the form below to create/update a new Collection container
+            Use the form below to create/update a new collection container
         </p>
         
         <img src="/img/collection-large.png" />
 		        
 		<?php echo $this->element('../podcasts/_form'); ?>
         	
-        <button id="PodcastUpdateButton" type="submit" class="button light-blue auto_select_and_submit">Update collection</button>
+        <button id="PodcastUpdateButton" type="submit" class="button blue auto_select_and_submit">Update collection</button>
     </fieldset>
 <form>

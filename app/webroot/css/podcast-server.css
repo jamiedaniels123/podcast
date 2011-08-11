@@ -91,8 +91,16 @@ h3 a:hover {text-decoration: underline;}
 	color: #fff;
 	border: 1px solid #418db1;
 	border-radius: 4px;
-	padding: 2px 4px 2px 2px;
+	padding: 2px 4px 2px 4px;
 	}
+	
+.orange	{
+	background-color: #f19300;
+	color: #003d4c;
+	border: 1px solid #f19300;
+	border-radius: 4px;
+	padding: 2px 4px 2px 4px;
+}	
 	
 .light-blue:hover {color: #fff;}
 

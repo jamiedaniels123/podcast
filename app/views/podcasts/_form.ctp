@@ -18,7 +18,7 @@
 			<div class="input select">
             <label for="Moderators">Moderator Groups</label>
             
-				<span class="move right" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
+				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
 				
 				<input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
 				<select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
@@ -69,8 +69,9 @@
 	<div class="wrapper" id="moderator_container">
 		<div class="float_left">
 			<div class="input select">
+            <label for="Moderators">Podcast Moderators</label>
 				<span class="move" data-source="Moderators" data-target="Members">Move &rarr;</span>
-				<label for="Moderators">Podcast Moderators</label>
+				
 				<input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
 				<select id="Moderators" multiple="multiple" class="selected" name="data[Moderators][]">
 					<?php foreach( $this->data['Moderators'] as $moderator ) : ?>
@@ -82,9 +83,10 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
+            <label for="Members">Podcast Members</label>
 				<span class="move" data-source="Members" data-target="Moderators">&larr; Move</span>
 				<span class="move" data-source="Members" data-target="UsersUsers">Move &rarr;</span>
-				<label for="Members">Podcast Members</label>
+				
 				<input type="hidden" name="data[Members]" value="" id="Members_" />
 				<select id="Members" multiple="multiple" class="selected" name="data[Members][]">
 					<?php foreach( $this->data['Members'] as $member ) : ?>
@@ -96,8 +98,9 @@
 		</div>
 		<div class="float_left">
 			<div class="input select">
+            <label for="UsersUsers">All Users</label>
 				<span class="move" data-source="UsersUsers" data-target="Members">&larr; Move</span>
-				<label for="UsersUsers">All Users</label>
+				
 				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
 					<?php foreach( $users as $key => $value ) : ?>
 						<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
