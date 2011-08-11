@@ -51,10 +51,18 @@
 										<a class="button white" href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');"><span>delete</span></a>
 
 									<?php endif; ?>
-									<?php if( ( $podcast_item['processed_state'] != MEDIA_AVAILABLE ) && ( $this->Object->youtubePublished( $podcast_item ) ) ) : ?>
                                     
-										<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>upload</span></a>
-
+									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() ) : ?>
+                                    
+                                    	<?php if( !empty( $podcast_item['youtube_id'] ) ) : ?>
+                                        
+											<a class="button white disabled" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="alert('Your media has already been scheduled/uploaded to youtube'); return false;"><span>youtube uploaded</span></a>
+                                        
+                                        <?php else : ?>
+                                    
+											<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>youtube upload</span></a>
+                                        
+										<?php endif; ?>
                                     <?php endif; ?>
 									
 								<?php endif; ?>
