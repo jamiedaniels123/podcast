@@ -39,14 +39,12 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php echo $user_group['UserGroup']['group_title']; ?>
+                        <a href="/user_groups/view/<?php echo $user_group['UserGroup']['id']; ?>" title="view user group" id="view_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="view_user_group"><?php echo $user_group['UserGroup']['group_title']; ?></a>
                     </td>
                     <td>
                         <?php echo $user_group['UserGroup']['created'] ? $this->Time->getPrettyShortDate( $user_group['UserGroup']['created'] ) : $this->Time->getPrettyShortDate( $user_group['UserGroup']['created_when'] ); ?>
                     </td>
                     <td class="actions">
-
-                        <a href="/user_groups/view/<?php echo $user_group['UserGroup']['id']; ?>" title="view user group" id="view_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="view_user_group">view</a>
                         <?php if( $this->Permission->isModerator( $user_group['Moderators'] ) ) : ?>
                             <a href="/user_groups/edit/<?php echo $user_group['UserGroup']['id']; ?>" title="edit user group" id="edit_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="edit_user_group">moderate</a>
                             <a href="/user_groups/delete/<?php echo $user_group['UserGroup']['id']; ?>" title="delete user group" id="delete_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="delete_user_group" onclick="return confirm('Are you sure you wish to delete this user group?');">delete</a>

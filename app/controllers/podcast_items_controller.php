@@ -61,7 +61,6 @@ class PodcastItemsController extends AppController {
             $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id, 'PodcastItem.deleted' => false ) );
         }
     }
-
 	
     /*
      * @name : view

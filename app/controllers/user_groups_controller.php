@@ -238,7 +238,7 @@ class UserGroupsController extends AppController {
      * @name : Charles Jackson
      * @by : 10th May 2011
      */
-    function admin_add() {
+    /*function admin_add() {
 
         if ( !empty( $this->data ) ) {
 
@@ -261,7 +261,7 @@ class UserGroupsController extends AppController {
                 $this->Session->setFlash( 'Could not create the user group. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
             }
         }
-    }
+    }*/
 
     /*
      * @name : view

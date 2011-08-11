@@ -44,7 +44,9 @@ class PodcastItemMediasController extends AppController {
 
 			if( $this->Api->deleteFileOnMediaServer( 
 				array(
-						'source_path' => $this->data['PodcastItem']['Podcast']['custom_id'].'/'.$this->data['PodcastItemMedia']['media_type'].'/',  						'filename' => $this->data['PodcastItemMedia']['filename'],  
+						'source_path' => $this->data['PodcastItem']['Podcast']['custom_id'].'/'.$this->data['PodcastItemMedia']['media_type'].'/',  						'source_filename' => $this->data['PodcastItemMedia']['filename'],  
+						'destination_path' => $this->data['PodcastItem']['Podcast']['custom_id'].'/'.$this->data['PodcastItemMedia']['media_type'].'/',
+						'destination_filename' => $this->data['PodcastItemMedia']['filename'],  
 					)
 				) 
 			) {
