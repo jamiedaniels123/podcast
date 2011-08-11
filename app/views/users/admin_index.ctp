@@ -1,8 +1,11 @@
 <fieldset class="users index">
-    <legend>All Users</legend>
-    <p>
+    <legend><h3>All Users</h3></legend>
+    <p class="leader">
         Below is a list of all users on the system.
     </p>
+    
+    <img src="/img/your-usergroups-large.png" width="45" height="33" />
+    
     <?php echo $this->element('../users/_filter'); ?>
     <p>
         <?php

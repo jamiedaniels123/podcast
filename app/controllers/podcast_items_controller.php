@@ -140,13 +140,19 @@ class PodcastItemsController extends AppController {
 	
 		$this->data = $this->PodcastItem->findById( $id );
 		
-		if( $this->data['PodcastItem']['youtube_flag'] ) {
+		if( $this->data['PodcastItem']['youtube_flag'] && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
 			
+			$this->data['PodcastItem']['youtube_id'] = 1;
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
 			
-				
+		} else {
 			
+			$this->Session->setFlash('Collections must be youtube approved at umbrella level and include a youtube title and description.', 'default', array( 'class' => 'error' ) );				
 		}
-		 
+		
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 	 }
 	 
 	 
@@ -419,6 +425,7 @@ class PodcastItemsController extends AppController {
 								'source_filename' => $this->data['PodcastItem']['filename'],
 								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
+								'workflow' => 'audio'
 									)
 								)
 							)

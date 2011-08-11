@@ -40,7 +40,6 @@
 						<td class="actions">
 						
 							<?php if( $this->Permission->toView( $this->data ) ) : ?>
-						
 								
 								<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 								
@@ -51,10 +50,18 @@
 										<a class="button white" href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');"><span>delete</span></a>
 
 									<?php endif; ?>
-									<?php if( ( $podcast_item['processed_state'] != MEDIA_AVAILABLE ) && ( $this->Object->youtubePublished( $podcast_item ) ) ) : ?>
                                     
-										<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to youtube?');"><span>upload</span></a>
+									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() ) : ?>
+                                    
+                                    	<?php if( empty( $podcast_item['youtube_id'] ) ) : ?>
+                                        
+											<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>youtube upload</span></a>
+                                        
+                                        <?php else : ?>
 
+											<a class="button disabled" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="alert('Your media has already been scheduled/uploaded to youtube'); return false;"><span>youtube upload</span></a>
+                                        
+										<?php endif; ?>
                                     <?php endif; ?>
 									
 								<?php endif; ?>
@@ -74,19 +81,20 @@
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
 	        <a href="/" class="toggler button blue" data-status="unticked">Select/deselect all</a>
-			<a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span><img src="../../webroot/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
+			<a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span><img src="/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span><img src="../../webroot/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes appprove</span></button>
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span><img src="../../webroot/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes reject</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes appprove</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes reject</span></button>
 		        
 			<?php endif; ?>
 			
 			<?php if( $this->Permission->isYoutubeUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span><img src="../../webroot/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube approve</span></button>
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span><img src="../../webroot/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube reject</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube approve</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube reject</span></button>
+		        <a class="button white multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube upload</span></button>
 	        
         	<?php endif; ?>
 	        

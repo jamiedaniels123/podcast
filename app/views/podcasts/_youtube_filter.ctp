@@ -9,7 +9,7 @@
         </select>
     </div>
     <div class="input submit">
-    	<button type="submit" id="PodcastFilterSubmit"><span>Filter</span></button>
+    	<button type="submit" button="button blue" id="PodcastFilterSubmit"><span>Filter</span></button>
 	</div>
 </form>
 

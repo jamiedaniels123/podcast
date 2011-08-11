@@ -1,11 +1,13 @@
 <fieldset class="podcasts index">
     <legend><h3>iTunesU collections</h3></legend>
     
-    <img src="/img/collection-large.png" />
+
     
     <p class="leader">
         Below is a list of all itunes collections on the system.
-    </p>
+    </p>    
+    
+    <img src="/img/collection-large.png" />
     
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     

@@ -152,7 +152,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, PodcastItems.youtube_flag, PodcastItems.itunes_flag',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state',
             'order' => 'PodcastItems.publication_date DESC',
         ),
         'PublishedPodcastItems' => array(
@@ -1230,7 +1230,6 @@ class Podcast extends AppModel {
      */ 	
 	function copy( $user_id = null ) {
 
-
 		$original_podcast_id = $this->data['Podcast']['id'];
 		$original_custom_id = $this->data['Podcast']['custom_id'];
 		$this->data['Podcast']['id'] = null;
@@ -1252,7 +1251,7 @@ class Podcast extends AppModel {
 		// errors on the automagical 'function before***' methods.
 		$this->save( $this->data, array('validate' => false ) );
 		
-		// Now we need to copy the data back in the class propertry from our local copy because it has been wiped by the
+		// Now we need to copy the data back in the class property from our local copy because it has been wiped by the
 		// set/save combination above.
 		$this->data = $data;
 
@@ -1279,6 +1278,10 @@ class Podcast extends AppModel {
 			}
 		}
 		
+		// We need to unset the PodcastItems array else we will steal the PodcastItems from the original
+		// podcast when we use the saveAll command.
+		unset( $this->data['PodcastItems'] );
+		
 		if( isSet( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) )
 			$this->data['iTuneCategories'] = $this->copyAssociations('iTuneCategories' );
 			
@@ -1287,24 +1290,25 @@ class Podcast extends AppModel {
 			
 		if( isSet( $this->data['Categories'] ) && count( $this->data['Categories'] ) )			
 			$this->data['Categories'] = $this->copyAssociations('Categories' );
-
 			
 		$this->data['Podcast']['custom_id'] = str_replace( $original_podcast_id . '_', $this->data['Podcast']['id'] . '_', $this->data['Podcast']['custom_id'] );
 		$this->data['Podcast']['title'] .= ' (COPY)';
-		$this->set( $this->data );							
+		$this->set( $this->data );	
 		
+		//Wrapped in two arrays so we create a multidimensional solution inline with all API commands.
+		$api_information = array( array(
+			'source_path' => $original_custom_id,
+			'destination_path' => $this->data['Podcast']['custom_id']
+		) );
+			
 		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {
 		
+
+			
 			$this->data = $data;
 			$this->commit();
 			
-			return array(
-				'source_path' => $original_custom_id,
-				'destination_path' => $this->data['Podcast']['custom_id']
-			);
-			
-			
-			return true;
+			return $api_information;
 			
 		} else {
 			

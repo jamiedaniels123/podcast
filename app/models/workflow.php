@@ -2,7 +2,7 @@
 class Workflow extends AppModel {
 
     var $name = 'Workflow';
-    var $useTable = false;
+    var $useTable = 'workflow_map';
 	var $errors = array();
 	
 	var $data = array();

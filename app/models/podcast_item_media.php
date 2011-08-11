@@ -41,10 +41,20 @@ class PodcastItemMedia extends AppModel {
 		}
 			
 		$data['PodcastItemMedia']['filename'] = str_replace('//','/',$row['destination_filename'] ); // Quick fudge to fix minor API issue;
-		$data['PodcastItemMedia']['original_filename'] = $row['original_filename'];
+		
+		// When media has been trancoded the original filename will exist within
+		// the array element "original_filename" else it will exist within "destination_filename" 
+		// for non transcoded media such as MP3 files.
+		if( isSet( $row['original_filename'] ) ) {
+			$data['PodcastItemMedia']['original_filename'] = $row['original_filename'];
+		} else {
+			$data['PodcastItemMedia']['original_filename'] = $row['destination_filename'];
+		}
+		
 		$data['PodcastItemMedia']['media_type'] = $row['flavour'];
 		$data['PodcastItemMedia']['podcast_item'] = $row['podcast_item_id'];
-		$data['PodcastItemMedia']['duration'] = $row['duration'];
+		
+		$data['PodcastItemMedia']['duration'] = 0; //$row['duration'];
 		$data['PodcastItemMedia']['uploaded_when'] = date("Y-m-d H:i:s");
 
 		$this->set( $data );

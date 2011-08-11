@@ -1,18 +1,15 @@
 <fieldset class="user_groups index">
-    <legend>Your User Groups</legend>
-    <p>
+    <legend><h3>Your User Groups</h3></legend>
+    
+    <p class="leader">
         Below is a list of all user groups of which you are a member.
     </p>
-    <p>
-        <?php
-            echo $this->Paginator->counter(array(
-            'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-            ));
-        ?>
-    </p>
+    
+    <img src="/img/your-usergroups-large.png" width="45" height="33" />
+    
+
     <form method="post" action="/user_groups/delete">
-        <a href="/" class="toggler" data-status="unticked">Toggle</a>
-        <button type="submit" onclick="return confirm('Are you sure you wish to delete all these usergroups?')"><span>delete</span></button>
+       
 
 
         <table cellpadding="0" cellspacing="0">
@@ -61,9 +58,27 @@
         endif; ?>
     </table>
     </form>
+    
     <div class="paging">
-        <?php echo $this->Paginator->prev('<< '.__('previous', true), array(), null, array('class'=>'disabled'));?>
-     | 	<?php echo $this->Paginator->numbers();?>
-        <?php echo $this->Paginator->next(__('next', true).' >>', array(), null, array('class'=>'disabled'));?>
+    
+    <p>
+        <?php
+            echo $this->Paginator->counter(array(
+            'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
+            ));
+        ?>
+    </p>
+    
+<div class="page-controls">
+   	<?php echo $this->Paginator->prev(''.__('previous', true), array(), null, array('class'=>'disabled previous'));?>
+ | 	<?php echo $this->Paginator->numbers();?>
+    <?php echo $this->Paginator->next(__('next', true).'', array(), null, array('class'=>'disabled next'));?>
     </div>
+</div>
+    
+    
+     <a href="/" class="button blue toggler" data-status="unticked">Select/deselect all</a>
+        <button type="submit" class="button white" onclick="return confirm('Are you sure you wish to delete all these usergroups?')"><span><img src="/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
+        
+        </div>
 </fieldset>

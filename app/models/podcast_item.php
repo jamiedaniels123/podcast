@@ -199,48 +199,26 @@ class PodcastItem extends AppModel {
 	
 	/*
 	 * @name : buildInjectionFlavours
-	 * @description : Find every flavour of media for a media_item and list it in an array for meta injection.
+	 * @description : Takes a row from the callbacks controller and build common meta data for injection
 	 * @updated : 13th July 2011
 	 * @by : Charles Jackson
 	 */
-	function buildInjectionFlavours( $id = null ) {
+	function commonMetaInjection( $row ) {
 
-		$flavours = array();		
-		$data = $this->findById( $id );
+		$meta_data = array();
+		$data = $this->findById( $row['podcast_item_id'] );
+
+		$meta_data['destination_path'] = $row['destination_path'];
+		$meta_data['destination_filename'] = $row['destination_filename'];
+		$meta_data['meta_data']['title'] = $this->data['title'];
+		$meta_data['meta_data']['genre'] = 'Podcast';
+		$meta_data['meta_data']['author'] = $data['Podcast']['author'];
+		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
+		$meta_data['meta_data']['podcast_title'] = $data['Podcast']['title'];
+		$meta_data['meta_data']['year'] = date("Y");
+		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['title'];
 		
-		if( $data['PodcastItem']['processed_state'] == MEDIA_AVAILABLE ) {
-			
-			$flavours[] = array(
-			
-				'destination_path' => $data['Podcast']['custom_id'].'/',
-				'destination_filename' => $data['PodcastItem']['filename'],
-				'podcast_item_id' => $id,
-				'title' => $data['PodcastItem']['title'],
-				'genre' => 'Podcast',
-				'artist' => $data['PodcastItem']['author'],
-				'album' => $data['Podcast']['title'],
-				'year' => date('Y'),
-				'comments' => $data['PodcastItem']['summary']
-			);
-			
-			foreach( $data['PodcastMedia'] as $flavour ) {
-				
-				$flavours[] = array(
-				
-					'destination_path' => $data['Podcast']['custom_id'].'/'.$flavour['media_type'].'/',
-					'destination_filename' => $flavour['filename'],
-					'podcast_item_id' => $id,
-					'title' => $data['PodcastItem']['title'],
-					'genre' => 'Podcast',
-					'artist' => $data['PodcastItem']['author'],
-					'album' => $data['Podcast']['title'],
-					'year' => date('Y'),
-					'comments' => $data['PodcastItem']['summary']			
-				);
-			}
-		}
-		
-		return $flavours;
+		return $meta_data;
 	}
 	
 	/* 
@@ -262,6 +240,22 @@ class PodcastItem extends AppModel {
 			default:
 				break;	
 		}
+	}
+	
+	
+	function buildYouTubeData( $id = null ) {
+
+		$youtube_data = array();
+				
+		$this->data = $this->findById( $id );
+		
+		if( empty( $this->data ) )
+			return false;
+			
+		
+			
+		
+		
 	}
 
 

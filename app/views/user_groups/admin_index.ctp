@@ -1,8 +1,13 @@
 <fieldset class="user_groups index">
-    <legend>User Group Administration</legend>
-    <p>
+    <legend><h3>User Group Administration</h3></legend>
+    
+    <p class="leader">
         Below is a list of all user groups on the system.
     </p>
+    
+    <img src="/img/create-usergroups-large.png" width="45" height="33" />
+    
+    
     <?php echo $this->element('../user_groups/_filter'); ?>    
     <p>
         <?php
@@ -13,7 +18,7 @@
     </p>
     <form method="post" action="/admin/user_groups/delete">
         <a href="/" class="toggler" data-status="unticked">Toggle</a>
-        <button type="submit" onclick="return confirm('Are you sure you wish to delete all these usergroups?')"><span>delete</span></button>
+        <button type="submit" class="button blue" onclick="return confirm('Are you sure you wish to delete all these usergroups?')"><span>delete</span></button>
 
         <table cellpadding="0" cellspacing="0">
             <tr>
