@@ -16,7 +16,7 @@
             
 					<!--LOGOUT BUTTON-->
 					<?php if( $this->Session->check('Auth.User.id') ) : ?>
-            		<a href="/users/logout" title="logout link" class="button orange" style="display:block;margin:0 0 0 10px;padding:0px;" id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
+            		<br /><a href="/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
             		<?php endif; ?>
            			 <!--/LOGOUT BUTTON-->
                      
