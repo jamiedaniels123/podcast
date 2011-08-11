@@ -138,18 +138,26 @@ class PodcastItemsController extends AppController {
 	 */
 	 function youtube_upload( $id = null ) {
 	
-		$this->data = $this->PodcastItem->findById( $id );
-		
-		if( $this->data['PodcastItem']['youtube_flag'] && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+				
+			$this->data = $this->PodcastItem->findById( $key );
+
+
+			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
+
+				$this->data['PodcastItem']['youtube_id'] = 1;
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+				$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
 			
-			$this->data['PodcastItem']['youtube_id'] = 1;
-			$this->Podcast->set( $this->data );
-			$this->Podcast->save();
-			$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
-			
-		} else {
-			
-			$this->Session->setFlash('Collections must be youtube approved at umbrella level and include a youtube title and description.', 'default', array( 'class' => 'error' ) );				
+			} else {
+				
+				$this->Session->setFlash('Collections must be youtube approved at umbrella level and include a youtube title and description.', 'default', array( 'class' => 'alert' ) );
+				break;
+			}
 		}
 		
 		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
@@ -183,7 +191,7 @@ class PodcastItemsController extends AppController {
         }
         
         $this->Session->setFlash('Your media has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( $this->referer() );
+        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
    /*
@@ -223,7 +231,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one media item to publish in iTunes.', 'default', array( 'class' => 'error' ) );
 		}
 
-        $this->redirect( $this->referer() );	
+        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
     
    /*
@@ -264,7 +272,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one media item.', 'default', array( 'class' => 'error' ) );
 		}
 		
-        $this->redirect( $this->referer() );	
+        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
     
         
@@ -293,7 +301,7 @@ class PodcastItemsController extends AppController {
         }
         
         $this->Session->setFlash('The media has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( $this->referer() );
+        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
    /*
@@ -324,7 +332,7 @@ class PodcastItemsController extends AppController {
         }
         
         $this->Session->setFlash('Your media has been successfully approved and acheduled for publication on Youtube.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( $this->referer() );	
+        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
     /*
@@ -346,7 +354,7 @@ class PodcastItemsController extends AppController {
             $this->data = $this->PodcastItem->findById( $key );
     	
             // Make sure it has already been converted into a podcast if they want to publish it.
-	        if( !empty( $this->data ) ) {
+	        if( !empty( $this->data ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
 	        	
                 $this->data['PodcastItem']['youtube_flag'] = 'N';
 				$this->data['PodcastItem']['consider_for_youtube'] = false;
@@ -356,8 +364,8 @@ class PodcastItemsController extends AppController {
 			}
         }
         
-        $this->Session->setFlash('Your media has been successfully rejected and, if appropriate scheduled for removal from Youtube.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( $this->referer() );	
+        $this->Session->setFlash('Your media has been successfully rejected for youtube. NOTE: If previously published it will not be automatically removed.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
         
     /*
@@ -656,7 +664,7 @@ class PodcastItemsController extends AppController {
         }
         
 		$this->Session->setFlash('There has been a problem deleting the media attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
-		$this->redirect( $this->referer() );
+	    $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
     }
 
     /*
@@ -671,7 +679,7 @@ class PodcastItemsController extends AppController {
      * @updated : 13th May 2011
      * @by : Charles Jackson
      */
-    function admin_add( $podcast_id ) {
+    /*function admin_add( $podcast_id ) {
 
         $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
 
@@ -694,7 +702,7 @@ class PodcastItemsController extends AppController {
 
             $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id ) );
         }
-    }
+    }*/
 
     /*
      * @name : admin_view
