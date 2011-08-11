@@ -131,7 +131,7 @@ class PodcastItemsController extends AppController {
 
 	/*
 	 * @name : youtube_upload
-	 * @description :
+	 * @description : Upload a new video to youtube.
 	 * @updated : 9th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -145,16 +145,21 @@ class PodcastItemsController extends AppController {
 			$this->data = $this->PodcastItem->findById( $key );
 
 
-			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
-
-				$this->data['PodcastItem']['youtube_id'] = 1;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
-				$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && !empty( $this->data['PodcastItem']['youtube_id'] ) && $this->Object->hasYoutubeFlavour( $this->data ) ) {
+				if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
+					$this->data['PodcastItem']['youtube_id'] = 1;
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
+					$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+				} else {
+					
+					$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					break;
+				}
 			
 			} else {
 				
-				$this->Session->setFlash('Collections must be youtube approved at umbrella level and include a youtube title and description.', 'default', array( 'class' => 'alert' ) );
+				$this->Session->setFlash('Collections must be youtube approved at umbrella level, include a youtube title and description and have an available youtube flavour of media.', 'default', array( 'class' => 'error' ) );
 				break;
 			}
 		}
@@ -162,7 +167,43 @@ class PodcastItemsController extends AppController {
 		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 	 }
 	 
-	 
+	/*
+	 * @name : youtube_refresh
+	 * @description :
+	 * @updated : 9th August 2011
+	 * @by : Charles Jackson
+	 */
+	 function youtube_refresh( $id = null ) {
+	
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+				
+			$this->data = $this->PodcastItem->findById( $key );
+
+
+			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && !empty( $this->data['PodcastItem']['youtube_id'] ) && $this->Object->hasYoutubeFlavour( $this->data ) ) {
+				if( $this->Api->youtubeRefresh( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
+					$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+				} else {
+					
+					$this->Session->setFlash('Unable to refresh media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					break;
+				}
+			
+			} else {
+				
+				$this->Session->setFlash('Collections must be youtube approved at umbrella level, include a youtube title and description and have an available youtube flavour of media.', 'default', array( 'class' => 'error' ) );
+				break;
+			}
+		}
+		
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+	 }
+	 	 
    /*
      * @name : consider_itunes
      * @description : Enables a peeps to submit an item of media for itunesu consideration
@@ -615,7 +656,7 @@ class PodcastItemsController extends AppController {
 					
 		        } else {
 				
-					$this->Session->setFlash('Cannot delete media that is published or not yet available.', 'default', array( 'class' => 'alert' ) );
+					$this->Session->setFlash('Cannot delete media that is published or not yet available.', 'default', array( 'class' => 'error' ) );
 					break;
 				}
 			}
@@ -853,7 +894,6 @@ class PodcastItemsController extends AppController {
         $YoutubeSubjectPlaylist = ClassRegistry::init('YoutubeSubjectPlaylist');
         $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
         $this->set('youtube_subject_playlist', $youtube_subject_playlist );
-        
     }
 	
 }

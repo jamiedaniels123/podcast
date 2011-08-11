@@ -25,7 +25,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text',
             'dependent' => true
         )
     );
@@ -36,7 +36,12 @@ class PodcastItem extends AppModel {
             'className' => 'PodcastItemMedia',
             'foreignKey' => 'podcast_item',
             'conditions' => 'Transcript.media_type = "transcript"'
-        )
+        ),
+        'YoutubeVideo' => array(
+            'className' => 'PodcastItemMedia',
+            'foreignKey' => 'podcast_item',
+            'conditions' => 'YoutubeVideo.media_type = "youtube"'
+        )		
     );
 
     var $hasMany = array(
@@ -242,21 +247,43 @@ class PodcastItem extends AppModel {
 		}
 	}
 	
-	
-	function buildYouTubeData( $id = null ) {
+	/*
+	 * @name : buildYoutubeData
+	 * @description : Build an array that is passed to the API when uploading a new video to youtube or refreshing the data
+	 * @updated : 11th August 2011
+	 * @by : Charles Jackson
+	 */
+	function buildYoutubeData( $data = array() ) {
 
 		$youtube_data = array();
 				
-		$this->data = $this->findById( $id );
+		$this->data = $this->findById( $data['PodcastItem']['id'] );
 		
 		if( empty( $this->data ) )
 			return false;
 			
+		$youtube_data = array(
 		
-			
+			'podcast_item_id' => $this->data['PodcastItem']['id'],
+			'youtube_id' => $this->data['PodcastItem']['youtube_id'],
+			'destination_path' => $this->data['Podcast']['custom_id'].'/youtube/',
+			'destination_filename' => $this->data['YoutubeVideo']['filename'],			
+			'title' => $this->data['PodcastItem']['youtube_title'],
+			'description' => $this->data['PodcastItem']['youtube_description'],
+			'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
+			'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
+			'channel' => $this->data['PodcastItem']['youtube_channel'],
+			'tags' => $this->data['PodcastItem']['youtube_tags'],
+			'privacy' => $this->data['PodcastItem']['youtube_privacy'],
+			'license' => $this->data['PodcastItem']['youtube_license'],
+			'comments' => $this->data['PodcastItem']['youtube_comments'],
+			'voting' => $this->data['PodcastItem']['youtube_voting'],
+			'video_response' => $this->data['PodcastItem']['youtube_video_response'],
+			'ratings' => $this->data['PodcastItem']['youtube_ratings'],
+			'embedding' => $this->data['PodcastItem']['youtube_embedding'],
+			'syndication' => $this->data['PodcastItem']['youtube_syndication']
+		);
 		
-		
+		return $youtube_data;
 	}
-
-
 }

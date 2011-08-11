@@ -51,7 +51,7 @@
 
 									<?php endif; ?>
                                     
-									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() ) : ?>
+									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
                                     
                                     	<?php if( empty( $podcast_item['youtube_id'] ) ) : ?>
                                         
@@ -59,7 +59,7 @@
                                         
                                         <?php else : ?>
 
-											<a class="button disabled" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="alert('Your media has already been scheduled/uploaded to youtube'); return false;"><span>youtube upload</span></a>
+											<a class="button white" href="/youtube/podcast_items/refresh/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to refresh the associated media data on YouTube?');"><span>youtube refresh</span></a>
                                         
 										<?php endif; ?>
                                     <?php endif; ?>
