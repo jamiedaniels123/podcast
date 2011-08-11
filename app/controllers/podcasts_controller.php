@@ -530,7 +530,7 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 5th May 2011
      */
-    function admin_add() {
+    /*function admin_add() {
 
         if ( !empty( $this->data ) ) {
 
@@ -560,7 +560,7 @@ class PodcastsController extends AppController {
         // Need to retrieve form options such as additional users and catagories etc... on the system.
         $this->__setPodcastFormOptions();
         
-    }
+    }*/
 
     /*
      * @name : admin_view
