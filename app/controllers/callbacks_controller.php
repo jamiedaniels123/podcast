@@ -6,6 +6,7 @@ class CallbacksController extends AppController {
 	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
+	var $youtube = array('youtube-file-upload');
 	
     /*
      * @name : beforeFilter
@@ -37,7 +38,7 @@ class CallbacksController extends AppController {
 			$this->set('status', json_encode( array( 'status'=>'ACK', 'data'=>'Message received', 'timestamp' => time() ) ) );
 
 			if( $this->Callback->hasErrors() )
-				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'This callback has errors');
+				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'This callback has errors, see information below as received from the Admin API');
 				
 			// Do we need to update the processed state
 			if( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
@@ -51,15 +52,15 @@ class CallbacksController extends AppController {
 				foreach( $this->Callback->data['data'] as $row ) {
 					
 					if( $podcastItemMedia->saveFlavour( $row ) == false )
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of media, see details below');
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of media, see information below as received from the Admin API');
 						
 					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
 				}
 			}
 			
+			// Called when we are HARD DELETING a podcast or podcast item we must remove them from the database.
 			if( in_array( $this->Callback->data['command'], $this->deletion_request ) ) {
 				
-				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'processing a deletion');
 				$this->Callback->processDeletions();
 			}			
 				
@@ -76,7 +77,7 @@ class CallbacksController extends AppController {
 				}
 			}
 			
-			// If we need to 'kick-off' some meta injection do it here.
+			// If we need to kick-off some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
 
 				// Needed to retrieve the meta data.
@@ -95,6 +96,28 @@ class CallbacksController extends AppController {
 						}
  					}
 				}
+			}
+			
+			// If we have just attempted to upload a video to youtube process the result here.
+			if( in_array( $this->Callback->data['command'], $this->youtube ) ) {
+				
+				// Needed to retrieve the meta data.
+				if( is_object( $podcastItem ) == false )
+					$podcastItem = ClassRegistry::init('PodcastItem');
+
+				$this->data = $podcastItem->findById( $this->Callback->data['data'][0]['podcast_item_id'] );
+				if( ( $this->Callback->data['data'][0]['status'] ) == YES ) {
+					
+					$this->data['PodcastItem']['youtube_id'] = $this->Callback->data['data'][0]['youtube_id'];
+					
+				} else {
+					
+					$this->data['PodcastItem']['youtube_id'] = 	null;
+					$this->data['PodcastItem']['youtube_flag'] = NO;
+				}
+				
+				$podcastItem->set( $this->data );
+				$podcastItem->save();
 			}
 
 		} else {

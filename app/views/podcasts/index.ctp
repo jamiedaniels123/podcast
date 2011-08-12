@@ -5,7 +5,7 @@
         Below is a list of all podcasts on the system to which you have access. You can filter using the options below and sort by column headings.
     </p>
     
-    <img src="/img/collection-large.png" />
+    <img src="/img/collection-large.png"  width="45" height="33" />
     
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     

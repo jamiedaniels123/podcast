@@ -821,7 +821,8 @@ form#theuploadform input[type="file"] {
 
 ul#breadcrumb	{
 	margin: 20px 0 20px 0;
-	padding:0;	
+	padding:0;
+	background: #fff;
 }
 
 

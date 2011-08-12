@@ -6,7 +6,6 @@
         <?php echo $title_for_layout; ?>
     </title>
     <link rel="stylesheet" type="text/css" media="all" href="/cgi-bin/filechucker.cgi?css" />
-    
 
     <?php
         echo $this->Javascript->link('jquery.js');
@@ -59,7 +58,7 @@
 	<?php echo $this->element('footer'); ?>
     <!--/display OU Footer-->
     
-	<?php echo $this->element('sql_dump'); ?>
+	<?php //echo $this->element('sql_dump'); ?>
     
 </body>
 </html>

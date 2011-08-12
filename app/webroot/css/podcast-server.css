@@ -218,3 +218,24 @@ h3 a:hover {text-decoration: underline;}
 
 	
 	}
+	
+	/*I have used !important here as a means over over-riding the perl aspects of the upload page. Could be overkill*/
+	
+	#fcbody	{
+		margin:0 1%!important; 
+		background-color:#EBF4FB!important; 
+		background-image:url(http://www.open.ac.uk/includes/headers-footers/body-bg.png!important); 
+		background-repeat:repeat-x!important;
+	}
+	
+	#fcbody #header {
+		background: #fff;	
+	}
+	
+	#fcbody #breadcrumb {
+		background: #fff;	
+	}
+	
+	#fcbody #ou-org-header	{
+		background: #fff;	
+	}

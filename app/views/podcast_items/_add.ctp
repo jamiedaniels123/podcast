@@ -1,13 +1,22 @@
-<fieldset>
-    <legend>Add Media</legend>
-    <p>
-        <em>Upload a new media file or document for this podcast</em>
+<fieldset class="podcasts index">
+    
+    <legend><h3>Add Media</h3></legend>
+    
+    <p class="leader">
+        Upload a new media file or document for this collection.
     </p>
+    
+    <img src="/img/upload-collection-large.png" width="45" height="33" />
+    
     <p>
-        You may upload files up to 20Gb in size. Media will be transcoded, as necessary, into MP3 (audio) or M4V (video).
-        Please ensure your filenames end with the correct extension. Supported formats include:
+        You can upload files up to 20Gb in size. Media will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
+        Please ensure your filenames end with the correct extension. See below for supported formats.
     </p>
-    <div class="wrapper">
+    
+
+    <?php require(WWW_ROOT."upload/call_fc.php"); ?>
+    
+        <div class="wrapper">
         <div class="float_right">
             <h4>Video Files</h4>
             <ul>
@@ -35,5 +44,4 @@
         </div>
     </div>
     <div class="clear"></div>
-    <?php require(WWW_ROOT."upload/call_fc.php"); ?>
 </fieldset>

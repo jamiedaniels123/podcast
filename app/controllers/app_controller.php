@@ -107,17 +107,13 @@ class AppController extends Controller {
 	                    )
 	                );
 
-					if( $current_breadcrumb['Breadcrumb']['controller'] == 'podcast_items' && $breadcrumb['Breadcrumb']['controller'] == 'podcasts' ) {
+					if( strtolower( $current_breadcrumb['Breadcrumb']['title'] ) == 'track' ) {
 
-	                	 if( in_array( $current_breadcrumb['Breadcrumb']['action'], array( 'add', 'admin_add' ) ) && !in_array( $breadcrumb['Breadcrumb']['action'], array( 'index', 'admin_index' ) ) ) {
-
-							$breadcrumb['Breadcrumb']['url'] .= '/'.substr( $this->params['url']['url'], ( mb_strrpos( $this->params['url']['url'],'/' ) +1 ) );
-							
-	                	 } elseif( !in_array( $breadcrumb['Breadcrumb']['action'], array( 'index','admin_index' ) ) ) {
-
-	                	 	$breadcrumb['Breadcrumb']['url'] .= '/'.$this->data['PodcastItem']['podcast_id'];
-	                	 	
-	                	 }
+						if( isSet( $this->data['PodcastItem']['podcast_id'] ) ) {
+							$breadcrumb['Breadcrumb']['url'] .= $this->data['PodcastItem']['podcast_id'];
+						} else {
+							$breadcrumb['Breadcrumb']['url'] .= $this->data['Podcast']['id'];
+						}
 	                }
 	                
 	                $breadcrumbs[] = $breadcrumb;
@@ -126,7 +122,6 @@ class AppController extends Controller {
 
             $this->set('breadcrumbs', array_reverse( $breadcrumbs ) );
         }
-
     }
 
 	/*

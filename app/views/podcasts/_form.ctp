@@ -153,7 +153,7 @@
             <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
             <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
             
-            <span class="tip-text">JPG or PNG images only. PNGs are converted to JPG</span>
+            <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
             
             <?php echo $this->Form->error('Podcast.image'); ?>
  
