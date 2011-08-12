@@ -101,9 +101,24 @@ class ApiComponent extends Object {
      */
     function youtubeUpload( $data = array() ) {
     	
-        $this->setResponse( json_decode( $this->__sendMessage('upload-file-to-youtube', ADMIN_API, $data ), 1 ) );
+		$this->params = array( $data );
+        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-upload', ADMIN_API, $this->params ), 1 ) );
         return $this->getStatus();
     }
+	
+    /*
+     * @name : youtubeRefresh
+     * @description : Will refresh the data for a specific youtube video
+     * @updated : 8th August 2011
+     * @by : Charles Jackson
+     */
+    function youtubeRefresh( $data = array() ) {
+    	
+		$this->params = array( $data );
+        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-update', ADMIN_API, $this->params ), 1 ) );
+        return $this->getStatus();
+    }
+	
     /*
      * @name : transcodeMedia
      * @description : Called from the controller, formats parameters passed into a JSON encoded array

@@ -5,4 +5,5 @@
     <a href="/admin/podcast_items/delete/<?php echo $this->data['PodcastItem']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to perform a HARD DELETE this media?');" >delete</a>
     <div class="clear"></div>
     <?php echo $this->element('../podcast_items/_view'); ?>
+    <?php echo $this->element('../podcast_item_medias/_index'); ?>
 </fieldset>

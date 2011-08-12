@@ -133,6 +133,20 @@ class ObjectComponent extends Object {
 				
 		return false;
 	}
+	
+	/*
+	 * @name : hasYoutubeFlavour
+	 * @description : Checks to see if a youtube flavour of media exists
+	 * @updated : 11th August 2011
+	 * @by : Charles Jackson
+	 */
+	function hasYoutubeFlavour( $object = array() ) {
+		
+		if( isSet( $object['YoutubeVideo']['filename'] ) && !empty( $object['YoutubeVideo']['filename'] ) )
+			return true;
+			
+		return false;
+	}
     
 }
 

@@ -43,13 +43,12 @@
                             <input type="checkbox" name="data[UserGroup][Checkbox][<?php echo $user_group['UserGroup']['id']; ?>]" class="usergroup_selection" id="UserGroupCheckbox<?php echo $user_group['UserGroup']['id']; ?>">
                         </td>
                         <td>
-                            <?php echo $user_group['UserGroup']['group_title']; ?>
+                            <a href="/admin/user_groups/view/<?php echo $user_group['UserGroup']['id']; ?>" title="view user group" id="view_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="view_user_group"><?php echo $user_group['UserGroup']['group_title']; ?></a>
                         </td>
                         <td>
                             <?php echo $user_group['UserGroup']['created'] ? $this->Time->getPrettyShortDate( $user_group['UserGroup']['created'] ) : $this->Time->getPrettyShortDate( $user_group['UserGroup']['created_when'] ); ?>
                         </td>
                         <td class="actions">
-                            <a href="/admin/user_groups/view/<?php echo $user_group['UserGroup']['id']; ?>" title="view user group" id="view_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="view_user_group">view</a>
                             <a href="/admin/user_groups/edit/<?php echo $user_group['UserGroup']['id']; ?>" title="edit user group" id="edit_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="edit_user_group">edit</a>
                             <a href="/admin/user_groups/delete/<?php echo $user_group['UserGroup']['id']; ?>" title="delete user group" id="delete_user_group_<?php echo $user_group['UserGroup']['id']; ?>" class="delete_user_group" onclick="return confirm('Are you sure you wish to delete this user group?');">delete</a>
                         </td>

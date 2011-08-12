@@ -1,14 +1,33 @@
+<?php echo $this->Session->flash(); ?>
+
 <fieldset>
 <!--<legend><span>Dashboard</span></legend>-->
 <div id="dashboard" class="wrapper">
     <!--<p>Hello <?php echo $this->Session->read('Auth.User.firstname'); ?>,</p>
     <p>And welcome to your dashboard. On this page you will find ...</p>-->
-
-    <div class="float_right dashboard-user-panel">
     
-   <div>
-   <?php echo $this->Session->flash(); ?>
-   <img src="/img/temp-avatar.png" /><p class="dashboard-user-panel-title"><?php echo $this->Session->read('Auth.User.full_name'); ?></p></div>
+	<div class="float_right dashboard-user-panel">
+    
+   		<div>
+   			<img src="/img/temp-avatar.png" />
+    			<p class="dashboard-user-panel-title">
+			
+					<?php echo $this->Session->read('Auth.User.full_name'); ?></p>
+            
+					<!--LOGOUT BUTTON-->
+					<?php if( $this->Session->check('Auth.User.id') ) : ?>
+            		<br /><a href="/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
+            		<?php endif; ?>
+           			 <!--/LOGOUT BUTTON-->
+                     
+                     <div style="clear:both;"></div>
+  				
+        
+        </div>
+   
+            
+            
+            
         <ul>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> podcasts.</a></li>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>

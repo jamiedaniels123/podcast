@@ -1,13 +1,13 @@
 <ul id="breadcrumb">
 
-    <li>You are here</li>
+    <!--<li>You are here</li>-->
 
     <?php $x = 0; foreach( $breadcrumbs as $breadcrumb ) : ?>
 
         <?php $x++; if( $x == count( $breadcrumbs ) ) : ?>
         
         	<li>
-    	        &rarr; 
+    	        <!--&rarr; -->
 	            <a href="/<?php echo $this->params['url']['url']; ?>" title="<?php echo $breadcrumb['Breadcrumb']['title']; ?>">
         	        <?php echo $breadcrumb['Breadcrumb']['title']; ?>
             	</a>
@@ -16,7 +16,7 @@
         <?php else : ?>
 
             <li>
-               &rarr; 
+               <!--&rarr; -->
                
                <?php if( empty( $breadcrumb['Breadcrumb']['url'] ) ) : ?>
 	               <a href="<?php echo '/'.$breadcrumb['Breadcrumb']['controller'].'/'.$breadcrumb['Breadcrumb']['action']; ?>" title="<?php echo $breadcrumb['Breadcrumb']['title']; ?>">

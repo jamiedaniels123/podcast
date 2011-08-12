@@ -9,12 +9,10 @@
 			
             <ul style="list-style:none;">
                 <li style="line-height: 22px; background-image: url(/img/icon-16-link-usergroups.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/user_groups">User Group Administration</a></li>
-                <li style="line-height: 22px; background-image: url(/img/icon-16-link-usergroups.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/user_groups/add">Create New User Group</a></li>
             </ul>
 			
             <ul style="list-style:none;">
                 <li style="line-height: 22px; background-image: url(/img/icon-16-link-podcast.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/podcasts">Podcast Administration</a></li>
-                <li style="line-height: 22px; background-image: url(/img/icon-16-link-podcast.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/podcasts/add">Create New Podcast</a></li>
             </ul>
 			
             <ul style="list-style:none;">
