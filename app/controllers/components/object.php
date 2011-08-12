@@ -1,9 +1,11 @@
 <?php
 class ObjectComponent extends Object {
 
+	
    /*
     * @name : ObjectComponent
-    * @description : Used to detrmine the status of the object passed as a parameter
+    * @description : Used to detrmine the status of the object passed as a parameter. all methods within here can be easily moved into the 
+	* appropriate modeels but here for convenience during development.
     * @updated : 24th May 2011
     * @by : Charles Jackson
     */
@@ -134,19 +136,7 @@ class ObjectComponent extends Object {
 		return false;
 	}
 	
-	/*
-	 * @name : hasYoutubeFlavour
-	 * @description : Checks to see if a youtube flavour of media exists
-	 * @updated : 11th August 2011
-	 * @by : Charles Jackson
-	 */
-	function hasYoutubeFlavour( $object = array() ) {
-		
-		if( isSet( $object['YoutubeVideo']['filename'] ) && !empty( $object['YoutubeVideo']['filename'] ) )
-			return true;
-			
-		return false;
-	}
+
     
 }
 

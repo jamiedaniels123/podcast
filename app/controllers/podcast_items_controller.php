@@ -146,19 +146,27 @@ class PodcastItemsController extends AppController {
 
 			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) == false ) {
 			
-				if( $this->Object->hasYoutubeFlavour( $this->data ) ) {
+				if( $this->PodcastItem->hasYoutubeFlavour( $this->data ) ) {
 				
-					if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
-						$this->data['PodcastItem']['youtube_flag'] = 'Y';
-						$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
-						$this->data['PodcastItem']['youtube_id'] = 1;
-						$this->PodcastItem->set( $this->data );
-						$this->PodcastItem->save();
-						$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+					if( $this->PodcastItem->youtubeValidates( $this->data ) ) {
+						
+						if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
+							$this->data['PodcastItem']['youtube_flag'] = 'Y';
+							$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
+							$this->data['PodcastItem']['youtube_id'] = 1;
+							$this->PodcastItem->set( $this->data );
+							$this->PodcastItem->save();
+							$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+						} else {
+							
+							$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+							break;
+						}
+						
 					} else {
 						
-						$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-						break;
+							$this->Session->setFlash('Unable to publish media to youtube. Please ensure it has a title & description.', 'default', array( 'class' => 'error' ) );
+							break;
 					}
 
 				} else {
@@ -179,7 +187,7 @@ class PodcastItemsController extends AppController {
 	 
 	/*
 	 * @name : youtube_refresh
-	 * @description :
+	 * @description : Refresh the meta data for a youtube video.
 	 * @updated : 9th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -192,28 +200,37 @@ class PodcastItemsController extends AppController {
 				
 			$this->data = $this->PodcastItem->findById( $key );
 
-
-			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && !empty( $this->data['PodcastItem']['youtube_id'] ) && $this->Object->hasYoutubeFlavour( $this->data ) ) {
-				if( $this->Api->youtubeRefresh( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
-					$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) ) {
+			
+				if( $this->PodcastItem->youtubeValidates( $this->data ) ) {
+					
+					if( $this->Api->youtubeRefresh( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
+						$this->data['PodcastItem']['youtube_flag'] = 'Y';
+						$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+						$this->Session->setFlash('Collection has been successfully scheduled for a youtube meta data refresh.', 'default', array( 'class' => 'success' ) );
+					} else {
+						
+						$this->Session->setFlash('Unable to refresh media on Youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						break;
+					}
+					
 				} else {
 					
-					$this->Session->setFlash('Unable to refresh media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-					break;
+						$this->Session->setFlash('Unable to refresh media to youtube. Please ensure it has a title & description.', 'default', array( 'class' => 'error' ) );
+						break;
 				}
-			
+
 			} else {
 				
-				$this->Session->setFlash('Collections must be youtube approved at umbrella level, include a youtube title and description and have an available youtube flavour of media.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash('Media has not yet been published on youtube. Cannot refresh meta data.', 'default', array( 'class' => 'error' ) );
 				break;
 			}
 		}
 		
 		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
-	 }
-	 	 
+	 }	 	 
    /*
      * @name : consider_itunes
      * @description : Enables a peeps to submit an item of media for itunesu consideration
@@ -614,7 +631,7 @@ class PodcastItemsController extends AppController {
 			
 		} else {
 			
-			unset( $this->data['Transcript']['filename'] );
+			unset( $this->data['Transcript'] );
 
 		}
 		
@@ -775,7 +792,7 @@ class PodcastItemsController extends AppController {
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash( 'Could not find your chosen media. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
     }
 
@@ -785,7 +802,7 @@ class PodcastItemsController extends AppController {
      * @name : Charles Jackson
      * @by : 19th May 2011
      */
-    function admin_edit( $id = null ) {
+    /*function admin_edit( $id = null ) {
 
        if ( !empty( $this->data ) ) {
 
@@ -821,7 +838,7 @@ class PodcastItemsController extends AppController {
         }
 
 		$this->__setYoutubeOptions();
-    }
+    }*/
 
     /*
      * @name : admin_delete
@@ -857,7 +874,7 @@ class PodcastItemsController extends AppController {
 			}
         }
         
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
     }
 	
     /*

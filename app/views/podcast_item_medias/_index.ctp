@@ -4,7 +4,7 @@
     	<thead>
             <tr>
             	<th>Flavour</th>
-            	<th>Name</th>
+            	<th>Filename</th>
                 <th>Processed State</th>
                 <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
                 	<th>Actions</th>

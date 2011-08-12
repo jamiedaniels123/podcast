@@ -286,4 +286,34 @@ class PodcastItem extends AppModel {
 		
 		return $youtube_data;
 	}
+	
+	
+	/*
+	 * @name : hasYoutubeFlavour
+	 * @description : Checks to see if a youtube flavour of media exists
+	 * @updated : 11th August 2011
+	 * @by : Charles Jackson
+	 */
+	function hasYoutubeFlavour( $object = array() ) {
+		
+		if( isSet( $object['YoutubeVideo']['filename'] ) && !empty( $object['YoutubeVideo']['filename'] ) )
+			return true;
+			
+		return false;
+	}
+	
+	/*
+	 * @name : hasYoutubeFlavour
+	 * @description : Checks to see if a youtube flavour of media exists
+	 * @updated : 11th August 2011
+	 * @by : Charles Jackson
+	 */
+	function youtubeValidates( $data = array() ) {
+		
+		if( empty( $data['PodcastItem']['youtube_title'] ) || empty( $data['PodcastItem']['youtube_description'] ) )
+			return false;
+			
+		return true;
+	}	
 }
+

@@ -61,7 +61,7 @@ class PodcastItemMediasController extends AppController {
 				
         }
         
-		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
+		$this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
 		
     }
 }

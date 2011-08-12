@@ -44,7 +44,7 @@
                             
 						<?php else : ?>
                             
-                            Not currently available
+                            <img src="/img/icon-16-youtube-unavailable.png" alt="Not available" />
                             
                         <?php endif; ?>
                         </td>
@@ -78,8 +78,8 @@
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes appprove</span></button>
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes reject</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes include</span></button>
+		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes exclude</span></button>
 		        
 			<?php endif; ?>
 			
