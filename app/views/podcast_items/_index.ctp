@@ -36,11 +36,20 @@
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
 		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
-		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon"></td>
+		            	<td  class="icon-col">
+                        
+                        <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
+                        
+	                        <img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon">
+                            
+						<?php else : ?>
+                            
+                            Not currently available
+                            
+                        <?php endif; ?>
+                        </td>
 						<td class="actions">
 						
-							<?php if( $this->Permission->toView( $this->data ) ) : ?>
-								
 								<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 								
 									<a class="button off-black" href="/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
@@ -51,23 +60,7 @@
 
 									<?php endif; ?>
                                     
-									<?php if( $podcast_item['processed_state'] == MEDIA_AVAILABLE && $this->Object->youtubePublished( $podcast_item ) && $this->Permission->isYoutubeUser() && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
-                                    
-                                    	<?php if( empty( $podcast_item['youtube_id'] ) ) : ?>
-                                        
-											<a class="button white" href="/youtube/podcast_items/upload/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to upload this media to YouTube?');"><span>youtube upload</span></a>
-                                        
-                                        <?php else : ?>
-
-											<a class="button white" href="/youtube/podcast_items/refresh/<?php echo $podcast_item['id']; ?>" title="upload media" onclick="return confirm('Are you sure you wish to refresh the associated media data on YouTube?');"><span>youtube refresh</span></a>
-                                        
-										<?php endif; ?>
-                                    <?php endif; ?>
-									
 								<?php endif; ?>
-								
-							<?php endif; ?>
-							
 						</td>	
 						                
 		            </tr>
@@ -90,11 +83,15 @@
 		        
 			<?php endif; ?>
 			
-			<?php if( $this->Permission->isYoutubeUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
+			<?php if( $this->Permission->isYoutubeUser() ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/approve" id="PodcastItemYoutubeApprove"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube approve</span></button>
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/reject" id="PodcastItemYoutubeReject"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube reject</span></button>
-		        <a class="button white multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube upload</span></button>
+				<?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) ) : ?>
+                
+                    <a class="button white multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube upload</span></button>
+                    
+                    <a class="button white multiple_action_button" href="/youtube/podcast_items/refresh" id="PodcastItemYoutubeRefresh"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube refresh</span></button>
+                    
+				<?php endif; ?>
 	        
         	<?php endif; ?>
 	        

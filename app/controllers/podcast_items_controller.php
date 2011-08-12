@@ -144,22 +144,32 @@ class PodcastItemsController extends AppController {
 				
 			$this->data = $this->PodcastItem->findById( $key );
 
+			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) == false ) {
+			
+				if( $this->Object->hasYoutubeFlavour( $this->data ) ) {
+				
+					if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
+						$this->data['PodcastItem']['youtube_flag'] = 'Y';
+						$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
+						$this->data['PodcastItem']['youtube_id'] = 1;
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+						$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+					} else {
+						
+						$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						break;
+					}
 
-			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) && !empty( $this->data['PodcastItem']['youtube_id'] ) && $this->Object->hasYoutubeFlavour( $this->data ) ) {
-				if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
-					$this->data['PodcastItem']['youtube_id'] = 1;
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
-					$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
 				} else {
 					
-					$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot publish media that does not have a Youtube flavour.', 'default', array( 'class' => 'error' ) );
 					break;
 				}
 			
 			} else {
 				
-				$this->Session->setFlash('Collections must be youtube approved at umbrella level, include a youtube title and description and have an available youtube flavour of media.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash('Media has already been published on Youtube.', 'default', array( 'class' => 'error' ) );
 				break;
 			}
 		}
@@ -347,11 +357,11 @@ class PodcastItemsController extends AppController {
    /*
      * @name : youtube_approve
      * @description : Enables an itunes user to approve an item of media for publication on
-     * youtube. If the parent collection has not been approved it will also publish the parent.
+     * youtube. 
      * @updated : 21st July 2011
      * @by : Charles Jackson
      */
-	function youtube_approve( $id = null ) {
+	/*function youtube_approve( $id = null ) {
     	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
@@ -361,19 +371,25 @@ class PodcastItemsController extends AppController {
             $this->data = $this->PodcastItem->findById( $key );
 
             // Make sure it has already been converted into a podcast if they want to publish it.
-	        if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
+	        if( ( !empty( $this->data ) ) && ( $this->data['Podcast']['podcast_flag'] == true ) && ( $this->Object->hasYoutubeFlavour( $this->data['PodcastItem'] ) ) ) {
 	        	
                 $this->data['PodcastItem']['youtube_flag'] = 'Y';
                 $this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
                 	                
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
+		        $this->Session->setFlash('Your media has been successfully approved and acheduled for publication on Youtube.', 'default', array( 'class' => 'success' ) );
+				
+			} else {
+				
+		        $this->Session->setFlash('Can only publish available podcast media with a youtube flavour.', 'default', array( 'class' => 'error' ) );
+				break;
+				
 			}
         }
         
-        $this->Session->setFlash('Your media has been successfully approved and acheduled for publication on Youtube.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }
+    }*/
 
     /*
      * @name : youtube_reject
@@ -382,7 +398,7 @@ class PodcastItemsController extends AppController {
      * @updated : 21st July 2011
      * @by : Charles Jackson
      */
-	function youtube_reject( $id = null ) {
+	/*function youtube_reject( $id = null ) {
     	
     	$this->PodcastItem->recursive = -1;
     	
@@ -406,7 +422,7 @@ class PodcastItemsController extends AppController {
         
         $this->Session->setFlash('Your media has been successfully rejected for youtube. NOTE: If previously published it will not be automatically removed.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }
+    }*/
         
     /*
      * @name : filechucker

@@ -45,7 +45,7 @@ class Workflow extends AppModel {
 			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setWorkflow( $this->__select() );
-
+			$this->setWorkflow( VIDEO ); // @todo : Temporary, forcing a workflow during development. TO BE REMOVED
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
@@ -58,7 +58,7 @@ class Workflow extends AppModel {
 			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
 		
-		$this->setWorkflow( VIDEO ); // @todo : Temporary, forcing a workflow during development. TO BE REMOVED
+		
 		return count( $this->errors );
 	}
 

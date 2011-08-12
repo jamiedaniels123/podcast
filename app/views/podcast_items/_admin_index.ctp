@@ -31,7 +31,11 @@
             <td>
              <img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'],$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" />
             </td>
-            <td><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></td>
+            <td>
+	            <a href="/admin/podcast_items/view/<?php echo $podcast_item['id']; ?>" title="view media">
+                <?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?>
+                </a>                    
+            </td>
            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
             <td class="centered"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
            	<td class="centered"><img src="/img/<?php echo $this->Attachment->getStatusImage( $podcast_item['itunes_flag'] ); ?>" class="icon"></td>

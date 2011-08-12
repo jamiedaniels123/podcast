@@ -24,11 +24,11 @@ class PodcastItemMediasController extends AppController {
 
     /*
      * @name : delete
-     * @desscription : Enables a user to delete a row on the media table including it's associated file on the media server
+     * @desscription : Enables an administrator to delete a row on the media table including it's associated file on the media server
      * @name : Charles Jackson
      * @by : 4th July 2011
      */
-	function delete( $id ) {
+	function admin_delete( $id ) {
 		
         $this->autoRender = false;
 		$this->PodcastItemMedia->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
@@ -61,7 +61,7 @@ class PodcastItemMediasController extends AppController {
 				
         }
         
-		$this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
 		
     }
 }

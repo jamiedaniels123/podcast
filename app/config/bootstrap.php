@@ -97,11 +97,11 @@ DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
 
 DEFINE('LOCAL_FILE_REPOSITORY_URL', APPLICATION_URL.'/upload/files/');
 //DEFINE('DEFAULT_MEDIA_URL', APPLICATION_URL.'/upload/files/');
-DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+//*** DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
 //DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
 
-DEFINE('AMAZON_S3_SERVER', 'http://media-podcast.open.ac.uk.s3.amazonaws.com');
-DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://podcast.open.ac.uk/');
+//*** DEFINE('AMAZON_S3_SERVER', 'http://media-podcast.open.ac.uk.s3.amazonaws.com');
+//*** DEFINE('DEFAULT_ITUNES_MEDIA_URL', 'http://podcast.open.ac.uk/');
 
 DEFINE('DEFAULT_AUTHOR', 'The Open University');
 DEFINE('DEFAULT_RSS_FILENAME','rss2.xml');
@@ -154,5 +154,5 @@ DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');
 
 // processed state of media
 DEFINE('MEDIA_AVAILABLE',9);
-DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
+//*** DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 DEFINE('INPUT_GREETING', 'Enter your search here');
