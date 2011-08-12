@@ -58,7 +58,10 @@
 	<?php echo $this->element('footer'); ?>
     <!--/display OU Footer-->
     
-	<?php //echo $this->element('sql_dump'); ?>
+	<?php echo $this->element('sql_dump'); ?>
     
 </body>
 </html>
+<pre>
+	<?php print_r( $this->data ); ?>
+</pre>

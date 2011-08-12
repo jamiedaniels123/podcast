@@ -224,7 +224,7 @@ h3 a:hover {text-decoration: underline;}
 	#fcbody	{
 		margin:0 1%!important; 
 		background-color:#EBF4FB!important; 
-		background-image:url(http://www.open.ac.uk/includes/headers-footers/body-bg.png!important); 
+		background-image:url(http://www.open.ac.uk/includes/headers-footers/body-bg.png)!important; 
 		background-repeat:repeat-x!important;
 	}
 	
@@ -239,3 +239,10 @@ h3 a:hover {text-decoration: underline;}
 	#fcbody #ou-org-header	{
 		background: #fff;	
 	}
+
+##fcbody form#theuploadform	{
+	background: red;
+	margin:0;
+	padding: 0 0.5em;
+
+}

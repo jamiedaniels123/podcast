@@ -37,6 +37,10 @@
 			<?php if( $this->Permission->isYoutubeUser() ) : ?>
 	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/youtube/podcasts" class="button">Youtube collections</a></li>
 			<?php endif; ?>	            
+			<?php if( $this->Permission->isVleUser() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/vle/podcasts" class="button">Vle collections</a></li>
+			<?php endif; ?>	            
+
         </ul>
     </div>
     

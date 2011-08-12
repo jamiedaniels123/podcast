@@ -584,7 +584,6 @@ class Podcast extends AppModel {
         $this->data['MemberGroups'] = $this->rebuildSelection( $this->data, 'MemberGroups' );
 
         return $this->data;
-
      }
 
      /*
@@ -599,7 +598,7 @@ class Podcast extends AppModel {
       * @updated : 24th May 2011
       * @by : Charles Jackson
       */
-     function xgetUserPodcasts( $user_id = null, $podcast = null ) {
+     /* function getUserPodcasts( $user_id = null, $podcast = null ) {
 
        $this->recursive = -1;
 
@@ -658,7 +657,7 @@ class Podcast extends AppModel {
         }
 
         return $list;
-     }
+     } */
 
      /*
       * @name : getItunesUserPodcasts
@@ -706,7 +705,7 @@ class Podcast extends AppModel {
 	                        	'Owner.iTunesU' => 'N',
 	                        	'Owner.YouTube' => 'N',
 	                        	'Podcast.owner_id = Owner.id'
-                        		),
+                        		)
                         	)
                         )
                     )
@@ -955,32 +954,6 @@ class Podcast extends AppModel {
         }
      }
      
-     /*
-      * @name : waitingApproval
-      * @description : Will build the conditions to find all podcasts that are waiting to be approved.
-      * @updated : 23rd June 2011
-      * @by : Charles Jackson
-      */
-     /*function waitingApproval() {
-
-        $conditions = array(
-            array('OR' => array(
-                array(
-                    'Podcast.intended_itunesu_flag' => 'N',
-                    'Podcast.publish_itunes_u' => 'N'
-                    ),
-                array(
-                    'Podcast.intended_youtube_flag' => 'N',
-                    'Podcast.publish_youtube' => 'N'
-                    )
-                )
-            ),
-            'Podcast.deleted' => 0
-        );
-
-        return $conditions;
-     }*/
-
     /*
      * @name : unconfirmedChangeOfOwnership
      * @description : Called when somebody updates a podcast. It checks to see if there has been a change of ownership and if that
@@ -1134,7 +1107,7 @@ class Podcast extends AppModel {
 			case 'index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
-		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 		        unset( $this->hasMany['PublishedPodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
@@ -1145,7 +1118,7 @@ class Podcast extends AppModel {
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
-		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 		        unset( $this->hasMany['PublishedPodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
@@ -1163,7 +1136,7 @@ class Podcast extends AppModel {
 			case 'youtube_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
-		        // Unset the rest to prevent a recursive loop on the models, specifically users ( it's a big 'ole model! )
+		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 		        unset( $this->hasMany['PublishedPodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );

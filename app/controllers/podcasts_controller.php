@@ -40,7 +40,7 @@ class PodcastsController extends AppController {
     function index() {
 
         $id_numbers = array();
-		
+
 		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
         	
         // Have they posted the filter form?
@@ -82,6 +82,20 @@ class PodcastsController extends AppController {
 		$this->data['Podcasts'] = $this->paginate('Podcast', $this->Podcast->buildiTunesFilters( $this->data['Podcast']['filter'] ) );
     }
 
+    /*
+     * @name : vle_index
+     * @desscription : Displays a paginated list of all podcasts that are vle related
+     * @name : Charles Jackson
+     * @by : 8th July 2011
+     */
+    function vle_index() {
+
+		$this->Podcast->recursive = 3;
+		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
+		
+		$this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.owner_id' => VLE_USER ) );
+    }
+	
     /*
      * @name : youtube_index
      * @desscription : Displays a paginated list of all podcasts that are youtube related.

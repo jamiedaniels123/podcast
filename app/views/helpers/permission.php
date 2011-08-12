@@ -296,5 +296,20 @@ class PermissionHelper extends AppHelper {
     		
     	return false;
     }
+	
+    /*
+     * @name : isVleUser
+     * @description : Checks session data to see if the current user is VLE enabled.
+     * @updated : 12th July 2011
+     * @by : Charles Jackson
+     */    
+	function isVleUser() {
+		
+        if( $this->Session->read('Auth.User.vle') == true )
+            return true;
+
+        return false;		
+		
+	}
 }
 ?>

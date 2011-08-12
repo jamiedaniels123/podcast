@@ -45,5 +45,12 @@
         <label for="UserOpenlearnExplore">Open Learn Explore</label>
         <?php echo $this->Form->error('User.OpenlearnExplore'); ?>
     </div>
+    <div class="input checkbox float_left">
+        <input type="hidden" value="0" id="UserVle_" name="data[User][vle]">
+        <input type="checkbox" id="UserVle" value="Y" <?php echo $this->data['User']['vle'] == true ? 'checked="checked"' : '';?> name="data[User][vle]">
+        <label for="UserYouTube">VLE</label>
+        <?php echo $this->Form->error('User.vle'); ?>
+    </div>
+
 </div>
 <div class="clear"></div>
