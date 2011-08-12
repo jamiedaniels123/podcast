@@ -38,8 +38,8 @@
     <div id="container">
     
         <div id="header">
-            <h1>OU Podcast Server</h1>
-            <p>For the management of podcast collections</p>
+            <h1 class="sitename">OU Podcast Server</h1>
+            <p class="strapline">For the management of podcast collections</p>
 
             <?php echo $this->element('breadcrumb', array('breadcrumbs' => $breadcrumbs ) ); ?>
             

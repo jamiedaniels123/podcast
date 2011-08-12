@@ -6,7 +6,7 @@ fieldset {
 	display:block; 
 	margin: 0; 
 	padding: 20px;
-	margin-top: 20px;
+	margin-top: 5px;
 	}
 
 /*fieldset legend {
@@ -91,7 +91,7 @@ h3 a:hover {text-decoration: underline;}
 	color: #fff;
 	border: 1px solid #418db1;
 	border-radius: 4px;
-	padding: 2px 4px 2px 4px;
+	padding: 2px;
 	}
 	
 .orange	{
@@ -99,7 +99,7 @@ h3 a:hover {text-decoration: underline;}
 	color: #003d4c;
 	border: 1px solid #f19300;
 	border-radius: 4px;
-	padding: 2px 4px 2px 4px;
+	padding: 2px;
 }	
 	
 .light-blue:hover {color: #fff;}
@@ -190,6 +190,31 @@ h3 a:hover {text-decoration: underline;}
 }
 
 #error404 {
-	padding: 20px;	
-	
+	padding: 20px;		
 }
+
+#terms_and_conditions	{
+	margin: 30px 0;	
+}
+
+.strapline	{
+	font-size:110%;
+	margin: 0px 0px 0 0px;
+	padding:0px 0 0 0px;
+	letter-spacing:0.01em;
+	color: #418db1;
+	-moz-box-shadow: 0px 1px 0px #fff; /*The shadow controls are as follows: first number is horizontal shift, the second is vertical shift, the third is amount of blur and the last is the colour of the shadow*/
+  	-webkit-box-shadow: 0px 1px 0px #fff;
+  	box-shadow: 0px 1px 0px #fff;
+	}
+	
+.sitename	{
+	color:#003d4c;
+	margin-bottom:0.2em;
+	-moz-box-shadow: 0px 1px 0px #fff; /*The shadow controls are as follows: first number is horizontal shift, the second is vertical shift, the third is amount of blur and the last is the colour of the shadow*/
+  	-webkit-box-shadow: 0px 1px 0px #fff;
+  	box-shadow: 0px 1px 0px #fff;
+
+
+	
+	}
