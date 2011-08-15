@@ -8,7 +8,7 @@
     
     <img src="/img/upload-collection-large.png" width="45" height="33" />
     
-    <p>
+    <p style="margin: 20px 0;">
         You can upload files up to 20Gb in size. Media will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
         Please ensure your filenames end with the correct extension. See below for supported formats.
     </p>

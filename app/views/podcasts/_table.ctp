@@ -186,4 +186,4 @@ endif; ?>
     </div>  
 </form>
 
-<div style="float:right;"><?php echo $this->element('../podcasts/_personalise'); ?></div>    
+<div style="float:right;"><?php echo $this->element('../podcasts/_personalise'); ?></div>
