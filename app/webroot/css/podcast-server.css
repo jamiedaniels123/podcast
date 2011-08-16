@@ -109,6 +109,12 @@ h3 a:hover {text-decoration: underline;}
 	border:0;
 	padding:20px 10px 20px 50px;
 	}
+	
+.admin_panel_list	{
+	line-height: 22px; 
+	background-repeat: no-repeat;background-position: 0px 4px;
+	padding-left: 22px;
+}
 
 #admin_panel legend	{
 	margin-top:20px;	
@@ -182,6 +188,12 @@ h3 a:hover {text-decoration: underline;}
 	color: #4492B0;
 	font-style:italic;
 	font-size:85%;
+}
+
+.tip	{
+	margin: 5px 0 0 0;
+	color: #4492B0;
+	font-style:italic;
 }
 
 .disabled {

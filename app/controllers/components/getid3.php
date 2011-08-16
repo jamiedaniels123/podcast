@@ -51,8 +51,13 @@ class Getid3Component extends Object {
                     $this->result['filesize'] = @$getid3->info['filesize'];
                     $this->result['fileformat'] = @$getid3->info['fileformat'];
 
+					if( isSet( $getid3->info['audio'] ) ) 
+						$this->result['audio'] = $getid3->info['audio'];
+					if( isSet( $getid3->info['video'] ) ) 
+						$this->result['video'] = $getid3->info['video'];
+					
                     if (@$getid3->info['audio']['dataformat'] && $getid3->info['audio']['dataformat'] != $getid3->info['fileformat']) {
-                            $this->result['audio']['dataformat'] = @$getid3->info['fileformat'];
+						$this->result['audio']['dataformat'] = @$getid3->info['fileformat'];
                     }
 
                     if (@$getid3->info['video']['dataformat'] && $getid3->info['video']['dataformat'] != $getid3->info['fileformat'] && $getid3->info['video']['dataformat'] != @$getid3->info['audio']['dataformat']) {
@@ -86,8 +91,8 @@ class Getid3Component extends Object {
                     return $this->result;
             }
 
-            catch (Exception $e) {
-                    return 'ERROR: ' . $e->message;
+			catch (Exception $e) {
+            	return 'ERROR: ' . $e->message;
             }
 	}
 }

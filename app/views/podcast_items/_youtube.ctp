@@ -1,11 +1,20 @@
 <fieldset class="youtube">
-	<legend>Youtube</legend>
-	<dl>
-	    <dt><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="juggle">Toggle</a></dt>
+	<legend><h3>YouTube</h3></legend>
+    
+    <img src="/img/collection-youtube-large.png" width="45" height="34" />
+    
+    
+	<div class="wrapper youtube  two_column">
+    <dl>
+	    <dt></dt>
 	    <dt>Published: </dt>
 	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'youtube' ); ?>" /></dd>
-    </dl>		
-    <div class="wrapper youtube" id="PodcastItemYoutubeContainer" style="display:none">	
+    </dl>
+    </div>	
+    
+    <a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="button white juggle"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">Edit</a>	
+    
+    <div class="wrapper youtube two_column" id="PodcastItemYoutubeContainer" style="display:none">	
     <dl>
         <dt>Published: </dt>
         <dd><?php echo strtoupper( $this->data['PodcastItem']['youtube_flag'] ) == YES ? 'Yes' : 'No'; ?>&nbsp;</dd>
@@ -73,4 +82,7 @@
         <dt>Notes: </dt>
         <dd><?php echo nl2br( $this->data['PodcastItem']['youtube_notes'] ); ?>&nbsp;</dd>
     </dl>
+    
+    
+    
 </fieldset>

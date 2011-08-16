@@ -2,12 +2,13 @@
 class Workflow extends AppModel {
 
     var $name = 'Workflow';
-    var $useTable = 'workflow_map';
+    var $useTable = 'workflows';
 	var $errors = array();
 	
 	var $data = array();
 	var $id3_data = array();
 	var $params = array();
+	var $conditions = array(); // Holds the conditions used on the lookup table.
 	
 	var $file_format = null;
 	var $file_extension = null;
@@ -15,6 +16,9 @@ class Workflow extends AppModel {
 	var $video_width = null;
 	var $video_height = null;
 	var $aspect_ratio = null;
+	var $aspect_ratio_float = 0;
+	var $watermark_bumper_trailer = null;
+	var $media_type = null;
 	
 	public $workflow = null; // Holds the determined workflow.
 
@@ -43,13 +47,20 @@ class Workflow extends AppModel {
 			$this->setScreencast( strtoupper( $this->params['url']['ff02v'] ) == 'YES' ? true : false );
 			$this->setVideoWidth( isSet( $this->params['video']['resolution_x'] ) ? $this->params['video']['resolution_x'] : 0 );
 			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
+			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : 0 );
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
+			$this->setMediaType( 'video' );
+
+			$this->setConditions();
 			$this->setWorkflow( $this->__select() );
-			$this->setWorkflow( VIDEO ); // @todo : Temporary, forcing a workflow during development. TO BE REMOVED
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
-			$this->setWorkflow( AUDIO );
+			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : 0 );
+			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
+			$this->setMediaType( 'audio' );
+			$this->setConditions();
+			$this->setWorkflow( $this->__select() );
 
 		} else {
 
@@ -57,7 +68,6 @@ class Workflow extends AppModel {
 			// also exists in the file chucker upload.
 			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
-		
 		
 		return count( $this->errors );
 	}
@@ -147,21 +157,56 @@ class Workflow extends AppModel {
 	 */		
 	function setVideoHeight( $video_height = 0 ) {
 		
-		$this->video_height = $video_height;
+		if( (int)$video_height > 720 ) {
+			
+			$this->video_height	= 1080;
+			return true;
+			
+		} elseif( (int)$video_height > 480 ) {
+			
+			$this->video_height	= 720;
+			return true;
+			
+		} elseif( (int)$video_height > 360 ) {
+			
+			$this->video_height	= 480;
+			return true;
+			
+		} elseif( (int)$video_height > 270 ) {
+			
+			$this->video_height	= 360;
+			return true;
+			
+		} else {
+			
+			$this->video_height	= 270;
+			return true;
+		}
 	}
 	
 	/* 
 	 * @name : setAspectRatio
-	 * @description : Standard setter
+	 * @description : Unusual solution, we pass the aspect_ratio as a floating_point number because that is what we 
+	 * store in the PodcastItem table. We convert that value into a string as stored in the workflows database table hence
+	 * we have two related class properties called "aspect_ratio" the second having "_float" appended to the variable name.
 	 * @updated : 29th June 2011
 	 * @by : Charles Jackson
 	 */		
-	function setAspectRatio( $aspect_ratio = null ) {
-		
+	function setAspectRatio( $aspect_ratio_float = null ) {
+
 		// If the user chose an aspect ratio on upload, use it.
-		if( $aspect_ratio ) {
+		if( $aspect_ratio_float ) {
 			
-			$this->aspect_ratio = $aspect_ratio;
+			$this->aspect_ratio_float = $aspect_ratio_float;
+			
+			if( $this->aspect_ratio_float == STANDARD_SCREEN_FLOAT ) {
+				
+				$this->aspect_ratio = STANDARD_SCREEN;
+				
+			} else {
+				
+				$this->aspect_ratio = WIDE_SCREEN;
+			}
 		
 		// The user did not specify an aspect ratio on upload, figure it out.
 		} else {
@@ -169,22 +214,35 @@ class Workflow extends AppModel {
 			if( $this->video_width == 0 ) {
 				
 				$this->aspect_ratio = STANDARD_SCREEN;
+				$this->aspect_ratio_float = STANDARD_SCREEN_FLOAT;
 				
 			} else {
 				
-				$this->aspect_ratio = ( $this->video_height / $this->video_width );
+				$this->aspect_ratio_float = ( $this->video_height / $this->video_width );
 				
-				if( $this->aspect_ratio < 0.6 ) {
+				if( $this->aspect_ratio_float < 0.6 ) {
 					
 					$this->aspect_ratio = WIDE_SCREEN;
+					$this->aspect_ratio_float = WIDE_SCREEN_FLOAT;
 					
 				} else {
 					
-					$this->aspect_ratio = STANDARD_SCREEN;
+					$this->aspect_ratio_float = STANDARD_SCREEN_FLOAT;
 				}
 			}
 		}
 		
+	}
+
+	/* 
+	 * @name : setMediaType
+	 * @description : Standard setter
+	 * @updated : 15th August 2011
+	 * @by : Charles Jackson
+	 */		
+	function setMediaType( $media_type = null ) {
+		
+		$this->media_type = $media_type;	
 	}
 
 	/* 
@@ -196,6 +254,19 @@ class Workflow extends AppModel {
 	function setWorkflow( $workflow = null ) {
 		
 		$this->workflow = $workflow;
+	}
+	
+	/*
+	 * @name : setWatermarkBumperTrailer
+	 * @description : Takes the string passed as a parameter and uses it as the key on this class property array.
+	 * Not a robust solution, if somebody tweaks the filechucker upload form it will break. I have documented the cgi
+	 * script sccordingly.
+	 * @updated : 15th August 2011
+	 * @by : Charles Jackson
+	 */
+	function setWatermarkBumperTrailer( $bumper_and_trailer = null ) {
+		
+		$this->watermark_bumper_trailer = $bumper_and_trailer;
 	}
 	
 	/* 
@@ -219,6 +290,28 @@ class Workflow extends AppModel {
 		
 		return $this->aspect_ratio;
 	}
+
+	/* 
+	 * @name : getAspectRatioFloat
+	 * @description : Standard getter
+	 * @updated : 29th June 2011
+	 * @by : Charles Jackson
+	 */			
+	function getAspectRatioFloat() {
+		
+		return $this->aspect_ratio_float;
+	}
+
+	/*
+	 * @name : getWatermarkBumperTrailer
+	 * @description : Standard getter
+	 * @updated : 15th August 2011
+	 * @by : Charles Jackson
+	 */
+	function getWatermarkBumperTrailer( $bumper_and_trailer = null ) {
+		
+		return $this->watermark_bumper_trailer;
+	}
 	
 	/*
 	 * @name : exists
@@ -235,36 +328,26 @@ class Workflow extends AppModel {
 		return true;	
 	}
 
+
 	/*
 	 * @name : __select
-	 * @description : 
-	 * @updated : 29th June 2011
+	 * @description : Selects a workflow from the lookup table "workflows";
+	 * @updated : 15th August 2011
 	 * @by : Charles Jackson
 	 */
-	protected function __select() {
-
-		if( $this->screencast ) {
-
-			if( $this->aspect_ratio == WIDE_SCREEN ) {
-
-				return SCREENCAST_WIDE;
-				
-			} else {
-
-				return SCREENCAST;
-			}
-			
-		} else {
-
-			if( $this->aspect_ratio == WIDE_SCREEN ) {
-				
-				return VIDEO_WIDE;
-				
-			} else {
-				
-				return VIDEO;
-			}
-		}
+	function __select() {
+		
+		$this->recursive = -1;
+		
+		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
+		
+		echo "<pre>";
+			print_r( $workflow );
+			print_r( $this->conditions );
+		echo "</pre>";
+		die('end');
+		if( empty( $workflow ) )
+			return false;
 	}
 	
 	/*
@@ -290,5 +373,27 @@ class Workflow extends AppModel {
 	function getErrors() {
 		
 		return $this->errors;	
+	}
+	
+	/*
+	 * @name : setConditions
+	 * @description : Builds the ORM conditions that are used on the lookup table from the class properties 
+	 * with have populated. The properties are :
+	 * 1. type (eg: video)
+	 * 2. aspect_ratio (eg: 16:9)
+	 * 3. height (eg: <=240)
+	 * 4. bumber_and_trailer (eg: set "Y" flag on one of 3 fields accordingly. Fields are 'watermark_bumper_trailer',
+	 * 'watermark_only','nothing_added'.
+	 * @updated : 15th August 2011
+	 * @by : Charles Jackson
+	 */
+	function setConditions() {
+	
+		$this->conditions = array(
+			'Workflow.media_type' => $this->media_type,
+			'Workflow.aspect_ratio' => $this->aspect_ratio,
+			'Workflow.height' => $this->video_height,
+			'Workflow.watermark_bumpers_trailers' => $this->watermark_bumper_trailer
+		);
 	}
 }

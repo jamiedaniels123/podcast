@@ -1,11 +1,19 @@
 <fieldset class="itunes">
-	<legend>iTunesU</legend>
-	<dl>
-	    <dt><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle">Toggle</a></dt>
+	<legend><h3>iTunes U</h3></legend>
+    
+    <img src="/img/collection-itunes-large.png" width="45" height="34" />
+
+    <div class="wrapper itunes two_column">
+    <dl>
+	    <dt></dt>
 	    <dt>Published: </dt>
 	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'itunes' ); ?>" /></dd>
-    </dl>		
-    <div class="wrapper itunes" id="PodcastItemItuneContainer" style="display:none">
+    </dl>
+    </div>	
+    
+    <a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle button white"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">Edit</a>	
+    
+    <div class="wrapper itunes  two_column" id="PodcastItemItuneContainer" style="display:none">
 	   	<dl>
 	        <dt>ePub ISBN: </dt>
 	        <dd><?php echo $this->data['PodcastItem']['epub_isbn']; ?>&nbsp;</dd>
@@ -23,4 +31,6 @@
 	        <dd><?php echo $this->data['PodcastItem']['rights_approved']; ?>&nbsp;</dd>        
 		</dl>    
 	</div>
+    
+    
 </fieldset>

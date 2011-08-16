@@ -63,5 +63,5 @@
 </body>
 </html>
 <pre>
-	<?php print_r( $this->data ); ?>
+	<?php print_r( $breadcrumbs ); ?>
 </pre>

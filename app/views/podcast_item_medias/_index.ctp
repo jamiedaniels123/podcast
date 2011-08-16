@@ -1,5 +1,9 @@
 <fieldset id="podcast_media">
-    <legend>Flavours</legend>
+    <legend><h3>Flavours</h3></legend>
+    
+    <img src="/img/collection-large.png" width="45" height="34" />
+    
+    
     <table>
     	<thead>
             <tr>

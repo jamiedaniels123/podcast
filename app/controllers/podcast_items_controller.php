@@ -486,7 +486,8 @@ class PodcastItemsController extends AppController {
 					$this->Workflow = ClassRegistry::init('Workflow');
 					$this->Workflow->setData( $this->data );
 					$this->Workflow->setId3Data( $getId3_information );
-					$this->Workflow->setParams( $this->params );
+
+					$this->Workflow->setParams( $this->params ); // Parameters passed in the URL from the filechucker upload script.
 					$this->Workflow->determine();
 
 					// Do we have errors? If true, probably an invalid file type.
@@ -536,7 +537,7 @@ class PodcastItemsController extends AppController {
 						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'] ) ) {
 	
 							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
-							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatio();
+							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatioFloat();
 							$this->PodcastItem->set( $this->data ); // Hydrate the object
 							$this->PodcastItem->save();
 							

@@ -128,8 +128,10 @@ DEFINE('NO', 'N');
 DEFINE('REGISTER_BY_OUCU', true );
 DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );
 
-DEFINE('WIDE_SCREEN', '0.5625');
-DEFINE('STANDARD_SCREEN', '0.75');
+DEFINE('WIDE_SCREEN_FLOAT', '0.5625');
+DEFINE('STANDARD_SCREEN_FLOAT', '0.75');
+DEFINE('WIDE_SCREEN', '16:9');
+DEFINE('STANDARD_SCREEN', '4:3');
 
 // The columns on the podcast table database that indicate itunes status 
 DEFINE('ITUNES_CONSIDERATION', 'consider_for_itunesu');

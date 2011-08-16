@@ -107,7 +107,7 @@ class AppController extends Controller {
 	                    )
 	                );
 
-					if( strtolower( $current_breadcrumb['Breadcrumb']['title'] ) == 'track' ) {
+					if( strtolower( $current_breadcrumb['Breadcrumb']['title'] ) == 'track' && $breadcrumb['Breadcrumb']['url'] == '/podcasts/view/' ) {
 
 						if( isSet( $this->data['PodcastItem']['podcast_id'] ) ) {
 							$breadcrumb['Breadcrumb']['url'] .= $this->data['PodcastItem']['podcast_id'];

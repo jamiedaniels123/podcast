@@ -79,11 +79,5 @@ class VlesController extends AppController {
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}
-
-
-
-	function post() {
-
-	}
 }
 ?>
