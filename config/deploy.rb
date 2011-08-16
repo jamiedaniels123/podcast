@@ -23,7 +23,10 @@ namespace :deploy do
         # link a custom configurations files and folders
 		run "ln -s #{deploy_to}/#{shared_dir}/config/core.php #{current_release}/app/config/core.php" 
 		run "ln -s #{deploy_to}/#{shared_dir}/config/database.php #{current_release}/app/config/database.php"
+		run "ln -s #{deploy_to}/#{shared_dir}/config/call_fc.php #{current_release}/app/webroot/upload/call_fc.php"
 		run "ln -s #{deploy_to}/#{shared_dir}/files #{current_release}/app/webroot/upload/files"
+		run "mkdir #{current_release}/app/tmp"
+		run "ln -s #{deploy_to}/#{shared_dir}/tmp #{current_release}/app/tmp/cache"
 		run "ln -s #{deploy_to}/#{shared_dir}/config/.htaccess_root #{current_release}/.htaccess"
 		run "ln -s #{deploy_to}/#{shared_dir}/config/.htaccess_webroot #{current_release}/app/webroot/.htaccess"
 	end
