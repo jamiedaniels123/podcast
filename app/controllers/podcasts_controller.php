@@ -239,7 +239,7 @@ class PodcastsController extends AppController {
             // Set the preferred itunesu category to equal the first node chosen.
             $this->Podcast->setPreferredItunesuCategory();
 
-            if(  $this->__updateImages() && $this->Podcast->validates( $this->Podcast->data ) ) {
+            if(  $this->__updateImages() && $this->__updateArtwork() && $this->Podcast->validates( $this->Podcast->data ) ) {
 
                 // OK, it validates but have they changed/confirmed ownership.
                 if( $this->Podcast->unconfirmedChangeOfOwnership() ) {
@@ -269,7 +269,6 @@ class PodcastsController extends AppController {
 					} else {
 						
 						$this->Podcast->set( $this->Podcast->data );
-
 						$this->Podcast->saveAll();
 
 						$this->Podcast->commit(); // Everything hunky dory, commit the changes.
@@ -626,7 +625,7 @@ class PodcastsController extends AppController {
             // Set the preferred itunesu category to equal the first node chosen.
             $this->Podcast->setPreferredItunesuCategory();
 
-            if(  $this->__updateImages() && $this->Podcast->validates( $this->Podcast->data ) ) {
+            if(  $this->__updateImages() && $this->__updateArtwork() && $this->Podcast->validates( $this->Podcast->data ) ) {
 
                 // OK, it validates but have they changed/confirmed ownership.
                 if( $this->Podcast->unconfirmedChangeOfOwnership() ) {
@@ -889,6 +888,36 @@ class PodcastsController extends AppController {
     	
         return $statusOK;
     }
+
+    /*
+     * @name : __updateArtwork
+     * @description : Internal method called by the edit methods, both user and administrator. Will upload a zip file.
+     * @updated : 9th May 2011
+     * @by : Charles Jackson
+     */
+	function __updateArtwork() {
+		
+        // Try to upload any artwork file. If successful the upload component will return the name of the uploaded file
+        // else it will return false.
+        if( $this->Upload->artwork( $this->data, 'new_artwork_file' ) ) {
+			
+			$this->Podcast->data['Podcast']['artwork_file'] = $this->Upload->getUploadedFileName();
+			
+		} else {
+			
+			unset( $this->data['Podcast']['new_artwork_file'] );
+		}
+				
+        // Check to see if the upload component created any errors.
+        if( $this->Upload->hasError() ) {
+
+            $this->Podcast->invalidate('artwork_file', $this->Upload->getError() );
+            return false;
+			
+        }
+
+		return true;
+	}
 
     /*
      * @name : __generateRSSFeeds

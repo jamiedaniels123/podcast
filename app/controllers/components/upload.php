@@ -225,6 +225,69 @@ class UploadComponent extends Object {
 
     }
 	
+	/*
+	 * @name : artwork
+	 * @description :
+	 * @updated : 16th August 2011
+	 * @by : Charles Jackson
+	 */
+	function artwork( $data = array(), $data_key ) {
+		
+    	$this->error = null;
+    	
+        // Have they tried uploading an image?
+		if( $this->attemptedUpload( $data, $data_key ) == false )
+			return false;
+
+        // Has an image been uploaded and is it error free?
+        if ( (int)$data[$this->controller->modelClass][$data_key]['error'] ) {
+
+            $this->error = 'There has been a problem uploading the artwork file. Please try again.';
+            return false;
+        }
+
+        $this->setDataCollection('iTunes artwork');
+        $this->setData( $data );
+        $this->setCustomId( $this->data['Podcast']['custom_id'] );
+        $this->setFolderName( $this->data['Podcast']['custom_id'] );
+        $this->setDataKey( $data_key );
+        $this->setFileName( 'ARTWORK_'.$this->data['Podcast']['custom_id'].'.zip' );
+		$this->setFileExtension( $this->data['Podcast'][$this->data_key]['name'] );
+		
+        if( $this->isZip() == false )
+            return false;
+
+        if( $this->createTemporaryFile() == false )
+            return false;
+
+
+        if( $this->createFolder() == false )
+            return false;
+
+		if ( copy( $this->temporary_file, FILE_REPOSITORY.$this->folder.'/'.$this->file_name ) ) {
+		
+			// Now we need to call the Api and schedule the artwork file for transfer to the media server.
+			if(
+				$this->Api->transferFileMediaServer(
+				array(
+					array(
+						'source_path' => $this->custom_id.'/',
+						'destination_path' => $this->custom_id.'/',
+						'source_filename' => $this->file_name,
+						'destination_filename' => $this->file_name
+						)
+					)
+				)
+			) {
+	
+				$this->setUploadedFileName( $this->file_name );
+				return true;
+			}
+		}
+		
+        $this->error = 'Could not upload and/or schedule movement of your ' . $this->data_collection . ' to the media server. If the problem persists please alert an administrator.';
+        return false;
+	}
 	
     /*
      * @name : transcript
@@ -400,6 +463,23 @@ class UploadComponent extends Object {
         if ( strtolower( $this->file_extension ) != 'pdf' ) {
 
             $this->error = 'Your '.$this->data_collection.' is not in a valid PDF format.';
+            return false;
+        }
+
+        return true;
+    }
+
+    /*
+     * @name : isZip
+     * @description : Will check the file extension as being ZIP and set the file extension property
+     * @updated : 16th August 2011
+     * @by : Charles Jackson
+     */
+    function isZip() {
+
+        if ( strtolower( $this->file_extension ) != 'zip' ) {
+
+            $this->error = 'Your '.$this->data_collection.' must be contained in a ZIP file.';
             return false;
         }
 

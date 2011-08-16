@@ -17,27 +17,27 @@
         <div class="float_left">
 			<div class="input select">
             <label for="Moderators">Moderator Groups</label>
-            
-				<span class="move" data-source="ModeratorGroups" data-target="MemberGroups">Move &rarr; </span>
 				
 				<input type="hidden" name="data[ModeratorGroups][]" value="" id="ModeratorGroups_" />
 				<select id="ModeratorGroups" multiple="multiple" class="selected" name="data[ModeratorGroups][]">
 					<?php foreach( $this->data['ModeratorGroups'] as $moderator ) : ?>
 						<option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['group_title']; ?></option>
 					<?php endforeach; ?>
-				</select>                
+				</select>
+                                
 				<?php echo $this->Form->error('Podcast.ModeratorGroups'); ?>
+                <div class="right-align">
+                <span class="move multiple-button light-blue" data-source="ModeratorGroups" data-target="MemberGroups">Move <img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></span>
+                </div>
 			</div>
+            
+            
+            
          </div>
 		
         <div class="float_left">
 			<div class="input select">
-				<label for="MemberGroups">Member Groups</label>
-               	<span class="left move" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
-               
-                
-               
-				<span class="move right" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
+				<label for="MemberGroups">Member Groups</label>              	
 				
 				<input type="hidden" name="data[MemberGroups]" value="" id="MemberGroups_" />
 				<select id="MemberGroups" multiple="multiple" class="selected" name="data[MemberGroups][]">
@@ -45,7 +45,14 @@
 						<option value="<?php echo $member['id']; ?>"><?php echo $member['group_title']; ?></option>
 					<?php endforeach; ?>
 				</select>
+                
 				<?php echo $this->Form->error('Podcast.MemberGroups'); ?>
+                
+                <div class="">
+                <span class="move multiple-button light-blue" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
+				<span class="move multiple-button light-blue" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
+                </div>
+                
 			</div>
 		</div>
 		
@@ -53,63 +60,96 @@
 			<div class="input select">
 				<label for="UserGroups">All User Groups</label>
                 
-                <span class="left move" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
-				
 				<input type="hidden" name="data[UserGroups]" value="" id="UserGroups_" />
 				<select name="data[UserGroups][]" class="selected" multiple="multiple" id="UserGroups">
 					<?php foreach( $user_groups as $key => $value ) : ?>
 						<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 					<?php endforeach; ?>
 				</select>
+                
 				<?php echo $this->Form->error('Podcast.UserGroups'); ?>
+                
+                <div class="">
+                <span class="move multiple-button light-blue" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
+                </div>
+                
 			</div>
 		</div>
+        
 	</div>
+    
 	<div class="clear"></div>
+    
 	<div class="wrapper" id="moderator_container">
+    
 		<div class="float_left">
 			<div class="input select">
             <label for="Moderators">Podcast Moderators</label>
-				<span class="move" data-source="Moderators" data-target="Members">Move &rarr;</span>
 				
 				<input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
+                
 				<select id="Moderators" multiple="multiple" class="selected" name="data[Moderators][]">
 					<?php foreach( $this->data['Moderators'] as $moderator ) : ?>
 						<option value="<?php echo $moderator['id']; ?>"><?php echo $moderator['full_name']; ?></option>
 					<?php endforeach; ?>
 				</select>
+                
 				<?php echo $this->Form->error('Podcast.Moderators'); ?>
+                
+                <div class="right-align">
+                <span class="move multiple-button light-blue" data-source="Moderators" data-target="Members">Move &rarr;</span>
+                </div>
+                
 			</div>
 		</div>
+        
+        
 		<div class="float_left">
 			<div class="input select">
             <label for="Members">Podcast Members</label>
-				<span class="move" data-source="Members" data-target="Moderators">&larr; Move</span>
-				<span class="move" data-source="Members" data-target="UsersUsers">Move &rarr;</span>
 				
 				<input type="hidden" name="data[Members]" value="" id="Members_" />
-				<select id="Members" multiple="multiple" class="selected" name="data[Members][]">
+                
+				<select id="Members" multiple="multiple" class="selected" name="data[Members][]">                
 					<?php foreach( $this->data['Members'] as $member ) : ?>
 						<option value="<?php echo $member['id']; ?>"><?php echo $member['full_name']; ?></option>
-					<?php endforeach; ?>
+					<?php endforeach; ?>                    
 				</select>
+                
 				<?php echo $this->Form->error('Podcast.Members'); ?>
+                
+                <div class="">
+                <span class="move multiple-button light-blue" data-source="Members" data-target="Moderators">&larr; Move</span>
+				<span class="move multiple-button light-blue" data-source="Members" data-target="UsersUsers">Move &rarr;</span>
+                </div>
+                
 			</div>
 		</div>
+        
+        
 		<div class="float_left">
 			<div class="input select">
             <label for="UsersUsers">All Users</label>
-				<span class="move" data-source="UsersUsers" data-target="Members">&larr; Move</span>
+            
+			
 				
 				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
 					<?php foreach( $users as $key => $value ) : ?>
 						<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 					<?php endforeach; ?>
 				</select>
+                
+                <div class="">
+                <span class="move multiple-button light-blue" data-source="UsersUsers" data-target="Members">&larr; Move</span>
+                </div>
+                
 			</div>
 		</div>
+        
 	</div>
+    
 	<div class="clear"></div>
+    
 	<?php if( ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
 	
 		<div class="input text">

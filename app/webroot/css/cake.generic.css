@@ -832,9 +832,19 @@ div.clear {
 }
 
 .move	{
-	/*float:left;*/
+	margin: 5px;
+	padding: 2px;
 	display:block;
-	vertical-align:middle;	
+}
+
+multiple-button	{
+		background: none; border: 0; vertical-align:middle;margin-right:10px;
+}
+
+.multiple-button:hover {text-decoration:underline;}
+
+.right-align	{
+	text-align: right;	
 }
 
 .move:hover {

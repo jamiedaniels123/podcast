@@ -19,6 +19,7 @@ class Workflow extends AppModel {
 	var $aspect_ratio_float = 0;
 	var $watermark_bumper_trailer = null;
 	var $media_type = null;
+	var $vle = false;
 	
 	public $workflow = null; // Holds the determined workflow.
 
@@ -269,6 +270,17 @@ class Workflow extends AppModel {
 		$this->watermark_bumper_trailer = $bumper_and_trailer;
 	}
 	
+	/*
+	 * @name : setVle
+	 * @description : Standard setter
+	 * @updated : 16th August 2011
+	 * @by : Charles Jackson
+	 */
+	function setVle( $vle = false ) {
+		
+		$this->vle = $vle;
+	}
+	
 	/* 
 	 * @name : getWorkflow
 	 * @description : Standard getter
@@ -328,6 +340,10 @@ class Workflow extends AppModel {
 		return true;	
 	}
 
+	function getVle() {
+		
+		return $this->vle;	
+	}
 
 	/*
 	 * @name : __select
@@ -341,11 +357,6 @@ class Workflow extends AppModel {
 		
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
 		
-		echo "<pre>";
-			print_r( $workflow );
-			print_r( $this->conditions );
-		echo "</pre>";
-		die('end');
 		if( empty( $workflow ) )
 			return false;
 	}
@@ -384,6 +395,7 @@ class Workflow extends AppModel {
 	 * 3. height (eg: <=240)
 	 * 4. bumber_and_trailer (eg: set "Y" flag on one of 3 fields accordingly. Fields are 'watermark_bumper_trailer',
 	 * 'watermark_only','nothing_added'.
+	 * 5. VLE flag
 	 * @updated : 15th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -393,7 +405,8 @@ class Workflow extends AppModel {
 			'Workflow.media_type' => $this->media_type,
 			'Workflow.aspect_ratio' => $this->aspect_ratio,
 			'Workflow.height' => $this->video_height,
-			'Workflow.watermark_bumpers_trailers' => $this->watermark_bumper_trailer
+			'Workflow.watermark_bumpers_trailers' => $this->watermark_bumper_trailer,
+			'Workflow.vle' => $this->vle
 		);
 	}
 }

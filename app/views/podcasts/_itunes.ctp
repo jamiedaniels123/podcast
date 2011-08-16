@@ -72,6 +72,8 @@
                 <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
                 <dt>iTunes Site: </dt>
                 <dd><?php echo ucfirst( $this->data['Podcast']['itunesu_site'] ); ?>&nbsp;</dd>                
+                <dt>Artwork File: </dt>
+                <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
                 <dt>Open Learn ePub: </dt>
                 <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" /></dd>
                 <dt>Categories</dt>

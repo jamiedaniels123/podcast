@@ -114,7 +114,29 @@ class AttachmentHelper extends AppHelper {
 					
 		return 'Transcript missing on media server.';
 	}
-	
+
+	/*
+	 * @name : getTranscriptLink
+	 * @description : Returns a link to a transcript
+	 * @updated : 1st July 2011
+	 * @by : Charles Jackson
+	 */
+	 
+	function getArtworkLink( $path = null, $filename = null ) {
+
+		if( empty( $filename ) )
+			return('No artwork file');
+
+		// Check to see if there is a local image on the admin box first as that will be more topical.
+		if(	file_exists( FILE_REPOSITORY.$path.'/'.$filename ) )
+			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$path.'/'.$filename.'" target="_blank" title="Link to artwork">'.$filename.'</a>';
+
+		if ( @fopen( DEFAULT_MEDIA_URL.FEEDS.$path.'/'.$filename, 'r' ) )
+			return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$path.'/'.$filename.'" target="_blank" title="Link to artwork">'.$filename.'</a>';
+					
+		return 'Artwork file missing from media server.';
+	}
+		
     /*
      * @name : getMediaLink
      * @description : 
