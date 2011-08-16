@@ -832,13 +832,12 @@ div.clear {
 }
 
 .move	{
-	margin: 5px;
-	padding: 2px;
-	display:block;
 }
 
-multiple-button	{
-		background: none; border: 0; vertical-align:middle;margin-right:10px;
+.multiple-button	{
+		margin:10px auto 0 auto; 
+		padding: 0px;
+
 }
 
 .multiple-button:hover {text-decoration:underline;}

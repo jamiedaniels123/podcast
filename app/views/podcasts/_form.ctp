@@ -26,9 +26,11 @@
 				</select>
                                 
 				<?php echo $this->Form->error('Podcast.ModeratorGroups'); ?>
-                <div class="right-align">
-                <span class="move multiple-button light-blue" data-source="ModeratorGroups" data-target="MemberGroups">Move <img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></span>
+                <div class="multiple-button">
+                <div class="move float_right" data-source="ModeratorGroups" data-target="MemberGroups"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                 </div>
+                
+                <div class="clear"></div>
 			</div>
             
             
@@ -48,10 +50,12 @@
                 
 				<?php echo $this->Form->error('Podcast.MemberGroups'); ?>
                 
-                <div class="">
-                <span class="move multiple-button light-blue" data-source="MemberGroups" data-target="ModeratorGroups">&larr; Move</span>
-				<span class="move multiple-button light-blue" data-source="MemberGroups" data-target="UserGroups">Move &rarr;</span>
+                <div class="multiple-button">
+                <div class="move float_left" data-source="MemberGroups" data-target="ModeratorGroups"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+				<div class="move float_right" data-source="MemberGroups" data-target="UserGroups"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                 </div>
+                
+                <div class="clear"></div>
                 
 			</div>
 		</div>
@@ -69,10 +73,10 @@
                 
 				<?php echo $this->Form->error('Podcast.UserGroups'); ?>
                 
-                <div class="">
-                <span class="move multiple-button light-blue" data-source="UserGroups" data-target="MemberGroups">&larr; Move</span>
+                <div class="multiple-button">
+                <div class="move" data-source="UserGroups" data-target="MemberGroups"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
                 </div>
-                
+                <div class="clear"></div>
 			</div>
 		</div>
         
@@ -96,10 +100,10 @@
                 
 				<?php echo $this->Form->error('Podcast.Moderators'); ?>
                 
-                <div class="right-align">
-                <span class="move multiple-button light-blue" data-source="Moderators" data-target="Members">Move &rarr;</span>
+                <div class="multiple-button">
+                <div class="move float_right" data-source="Moderators" data-target="Members"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                 </div>
-                
+                <div class="clear"></div>
 			</div>
 		</div>
         
@@ -118,11 +122,11 @@
                 
 				<?php echo $this->Form->error('Podcast.Members'); ?>
                 
-                <div class="">
-                <span class="move multiple-button light-blue" data-source="Members" data-target="Moderators">&larr; Move</span>
-				<span class="move multiple-button light-blue" data-source="Members" data-target="UsersUsers">Move &rarr;</span>
+                <div class="multiple-button">
+                <div class="move float_left" data-source="Members" data-target="Moderators"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+				<div class="move float_right" data-source="Members" data-target="UsersUsers"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                 </div>
-                
+                <div class="clear"></div>
 			</div>
 		</div>
         
@@ -139,10 +143,10 @@
 					<?php endforeach; ?>
 				</select>
                 
-                <div class="">
-                <span class="move multiple-button light-blue" data-source="UsersUsers" data-target="Members">&larr; Move</span>
+                <div class="multiple-button">
+                <div class="move" data-source="UsersUsers" data-target="Members"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
                 </div>
-                
+                <div class="clear"></div>
 			</div>
 		</div>
         
@@ -152,7 +156,8 @@
     
 	<?php if( ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
 	
-		<div class="input text">
+		<div class="wrapper">
+        <div class="input text">
 			<label for="PodcastOwnerId">Podcast Owner</label>
 			<?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
 				<input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
@@ -167,6 +172,7 @@
 			</select>
 			<?php echo $this->Form->error('Podcast.owner_id'); ?>
 		</div>
+        </div>
 	<?php endif; ?>
 </div>
 <?php if( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) : ?>
@@ -283,7 +289,7 @@
         <div class="wrapper" id="nodes_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="Nodes" data-target="PodcastAllNodes">Move &rarr;</span>
+                    
                     <label for="Nodes">Podcast Nodes</label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
                     <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
@@ -294,11 +300,18 @@
                         <?php endif; ?>
                     </select>
                     <?php echo $this->Form->error('Podcast.Nodes'); ?>
+                    
+                    
+                    <div class="multiple-button">
+                    <div class="move float_right" data-source="Nodes" data-target="PodcastAllNodes"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                    </div>
+                    <div class="clear"></div>
+ 
                 </div>
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAllNodes" data-target="Nodes">&larr; Move</span>
+                    
                     <label for="PodcastAllNodes">All Nodes</label>
                     <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
                     <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">
@@ -306,6 +319,12 @@
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    
+                    <div class="multiple-button">
+                    <div class="move float_left" data-source="PodcastAllNodes" data-target="Nodes"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                    </div>
+                	<div class="clear"></div>
+                    
                 </div>
             </div>
         </div>

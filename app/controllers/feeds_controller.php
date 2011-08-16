@@ -52,6 +52,7 @@ class FeedsController extends AppController {
 
 			// If we found a podcast, create the RSS feeds.
 			if( !empty( $podcast ) ) {
+				
 				foreach( $this->Feed->rss_flavours as $flavour ) {
 	
 					$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour ) );
@@ -81,25 +82,24 @@ class FeedsController extends AppController {
     
     /*
      * @name : view
-     * @description : Generate a very simple RSS feed that is echoed out to screen and catpured by the calling routine
+     * @description : Generate an RSS feed that is echoed out to screen and captured by the calling routine
      * so it can be written to a flat file.
      * @updated : 26th May 2011
      * @by : Charles Jackson
      */
     function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true ) {
 
-		//$this->autoRender = false;
-		//$view = new View( $this, false);
-		//$view->viewPath = 'elements';
-		
         $podcast_items = array();
         
         $this->Podcast = ClassRegistry::init('Podcast');
         $this->Podcast->recursive = 2;
 
-        $this->data = $this->Podcast->findById( $id, array(
+		// Make sure the podcast has not been soft-deleted.
+        $this->data = $this->Podcast->find( 'first', array(
+		
             'conditions' => array(
-
+				'Podcast.id' => $id,
+				'Podcast.deleted' => false
                 )
             )
         );
@@ -110,8 +110,8 @@ class FeedsController extends AppController {
             return false;
 
         } else {
-            
-            $this->Feed->setData( $this->data ); // Set the data first, some of the Setter below will perform comparison logic.
+
+            $this->Feed->setData( $this->data ); // Set the data first, some of the Setters below will perform comparison logic.
             $this->Feed->setMediaType( $media_type );
             $this->Feed->setMediaServer();
             $this->Feed->setRssFilename( $rss_filename );
@@ -123,13 +123,17 @@ class FeedsController extends AppController {
             $track_number = 0; // used in iTunes to determine tracking ordering and incremented within the followiing foreach loop.
             
             foreach ( $this->data['PublishedPodcastItems'] as $podcast_item ) {
-
+				
+				// Has the item been soft deleted.
+				if( (int)$podcast_item['deleted'] )
+					continue;
+					
                 $track_number++;
 
                 $this->Feed->setMediaType( $media_type ); // We must reset the media type in every loop incase the RSS is interlaced and has been changed to TRANSCRIPT
                 $this->Feed->setPodcastItem( $podcast_item );
 
-                // We only want to include this item in the RSS feed if there are a flavour of media to match the users request.
+                // We only want to include this item in the RSS feed if there is a flavour of media to match the users request.
                 if( $this->Feed->setPodcastMedia() ) {
 
                     $this->Feed->setPodcastItemMediaFolder(); // Set the name of the media specific folder under FEED/custom_id/
@@ -151,8 +155,6 @@ class FeedsController extends AppController {
             $podcast_items = $this->Feed->getPodcastItems();
             $this->set( compact( 'podcast_items' ) );
           }
-		  
-		  //return $view->render('blank');
     }
 
 
@@ -169,14 +171,15 @@ class FeedsController extends AppController {
 
             $this->Podcast = ClassRegistry::init('Podcast');
             $this->Podcast->recursive = -1;
-            $this->data['Podcasts'] = $this->Podcast->find('all', array('order' => 'Podcast.title ASC' ) );
-            $this->data['MediaTypes'] = $this->Feed->itunes_title_suffix;
+            $this->data['Podcasts'] = $this->Podcast->find('all', array('conditions' => array('Podcast.deleted' => 0), 'order' => 'Podcast.title ASC' ) );
+            //$this->data['MediaTypes'] = $this->Feed->itunes_title_suffix;
+			$this->data['MediaTypes'] = $this->Feed->rss_flavours;
 
         } else {
 			
             $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'] ) );
 
-            // Create a filename prefixed with the current users ID so as not to overwrite another preview file.
+            // Create a filename prefixed with the current users ID so as not to overwrite another users preview file.
             $this->Feed->writeRssFile( WWW_ROOT .'rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );
             $this->redirect( APPLICATION_URL.'/rss/'.$this->Session->read('Auth.User.id').'_debug.xml' );
         }

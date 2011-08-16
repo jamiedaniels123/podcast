@@ -123,7 +123,7 @@
         <div class="wrapper" id="itune_categories_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="Categories" data-target="PodcastAllCategories">Move &rarr;</span>
+                    
                     <label for="Categories">Podcast iTune Categories</label>
                     <input type="hidden" name="data[Categories]" value="" id="Categories_" />
                     <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
@@ -134,11 +134,18 @@
                         <?php endif; ?>
                     </select>
                     <?php echo $this->Form->error('Podcast.Categories'); ?>
+                    
+                <div class="multiple-button">
+                <div class="move float_right" data-source="Categories" data-target="PodcastAllCategories"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                </div>
+                <div class="clear"></div>
+                
+                
                 </div>
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAllCategories" data-target="Categories">&larr; Move</span>
+                   
                     <label for="PodcastAllCategories">All iTune Categories</label>
                     <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
                     <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
@@ -146,6 +153,13 @@
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    
+                 <div class="multiple-button">
+                <div class="move float_left" data-source="PodcastAllCategories" data-target="Categories"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                </div>
+                <div class="clear"></div>
+                
+                
                 </div>
             </div>
         </div>
@@ -153,7 +167,7 @@
         <div class="wrapper" id="ituneu_categories_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories">Move &rarr;</span>
+                    
                     <label for="iTuneCategories">Podcast iTune U Categories</label>
                     <input type="hidden" name="data[iTuneCategories]" value="" id="iTuneCategories_" />
                     <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="iTuneCategories">
@@ -164,11 +178,20 @@
                         <?php endif; ?>
                     </select>
                     <?php echo $this->Form->error('Podcast.iTuneCategories'); ?>
+                    
+                    
+                    
+                <div class="multiple-button">
+                <div class="move float_right" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                </div>
+                <div class="clear"></div>
+                    
+                    
                 </div>
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories">&larr; Move</span>
+
                     <label for="PodcastAlliTuneCategories">All iTune U Categories</label>
                     <input type="hidden" name="data[Podcast][PodcastAlliTuneCategories]" value="" id="PodcastAlliTuneCategories_" />
                     <select name="data[Podcast][PodcastAlliTuneCategories][]" multiple="multiple" id="PodcastAlliTuneCategories">
@@ -176,6 +199,14 @@
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
+                    
+                <div class="multiple-button">
+                <div class="move float_left" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                </div>
+                <div class="clear"></div>
+                
+                
+                
                 </div>
             </div>
         </div>

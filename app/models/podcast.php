@@ -5,7 +5,6 @@ class Podcast extends AppModel {
     const AVAILABLE = 9;
     
     var $name = 'Podcast';
-    var $backup_table = 'podcasts_backup';
 	var $order = 'Podcast.id DESC';
     
     var $validate = array(
@@ -158,9 +157,6 @@ class Podcast extends AppModel {
         'PublishedPodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
-            'fields' => 'PublishedPodcastItems.id, PublishedPodcastItems.podcast_id, PublishedPodcastItems.title, PublishedPodcastItems.summary, PublishedPodcastItems.filename,
-                PublishedPodcastItems.published_flag, PublishedPodcastItems.itunes_flag, PublishedPodcastItems.youtube_flag, PublishedPodcastItems.created,
-                PublishedPodcastItems.author, PublishedPodcastItems.image_filename, PublishedPodcastItems.publication_date, PublishedPodcastItems.explicit',
             'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
         ),
         'PodcastModerators' => array(

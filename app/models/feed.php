@@ -60,7 +60,14 @@ class Feed extends AppModel {
         'large' => 'large/', // iTunes U - video only (native video dimensions)
         'transcript' => 'transcript/', // transcripts of corresponding track entry (for audio and video tracks only)
         'youtube' => 'youtube/', // YouTube - encoded for uploading to YouTube, has different trailer
-        'extra' => 'extra/'
+        'extra' => 'extra/',
+		'default' => null,
+		'240' => null,
+		'270' => null,
+		'360' => null,
+		'480' => null,
+		'540' => null,
+		'720' => null
     );
 
     var $mime_types = array(
@@ -322,6 +329,12 @@ class Feed extends AppModel {
         if ( ( strtoupper( $this->media_type ) == 'YOUTUBE' ) && ( strtoupper( $this->podcast_item['youtube_legacy_track'] ) == 'Y' ) )
             $item['oupod:legacy'] = 'true';
 
+        if ( !empty($this->podcast_item['shortcode'] ) ) {
+			$item['source']['url'] = 'http://www.open.ac.uk';
+			$item['source']['title'] = $this->podcast_item['shortcode'];
+        }
+
+
         $this->podcast_items[] = $item;
 
     }
@@ -561,16 +574,26 @@ class Feed extends AppModel {
 
     function setPodcastMedia() {
 
-        foreach ( $this->podcast_item['PodcastMedia'] as $podcast_media ) {
-
-            $this->podcast_media = array();
-
-            if ( $podcast_media['media_type'] == $this->media_type ) {
-                $this->podcast_media = $podcast_media;
-                return true;
-            }
-        }
-
+		// Due to legacy issues we cannot guarantee a "default" flavoured entry will exist on the
+		// podcast_item_media table. As such we take the value straight from the podcast_items table.
+		if( strtolower( $this->media_type == 'default' ) ) {
+		
+			$this->podcast_media['filename'] = $this->podcast_item['filename'];
+			return true;
+			
+		} else {
+			
+			foreach ( $this->podcast_item['PodcastMedia'] as $podcast_media ) {
+	
+				$this->podcast_media = array();
+	
+				if ( $podcast_media['media_type'] == $this->media_type || $this->media_type = 'default' ) {
+					$this->podcast_media = $podcast_media;
+					return true;
+				}
+			}
+		}
+		
         return false;
     }
 
