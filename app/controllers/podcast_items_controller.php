@@ -371,76 +371,6 @@ class PodcastItemsController extends AppController {
         $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
-   /*
-     * @name : youtube_approve
-     * @description : Enables an itunes user to approve an item of media for publication on
-     * youtube. 
-     * @updated : 21st July 2011
-     * @by : Charles Jackson
-     */
-	/*function youtube_approve( $id = null ) {
-    	
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
-
-            $this->data = $this->PodcastItem->findById( $key );
-
-            // Make sure it has already been converted into a podcast if they want to publish it.
-	        if( ( !empty( $this->data ) ) && ( $this->data['Podcast']['podcast_flag'] == true ) && ( $this->Object->hasYoutubeFlavour( $this->data['PodcastItem'] ) ) ) {
-	        	
-                $this->data['PodcastItem']['youtube_flag'] = 'Y';
-                $this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
-                	                
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
-		        $this->Session->setFlash('Your media has been successfully approved and acheduled for publication on Youtube.', 'default', array( 'class' => 'success' ) );
-				
-			} else {
-				
-		        $this->Session->setFlash('Can only publish available podcast media with a youtube flavour.', 'default', array( 'class' => 'error' ) );
-				break;
-				
-			}
-        }
-        
-        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }*/
-
-    /*
-     * @name : youtube_reject
-     * @description : Enables a youtube user to reject an item of media for publication on
-     * youtube.
-     * @updated : 21st July 2011
-     * @by : Charles Jackson
-     */
-	/*function youtube_reject( $id = null ) {
-    	
-    	$this->PodcastItem->recursive = -1;
-    	
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
-
-            $this->data = $this->PodcastItem->findById( $key );
-    	
-            // Make sure it has already been converted into a podcast if they want to publish it.
-	        if( !empty( $this->data ) && empty( $this->data['PodcastItem']['youtube_id'] ) ) {
-	        	
-                $this->data['PodcastItem']['youtube_flag'] = 'N';
-				$this->data['PodcastItem']['consider_for_youtube'] = false;
-				                
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
-			}
-        }
-        
-        $this->Session->setFlash('Your media has been successfully rejected for youtube. NOTE: If previously published it will not be automatically removed.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }*/
-        
     /*
      * @name : filechucker
      * @description : Called by the filechucker script directly after a successful upload. It is used by both
@@ -748,37 +678,6 @@ class PodcastItemsController extends AppController {
      */
 
     /*
-     * @name : admin_add
-     * @desscription : Enables a peep to upload a piece of media
-     * @updated : 13th May 2011
-     * @by : Charles Jackson
-     */
-    /*function admin_add( $podcast_id ) {
-
-        $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
-
-        if( (int)$podcast_id ) {
-
-            $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
-
-            // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
-            // in the session.
-            $this->Session->write('Podcast.podcast_id', $podcast_id);
-            $this->Session->write('Podcast.admin', true);
-        }
-
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
-
-        } else {
-
-            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id ) );
-        }
-    }*/
-
-    /*
      * @name : admin_view
      * @desscription : Enables an administrator to view details of an individual media file.
      * @name : Charles Jackson
@@ -796,50 +695,6 @@ class PodcastItemsController extends AppController {
             $this->cakeError('error404');
         }
     }
-
-    /*
-     * @name : admin_edit
-     * @desscription : Displays a form that enables administrator to edit an existing row on the podcast_items table.
-     * @name : Charles Jackson
-     * @by : 19th May 2011
-     */
-    /*function admin_edit( $id = null ) {
-
-       if ( !empty( $this->data ) ) {
-
-        	// Unset this relationship so we can "saveAll" without touching the parent collection
-        	unset( $this->PodcastItem->belongsTo['Podcast'] );
-        	
-			$this->PodcastItem->begin(); // Begin a transaction so we can rollback if needed.
-			
-            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-
-				$this->PodcastItem->set( $this->data );
-            	$this->PodcastItem->saveAll();
-				$this->PodcastItem->commit();
-				$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );									
-                $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
-				exit;
-            }
-			
-            $this->errors = $this->PodcastItem->invalidFields( $this->data );
-            $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
-			$this->PodcastItem->rollback();
-
-        } else {
-
-            $this->data = $this->PodcastItem->findById( $id );
-
-            // We did not find the podcast, redirect.
-            if( empty( $this->data ) ) {
-
-                $this->Session->setFlash('Could not find your podcast media. Please try again.', 'default', array( 'class' => 'error' ) );
-                $this->cakeError('error404');
-            }
-        }
-
-		$this->__setYoutubeOptions();
-    }*/
 
     /*
      * @name : admin_delete

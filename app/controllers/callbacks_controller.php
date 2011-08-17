@@ -3,7 +3,7 @@ class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
 	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
-	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
+	var $requires_meta_injection = array('deliver-without-transcoding');
 	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
 	var $youtube = array('youtube-file-upload');
@@ -89,6 +89,8 @@ class CallbacksController extends AppController {
 					if( ( $row['status'] == YES ) && ( $row['workflow'] == 'audio' ) ) {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
+						
+						//@TODO - We need to identify the type of injection based on the flavour.
 						if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false ) {
 							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
 						} else {

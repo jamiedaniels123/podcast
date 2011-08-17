@@ -201,31 +201,7 @@ class PodcastItem extends AppModel {
 			'comments' => 'Item from '.$data['Podcast']['title']			
 		);
 	}
-	
-	/*
-	 * @name : buildInjectionFlavours
-	 * @description : Takes a row from the callbacks controller and build common meta data for injection
-	 * @updated : 13th July 2011
-	 * @by : Charles Jackson
-	 */
-	function commonMetaInjection( $row ) {
-
-		$meta_data = array();
-		$data = $this->findById( $row['podcast_item_id'] );
-
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $this->data['title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['Podcast']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['Podcast']['title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['title'];
 		
-		return $meta_data;
-	}
-	
 	/* 
 	 * @name : stripJoinsByAction
 	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
