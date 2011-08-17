@@ -502,7 +502,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help cleanse legacy data moving forward
 			$this->data['Podcast']['consider_for_itunesu'] = false;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
@@ -534,7 +534,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_youtube'] = false;
     		$this->data['Podcast']['intended_youtube_flag'] = 'N';
     		$this->data['Podcast']['publish_youtube'] = 'N';
@@ -566,7 +566,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_itunesu'] = true;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
 			$this->data['Podcast']['publish_itunes_u'] = 'Y';
@@ -598,7 +598,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_youtube'] = true;
     		$this->data['Podcast']['intended_youtube_flag'] = 'Y';
     		$this->data['Podcast']['publish_youtube'] = 'Y';
@@ -630,7 +630,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clear legacy data moving forward
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
 			$this->data['Podcast']['publish_itunes_date'] = null;
 

@@ -76,51 +76,56 @@ class Podcast extends AppModel {
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for publish iTunnesU date.'
             )
         ),
         'update_itunes_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for update iTunesU date.'
             )
         ),
         'target_itunesu_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD target iTunesU date.'
             )
         ),
         'production_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for production date.'
             )
         ),
         'rights_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for rights date.'
             )
         ),
         'metadata_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for meta data date.'
             )
         ),
         'itunes_u_url' => array(
             'Rule1' => array(
                 'rule' => 'url',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid web address.'
+                'message' => 'If entered, you must provide a valid web address for the iTunesU URL.'
             )
-        )
+        ),
+        'youtube_series_playlist_link' => array(
+			'rule' => 'url',
+			'allowEmpty' => true,
+			'message' => 'If entered, you must provide a valid web address for the youtube series playlist link.'
+        ),		
     );
 
     var $belongsTo = array(
@@ -138,7 +143,7 @@ class Podcast extends AppModel {
             'className' => 'Nodes',
             'foreignKey' => 'preferred_node',
             'fields' => 'PreferredNode.id,PreferredNode.title'
-        )		
+		)		
     );
 
     var $hasMany = array(
@@ -151,7 +156,7 @@ class Podcast extends AppModel {
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
             'fields' => 'PodcastItems.id, PodcastItems.podcast_id, PodcastItems.title, PodcastItems.summary, PodcastItems.filename,
-                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, youtube_id',
+                PodcastItems.published_flag, PodcastItems.itunes_flag, PodcastItems.youtube_flag, PodcastItems.created, PodcastItems.image_filename, PodcastItems.deleted, PodcastItems.processed_state, PodcastItems.duration',
             'order' => 'PodcastItems.publication_date DESC',
         ),
         'PublishedPodcastItems' => array(
@@ -235,7 +240,7 @@ class Podcast extends AppModel {
             'className' => 'UserPodcast',
             'foreignKey' => 'podcast_id',
             'fields' => 'UserPodcast.id,UserPodcast.user_id'
-        )
+		)
     );
 
     /*
