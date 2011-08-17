@@ -445,15 +445,7 @@ class PodcastItemsController extends AppController {
 							$this->Session->setFlash('Media file has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
 							$this->PodcastItem->commit();
 							
-							// Everything worked OK, redirect to view page
-					        if( $this->Session->read('Podcast.admin') ) {
-					
-					            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
-					
-					        } else {
-					
-					            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
-					        }
+				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							
@@ -475,15 +467,7 @@ class PodcastItemsController extends AppController {
 							$this->PodcastItem->commit();
 							$this->Session->setFlash('Your podcast media has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
 
-							// Everything worked OK, redirect to view page
-					        if( $this->Session->read('Podcast.admin') ) {
-					
-					            $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
-					
-					        } else {
-					
-					            $this->redirect( array( 'controller' => 'podcast_items', 'action' => 'view', $this->PodcastItem->getLastInsertId() ) );
-					        }
+				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							

@@ -205,7 +205,7 @@ class PodcastsController extends AppController {
         if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
     }
 
@@ -821,7 +821,7 @@ class PodcastsController extends AppController {
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
 
     }
