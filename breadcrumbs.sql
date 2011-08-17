@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 17, 2011 at 04:57 PM
+-- Generation Time: Aug 17, 2011 at 05:19 PM
 -- Server version: 5.1.52
 -- PHP Version: 5.3.3
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `podcast`
+-- Database: `podcast-admin-dev`
 --
 
 -- --------------------------------------------------------
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `breadcrumbs` (
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
 
 --
 -- Dumping data for table `breadcrumbs`
@@ -68,4 +68,6 @@ INSERT INTO `breadcrumbs` (`id`, `controller`, `action`, `parent_id`, `created`,
 (29, 'podcast_items', 'add', 4, NULL, NULL, 'Track', '/podcast_items/add/'),
 (30, 'podcast_items', 'admin_view', 23, NULL, NULL, 'Track', '/admin/podcast_items/view/'),
 (31, 'podcasts', 'vle_index', 2, NULL, NULL, 'VLE Podcasts', '/vle/podcasts'),
-(32, 'feeds', 'admin_preview', 2, NULL, NULL, 'Rss Preview', NULL);
+(32, 'feeds', 'admin_preview', 2, NULL, NULL, 'Rss Preview', NULL),
+(33, 'logs', 'admin_index', 2, NULL, NULL, 'Admin API', NULL),
+(34, 'logs', 'admin_view', 33, NULL, NULL, 'Log', NULL);
