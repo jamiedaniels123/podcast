@@ -702,7 +702,7 @@ class Feed extends AppModel {
 
     function buildParameters( $id, $flavour ) {
 
-        return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'/'.DEFAULT_RSS_FILENAME.'/'.$flavour['interlace'] );
+        return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'/'.$flavour['interlace'].'.rss' );
     }
 
 	/*
