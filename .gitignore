@@ -13,3 +13,4 @@ app/webroot/rss/*
 /.settings/org.eclipse.php.core.prefs
 /app/webroot/rss
 /app/webroot/upload/call_fc.php
+config/deploy.rb

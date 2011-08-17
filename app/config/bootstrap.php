@@ -50,9 +50,32 @@
  *
  */
 
+switch ($_SERVER['SERVER_NAME']){
+	case 'podcast-admin-dev.open.ac.uk':
+		DEFINE('SERVER_ENV', 'DEV');
+		DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
+		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+		break;
+	case 'podcast-admin-acc.open.ac.uk':	// Currently doesn't exist, using live for acct.
+		DEFINE('SERVER_ENV', 'ACCT');
+		DEFINE('DOMAIN_NAME', 'podcast-api-acc.open.ac.uk' );
+		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
+		break;
+	case 'podcast-admin.open.ac.uk':
+		DEFINE('SERVER_ENV', 'LIVE');
+		DEFINE('DOMAIN_NAME', 'podcast-api-acc.open.ac.uk' );
+		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
+		break;
+	default:
+		die('ERROR: Unknown server.  Check app/config/bootstrap.php');
+}
+
 DEFINE('APPLICATION_URL', 'http://'.$_SERVER['SERVER_NAME']);
 DEFINE('SECURE_APPLICATION_URL', 'https://'.$_SERVER['SERVER_NAME']);
-DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
+
 // Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
@@ -97,7 +120,6 @@ DEFINE('FILE_REPOSITORY', WWW_ROOT.'upload/files/');
 
 DEFINE('LOCAL_FILE_REPOSITORY_URL', APPLICATION_URL.'/upload/files/');
 //DEFINE('DEFAULT_MEDIA_URL', APPLICATION_URL.'/upload/files/');
-DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
 //DEFINE('DEFAULT_MEDIA_URL', 'http://podcast.open.ac.uk/');
 
 DEFINE('AMAZON_S3_SERVER', 'http://media-podcast.open.ac.uk.s3.amazonaws.com');
@@ -156,7 +178,6 @@ DEFINE('MULTI_VIDEO_WIDE', 'multi-video-wide');
 
 // processed state of media
 DEFINE('MEDIA_AVAILABLE',9);
-DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 DEFINE('INPUT_GREETING', 'Enter your search here');
 
 // VLE Stuff
