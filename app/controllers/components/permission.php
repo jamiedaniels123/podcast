@@ -74,7 +74,7 @@ class PermissionComponent extends Object {
 
         if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
-		            
+
         return false;
     }
 

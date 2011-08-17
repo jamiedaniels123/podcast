@@ -262,7 +262,7 @@ class PodcastsController extends AppController {
 							'source_filename' => 'htaccess' ,
 							'destination_filename' => '.htaccess' 
 							)
-						) ) ) == false ) {		
+						) ) ) == false ) {
 						
 							$this->Session->setFlash('We were unable to generate the associated permissions. If the problem persists please alert an administrator', 'default', array( 'class' => 'error' ) );
 						
@@ -382,70 +382,300 @@ class PodcastsController extends AppController {
         $this->redirect( array( 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 
-    /*
-     * @name : status
-     * @description : Enables a user to set the status of a collection for any channel. The options include
-     * "consider for channel", "intended on channel" and "published on channel".
-     * @updated : 1st August 2011
-     * @by : Charles Jackson
-     */
-    function status( $media = null, $consider = 0, $intended = 'N', $publish = 'N', $id = null ) {
-
-    	$this->Podcast->recursive = -1;
+	/*
+	 * @name : consider
+	 * @description : Enables a user to submit a podcast for consideration on either youtube or itunes
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function consider( $media, $id ) {
+		
+    	$this->Podcast->recursive = 2;
     	$this->data = $this->Podcast->findById( $id );
-    	
-    	if( !empty( $this->data ) && $this->Permission->statusUpdate( $media, $consider, $intended, $publish ) ) {
-    	
+		
+		if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
+			
     		if( strtoupper( $media ) == 'ITUNES' ) {
 				
-    			$this->data['Podcast']['consider_for_itunesu'] = $consider;
-    			$this->data['Podcast']['intended_itunesu_flag'] = $intended;
-    			$this->data['Podcast']['publish_itunes_u'] = $publish;
-    			
-    			if( strtoupper( $publish ) == YES ) {
-					
-					$this->data['Podcast']['publish_itunes_date'] = date('Y-m-d');
-					
-				} else {
-					
-					$this->data['Podcast']['publish_itunes_date'] = null;
-				}
-    			
-    			$this->Session->setFlash('You have successfully updated this collection.', 'default', array( 'class' => 'success' ) );	
-    			
-    		} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
-
-
-    			$this->data['Podcast']['consider_for_youtube'] = $consider;
-    			$this->data['Podcast']['intended_youtube_flag'] = $intended;
-    			$this->data['Podcast']['publish_youtube'] = $publish;
-    			
-    			if( strtoupper( $publish ) == YES ) {
-					
-					$this->data['Podcast']['publish_youtube_date'] = date('Y-m-d');
-					
-				} else {
-					
-					$this->data['Podcast']['publish_youtube_date'] = null;
-				}
-
-				$this->Session->setFlash('You have successfully updated this collection.', 'default', array( 'class' => 'success' ) );	
+    			$this->data['Podcast']['consider_for_itunesu'] = true;
+    			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
+    			$this->data['Podcast']['publish_itunes_u'] = 'N';
+				$this->data['Podcast']['publish_itunes_date'] = null;
 				
-    		} else {
-    		
-				$this->Session->setFlash('We could not identify the channel status you are attempting to update. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
+			} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
+				
+    			$this->data['Podcast']['consider_for_youtube'] = true;
+    			$this->data['Podcast']['intended_youtube_flag'] = 'N';
+    			$this->data['Podcast']['publish_youtube'] = 'N';
+				$this->data['Podcast']['publish_youtube_date'] = null;
 			}
-			$this->__generateRSSFeeds( $this->data['Podcast']['id'] );
-    		$this->Podcast->set( $this->data );
-    		$this->Podcast->save();
-    		
-    	} else {
-    		
-    		$this->Session->setFlash('We could not update this collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );	
-    	}
-    	
-    	$this->redirect( array( 'action' => 'view', $id ) );
-    }
+			
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('Your podcast has been successfully updated.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'action' => 'view', $id ) );
+			
+		} else {
+			
+			$this->Session->setFlash('Could not find your collection else you do have have permission to update this podcast. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+		
+	}
+	
+	/*
+	 * @name : itunes_approve
+	 * @description : Enables an itunes user to approve a podcast
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function itunes_approve( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_itunesu'] = true;
+			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
+			$this->data['Podcast']['publish_itunes_u'] = 'N';
+			$this->data['Podcast']['publish_itunes_date'] = null;
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully approved this podcast for publication on itunes.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to approve. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+
+	/*
+	 * @name : youtube_approve
+	 * @description : Enables a youtube user to approve a podcast
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function youtube_approve( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_youtube'] = true;
+    		$this->data['Podcast']['intended_youtube_flag'] = 'Y';
+    		$this->data['Podcast']['publish_youtube'] = 'N';
+			$this->data['Podcast']['publish_youtube_date'] = null;
+							
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully approved this podcast for publication on youtube.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to approve. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : itunes_reject
+	 * @description : Enables an itunes user to reject a podcast
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function itunes_reject( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_itunesu'] = false;
+			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
+			$this->data['Podcast']['publish_itunes_u'] = 'N';
+			$this->data['Podcast']['publish_itunes_date'] = null;
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully rejected this podcast, it will not appear on itunes.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'itunes' => true, 'action' => 'index' ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to reject. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : youtube_reject
+	 * @description : Enables an youtube user to reject a podcast
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function youtube_reject( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_youtube'] = false;
+    		$this->data['Podcast']['intended_youtube_flag'] = 'N';
+    		$this->data['Podcast']['publish_youtube'] = 'N';
+			$this->data['Podcast']['publish_youtube_date'] = null;
+			
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully rejected this podcast for youtube.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'youtube' => true, 'action' => 'index' ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to reject. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : itunes_publish
+	 * @description : Enables an itunes user to update the status of a podcast as published. Will also update the published date/time column.
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function itunes_publish( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_itunesu'] = true;
+			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
+			$this->data['Podcast']['publish_itunes_u'] = 'Y';
+			$this->data['Podcast']['publish_itunes_date'] = date('Y-m-d');
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully updated this podcast as being published on iTunes.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to publish. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : youtube_publish
+	 * @description : Enables an itunes user to update the status of a podcast as published. Will also update the published date/time column.
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function youtube_publish( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['consider_for_youtube'] = true;
+    		$this->data['Podcast']['intended_youtube_flag'] = 'Y';
+    		$this->data['Podcast']['publish_youtube'] = 'Y';
+			$this->data['Podcast']['publish_youtube_date'] = date('Y-m-d');
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully updated this podcast as being published on Youtube.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to publish. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : itunes_unpublish
+	 * @description : Enables an itunes user to update the status of a podcast as published. Will also update the published date/time column.
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function itunes_unpublish( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			$this->data['Podcast']['publish_itunes_u'] = 'N';
+			$this->data['Podcast']['publish_itunes_date'] = null;
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully updated this podcast as being not published on iTunes.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to unpublish. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
+
+	/*
+	 * @name : youtube_unpublish
+	 * @description : Enables a youtube user to update the status of a podcast as published. Will also update the published date/time column.
+	 * @updated : 17th August 2011
+	 * @by : Charles Jackson
+	 */
+	function youtube_unpublish( $id = null ) {
+		
+    	$this->Podcast->recursive = 2;
+    	$this->data = $this->Podcast->findById( $id );
+		
+		if( !empty( $this->data ) ) {
+
+			// We explicitly set the status of all associated flags to help clear legacy data moving forward
+    		$this->data['Podcast']['publish_youtube'] = 'N';
+			$this->data['Podcast']['publish_youtube_date'] = date('Y-m-d');
+
+			$this->Podcast->set( $this->data );
+			$this->Podcast->save();
+			
+			$this->Session->setFlash('You have successfully updated this podcast as being not published on Youtube.', 'default', array( 'class' => 'success' ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			
+		} else {
+
+			$this->Session->setFlash('Could not find your collection you are trying to unpublish. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
 
     /*
      * @name : copy

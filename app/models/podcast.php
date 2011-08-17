@@ -157,7 +157,7 @@ class Podcast extends AppModel {
         'PublishedPodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
-            'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
+            'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL', 'PublishedPodcastItems.media_type != "transcript"'
         ),
         'PodcastModerators' => array(
             'className' => 'UserPodcasts',
@@ -860,9 +860,6 @@ class Podcast extends AppModel {
 	                    ),
 	                array(
 	                    'Podcast.publish_itunes_u' => 'Y'
-	                    ),
-	                array(
-	                    'Podcast.openlearn_epub' => 'Y',
 	                    )
                     ),
                     'Podcast.deleted' => 0
@@ -884,16 +881,29 @@ class Podcast extends AppModel {
                 );
                 break;
             case 'openlearn':
-            	return array(
-	                'Podcast.openlearn_epub' => 'Y',
-	                'Podcast.deleted' => 0
+            	return array('OR' => array(
+					array(
+		                'Podcast.publish_itunes_u' => 'Y',
+		                'Podcast.openlearn_epub' => 'Y',
+		                'Podcast.deleted' => 0
+						),
+					array(
+		                'Podcast.intended_itunesu_flag' => 'Y',
+		                'Podcast.openlearn_epub' => 'Y',
+		                'Podcast.deleted' => 0
+						),
+					array(
+		                'Podcast.intended_itunesu_flag' => 'Y',
+		                'Podcast.openlearn_epub' => 'Y',
+		                'Podcast.deleted' => 0
+						),
+					)
             	);
                 break;
             case 'published':
             default :
             	return array(
 	                'Podcast.publish_itunes_u' => 'Y',
-            		'Podcast.openlearn_epub' => 'N',
 	                'Podcast.deleted' => 0
             	);
                 break;

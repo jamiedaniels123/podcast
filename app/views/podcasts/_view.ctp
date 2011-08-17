@@ -1,4 +1,5 @@
 <div class="wrapper">
+    
     <div class="float_right images_container">
         <h3 style="display:block;">Collection Image</h3>
         <?php echo !empty( $this->data['Podcast']['image_copyright'] ) ? $this->data['Podcast']['image_copyright'] : 'Copyright Unknown'; ?>

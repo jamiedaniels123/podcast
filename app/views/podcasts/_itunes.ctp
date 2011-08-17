@@ -1,49 +1,12 @@
-<fieldset class="itunes">
-	<legend><h3>iTunesU</h3> <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/></legend>
-	<ul class="itunes">
-	    <li><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItunesContainer" class="juggle">Toggle</a></li>
-	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-	    
-			<?php if( ( $this->Permission->isItunesUser() == false ) && ( $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) && ( $this->Object->considerForItunes( $this->data['Podcast'] ) == false ) ) : ?>
-			
-				<li><a href="/podcasts/status/itunes/1/N/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the iTunes team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
-				
-			<?php elseif( $this->Permission->isItunesUser() ) : ?>			
-				
-				<?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>			
-				
-					<li><a href="/podcasts/status/itunes/1/Y/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
+<fieldset>
+	<legend><h3>iTunes U</h3></legend>
+    
+    <img src="/img/collection-itunes-large.png"  width="46" height="33" />
+    
+    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/>
+    
 
-					<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) ) : ?>
-					
-						<li><a href="/podcasts/status/itunes/0/N/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to reject this collection. Are you sure?');">Reject</a></li>
-						
-					<?php endif; ?>
 
-				<?php elseif( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
-				
-					<li><a href="/podcasts/status/itunes/0/N/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to set this collection as being removed from iTunes and remove it\'s approved status. Are you sure?');">Unapprove</a></li>
-
-					<?php if( $this->Object->itunesPublished( $this->data['Podcast'] ) == false ) : ?>			
-			
-						<li><a href="/podcasts/status/itunes/1/Y/Y/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Published</a></li>
-					
-					<?php elseif( $this->Object->itunesPublished( $this->data['Podcast'] ) ) : ?>				
-					
-						<li><a href="/podcasts/status/itunes/1/Y/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Unpublished</a></li>
-					
-					<?php endif; ?>	
-					
-				<?php endif; ?>
-				
-			<?php endif; ?>
-			
-		<?php elseif( $this->Permission->isYouTubeUser() && $this->Object->considerForItunes( $this->data['Podcast'] ) && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>
-			
-			<li><a href="/podcasts/status/itunes/0/N/N/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to reject this collection. Are you sure?');">Reject</a></li>
-			
-		<?php endif; ?>
-    </ul>
     <div class="wrapper itunes" id="PodcastItunesContainer" style="display:none">
         <div class="float_right images_container">
             <div>
@@ -120,4 +83,44 @@
             </dl>    
         </div>
     </div>
+    
+	<div class="wrapper">
+        <ul class="itunes">
+	    <li><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItunesContainer" class="button white juggle"><img class="icon" alt="sharing - ownership" src="/img/icon-16-open.png"> View</a></li>
+	    <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForItunes( $this->data['Podcast'] ) == false ) && $this->Permission->isItunesUser() == false ) : ?>
+        
+				<li><a href="/podcasts/consider/itunes/<?php echo $this->data['Podcast']['id']; ?>" class="button white" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the iTunes team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
+                
+		<?php elseif( $this->Permission->isItunesUser() ) : ?>
+			
+				<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>			
+				
+					<li><a class="button orange" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
+
+					<li><a class="button orange" href="/itunes/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to reject this collection. Are you sure?');">Reject</a></li>
+						
+				<?php endif; ?>
+
+				<?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
+				
+					<li><a class="button light-blue" href="/itunes/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to set this collection as being removed from iTunes and remove it\'s approved status. Are you sure?');">Unapprove</a></li>
+                    
+					<?php if( $this->Object->itunesPublished( $this->data['Podcast'] ) == false ) : ?>			
+                
+                            <li><a class="button white" href="/itunes/podcasts/publish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Published</a></li>
+                        
+                    <?php elseif( $this->Object->itunesPublished( $this->data['Podcast'] ) ) : ?>				
+                        
+                            <li><a class="button white" href="/itunes/podcasts/unpublish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Unpublished</a></li>
+                        
+                    <?php endif; ?>
+                    
+				<?php endif; ?>
+				
+		<?php endif; ?>
+			
+    	</ul>
+    </div>
+    
+    
 </fieldset>

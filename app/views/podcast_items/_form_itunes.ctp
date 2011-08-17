@@ -1,5 +1,5 @@
 <fieldset class="itunes">
-	<legend>iTunes</legend>
+	<legend><h3>iTunes</h3></legend>
 	<dl>
 	    <dt><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItunesContainer" class="juggle">Toggle</a></dt>
 	    <dt>Published: </dt>

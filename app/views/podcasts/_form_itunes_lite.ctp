@@ -38,9 +38,10 @@
             <input type="text" size="60" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
             <?php echo $this->Form->error('Podcast.image_wide_copyright'); ?>
         </div>
-        <div class="input text">
-            <label for="PodcastArtworkFile">Artwork File</label>
-            <input type="text" size="60" id="PodcastArtworkFile" value="<?php echo (int)$this->data['Podcast']['artwork_file']; ?>" name="data[Podcast][artwork_file]">
+        <div class="input file">
+            <label for="PodcastNewArtworkFile">Artwork File</label>
+            <input type="file" id="PodcastNewArtworkFile" name="data[Podcast][new_artwork_file]">
+            <input type="hidden" id="PodcastArtworkFile" name="data[Podcast][artwork_file]" value="<?php echo $this->data['Podcast']['artwork_file']; ?>">            
             <?php echo $this->Form->error('Podcast.artwork_file'); ?>
         </div>
         <div class="input text">
@@ -63,9 +64,9 @@
         <div class="input checkbox">
             <label for="PodcastOpenlearnEpub">Open Learn ePub</label>
             <input type="hidden" value="N" id="PodcastOpenlearnEpub_" name="data[Podcast][openlearn_epub]">
-            <input type="checkbox" id="PodcastOpenlearnEpub" value="Y" <?php echo (int)$this->data['Podcast']['openlearn_epub'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][openlearn_epub]">
+            <input type="checkbox" id="PodcastOpenlearnEpub" value="Y" <?php echo $this->data['Podcast']['openlearn_epub'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][openlearn_epub]">
             <?php echo $this->Form->error('Podcast.openlearn_epub'); ?>
-        </div>
+        </div>        
         <div class="input select">
             <label for="PodcastItunesuSite">iTunes Site</label>
             <select name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">

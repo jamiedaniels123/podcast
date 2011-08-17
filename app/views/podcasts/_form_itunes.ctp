@@ -84,7 +84,7 @@
         <div class="input checkbox">
             <label for="PodcastOpenlearnEpub">Open Learn ePub</label>
             <input type="hidden" value="N" id="PodcastOpenlearnEpub_" name="data[Podcast][openlearn_epub]">
-            <input type="checkbox" id="PodcastOpenlearnEpub" value="Y" <?php echo (int)$this->data['Podcast']['openlearn_epub'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][openlearn_epub]">
+            <input type="checkbox" id="PodcastOpenlearnEpub" value="Y" <?php echo $this->data['Podcast']['openlearn_epub'] == 'Y' ? 'checked="checked"' : ''; ?>" name="data[Podcast][openlearn_epub]">
             <?php echo $this->Form->error('Podcast.openlearn_epub'); ?>
         </div>
         <div class="input select">
