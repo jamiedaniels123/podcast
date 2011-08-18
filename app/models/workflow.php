@@ -69,7 +69,7 @@ class Workflow extends AppModel {
 			// also exists in the file chucker upload.
 			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
-		
+
 		return count( $this->errors );
 	}
 
@@ -359,6 +359,8 @@ class Workflow extends AppModel {
 		
 		if( empty( $workflow ) )
 			return false;
+			
+		return $workflow['Workflow']['workflow'];
 	}
 	
 	/*

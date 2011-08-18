@@ -90,6 +90,15 @@
 </div>
 
 <?php echo $this->element('../podcast_items/_form_itunes'); ?>
-<?php echo $this->element('../podcast_items/_form_youtube'); ?>
 
+<?php if( $this->Permission->isYoutubeUser() ) : ?>
+	
+	<?php echo $this->element('../podcast_items/_form_youtube'); ?>
+
+<?php else : ?>
+
+	<?php echo $this->element('../podcast_items/_form_youtube_lite'); ?>
+	
+<?php endif; ?>
+		
   

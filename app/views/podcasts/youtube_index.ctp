@@ -1,8 +1,8 @@
 <fieldset class="podcasts index youtube">
-    <legend><h3>Youtube collections</h3></legend>
+    <legend><h3>Youtube <?php echo COLLECTION; ?>s</h3></legend>
     
     <p class="leader">
-        Below is a list of all youtube collections podcasts on the system.
+        Below is a list of all youtube <?php echo COLLECTION; ?>s on the system.
     </p>
     
     <img src="/img/collection-large.png" />

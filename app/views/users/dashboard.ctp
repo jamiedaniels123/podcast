@@ -9,22 +9,22 @@
 	<div class="float_right dashboard-user-panel">
     
    		<div>
-   			<img src="/img/temp-avatar.png" />
+   			
     			<p class="dashboard-user-panel-title">
 			
 					<?php echo $this->Session->read('Auth.User.full_name'); ?></p>
-            
+            <img src="/img/temp-avatar.png" />
 					<!--LOGOUT BUTTON-->
 					<?php if( $this->Session->check('Auth.User.id') ) : ?>
             		<br /><a href="/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
             		<?php endif; ?>
            			 <!--/LOGOUT BUTTON-->
                      
-                     <div style="clear:both;"></div>
+                     
   				
         
         </div>
-   
+   <div style="clear:both;"></div>
             
             
             
@@ -43,6 +43,8 @@
 
         </ul>
     </div>
+    
+
     
     
     <div class="float_left">

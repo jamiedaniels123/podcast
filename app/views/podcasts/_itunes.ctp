@@ -10,13 +10,13 @@
     <div class="wrapper itunes" id="PodcastItunesContainer" style="display:none">
         <div class="float_right images_container">
             <div>
-                <h2>Collection Image Logoless</h2>
+                <h2><?php echo PODCAST; ?> Image Logoless</h2>
                 <?php echo !empty( $this->data['Podcast']['image_ll_copyright'] ) ? $this->data['Podcast']['image_ll_copyright'] : 'Copyright Unknown'; ?>
                 <div class="clear"></div>        
                 <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="podcast logoless image" />
             </div>
             <div>
-                <h2>Collection Image Wide</h2>
+                <h2><?php echo PODCAST; ?> Image Wide</h2>
                 <?php echo !empty( $this->data['Podcast']['image_wide_copyright'] ) ? $this->data['Podcast']['image_wide_copyright'] : 'Copyright Unknown'; ?>
                 <div class="clear"></div>        
                 <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="podcast wide image" />

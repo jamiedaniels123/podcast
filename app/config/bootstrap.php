@@ -183,3 +183,7 @@ DEFINE('INPUT_GREETING', 'Enter your search here');
 // VLE Stuff
 DEFINE('VLE_USER', 1136); // Needs to be changed when we know what the live DB VLE user is.
 DEFINE('VLE_USER_GROUP', 36);  // Needs to be changed when we know what the live DB VLE user is.
+
+DEFINE('COLLECTION', 'collection');
+DEFINE('PODCAST', 'collection');
+DEFINE('MEDIA', 'track');

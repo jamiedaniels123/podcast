@@ -98,13 +98,13 @@ class PodcastItemsController extends AppController {
             	$this->PodcastItem->saveAll();
 								
 				// If the meta injection fails alert the user but do not roll back the database.
-				if( $this->Api->metaInjection( $this->PodcastItem->buildInjectionFlavours( $this->data['PodcastItem']['id'] ) ) ) {
+				if( $this->Api->metaInjection( $this->PodcastItem->metaInject( $this->data['PodcastItem']['id'] ) ) ) {
 					
 					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );
 					
 				} else {
 					
-					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Use the refresh button.', 'default', array( 'class' => 'alert' ) );
+					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Please use the refresh button.', 'default', array( 'class' => 'alert' ) );
 				}	
 												
                 $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );

@@ -327,6 +327,7 @@ fieldset {
 	margin-bottom: 1em;
 	padding: 16px 20px;
 	border-radius:4px;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 fieldset legend {
@@ -457,6 +458,7 @@ label{
     border-radius: 4px 4px 4px 4px;
     margin: 0.5em 0 0 24px;
     padding: 0.5em;	
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
  
  
@@ -621,6 +623,7 @@ td.actions a {
 	text-decoration:none;
 	text-shadow: #000 0px 0px 0px;
 	min-width: 0;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 input[type=submit]:hover,
 div.actions ul li a:hover,
@@ -764,6 +767,7 @@ th.actions {
     margin-bottom: 5px;
     margin-top: 5px;
 	border-radius:4px;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 #flashMessage.error, div#errors {
@@ -862,6 +866,7 @@ form#theuploadform input[type="button"] {
 	border: 1px solid #003d4c;
 	border-radius: 4px;
 	padding: 2px 4px 2px 20px;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 form#theuploadform input[type="file"] {
@@ -891,6 +896,7 @@ ul#breadcrumb li a	{
 	border-radius: 4px;
 	padding: 2px 4px 2px 20px;
 	list-style-type: none;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 ul#breadcrumb li a:hover	{
@@ -989,6 +995,7 @@ ul#PodcastColumnOptions li {
 	margin:0.5em 0 0em 24px;
 	background: #fff;
 	border-radius:4px;
+		behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 #PodcastSharingContainer	{

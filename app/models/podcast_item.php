@@ -291,5 +291,19 @@ class PodcastItem extends AppModel {
 			
 		return true;
 	}	
+	
+	
+	function metaInject( $id ) {
+		
+		$data = array();
+		
+		$data = $this->findbyId( $id );
+		
+		if( empty( $data ) )
+			return false;
+			
+				
+		
+	}
 }
 

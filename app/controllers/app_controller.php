@@ -57,71 +57,9 @@ class AppController extends Controller {
     	
     	if( $this->RequestHandler->isAjax() == false ) {
     		
-    		$this->get_breadcrumbs();
+			$Breadcrumb = ClassRegistry::init('Breadcrumb');
+			$this->set('breadcrumbs', $Breadcrumb->build( $this->params, $this->data  ) );			
     	}
-    }
-
-    /*
-     * @name : get_breadcrumbs
-     * @description : Build the breadcrumbs, loaded on every page except when it's an ajax call.
-     * @updated : 20th June 2011
-     * @by : Charles Jackson
-     */
-    function get_breadcrumbs() {
-
-    	$current_breadcrumb = array(); // Holds details of the currently loaded page
-        $breadcrumb = array();
-        $breadcrumbs = array(); // Holds the final array of breadcrumbs
-
-        $this->Breadcrumb = ClassRegistry::init('Breadcrumb');
-        $this->Breadcrumb->recursive = -1;
-
-        if( isSet( $this->params['url']['url'] ) ) {
-            
-            $current_breadcrumb =
-
-            $this->Breadcrumb->find('first', array(
-                'conditions' => array(
-                    'OR' => array (
-                        array(
-                            'Breadcrumb.controller' => $this->params['controller'],
-                            'Breadcrumb.action' => $this->params['action']
-                            ),
-                        array( 'Breadcrumb.url' => $this->params['url']['url'] )
-						)
-                    ),
-                    'order' => 'Breadcrumb.id DESC'
-                )
-            );
-			
-            $parent_id = $current_breadcrumb['Breadcrumb']['parent_id'];
-            $breadcrumbs[] = $current_breadcrumb;
-            while( (int)$parent_id ) {
-	                            	
-                $breadcrumb =
-
-	                $this->Breadcrumb->find('first', array(
-	                    'conditions' => array(
-	                        'Breadcrumb.id' => $parent_id,
-	                        )
-	                    )
-	                );
-
-					if( strtolower( $current_breadcrumb['Breadcrumb']['title'] ) == 'track' && $breadcrumb['Breadcrumb']['url'] == '/podcasts/view/' ) {
-
-						if( isSet( $this->data['PodcastItem']['podcast_id'] ) ) {
-							$breadcrumb['Breadcrumb']['url'] .= $this->data['PodcastItem']['podcast_id'];
-						} else {
-							$breadcrumb['Breadcrumb']['url'] .= $this->data['Podcast']['id'];
-						}
-	                }
-	                
-	                $breadcrumbs[] = $breadcrumb;
-	                $parent_id = $breadcrumb['Breadcrumb']['parent_id'];
-            }
-
-            $this->set('breadcrumbs', array_reverse( $breadcrumbs ) );
-        }
     }
 
 	/*

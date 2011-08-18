@@ -1,10 +1,10 @@
 <fieldset class="podcasts index">
-    <legend><h3>iTunesU collections</h3></legend>
+    <legend><h3>iTunesU <?php echo COLLECTION; ?>s</h3></legend>
     
 
     
     <p class="leader">
-        Below is a list of all itunes collections on the system.
+        Below is a list of all itunes <?php echo COLLECTION; ?>s on the system.
     </p>    
     
     <img src="/img/collection-large.png" />
