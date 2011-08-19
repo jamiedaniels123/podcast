@@ -176,7 +176,7 @@ class FeedsController extends AppController {
 			$this->data['MediaTypes'] = $this->Feed->rss_flavours;
 
         } else {
-			
+
             $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'] ) );
 
             // Create a filename prefixed with the current users ID so as not to overwrite another users preview file.

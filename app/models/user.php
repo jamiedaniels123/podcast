@@ -130,24 +130,7 @@ class User extends AppModel {
             )
         );
     }
-
-    /*
-     * @name : getAdministrators
-     * @description : Returns an array of all administrators on the system.
-     * @updated : 22nd June 2011
-     * @by : Charles Jackson
-     */
-    function getAdministrators() {
-
-        return $this->find('all', array(
-
-            'conditions' => array(
-                'User.administrator' => true
-                )
-            )
-        );
-    }
-
+		
     /*
      * @name : buildFilters
      * @description : Builds the filters for the admin_index method.

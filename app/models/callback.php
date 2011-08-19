@@ -134,4 +134,25 @@ class Callback extends AppModel {
 		
 		return true;
 	}
+	
+	/*
+	 * @name : malformed
+	 * @description : Developed during the development stages, if this routine returns TRUE it implies there is a problem with the
+	 * Admin API and the callback is receiving malformed data.
+	 * @updated : 18th August 2011
+	 * @by : Charles Jackson
+	 */
+	function malformed( $data = array(), $key = null ) {
+	
+		if( $key == 'transcode' ) {
+			
+			if( isSet( $data['data'] ) )
+				return true; 
+				
+		} else {
+			
+			return false;
+		}
+		
+	}
 }

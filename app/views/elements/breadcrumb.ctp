@@ -1,7 +1,5 @@
 <ul id="breadcrumb">
 
-    <!--<li>You are here</li>-->
-
     <?php $x = 0; foreach( $breadcrumbs as $breadcrumb ) : ?>
 
         <?php $x++; if( $x == count( $breadcrumbs ) ) : ?>
@@ -29,8 +27,9 @@
                <?php endif; ?>
             </li>
             
+            
         <?php endif; ?>
         
     <?php endforeach; ?>
-    
+   
 </ul>

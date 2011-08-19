@@ -51,14 +51,15 @@ class PodcastItemMedia extends AppModel {
 		} else {
 			$data['PodcastItemMedia']['original_filename'] = $row['destination_filename'];
 		}
-		
+
 		$data['PodcastItemMedia']['media_type'] = $row['flavour'];
 		$data['PodcastItemMedia']['podcast_item'] = $row['podcast_item_id'];
 		
-		$data['PodcastItemMedia']['duration'] = 0; //$row['duration'];
+		$data['PodcastItemMedia']['duration'] = $row['duration'];
 		$data['PodcastItemMedia']['uploaded_when'] = date("Y-m-d H:i:s");
 
 		$this->set( $data );
 		return $this->saveAll();
 	}	
+	
 }

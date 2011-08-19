@@ -88,7 +88,7 @@
     
 		<div class="float_left">
 			<div class="input select">
-            <label for="Moderators">Podcast Moderators</label>
+            <label for="Moderators">Moderators</label>
 				
 				<input type="hidden" name="data[Moderators][]" value="" id="Moderators_" />
                 
@@ -110,7 +110,7 @@
         
 		<div class="float_left">
 			<div class="input select">
-            <label for="Members">Podcast Members</label>
+            <label for="Members">Members</label>
 				
 				<input type="hidden" name="data[Members]" value="" id="Members_" />
                 
@@ -158,7 +158,7 @@
 	
 		<div class="wrapper">
         <div class="input text">
-			<label for="PodcastOwnerId">Podcast Owner</label>
+			<label for="PodcastOwnerId">Owner</label>
 			<?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
 				<input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
 				<input type="hidden" name="data[Podcast][confirmed]" value="<?php echo isSet( $this->data['Podcast']['confirmed'] ) ? '1' : '0'; ?>" id="PodcastConfirmed" />
@@ -179,7 +179,7 @@
     <div class="clear"></div>
     
     <div class="link">
-		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Convert Collection into a Podcast</a>
+		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Syndicate this <?php echo PODCAST; ?></a>
     	<input type="hidden" id="PodcastPodcastFlag" value="<?php echo trim( $this->data['Podcast']['podcast_flag'] );?>" name="data[Podcast][podcast_flag]">
 	</div>
     
@@ -195,7 +195,7 @@
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastNewImage">Podcast image</label>
+            <label for="PodcastNewImage">Image</label>
             <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
             <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
             
@@ -290,7 +290,7 @@
             <div class="float_left">
                 <div class="input select">
                     
-                    <label for="Nodes">Podcast Nodes</label>
+                    <label for="Nodes">Nodes</label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
                     <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
                         <?php if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) ) : ?>
@@ -340,15 +340,7 @@
 			
 		<?php endif; ?>
 
-        <?php if( $this->Permission->isYoutubeUser() ) : ?>
-			
-			<?php echo $this->element('../podcasts/_form_youtube'); ?>
-
-        <?php else : ?>
-
-			<?php echo $this->element('../podcasts/_form_youtube_lite'); ?>
-			
-		<?php endif; ?>
-		
+		<?php echo $this->element('../podcasts/_form_youtube'); ?>
+            
     </div>
 <?php endif; ?>

@@ -40,4 +40,13 @@
 </div>
 <div class="clear"></div>
 <?php echo $this->element('../podcast_items/_itunes'); ?>
-<?php echo $this->element('../podcast_items/_youtube'); ?>
+<?php if( $this->Permission->isYoutubeUser() ) : ?>
+	
+	<?php echo $this->element('../podcast_items/_youtube'); ?>
+
+<?php else : ?>
+
+	<?php echo $this->element('../podcast_items/_youtube_lite'); ?>
+	
+<?php endif; ?>
+

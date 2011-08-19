@@ -58,51 +58,61 @@ h3 a:hover {text-decoration: underline;}
 
 .icon {margin:0px 5px 2px 2px;padding-bottom:1px;vertical-align:middle;}
 
-.button {background: none; border: 0; vertical-align:middle;margin-right:10px;}
-
+.button {
+	background: none;  
+	vertical-align:middle;
+	margin-right:10px;
+	padding: 2px;
+	border-radius: 4px;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	}
 
 .button:hover {text-decoration:underline;}
 
 .podcast-owner {
 	font-style: italic;
-	color: #4492b0;}
+	color: #4492b0;
+	}
 
 /*Background colours*/
 
-.white {background-color:#fff;
-		color: #003d4c;
-		border-radius: 4px;
-		padding: 2px;}
-
-.off-black {background-color:#1a1a1a;color: #fff;}
+.white {
+	background-color:#fff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	}
+	
+.off-black {
+	background-color:#1a1a1a;
+	color: #fff;
+	border: 1px solid #1a1a1a;
+	}
 
 .blue {
 	background-color: #003d4c;
 	color: #fff;
 	border: 1px solid #003d4c;
-	border-radius: 4px;
-	padding: 2px;
 	}
 	
-.blue:hover {color: #fff;}
+.blue:hover {
+	color: #fff;
+	}
 
 .light-blue	{
 	background-color: #418db1;
 	color: #fff;
 	border: 1px solid #418db1;
-	border-radius: 4px;
-	padding: 2px;
 	}
 	
 .orange	{
 	background-color: #f19300;
 	color: #003d4c;
 	border: 1px solid #f19300;
-	border-radius: 4px;
-	padding: 2px;
-}	
+	}	
 	
-.light-blue:hover {color: #fff;}
+.light-blue:hover {
+	color: #fff;
+	}
 
 #admin_panel	{
 	margin-bottom:0;
@@ -130,6 +140,7 @@ h3 a:hover {text-decoration: underline;}
 	border-radius: 4px;
 	border:1px solid #ccc;
 	margin:20px 20px 0 0;
+	width: 280px;
 	}
 	
 .dashboard-user-panel img	{
@@ -244,10 +255,6 @@ h3 a:hover {text-decoration: underline;}
 		background: #fff;	
 	}
 	
-	#fcbody #breadcrumb {
-		background: #fff;	
-	}
-	
 	#fcbody #ou-org-header	{
 		background: #fff;	
 	}
@@ -256,5 +263,6 @@ h3 a:hover {text-decoration: underline;}
 	background: none repeat scroll 0 0 #E5F3FA;
     border-radius: 4px 4px 4px 4px;
     margin: 0.5em 0 0 24px;
-    padding: 0.5em;	
+    padding: 0.5em;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/	
 	}

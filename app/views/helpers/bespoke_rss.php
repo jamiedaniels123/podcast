@@ -8,7 +8,13 @@ App::import('Helper', 'Xml');
  */
 class BespokeRssHelper extends RssHelper {
 
-
+	/*
+	 * @name : channel
+	 * @description : Extension of the base channel method.
+	 * @TODO : Not sure this extension is now needed. To be checked but doing no harm.
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
+	 */
     function channel($attrib = array(), $elements = array(), $content = null) {
 
         $view =& ClassRegistry::getObject('view');
@@ -47,7 +53,13 @@ class BespokeRssHelper extends RssHelper {
         return $this->elem('channel', $attrib, $elems . $content, !($content === null));
     }
 
-
+	/*
+	 * @name : item
+	 * @description : I have extended the base 'item' helper to cope with the weired and wonderful stuff 
+	 * we are doing in the RSS feeds. Mostly, it is the many attributes we need to process.
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
+	 */
     function item( $att = array(), $elements = array() ) {
 
         $content = null;
@@ -159,10 +171,20 @@ class BespokeRssHelper extends RssHelper {
                     break;
             }
 
-            if ( !is_null( $val ) && $escape )
-                $val = h($val);
+			// If we are processing an atom:link at item level we need to call the specific routine below.
+			// We should refactor this and incorporate into the case statement above for a more elegant solution.
+			if( $key == 'atom:link' ) {
 
-            $elements[$key] = $this->elem($key, $attrib, $val);
+				$elements[$key] = $this->itemLevelAtom( $key, $val );
+				
+			} else {
+				
+				// Not an atom:link, process as normal.
+				if ( !is_null( $val ) && $escape )
+					$val = h($val);
+	
+				$elements[$key] = $this->elem($key, $attrib, $val);
+			}
         }
 
         if ( !empty( $elements ) )
@@ -188,4 +210,41 @@ class BespokeRssHelper extends RssHelper {
         $string = str_replace(">", "&gt;", $string );
         return $string;
     }
+	
+	/*
+	 * @name : itemLevelAtom
+	 * @description : We need to include aton:link within the item elements so it maybe picked up and read by the media player
+	 * because it contains the shortcode to the media item. It is above an beyond the scope of the built-in helpers hence
+	 * we extend here to cope.
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
+	 */
+    function itemLevelAtom( $elem, $data = array() ) {
+
+        $view =& ClassRegistry::getObject('view');
+
+		$attributes = array();
+		
+		if ( is_array( $data ) ) {
+			
+			if ( isSet( $data['attrib'] ) && is_array( $data['attrib'] ) ) {
+				
+				$attributes = $data['attrib'];
+				unset( $data['attrib'] );
+				
+			} else {
+				
+				$innerElements = '';
+				
+				foreach ( $data as $subElement => $value ) {
+					
+						$innerElements .= $this->elem( $subElement, array(), $value );
+				}
+				
+				$data = $innerElements;
+			}
+		}
+		
+		return $this->elem($elem, $attributes, $data);
+    }	
 }

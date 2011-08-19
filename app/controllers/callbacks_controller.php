@@ -3,8 +3,8 @@ class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
 	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
-	var $requires_meta_injection = array('transcode-media-and-deliver','deliver-without-transcoding');
-	var $processed_state_update = array('transcode-media-and-deliver','deliver-without-transcoding');
+	var $requires_meta_injection = array('deliver-without-transcoding');
+	var $process_transcode = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
 	var $youtube = array('youtube-file-upload');
 	
@@ -40,8 +40,8 @@ class CallbacksController extends AppController {
 			if( $this->Callback->hasErrors() )
 				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'This callback has errors, see information below as received from the Admin API');
 				
-			// Do we need to update the processed state
-			if( in_array( $this->Callback->data['command'], $this->processed_state_update ) ) {
+			// If we have transcoded media then we need to save the flavour and possibly update the processed state 
+			if( in_array( $this->Callback->data['command'], $this->process_transcode ) ) {
 					
 				// Save the processed state
 				if( is_object( $podcastItemMedia ) == false )
@@ -51,9 +51,18 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					if( $podcastItemMedia->saveFlavour( $row ) == false )
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'Could not save a flavour of media, see information below as received from the Admin API');
+					// A function created during the development stages to ernssure the API is giving a valid response
+					if( $this->Callback->malformed($row, 'transcode' ) ) {
 						
+						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'The Admin API has returned malformed data row. See row below :');
+						
+					} else {
+						
+						if( $podcastItemMedia->saveFlavour( $row ) == false )
+							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$podcastItemMedia->data,'Could not save a newly transcoded flavour of media, see debug information from the Podcast Admin Server');
+							
+					}
+					
 					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
 				}
 			}
@@ -69,11 +78,7 @@ class CallbacksController extends AppController {
 
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'deleting local file');
-					// Delete the local file structure or error.
-					
-					if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'] ) == false )
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'error deleting local file');
+					$this->Folder->cleanUp( $row['source_path'],$row['source_filename'] );
 				}
 			}
 			
@@ -86,14 +91,13 @@ class CallbacksController extends AppController {
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					if( ( $row['status'] == YES ) && ( $row['workflow'] == 'audio' ) ) {
+					if( ( $row['status'] == YES ) ) {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false ) {
+						
+						//@TODO - We need to identify the type of injection based on the flavour.
+						if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false )
 							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
-						} else {
-							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Meta data successfully sent');
-						}
  					}
 				}
 			}

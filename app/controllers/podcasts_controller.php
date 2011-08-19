@@ -205,7 +205,7 @@ class PodcastsController extends AppController {
         if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
     }
 
@@ -401,6 +401,7 @@ class PodcastsController extends AppController {
     			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
     			$this->data['Podcast']['publish_itunes_u'] = 'N';
 				$this->data['Podcast']['publish_itunes_date'] = null;
+				$this->emailTemplates->_sendItunesConsiderEmail( $this->data, $this->Podcast->getItunesUsers() );
 				
 			} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
 				
@@ -408,12 +409,13 @@ class PodcastsController extends AppController {
     			$this->data['Podcast']['intended_youtube_flag'] = 'N';
     			$this->data['Podcast']['publish_youtube'] = 'N';
 				$this->data['Podcast']['publish_youtube_date'] = null;
+				$this->emailTemplates->_sendYoutubeConsiderEmail( $this->data, $this->Podcast->getYoutubeUsers() );
 			}
 			
 			$this->Podcast->set( $this->data );
 			$this->Podcast->save();
 			
-			$this->Session->setFlash('Your podcast has been successfully updated.', 'default', array( 'class' => 'success' ) );
+			$this->Session->setFlash('Your podcast has been successfully submitted for consideration.', 'default', array( 'class' => 'success' ) );
 			$this->redirect( array( 'action' => 'view', $id ) );
 			
 		} else {
@@ -502,7 +504,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help cleanse legacy data moving forward
 			$this->data['Podcast']['consider_for_itunesu'] = false;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
@@ -534,7 +536,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_youtube'] = false;
     		$this->data['Podcast']['intended_youtube_flag'] = 'N';
     		$this->data['Podcast']['publish_youtube'] = 'N';
@@ -566,7 +568,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_itunesu'] = true;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
 			$this->data['Podcast']['publish_itunes_u'] = 'Y';
@@ -598,7 +600,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clense legacy data moving forward
 			$this->data['Podcast']['consider_for_youtube'] = true;
     		$this->data['Podcast']['intended_youtube_flag'] = 'Y';
     		$this->data['Podcast']['publish_youtube'] = 'Y';
@@ -630,7 +632,7 @@ class PodcastsController extends AppController {
 		
 		if( !empty( $this->data ) ) {
 
-			// We explicitly set the status of all associated flags to help clear legacy daata moving forward
+			// We explicitly set the status of all associated flags to help clear legacy data moving forward
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
 			$this->data['Podcast']['publish_itunes_date'] = null;
 
@@ -821,7 +823,7 @@ class PodcastsController extends AppController {
         if( empty( $this->data ) ) {
 
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
 
     }

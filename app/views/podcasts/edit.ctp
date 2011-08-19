@@ -5,10 +5,10 @@
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_itunesu_flag']; ?>" id="PodcastIntendedItunesuFlag" name="data[Podcast][intended_itunesu_flag]">
 	<input type="hidden" value="<?php echo $this->data['Podcast']['intended_youtube_flag']; ?>" id="PodcastIntendedYoutubeFlag" name="data[Podcast][intended_youtube_flag]">    
     <fieldset>
-        <legend><h3>Update Collection</h3></legend>
+        <legend><h3>Update <?php echo PODCAST; ?></h3></legend>
         
 		<p class="leader">
-            Use the form below to create/update a new collection container
+            Use the form below to update this <?php echo PODCAST; ?>.
         </p>
         
         <img src="/img/collection-large.png" />

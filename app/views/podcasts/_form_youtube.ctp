@@ -22,8 +22,8 @@
             <label for="PodcastYoutubeChannel">Youtube Channel</label>
             <select name="data[Podcast][youtube_channel]" id="PodcastYoutubeChannel">
 				<option value="">Please select</option>
-				<?php foreach( $youtube_channels as $key => $value ) : ?>
-					<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+				<?php foreach( $youtube_channels as $youtube_channel ) : ?>
+					<option value="<?php echo $youtube_channel; ?>"><?php echo $youtube_channel; ?></option>
 				<?php endforeach; ?>
             </select>
             <?php echo $this->Form->error('Podcast.youtube_channel'); ?>

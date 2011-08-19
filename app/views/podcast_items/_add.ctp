@@ -1,15 +1,15 @@
 <fieldset class="podcasts index">
     
-    <legend><h3>Add Media</h3></legend>
+    <legend><h3>Add <?php echo MEDIA; ?></h3></legend>
     
     <p class="leader">
-        Upload a new media file or document for this collection.
+        Upload a new <?php echo MEDIA; ?> file or document for this collection.
     </p>
     
     <img src="/img/upload-collection-large.png" width="45" height="33" />
     
     <p style="margin: 20px 0;">
-        You can upload files up to 20Gb in size. Media will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
+        You can upload files up to 20Gb in size. <?php echo ucfirst( MEDIA ); ?> will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
         Please ensure your filenames end with the correct extension. See below for supported formats.
     </p>
     

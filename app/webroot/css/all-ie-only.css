@@ -9,3 +9,111 @@ legend h3 {
 	margin: 20px 0 0 64px;
 	padding:0;
 	}
+	
+/*DASHBOARD*/
+	
+.dashboard-user-panel	{
+	border-radius: 4px;
+	border:1px solid #ccc;
+	margin:10px 10px 10px 0;
+	width: 280px;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	}
+	
+.dashboard-user-panel img	{
+	margin: 10px;
+	}
+
+.dashboard-user-panel ul {
+	margin:0 0 10px 0;
+	padding:0;
+	list-style:none;
+	}
+	
+.dashboard-user-panel li {
+	display:block;	
+}
+
+.dashboard-user-panel-title	{
+	font-size:1.2em;
+	height: 64px;
+	line-height:64px;
+	float:right;
+	margin:10px 20px 0 0 ;
+	}
+	
+/*BREADCRUMB STUFF*/
+	
+ul#breadcrumb	{
+	margin: 20px 0 0px 0;
+	padding:0;
+	background: #fff;
+}
+
+
+ul#breadcrumb li {
+	/*background: #fff url(/img/icon-16-link.png) no-repeat 2px center;*/
+	color: #003d4c;
+	float: left;
+	margin: 0 2px 0 0;
+    list-style-type: none;
+	padding: 2px 2px 0 0px;
+}
+
+ul#breadcrumb li a	{
+	background: #ccc url(/img/icon-16-link.png) no-repeat 2px center;
+	color: #003d4c;
+	border: 0px solid #003d4c;
+	border-radius: 4px;
+	padding: 2px 4px 2px 20px;
+	list-style-type: none;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+}
+
+ul#breadcrumb li a:hover	{
+	color: #1a1a1a;	
+}
+
+/*General*/
+
+form input[type=checkbox] {
+	border:0px solid #ccc;
+	background-color: none;
+}
+
+/*Actions*/
+
+div.actions ul {
+	margin: 0;
+	padding: 0;
+}
+div.actions li {
+	margin:0 0 0.5em 0;
+	list-style-type: none;
+	white-space: nowrap;
+	padding: 0;
+}
+
+table tr:nth-child(2n) td {
+	/*background: #f5f5f5;*/
+	background: #fff;
+}
+table .altrow td {
+	/*background: #f5f5f5;*/
+	background: #e5f3fa;
+}
+
+/*Filechucker Buttons*/
+
+form#theuploadform input[type="button"] {
+    background: #003d4c url(/img/icon-16-upload.png) no-repeat 2px center ;
+	color: #fff;
+	border: 1px solid #003d4c;
+	padding: 2px 4px 2px 20px;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+}
+
+.dropdown	{
+	margin-bottom: 0.5em;	
+}
+

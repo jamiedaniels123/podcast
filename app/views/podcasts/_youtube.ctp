@@ -30,11 +30,15 @@
 	    <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="button white juggle"><img class="icon" alt="sharing - ownership" src="/img/icon-16-open.png"> View</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForYoutube( $this->data['Podcast'] ) == false ) && $this->Permission->isYoutubeUser() == false ) : ?>
         
-				<li><a href="/podcasts/consider/youtube/<?php echo $this->data['Podcast']['id']; ?>" class="button white" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the Youtube team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
+				<li><a href="/podcasts/consider/youtube/<?php echo $this->data['Podcast']['id']; ?>" class="button white" id="PodcastYoutubeSubmit" onclick="return confirm('You are about to submit this collection to the Youtube team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
 
 		<?php elseif( $this->Permission->isYoutubeUser() ) : ?>
+
+            	<?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) == false && $this->Object->intendedForYoutube( $this->data['Podcast'] ) == false ) : ?>		
+
+					<li><a class="button orange" href="/youtube/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubeIntended" onclick="return confirm('You are about to approve this collection for publication on Youtube. Are you sure?');">Approve</a></li>
 			
-				<?php if( $this->Object->considerForYoutube( $this->data['Podcast'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) == false ) : ?>			
+				<?php elseif( $this->Object->considerForYoutube( $this->data['Podcast'] ) && $this->Object->intendedForYoutube( $this->data['Podcast'] ) == false ) : ?>			
 				
 					<li><a class="button orange" href="/youtube/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubeIntended" onclick="return confirm('You are about to approve this collection for publication on Youtube. Are you sure?');">Approve</a></li>
 

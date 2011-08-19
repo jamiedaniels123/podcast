@@ -53,7 +53,7 @@ class ObjectHelper extends AppHelper {
 
     	// Podcast level
     	if( isSet( $object['consider_for_itunesu'] ) )
-        	return $object['consider_for_itunesu'] == true;
+        	return $object['consider_for_itunesu'] == true ? true : false;
     	
 		return false;
     }

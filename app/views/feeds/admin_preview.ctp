@@ -34,6 +34,7 @@
                 <option value="0">No</option>
             </select>
         </div>
+       	<input type="hidden" name="data[Podcast][rss_filename]" id="PodcastInterlace" value="<?php echo DEFAULT_RSS_FILENAME ?>" />
         <button id="PodcastPreview" type="submit">preview rss</button>
     </fieldset>
 <form>
