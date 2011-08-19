@@ -1,3 +1,4 @@
+<div class="wrapper">
 <fieldset id="podcast_media">
     <legend><h3>Flavours</h3></legend>
     
@@ -34,3 +35,4 @@
         <?php endforeach; ?>
     </table>
 </fieldset>
+</div>

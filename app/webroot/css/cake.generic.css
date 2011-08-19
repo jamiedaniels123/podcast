@@ -861,9 +861,9 @@ ul#breadcrumb li a	{
 	color: #003d4c;
 	border: 0px solid #003d4c;
 	border-radius: 4px;
-	padding: 2px 4px 2px 20px;
+	padding: 2px 4px 2px 20px!important;
 	list-style-type: none;
-		behavior: url(/css/PIE.htc); /*IE rounded corner*/
+
 }
 
 ul#breadcrumb li a:hover	{

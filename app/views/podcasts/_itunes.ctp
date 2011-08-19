@@ -1,3 +1,4 @@
+<div class="wrapper ">
 <fieldset>
 	<legend><h3>iTunes U</h3></legend>
     
@@ -7,7 +8,7 @@
     
 
 
-    <div class="wrapper itunes" id="PodcastItunesContainer" style="display:none">
+    <div class="itunes" id="PodcastItunesContainer" style="display:none">
         <div class="float_right images_container">
             <div>
                 <h2><?php echo PODCAST; ?> Image Logoless</h2>
@@ -33,6 +34,8 @@
                 <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
                 <dt>Course Code: </dt>
                 <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
+                <dt>Course Type: </dt>
+                <dd><?php echo $this->data['Podcast']['course_type']; ?>&nbsp;</dd>
                 <dt>iTunes Site: </dt>
                 <dd><?php echo ucfirst( $this->data['Podcast']['itunesu_site'] ); ?>&nbsp;</dd>                
                 <dt>Artwork File: </dt>
@@ -95,7 +98,7 @@
 
             	<?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) == false && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>		
 
-					<li><a class="button orange" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
+					<li><a class="button approve" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
                 
 				<?php elseif( $this->Object->considerForItunes( $this->data['Podcast'] ) && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>			
 				
@@ -128,3 +131,4 @@
     
     
 </fieldset>
+</div>

@@ -1,5 +1,6 @@
+<div class="wrapper" style="margin-top: 40px;">
 <fieldset id="podcast_media">
-    <legend><span><h3>Collection Media</h3></span></legend>
+    <legend><h3>Collection Media</h3></legend>
     
     <img src="/img/collection-large.png" />
     
@@ -100,3 +101,4 @@
     </form>
     
 </fieldset>
+</div>

@@ -64,7 +64,7 @@ h3 a:hover {text-decoration: underline;}
 	margin-right:10px;
 	padding: 2px;
 	border-radius: 4px;
-	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	/*behavior: url(/css/PIE.htc); IE rounded corner - disabled as causes some erratic behaviour on the button class... I am sure there is a fix but cannot find it at present*/
 	}
 
 .button:hover {text-decoration:underline;}
@@ -75,6 +75,47 @@ h3 a:hover {text-decoration: underline;}
 	}
 
 /*Background colours*/
+
+.add {
+	background:#fff url(/img/add-new.png) no-repeat 2px center;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px;
+	}
+	
+.rss {
+	background:url(/img/icon-16-rss.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.delete {
+	background:url(/img/icon-16-link-delete.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.setting {
+	background:url(/img/icon-16-settings.png) no-repeat 2px center #003d4c;
+	color: #ffffff;
+	border: 1px solid #003d4c;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.edit {
+	background:url(/img/icon-16-link.png) no-repeat 2px center #418db1;
+	color: #ffffff;
+	border: 1px solid #418db1;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.approve	{
+	background-color: #f19300;
+	color: #003d4c;
+	border: 1px solid #f19300;
+	}	
 
 .white {
 	background-color:#fff;

@@ -13,7 +13,7 @@
     
     <div class="input-filter text">
     	<h3>Search: </h3>
-        <input type="text" id="UserSearch" title="Enter your search here" class="input_greeting" name="data[User][search]" value="<?php echo $search_criteria; ?>" /><button id="filter_button" type="submit" class="button white"><img src="../../webroot/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
+        <input type="text" id="UserSearch" title="Enter your search here" class="input_greeting" name="data[User][search]" value="<?php echo $search_criteria; ?>" /><button id="filter_button" type="submit" class="button white"><img src="/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
     </div> 
        
 </form>

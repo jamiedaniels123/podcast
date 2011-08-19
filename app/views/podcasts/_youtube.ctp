@@ -1,3 +1,4 @@
+<div class="wrapper ">
 <fieldset>
 	<legend><h3>YouTube</h3></legend>
     
@@ -7,7 +8,7 @@
     
     
 		
-    <div class="wrapper youtube" id="PodcastYoutubeContainer" style="display:none">
+    <div class="youtube" id="PodcastYoutubeContainer" style="display:none">
         <div class="float_right images_container">
 			&nbsp;
         </div>
@@ -25,8 +26,9 @@
         </div>
     </div>
     
-    <div class="wrapper">
-    <ul class="youtube">
+
+   <div class="wrapper ">
+   <ul class="youtube">
 	    <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="button white juggle"><img class="icon" alt="sharing - ownership" src="/img/icon-16-open.png"> View</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForYoutube( $this->data['Podcast'] ) == false ) && $this->Permission->isYoutubeUser() == false ) : ?>
         
@@ -65,7 +67,9 @@
 		<?php endif; ?>
 
 	    </ul>
-    </div>
+        </div>
+
     
     
 </fieldset>
+</div>

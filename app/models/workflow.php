@@ -23,7 +23,7 @@ class Workflow extends AppModel {
 	
 	public $workflow = null; // Holds the determined workflow.
 
-	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3' );
+	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3', '.mp3' );
 	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv');
 	var $audio_transcoding = array('wav','ogg','amr','aif','aiff');
 

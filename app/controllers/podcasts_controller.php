@@ -185,7 +185,7 @@ class PodcastsController extends AppController {
         }
         
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastFormOptions();
+        $this->_setPodcastFormOptions();
     }
 
     /*
@@ -323,7 +323,7 @@ class PodcastsController extends AppController {
         }
 		
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastFormOptions();
+        $this->_setPodcastFormOptions();
     }
 
     /*
@@ -931,7 +931,7 @@ class PodcastsController extends AppController {
         }
 		
         // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastFormOptions();
+        $this->_setPodcastFormOptions();
 	}
  
     /*
@@ -1172,14 +1172,15 @@ class PodcastsController extends AppController {
     }
 
     /*
-     * @name : __setPodcastFormOptions
-     * @description : Called prior to various methods when the user can update a podcast. This method will sanatize data prior to being
+     * @name : _setPodcastFormOptions
+     * @description : This is a MONSTER!
+	 * Called prior to various methods when the user can update a podcast. This method will sanatize data prior to being
      * shown on a form such as retrieving all users on the system as a list for possible membership of a podcast then removing any people
      * that are already members of the aforementioned podcast.
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    protected function __setPodcastFormOptions() {
+    protected function _setPodcastFormOptions() {
 
         // Get all the nodes
         $Node = ClassRegistry::init('Node');
@@ -1207,9 +1208,7 @@ class PodcastsController extends AppController {
         $UserGroup = ClassRegistry::init('UserGroup');
         $user_groups = $UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
         $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'MemberGroups' );
-
         $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'ModeratorGroups' );
-
         $this->set('user_groups', $user_groups );
 
         // Get all the users
@@ -1218,8 +1217,8 @@ class PodcastsController extends AppController {
         $users = $User->removeDuplicates( $users, $this->data, 'Members' );
         $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );
         $users = $User->removeDuplicates( $users, $this->data, 'Owner' );
-
         $this->set('users', $users );
+		
 		// Used to generate a list of possible users that can be assigned ownership.
         $this->set('all_users', $User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) ) );
         
@@ -1227,6 +1226,9 @@ class PodcastsController extends AppController {
         $youtube_channels = $YoutubeChannel->find( 'list', array( 'fields' => array( 'YoutubeChannel.id', 'YoutubeChannel.title' ) ) );
         $this->set('youtube_channels', $youtube_channels );
 
+		// Set the various course types by dynamically reading the ENUM options.
+		$this->set('course_types', $this->Podcast->getEnumValues('course_type') );
+		
         // Set the possible values of explicit
         $this->set( 'explicit', array( 'clean' => 'clean', 'no' => 'no', 'yes' => 'yes' ) );
     }
