@@ -186,6 +186,7 @@ table .altrow td {
 td.checkbox	{
 	width:24px;
 	margin: 0 auto;
+	border:0;
 }
 
 td.thumbnail	{
@@ -598,40 +599,6 @@ div.actions li {
 	white-space: nowrap;
 	padding: 0;
 }
-div.actions ul li a {
-	font-weight: normal;
-	display: block;
-	clear: both;
-}
-div.actions ul li a:hover {
-	text-decoration: underline;
-}
-
-input[type=submit],
-div.actions ul li a,
-td.actions a {
-	font-weight:normal;
-	padding: 4px 8px;
-	background:#418db1;
-	/*background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
-	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);*/
-	color:#fff;
-	border:0px solid #aaac62;
-	-webkit-border-radius:4px;
-	-moz-border-radius:4px;
-	border-radius:4px;
-	text-decoration:none;
-	text-shadow: #000 0px 0px 0px;
-	min-width: 0;
-		behavior: url(/css/PIE.htc); /*IE rounded corner*/
-}
-input[type=submit]:hover,
-div.actions ul li a:hover,
-td.actions a:hover {
-	background: #000;
-	color: #fff;
-	/*background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));*/
-}
 
 /** Related **/
 div.related {
@@ -767,7 +734,7 @@ th.actions {
     margin-bottom: 5px;
     margin-top: 5px;
 	border-radius:4px;
-		behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 #flashMessage.error, div#errors {
@@ -817,7 +784,7 @@ div#dashboard li	{
 }
 
 div.wrapper {
-	margin: 30px auto;
+	margin: 20px auto;
 	padding:0px!important;
 }
 
@@ -920,8 +887,7 @@ tr.deleted td {
 		margin-left:10px;
 }
 
-button {
-	
+button {	
 	padding: 5px;
 }
 

@@ -116,7 +116,6 @@ class Feed extends AppModel {
     var $podcast_media = array();
     var $podcast_transcript= array();
 
-
     /*
      * @name : defineDataDefaults
      * @description : Define the value of various parameters referenced in the RSS feed primarily at channel level but
@@ -330,13 +329,16 @@ class Feed extends AppModel {
             $item['oupod:legacy'] = 'true';
 
         if ( !empty($this->podcast_item['shortcode'] ) ) {
-			$item['source']['url'] = 'http://www.open.ac.uk';
-			$item['source']['title'] = $this->podcast_item['shortcode'];
+
+            $item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/custom_id#'.$this->podcast_item['shortcode'];
+			$item['atom:link']['attrib']['title'] = 'Permalink for ';			
+            $item['atom:link']['attrib']['rel'] = 'alternate';
+            $item['atom:link']['attrib']['type'] = 'text/html';
+            
+
         }
 
-
         $this->podcast_items[] = $item;
-
     }
 
     /*

@@ -94,16 +94,17 @@ class PodcastItemsController extends AppController {
 		if ( !empty( $this->data ) ) {
            	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
+				
 				$this->PodcastItem->set( $this->data );
             	$this->PodcastItem->saveAll();
-								
-				// If the meta injection fails alert the user but do not roll back the database.
-				if( $this->Api->metaInjection( $this->PodcastItem->metaInject( $this->data['PodcastItem']['id'] ) ) ) {
+
+				// May not need meta injection
+				if( $this->_metaInjectWhenNeeded() ) {
 					
 					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );
 					
 				} else {
-					
+					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
 					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Please use the refresh button.', 'default', array( 'class' => 'alert' ) );
 				}	
 												
@@ -126,7 +127,7 @@ class PodcastItemsController extends AppController {
             }
         }
 
-		$this->__setYoutubeOptions();        
+		$this->_setYoutubeOptions();        
     }
 
 	/*
@@ -159,25 +160,25 @@ class PodcastItemsController extends AppController {
 							$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
 						} else {
 							
-							$this->Session->setFlash('Unable to publish media to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+							$this->Session->setFlash('Unable to publish '.MEDIA.' to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 							break;
 						}
 						
 					} else {
 						
-							$this->Session->setFlash('Unable to publish media to youtube. Please ensure it has a title & description.', 'default', array( 'class' => 'error' ) );
+							$this->Session->setFlash('Unable to publish '.MEDIA.' to youtube. Please ensure the track has a youtube title & description.', 'default', array( 'class' => 'error' ) );
 							break;
 					}
 
 				} else {
 					
-					$this->Session->setFlash('Cannot publish media that does not have a Youtube flavour.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot publish '.MEDIA.' that does not have a Youtube flavour.', 'default', array( 'class' => 'error' ) );
 					break;
 				}
 			
 			} else {
 				
-				$this->Session->setFlash('Media has already been published on Youtube.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash( ucfirst( MEDIA ).' has already been published on Youtube.', 'default', array( 'class' => 'error' ) );
 				break;
 			}
 		}
@@ -212,19 +213,19 @@ class PodcastItemsController extends AppController {
 						$this->Session->setFlash('Collection has been successfully scheduled for a youtube meta data refresh.', 'default', array( 'class' => 'success' ) );
 					} else {
 						
-						$this->Session->setFlash('Unable to refresh media on Youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						$this->Session->setFlash('Unable to refresh '.MEDIA.' on Youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 						break;
 					}
 					
 				} else {
 					
-						$this->Session->setFlash('Unable to refresh media to youtube. Please ensure it has a title & description.', 'default', array( 'class' => 'error' ) );
+						$this->Session->setFlash('Unable to refresh '.MEDIA.' to youtube. Please ensure the '.MEDIA.' has a youtube title & description.', 'default', array( 'class' => 'error' ) );
 						break;
 				}
 
 			} else {
 				
-				$this->Session->setFlash('Media has not yet been published on youtube. Cannot refresh meta data.', 'default', array( 'class' => 'error' ) );
+				$this->Session->setFlash( ucfirst( MEDIA ).' has not yet been published on youtube. Cannot refresh meta data.', 'default', array( 'class' => 'error' ) );
 				break;
 			}
 		}
@@ -257,7 +258,7 @@ class PodcastItemsController extends AppController {
 	        }
         }
         
-        $this->Session->setFlash('Your media has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
+        $this->Session->setFlash('Your '.MEDIA.' has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
@@ -291,11 +292,11 @@ class PodcastItemsController extends AppController {
 				
 			}
 			
-			$this->Session->setFlash('Your media has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+			$this->Session->setFlash('Your '.MEDIA.' has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
 				
 		} else {
 				
-			$this->Session->setFlash('You must select at least one media item to publish in iTunes.', 'default', array( 'class' => 'error' ) );
+			$this->Session->setFlash('You must select at least one '.MEDIA.' item to publish in iTunes.', 'default', array( 'class' => 'error' ) );
 		}
 
         $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
@@ -332,11 +333,11 @@ class PodcastItemsController extends AppController {
 				}
 			}
 			
-			$this->Session->setFlash('Your media has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
+			$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
 			
 		} else {
 			
-			$this->Session->setFlash('You must select at least one media item.', 'default', array( 'class' => 'error' ) );
+			$this->Session->setFlash('You must select at least one '.MEDIA.' item.', 'default', array( 'class' => 'error' ) );
 		}
 		
         $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
@@ -367,7 +368,7 @@ class PodcastItemsController extends AppController {
 	        }
         }
         
-        $this->Session->setFlash('The media has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
+        $this->Session->setFlash('The '.MEDIA.' has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
 
@@ -755,7 +756,13 @@ class PodcastItemsController extends AppController {
         $this->redirect( $this->referer() );
     }
     
-    function __setYoutubeOptions() {
+	/*
+	 * @name : _setYoutubeOptions
+	 * @description : Sets the various options used on the youtube form
+	 * @udpated : 18th August 2011
+	 * @by : Charles Jackson
+	 */
+    function _setYoutubeOptions() {
     	
         // Get the pricavy settings
         $this->set('youtube_privacy', array('Public','Hidden','Private') );
@@ -768,5 +775,21 @@ class PodcastItemsController extends AppController {
         $youtube_subject_playlist = $YoutubeSubjectPlaylist->find( 'list', array( 'fields' => array( 'YoutubeSubjectPlaylist.id', 'YoutubeSubjectPlaylist.title' ) ) );
         $this->set('youtube_subject_playlist', $youtube_subject_playlist );
     }
+	
+	/*
+	 * @name : _metaInjectWhenNeeded
+	 * @description : Checks to see if a file needs meta injection (at time of writing MP3's only, then builds an array that is passed 
+	 * to the API.
+	 * @updated : 18th August 2011
+	 * @by : Charles Jackson
+	 */
+	function _metaInjectWhenNeeded() {
+	
+		if( $this->PodcastItem->needsInjection( $this->data['PodcastItem']['id'] ) )
+			return $this->Api->metaInjection( $this->PodcastItem->metaInject( $this->data['PodcastItem']['id'] ) );
+			
+		return true;
+		
+	}
 	
 }

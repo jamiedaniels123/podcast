@@ -1,8 +1,7 @@
 <fieldset class="podcasts index">
     <legend><h3>Your <?php echo COLLECTION; ?>s</h3></legend>
     
-    <p class="leader">
-        Below is a list of all <?php echo COLLECTION; ?>s on the system to which you have access. You can filter using the options below and sort by column headings. An individual <?php echo COLLECTION; ?> is known as a <?php echo PODCAST; ?> and a <?php echo PODCAST; ?> has many <?php echo MEDIA; ?>s.
+    <p class="leader">Below is a list of all <?php echo COLLECTION; ?>s on the system to which you have access. You can filter using the options below and sort by column headings. An individual <?php echo COLLECTION; ?> is known as a <?php echo PODCAST; ?> and a <?php echo PODCAST; ?> has many <?php echo MEDIA; ?>s.
     </p>
     
     <img src="/img/collection-large.png"  width="45" height="33" />

@@ -51,86 +51,15 @@ class PodcastItemMedia extends AppModel {
 		} else {
 			$data['PodcastItemMedia']['original_filename'] = $row['destination_filename'];
 		}
-		
+
 		$data['PodcastItemMedia']['media_type'] = $row['flavour'];
 		$data['PodcastItemMedia']['podcast_item'] = $row['podcast_item_id'];
 		
-		$data['PodcastItemMedia']['duration'] = 0; //$row['duration'];
+		$data['PodcastItemMedia']['duration'] = $row['duration'];
 		$data['PodcastItemMedia']['uploaded_when'] = date("Y-m-d H:i:s");
 
 		$this->set( $data );
 		return $this->saveAll();
 	}	
 	
-	/*
-	 * @name : youtubeMetaInjection
-	 * @description : Takes a row from the callbacks controller and build youtube meta data for injection
-	 * @updated : 13th July 2011
-	 * @by : Charles Jackson
-	 */
-	function youtubeMetaInjection( $row ) {
-
-		$meta_data = array();
-		$data = $this->findById( $row['podcast_item_id'] );
-		
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
-		
-		return $meta_data;
-	}
-
-	/*
-	 * @name : itunesMetaInjection
-	 * @description : Takes a row from the callbacks controller and builds itunes meta data for injection
-	 * @updated : 13th July 2011
-	 * @by : Charles Jackson
-	 */
-	function itunesMetaInjection( $row ) {
-
-		$meta_data = array();
-		$data = $this->findById( $row['podcast_item_id'] );
-
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
-		
-		return $meta_data;
-	}
-		
-	/*
-	 * @name : commonMetaInjection
-	 * @description : Takes a row from the callbacks controller and build common meta data for injection
-	 * @updated : 13th July 2011
-	 * @by : Charles Jackson
-	 */
-	function commonMetaInjection( $row ) {
-
-		$meta_data = array();
-		$data = $this->findById( $row['podcast_item_id'] );
-
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $this->data['title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['Podcast']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['Podcast']['title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['title'];
-		
-		return $meta_data;
-	}		
 }

@@ -38,17 +38,21 @@
     
         <div id="header">
             <h1 class="sitename">OU Podcast Server</h1>
-            <p class="strapline">For the management of podcast collections</p>
+            <p class="strapline">For the management of podcast collections</p><div class="clear"></div>
 
             <?php echo $this->element('breadcrumb', array('breadcrumbs' => $breadcrumbs ) ); ?>
             
         </div>
+        
+
+        
         <div id="content">
             <?php echo $this->Session->flash(); ?>
             <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
             <?php echo $content_for_layout; ?>
         </div>
+         
         <div id="footer">
             &nbsp;
         </div>

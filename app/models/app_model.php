@@ -1,6 +1,8 @@
 <?php
 class AppModel extends Model {
 
+	var $errors = array();
+	
     /*
      * @name : removeDuplicates
      * @description : Compares two arrays and removes any duplicate elements from the first parameter
@@ -177,4 +179,10 @@ class AppModel extends Model {
 
         return true;
     }
+	
+	
+	function getErrors() {
+	
+		return $this->errors;	
+	}
 }

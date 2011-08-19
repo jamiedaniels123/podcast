@@ -11,7 +11,7 @@
     </dl>
     </div>	
     
-    <a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle button white"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">Edit</a>	
+    <a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle button white"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">View</a>	
     
     <div class="wrapper itunes  two_column" id="PodcastItemItuneContainer" style="display:none">
 	   	<dl>

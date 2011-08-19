@@ -1,6 +1,9 @@
 <?php
 class PodcastItem extends AppModel {
-
+	
+	var $common_meta_injection = array('default' => null );
+	var $itunes_meta_injection = array('ipod-all' => 'ipod-all/','desktop-all' => 'desktop-all/','hd' => 'hd/','hd-1080' => 'hd-1080/' );
+	
     var $name = 'PodcastItem';
     var $validate = array(
         
@@ -244,6 +247,8 @@ class PodcastItem extends AppModel {
 			'youtube_id' => $this->data['PodcastItem']['youtube_id'],
 			'destination_path' => $this->data['Podcast']['custom_id'].'/youtube/',
 			'destination_filename' => $this->data['YoutubeVideo']['filename'],			
+			'source_path' => $this->data['Podcast']['custom_id'].'/youtube/',
+			'source_filename' => $this->data['YoutubeVideo']['filename'],			
 			'title' => $this->data['PodcastItem']['youtube_title'],
 			'description' => $this->data['PodcastItem']['youtube_description'],
 			'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
@@ -291,19 +296,134 @@ class PodcastItem extends AppModel {
 			
 		return true;
 	}	
+
+	/*
+	 * @name : youtubeMetaInjection
+	 * @description : Takes a row from the callbacks controller and build youtube meta data for injection
+	 * @updated : 13th July 2011
+	 * @by : Charles Jackson
+	 */
+	/* function youtubeMetaInjection( $row ) {
+
+		$meta_data = array();
+		$data = $this->findById( $row['podcast_item_id'] );
+		
+		$meta_data['destination_path'] = $row['destination_path'];
+		$meta_data['destination_filename'] = $row['destination_filename'];
+		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
+		$meta_data['meta_data']['genre'] = 'Podcast';
+		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
+		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
+		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
+		$meta_data['meta_data']['year'] = date("Y");
+		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
+		
+		return $meta_data;
+	} */
+
+	/*
+	 * @name : itunesMetaInjection
+	 * @description : Takes a row from the callbacks controller and builds itunes meta data for injection
+	 * @updated : 13th July 2011
+	 * @by : Charles Jackson
+	 */
+	function itunesMetaInjection( $row ) {
+
+		$meta_data = array();
+		$data = $this->findById( $row['podcast_item_id'] );
+
+		$meta_data['destination_path'] = $row['destination_path'];
+		$meta_data['destination_filename'] = $row['destination_filename'];
+		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
+		$meta_data['meta_data']['genre'] = 'Podcast';
+		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
+		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
+		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
+		$meta_data['meta_data']['year'] = date("Y");
+		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
+		
+		return $meta_data;
+	}
+		
+	/*
+	 * @name : commonMetaInjection
+	 * @description : Takes a row from the callbacks controller and build common meta data for injection
+	 * @updated : 13th July 2011
+	 * @by : Charles Jackson
+	 */
+	function commonMetaInjection( $row ) {
+
+		$meta_data = array();
+		$data = $this->findById( $row['podcast_item_id'] );
+
+		$meta_data['destination_path'] = $row['destination_path'];
+		$meta_data['destination_filename'] = $row['destination_filename'];
+		$meta_data['meta_data']['title'] = $this->data['title'];
+		$meta_data['meta_data']['genre'] = 'Podcast';
+		$meta_data['meta_data']['author'] = $data['Podcast']['author'];
+		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
+		$meta_data['meta_data']['podcast_title'] = $data['Podcast']['title'];
+		$meta_data['meta_data']['year'] = date("Y");
+		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['title'];
+		
+		return $meta_data;
+	}		
 	
-	
+	/*
+	 * @name : needsInjection
+	 * @description : Takes an ID as a parameter and determines if it needs meta injection. Returns a bool
+	 * @NOTE : 9 = Available
+	 * @updated : 18th August 2011
+	 * @by : Charles Jackson
+	 */
+	function needsInjection( $id = null ) {
+		
+		$this->data = $this->findById( $id );
+		
+		if( empty( $this->data ) )
+			return false;
+			
+		if( ( strtolower( $this->getExtension( $data['PodcastItem']['filename'] ) ) == 'mp3' ) && $data['PodcastItem']['processed_state'] == 9 )
+			return true;
+			
+		return false;
+	}
+
+	/*
+	 * @name : metaInject
+	 * @description : Reads through every flavour of item media and build an array on meta data for injection.
+	 * @updated : 18th August 2011
+	 * @by : Charles Jackson
+	 */	
 	function metaInject( $id ) {
 		
 		$data = array();
+		$meta_injection = array();
 		
 		$data = $this->findbyId( $id );
 		
 		if( empty( $data ) )
 			return false;
 			
+		foreach( $data['PodcastMedia'] as $media ) {
+			
+			if( isSet( $common_meta_injection[$media['media_type']] ) ) {
 				
+				$inject['podcast_item_id'] = $id;
+				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$common_meta_injection[$media['media_type']];
+				$inject['destination_filename'] = $data['PodcastItem']['filename'];
+				$meta_injection[] = $this->commonMetaInjection( $inject );
+				
+			} elseif( isSet( $itunes_meta_injection[$media['media_type']] ) ) {
+				
+				$inject['podcast_item_id'] = $id;
+				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$itunes_meta_injection[$media['media_type']];
+				$inject['destination_filename'] = $media['filename'];
+				$meta_injection[] = $this->itunesMetaInjection( $inject );
+			}
+		}
 		
+		return $meta_injection;
 	}
 }
 

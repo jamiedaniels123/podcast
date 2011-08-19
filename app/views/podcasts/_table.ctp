@@ -40,9 +40,9 @@
 
             $class = null;
 			if( $podcast['Podcast']['deleted'] ) :
-				$class = ' class="deleted"';
+				$class = ' class=" deleted "';
             elseif ($i++ % 2 == 0) :
-                $class = ' class="altrow"';
+                $class = ' class=" altrow "';
             endif;
 			
 ?>
@@ -141,16 +141,16 @@
                             <?php if( $this->Object->isDeleted( $podcast['Podcast'] ) ) : ?>
                                 <a href="/admin/podcasts/restore/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to restore this podcast?');" id="restore_podcast_<?php echo $podcast['Podcast']['id']; ?>">restore</a>
                             <?php endif; ?>
-                            <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">refresh rss</a>
-                            <a href="/admin/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" id="delete_podcast_<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you with to delete this podcast and all associated media? This action cannot be undone.');">delete</a>
+                            <a class="button white" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" /> Refresh RSS</a>
+                            <a class="button white" href="/admin/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" id="delete_podcast_<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you with to delete this podcast and all associated media? This action cannot be undone.');">delete</a>
 
                     	<?php elseif( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                        	<a class="button off-black" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
-                            <a class="button light-blue" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+                        	<a class="button white" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
+                            <a class="button white" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
                             <a class="button white" href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');"><img src="/img/icon-16-link-delete.png" alt="Delete" class="icon" />Delete</a>
                         <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
                         	<a class="button white" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit"><img src="/img/icon-16-link.png" alt="Edit" class="icon" />Edit</a>
-                            <a href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" />Refresh RSS</a>
+                            <a class="button white" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>"><img src="/img/icon-16-rss.png" alt="Refresh RSS" class="icon" /> Refresh RSS</a>
                         <?php endif; ?>
                     </td>
                 </tr>

@@ -23,7 +23,7 @@ class Workflow extends AppModel {
 	
 	public $workflow = null; // Holds the determined workflow.
 
-	var $not_for_transcoding = array('mp3','pdf','m4a','m4b');
+	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3' );
 	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv');
 	var $audio_transcoding = array('wav','ogg','amr','aif','aiff');
 
@@ -42,13 +42,13 @@ class Workflow extends AppModel {
 		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
 			$this->setWorkflow( DELIVER_WITHOUT_TRANSCODING );
-			
+
 		} elseif( in_array( $this->file_extension, $this->video_transcoding ) ) {
 
 			$this->setScreencast( strtoupper( $this->params['url']['ff02v'] ) == 'YES' ? true : false );
 			$this->setVideoWidth( isSet( $this->params['video']['resolution_x'] ) ? $this->params['video']['resolution_x'] : 0 );
 			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
-			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : 0 );
+			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : null );
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setMediaType( 'video' );
 
@@ -57,9 +57,12 @@ class Workflow extends AppModel {
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
-			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : 0 );
-			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
+			// An audio file cannot have a watermark, if watermark set to true assume it is a null value.
+			$this->setWatermarkBumperTrailer( strtolower( $this->params['url']['ff03v'] ) == 'watermark' ? null : $this->params['url']['ff03v'] );
 			$this->setMediaType( 'audio' );
+			$this->video_height = null;
+			$this->aspect_ratio = null;
+			$this->aspect_ratio_float = null;
 			$this->setConditions();
 			$this->setWorkflow( $this->__select() );
 
@@ -69,6 +72,8 @@ class Workflow extends AppModel {
 			// also exists in the file chucker upload.
 			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
+		
+		$this->setWorkflow('video');
 
 		return count( $this->errors );
 	}
