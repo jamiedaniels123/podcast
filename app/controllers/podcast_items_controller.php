@@ -104,6 +104,7 @@ class PodcastItemsController extends AppController {
 					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );
 					
 				} else {
+					
 					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
 					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Please use the refresh button.', 'default', array( 'class' => 'alert' ) );
 				}	
@@ -239,7 +240,7 @@ class PodcastItemsController extends AppController {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-	function consider_itunes( $id = null ) {
+	/*function consider_itunes( $id = null ) {
 
     	$this->PodcastItem->recursive = -1;
     	
@@ -256,11 +257,13 @@ class PodcastItemsController extends AppController {
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
 	        }
+			
+			$this->emailTemplates->_sendItunesConsiderEmail( $this->data, $this->getItunesUsers() );
         }
         
         $this->Session->setFlash('Your '.MEDIA.' has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }
+    } */
 
    /*
      * @name : itunes_approve
@@ -346,12 +349,11 @@ class PodcastItemsController extends AppController {
         
    /*
      * @name : consider_youtube
-     * @description : Enables a peeps to submit an item of media for youtube consideration
-     * approving them.
+     * @description : Enables a peeps to submit an item of media for youtube consideration.
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function consider_youtube( $id = null ) {
+    /*function consider_youtube( $id = null ) {
     	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
@@ -366,11 +368,13 @@ class PodcastItemsController extends AppController {
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save(); 
 	        }
+			
+			$this->emailTemplates->_sendYoutubeConsiderEmail( $this->data, $this->getYoutubeUsers() );
         }
         
         $this->Session->setFlash('The '.MEDIA.' has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
         $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    }
+    } */
 
     /*
      * @name : filechucker
@@ -522,7 +526,6 @@ class PodcastItemsController extends AppController {
 
             $this->PodcastItem->invalidate('image_filename', $this->Upload->getError() );
             return false;
-			
         }
 
 		return true;
@@ -784,12 +787,11 @@ class PodcastItemsController extends AppController {
 	 * @by : Charles Jackson
 	 */
 	function _metaInjectWhenNeeded() {
-	
+		
 		if( $this->PodcastItem->needsInjection( $this->data['PodcastItem']['id'] ) )
 			return $this->Api->metaInjection( $this->PodcastItem->metaInject( $this->data['PodcastItem']['id'] ) );
 			
 		return true;
-		
 	}
 	
 }

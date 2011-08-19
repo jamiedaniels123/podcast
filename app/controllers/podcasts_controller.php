@@ -401,6 +401,7 @@ class PodcastsController extends AppController {
     			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
     			$this->data['Podcast']['publish_itunes_u'] = 'N';
 				$this->data['Podcast']['publish_itunes_date'] = null;
+				$this->emailTemplates->_sendItunesConsiderEmail( $this->data, $this->Podcast->getItunesUsers() );
 				
 			} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
 				
@@ -408,12 +409,13 @@ class PodcastsController extends AppController {
     			$this->data['Podcast']['intended_youtube_flag'] = 'N';
     			$this->data['Podcast']['publish_youtube'] = 'N';
 				$this->data['Podcast']['publish_youtube_date'] = null;
+				$this->emailTemplates->_sendYoutubeConsiderEmail( $this->data, $this->Podcast->getYoutubeUsers() );
 			}
 			
 			$this->Podcast->set( $this->data );
 			$this->Podcast->save();
 			
-			$this->Session->setFlash('Your podcast has been successfully updated.', 'default', array( 'class' => 'success' ) );
+			$this->Session->setFlash('Your podcast has been successfully submitted for consideration.', 'default', array( 'class' => 'success' ) );
 			$this->redirect( array( 'action' => 'view', $id ) );
 			
 		} else {

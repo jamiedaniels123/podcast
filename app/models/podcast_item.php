@@ -249,20 +249,22 @@ class PodcastItem extends AppModel {
 			'destination_filename' => $this->data['YoutubeVideo']['filename'],			
 			'source_path' => $this->data['Podcast']['custom_id'].'/youtube/',
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
-			'title' => $this->data['PodcastItem']['youtube_title'],
-			'description' => $this->data['PodcastItem']['youtube_description'],
-			'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
-			'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
-			'channel' => $this->data['PodcastItem']['youtube_channel'],
-			'tags' => $this->data['PodcastItem']['youtube_tags'],
-			'privacy' => $this->data['PodcastItem']['youtube_privacy'],
-			'license' => $this->data['PodcastItem']['youtube_license'],
-			'comments' => $this->data['PodcastItem']['youtube_comments'],
-			'voting' => $this->data['PodcastItem']['youtube_voting'],
-			'video_response' => $this->data['PodcastItem']['youtube_video_response'],
-			'ratings' => $this->data['PodcastItem']['youtube_ratings'],
-			'embedding' => $this->data['PodcastItem']['youtube_embedding'],
-			'syndication' => $this->data['PodcastItem']['youtube_syndication']
+			'meta_data' => array(
+				'title' => $this->data['PodcastItem']['youtube_title'],
+				'description' => $this->data['PodcastItem']['youtube_description'],
+				'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
+				'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
+				'channel' => $this->data['PodcastItem']['youtube_channel'],
+				'tags' => $this->data['PodcastItem']['youtube_tags'],
+				'privacy' => $this->data['PodcastItem']['youtube_privacy'],
+				'license' => $this->data['PodcastItem']['youtube_license'],
+				'comments' => $this->data['PodcastItem']['youtube_comments'],
+				'voting' => $this->data['PodcastItem']['youtube_voting'],
+				'video_response' => $this->data['PodcastItem']['youtube_video_response'],
+				'ratings' => $this->data['PodcastItem']['youtube_ratings'],
+				'embedding' => $this->data['PodcastItem']['youtube_embedding'],
+				'syndication' => $this->data['PodcastItem']['youtube_syndication']
+			)
 		);
 		
 		return $youtube_data;

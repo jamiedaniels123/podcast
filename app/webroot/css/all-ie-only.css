@@ -78,6 +78,7 @@ ul#breadcrumb li a:hover	{
 
 form input[type=checkbox] {
 	border:0px solid #ccc;
+	background-color: none;
 }
 
 /*Actions*/
@@ -102,5 +103,17 @@ table .altrow td {
 	background: #e5f3fa;
 }
 
-/*Buttons*/
+/*Filechucker Buttons*/
+
+form#theuploadform input[type="button"] {
+    background: #003d4c url(/img/icon-16-upload.png) no-repeat 2px center ;
+	color: #fff;
+	border: 1px solid #003d4c;
+	padding: 2px 4px 2px 20px;
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+}
+
+.dropdown	{
+	margin-bottom: 0.5em;	
+}
 

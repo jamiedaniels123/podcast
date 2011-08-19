@@ -270,11 +270,6 @@ class Feed extends AppModel {
 
         $item = array();
 
-        // We only want to include this media if a copy exists on the media box. Break out of the loop and
-        // start again if the media does not exist.
-        if( parent::mediaFileExist( $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_media_folder.$this->podcast_media['filename'] ) == false )
-            return false;
-
         $item['title'] = $this->podcast_item['title'];
         $item['description'] = $this->podcast_item['summary'];
 
@@ -328,14 +323,13 @@ class Feed extends AppModel {
         if ( ( strtoupper( $this->media_type ) == 'YOUTUBE' ) && ( strtoupper( $this->podcast_item['youtube_legacy_track'] ) == 'Y' ) )
             $item['oupod:legacy'] = 'true';
 
+		// We include this element for the media player, it reads the RSS feed and extracts the shortcode.
         if ( !empty($this->podcast_item['shortcode'] ) ) {
 
             $item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/custom_id#'.$this->podcast_item['shortcode'];
-			$item['atom:link']['attrib']['title'] = 'Permalink for ';			
+			$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];			
             $item['atom:link']['attrib']['rel'] = 'alternate';
             $item['atom:link']['attrib']['type'] = 'text/html';
-            
-
         }
 
         $this->podcast_items[] = $item;

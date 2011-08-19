@@ -185,4 +185,62 @@ class AppModel extends Model {
 	
 		return $this->errors;	
 	}
+	
+    /*
+     * @name : getAdministrators
+     * @description : Returns an array of all administrators on the system.
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function getAdministrators() {
+
+		$user = ClassRegistry::init('User');
+		
+        return $user->find('all', array(
+
+            'conditions' => array(
+                'User.administrator' => true
+                )
+            )
+        );
+    }
+
+    /*
+     * @name : getYoutubeUsers
+     * @description : Returns an array of all youtube users on the system.
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function getYoutubeUsers() {
+
+		$user = ClassRegistry::init('User');
+		
+        return $user->find('all', array(
+
+            'conditions' => array(
+                'User.YouTube' => 'Y'
+                )
+            )
+        );
+    }
+	
+    /*
+     * @name : getItunesUsers
+     * @description : Returns an array of all iTunes users on the system.
+     * @updated : 22nd June 2011
+     * @by : Charles Jackson
+     */
+    function getItunesUsers() {
+
+		$user = ClassRegistry::init('User');
+		
+        return $user->find('all', array(
+
+            'conditions' => array(
+                'User.iTunesU' => 'Y'
+                )
+            )
+        );
+    }
+	
 }

@@ -23,24 +23,24 @@ class emailTemplatesComponent extends Object {
     }
 
     /*
-     * @NAME : __sendNewRegistrationEmail
-     * @DESCRIPTION : When a user registers with the site this email will be sent out.
+     * @name : __sendNewRegistrationEmail
+     * @description : When a user registers with the site this email will be sent out.
+	 * @NOTE: This is only used with the "alternative" registration when we are not using SAMS data.
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
      */
     function __sendNewRegistrationEmail( $data, $administrators = array() ) {
+			
+		$this->Email->subject = "New Registration at ".$_SERVER['HTTP_HOST'];
+		$this->Email->replyTo = $data['User']['email'];
+		$this->Email->template = 'new_registration'; // note no '.ctp'
 
-        $this->Email->to = $administrator['User']['email'];
-        $this->Email->subject = "New Registration at ".$_SERVER['HTTP_HOST'];
-        $this->Email->replyTo = $data['User']['email'];
-        $this->Email->template = 'new_registration'; // note no '.ctp'
+		$this->Email->sendAs = 'html'; // because we like to send pretty mail
+		//Set view variables as normal
+		$this->controller->set('data', $data);
 
-        $this->Email->sendAs = 'html'; // because we like to send pretty mail
-        //Set view variables as normal
-        $this->controller->set('data', $data);
-        //Do not pass any args to send()
-                	
-        /* Set delivery method */
         foreach( $administrators as $administrator ) {
-
+			$this->Email->to = $administrator['User']['email'];			
             $this->Email->send();
         }
     }
@@ -48,6 +48,7 @@ class emailTemplatesComponent extends Object {
     /*
      * @name : __sendRegistrationApprovedEmail
      * @description : When an administrator approved a user registration this email will be sent out.
+	 * @NOTE: This is only used on the "alternative" registration method, not when we are using SAMS data.
      */
     function __sendRegistrationApprovedEmail( $recipient ) {
 
@@ -67,7 +68,7 @@ class emailTemplatesComponent extends Object {
 
     /*
      * @name : __sendCallbackErrorEmail
-     * @description : 
+     * @description : Called from the /callbacks/add method, usually to alert administrators to a problem.
      */
     function __sendCallbackErrorEmail( $recipients=array(),$data ,$errormessage) {
 
@@ -90,8 +91,10 @@ class emailTemplatesComponent extends Object {
     }
 
     /*
-     * @name : __sendCallbackErrorEmail
-     * @description : 
+     * @name : __sendVleErrorEmail
+     * @description : Sent from the VLE callback URL when there is an issue.
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
      */
     function __sendVleErrorEmail( $recipients=array(),$data ,$errormessage) {
 
@@ -112,7 +115,55 @@ class emailTemplatesComponent extends Object {
         	$this->Email->send();
         }
     }
-        
+
+    /*
+     * @name : _sendYoutubeConsiderEmail
+     * @description : An email is sent when a user submits a video for consideration to the youtube team
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
+     */
+	function _sendYoutubeConsiderEmail( $data, $youtube_users ) {
+		
+        $this->Email->subject = "Podcast for Youtube consideration";
+        $this->Email->replyTo = $this->Session->read('Auth.User.email');
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        $this->Email->template = 'youtube_consider'; // note no '.ctp'		
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+		$this->controller->set('user', $this->Session->read('Auth.User') );
+
+        foreach( $youtube_users as $youtube_user ) {
+			
+			$this->Email->to = $youtube_user['User']['email'];	
+            $this->Email->send();
+        }
+	}
+
+    /*
+     * @name : _sendItunesConsiderEmail
+     * @description : An email is sent when a user submits a video for consideration to the iTunes team
+	 * @updated : 19th August 2011
+	 * @by : Charles Jackson
+     */
+	function _sendItunesConsiderEmail( $data, $itunes_users ) {
+		
+        $this->Email->to = $data['Owner']['email'];
+        $this->Email->subject = "Podcast for iTunes consideration";
+        $this->Email->replyTo = $this->Session->read('Auth.User.email');
+        $this->Email->sendAs = 'html'; // because we like to send pretty mail
+        $this->Email->template = 'itunes_consider'; // note no '.ctp'		
+        //Set view variables as normal
+        $this->controller->set('data', $data);
+		$this->controller->set('user', $this->Session->read('Auth.User') );
+
+        foreach( $itunes_users as $itunes_user ) {
+			
+			$this->Email->to = $itunes_user['User']['email'];			
+            $this->Email->send();
+        }
+
+	}
+		        
     /*
      * @name : __sendPodcastRejectionEmail
      * @description : Called when a podcast is rejected for either itunes ot youtube
@@ -131,7 +182,6 @@ class emailTemplatesComponent extends Object {
         //Do not pass any args to send()
 
         $this->Email->send();
-		
 	}
 
     /*
@@ -153,6 +203,8 @@ class emailTemplatesComponent extends Object {
         $this->Email->send();
 		
 	}
+	
+	
 	
     function getDomain() {
 

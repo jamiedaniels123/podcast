@@ -479,7 +479,7 @@ form br {
 
 
 select {
-	clear: both;
+	
 	margin-left: 10px;
 }
 
@@ -833,7 +833,7 @@ form#theuploadform input[type="button"] {
 	border: 1px solid #003d4c;
 	border-radius: 4px;
 	padding: 2px 4px 2px 20px;
-		behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	behavior: url(/css/PIE.htc); /*IE rounded corner*/
 }
 
 form#theuploadform input[type="file"] {
