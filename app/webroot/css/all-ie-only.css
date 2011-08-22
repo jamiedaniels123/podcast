@@ -117,3 +117,18 @@ form#theuploadform input[type="button"] {
 	margin-bottom: 0.5em;	
 }
 
+/*Admin panel*/
+#admin_panel legend	{
+	margin:10px 0 20px 0;	
+	}
+	
+	
+/*Search filter*/
+
+form .input-filter {
+	color: #999;
+	line-height: 1.2em;
+	display:inline;
+	margin:0 0 0 10px;
+}
+

@@ -1,5 +1,5 @@
 <div id="PersonaliseContainer">
-	<a href="/" class="button blue juggle" data-target="PersonaliseForm"><img src="/img/icon-16-settings.png" alt="Personalise" class="icon" />Personalise your table</a>
+	<a href="/" class="button setting juggle" data-target="PersonaliseForm">Personalise your table</a>
 	
 	
 

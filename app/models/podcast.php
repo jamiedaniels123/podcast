@@ -1123,8 +1123,19 @@ class Podcast extends AppModel {
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->ModeratorGroups->hasAndBelongsToMany['Users'] );
+				unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
+				
+				
+		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
+				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
+				unset( $this->ModeratorGroups->hasMany['Users'] );				
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
+				unset( $this->Owner->hasMany['Podcasts'] );
+				unset( $this->belongsTo['PreferredNode'] );
+				unset( $this->belongsTo['Language'] );				
+				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.

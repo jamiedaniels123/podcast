@@ -58,13 +58,15 @@ h3 a:hover {text-decoration: underline;}
 
 .icon {margin:0px 5px 2px 2px;padding-bottom:1px;vertical-align:middle;}
 
+/* -----BUTTONS----- */
+
 .button {
 	background: none;  
 	vertical-align:middle;
 	margin-right:10px;
 	padding: 2px;
 	border-radius: 4px;
-	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	/*behavior: url(/css/PIE.htc); IE rounded corner - disabled as causes some erratic behaviour on the button class... I am sure there is a fix but cannot find it at present*/
 	}
 
 .button:hover {text-decoration:underline;}
@@ -74,7 +76,86 @@ h3 a:hover {text-decoration: underline;}
 	color: #4492b0;
 	}
 
-/*Background colours*/
+/*Specific button decorations*/
+
+.add {
+	background:#fff url(/img/add-new.png) no-repeat 2px center;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px;
+	}
+	
+.rss {
+	background:url(/img/icon-16-rss.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.delete {
+	background:url(/img/icon-16-link-delete.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.setting {
+	background:url(/img/icon-16-settings.png) no-repeat 2px center #003d4c;
+	color: #ffffff;
+	border: 1px solid #003d4c;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.edit {
+	background:url(/img/icon-16-link.png) no-repeat 2px center #418db1;
+	color: #ffffff;
+	border: 1px solid #418db1;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.approve	{
+	background: #f19300 url(/img/approve.png) no-repeat 2px center;
+	color: #1a1a1a;
+	border: 1px solid #f19300;
+	padding: 2px 4px 2px 20px!important;	
+	}
+	
+.unapprove	{
+	background: #fff url(/img/unapprove.png) no-repeat 2px center;
+	color: #1a1a1a;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;	
+	}
+	
+.itunes-icon	{
+	background:url(/img/icon-16-itunes.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.youtube-icon	{
+	background:url(/img/icon-16-youtube.png) no-repeat 2px center #ffffff;
+	color: #f00;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.share	{
+	background:url(/img/share.png) no-repeat 2px center #ffffff;
+	color: #418db1;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}
+	
+.open-close	{
+	background:url(/img/icon-16-open.png) no-repeat 2px center #ffffff;
+	color: #003d4c;
+	border: 1px solid #fff;
+	padding: 2px 4px 2px 20px!important;
+	}				
+
+/*Generic button decorations*/
 
 .white {
 	background-color:#fff;
@@ -113,6 +194,8 @@ h3 a:hover {text-decoration: underline;}
 .light-blue:hover {
 	color: #fff;
 	}
+	
+/* -----END OF BUTTONS----- */	
 
 #admin_panel	{
 	margin-bottom:0;

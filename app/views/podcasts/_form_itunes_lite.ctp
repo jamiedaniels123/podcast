@@ -61,6 +61,15 @@
             <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
             <?php echo $this->Form->error('Podcast.course_code'); ?>
         </div>
+        <div class="input select">
+            <label for="PodcastCourseType">Course Type</label>
+            <select name="data[Podcast][course_type]" id="PodcastCourseType">
+            	<?php foreach( $course_types as $course_type ) : ?>
+	                <option value="<?php echo $course_type; ?>" <?php echo strtoupper( $this->data['Podcast']['course_type'] ) == $course_type ? 'selected="selected"' : ''; ?>><?php echo $course_type; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <?php echo $this->Form->error('Podcast.course_type'); ?>
+        </div>
         <div class="input checkbox">
             <label for="PodcastOpenlearnEpub">Open Learn ePub</label>
             <input type="hidden" value="N" id="PodcastOpenlearnEpub_" name="data[Podcast][openlearn_epub]">
