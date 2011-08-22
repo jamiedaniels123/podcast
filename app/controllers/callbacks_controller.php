@@ -96,8 +96,10 @@ class CallbacksController extends AppController {
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
 						
 						//@TODO - We need to identify the type of injection based on the flavour.
-						if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false )
-							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
+						//if( $podcastItem->needsInjection( $row['podcast_item_id'] ) {
+							if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false )
+								$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
+						//}
  					}
 				}
 			}

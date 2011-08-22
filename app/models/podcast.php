@@ -1119,17 +1119,14 @@ class Podcast extends AppModel {
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
+				// May need to refine this.
 		        unset( $this->hasMany['PublishedPodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );
-				unset( $this->ModeratorGroups->hasAndBelongsToMany['Users'] );
 				unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
-				
-				
 		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
 				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
-				unset( $this->ModeratorGroups->hasMany['Users'] );				
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
 				unset( $this->Owner->hasMany['Podcasts'] );
