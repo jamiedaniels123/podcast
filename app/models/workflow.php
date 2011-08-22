@@ -20,10 +20,11 @@ class Workflow extends AppModel {
 	var $watermark_bumper_trailer = null;
 	var $media_type = null;
 	var $vle = false;
+	var $transcode = true;
 	
 	public $workflow = null; // Holds the determined workflow.
 
-	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3', '.mp3' );
+	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3', 'mp3' );
 	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv');
 	var $audio_transcoding = array('wav','ogg','amr','aif','aiff');
 
@@ -41,7 +42,18 @@ class Workflow extends AppModel {
 		
 		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
-			$this->setWorkflow( DELIVER_WITHOUT_TRANSCODING );
+			$this->setTranscode( false ); // Does not need to be transcoded
+			
+			if( strtolower( $this->file_extension ) == 'transcript' ) {
+
+				$this->setWorkflow( 'transcript' );				
+				$this->setMediaType( 'transcript' );					
+				
+			} else {
+				
+				$this->setWorkflow( 'audio' );
+				$this->setMediaType( 'audio' );	
+			}
 
 		} elseif( in_array( $this->file_extension, $this->video_transcoding ) ) {
 
@@ -55,6 +67,9 @@ class Workflow extends AppModel {
 			$this->setConditions();
 			$this->setWorkflow( $this->__select() );
 			
+			
+			$this->setWorkflow( 'video' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
 			// An audio file cannot have a watermark, if watermark set to true assume it is a null value.
@@ -65,7 +80,10 @@ class Workflow extends AppModel {
 			$this->aspect_ratio_float = null;
 			$this->setConditions();
 			$this->setWorkflow( $this->__select() );
-
+			
+			
+			$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			
 		} else {
 
 			// If we reached this point the user has uploaded an unsupported file type. Should never happen because validation
@@ -73,7 +91,7 @@ class Workflow extends AppModel {
 			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
 		
-		$this->setWorkflow('video');
+		//$this->setWorkflow('video');
 
 		return count( $this->errors );
 	}
@@ -121,6 +139,18 @@ class Workflow extends AppModel {
 		
 		$this->file_format = $file_format;
 	}
+	
+	/* 
+	 * @name : setTranscode
+	 * @description : Standard setter
+	 * @updated : 22nd August 2011
+	 * @by : Charles Jackson
+	 */	
+	function setTranscode( $status = false ) {
+		
+		$this->transcode = $status;	
+	}
+	
 	
 	/* 
 	 * @name : setFileExtension
@@ -308,6 +338,17 @@ class Workflow extends AppModel {
 		return $this->aspect_ratio;
 	}
 
+	/* 
+	 * @name : getTranscode
+	 * @description : Standard getter
+	 * @updated : 22nd August 2011
+	 * @by : Charles Jackson
+	 */	
+	function getTranscode() {
+		
+		return $this->transcode;	
+	}
+	
 	/* 
 	 * @name : getAspectRatioFloat
 	 * @description : Standard getter

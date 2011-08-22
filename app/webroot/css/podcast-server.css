@@ -349,3 +349,18 @@ h3 a:hover {text-decoration: underline;}
     padding: 0.5em;
 	behavior: url(/css/PIE.htc); /*IE rounded corner*/	
 	}
+	
+img.approval_status {
+	
+	height: 15px;	
+}
+
+div#PodcastItunesContainer .float_right, div#PodcastSummaryContainer .float_right {
+	
+	width: 15%;
+}
+
+div#PodcastItunesContainer .float_left, div#PodcastSummaryContainer .float_left {
+	
+	width: 70%;
+}

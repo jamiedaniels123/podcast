@@ -75,12 +75,12 @@
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
 	        <a href="/" class="toggler button setting" data-status="unticked">Select/deselect all</a>
-			<a class="button delete multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items">Delete</button>
+			<a class="button delete multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items">Delete</a>
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove">iTunes include</button>
-		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject">iTunes exclude</button>
+		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove">iTunes include</a>
+		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject">iTunes exclude</a>
 		        
 			<?php endif; ?>
 			
@@ -88,9 +88,9 @@
 				        
 				<?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) ) : ?>
                 
-                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload">YouTube upload</button>
+                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload">YouTube upload</a>
                     
-                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/refresh" id="PodcastItemYoutubeRefresh">YouTube refresh</button>
+                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/refresh" id="PodcastItemYoutubeRefresh">YouTube refresh</a>
                     
 				<?php endif; ?>
 	        

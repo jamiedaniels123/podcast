@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 18, 2011 at 12:01 PM
+-- Generation Time: Aug 22, 2011 at 10:54 AM
 -- Server version: 5.1.52
 -- PHP Version: 5.3.3
 
@@ -25,6 +25,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `breadcrumbs`
 --
 
+DROP TABLE IF EXISTS `breadcrumbs`;
 CREATE TABLE IF NOT EXISTS `breadcrumbs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `controller` varchar(255) DEFAULT NULL,
@@ -68,5 +69,5 @@ INSERT INTO `breadcrumbs` (`id`, `controller`, `action`, `parent_id`, `created`,
 (30, 'podcast_items', 'admin_view', 23, NULL, NULL, 'Unknown Track', '/admin/podcast_items/view/'),
 (31, 'podcasts', 'vle_index', 2, NULL, NULL, 'VLE Collections', '/vle/podcasts'),
 (32, 'feeds', 'admin_preview', 2, NULL, NULL, 'Rss Preview', NULL),
-(33, 'logs', 'admin_index', 2, NULL, NULL, 'Admin API', NULL),
+(33, 'logs', 'admin_index', 2, NULL, NULL, 'Admin API', '/admin/logs'),
 (34, 'logs', 'admin_view', 33, NULL, NULL, 'Log', NULL);

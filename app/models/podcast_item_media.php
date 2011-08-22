@@ -5,6 +5,8 @@ class PodcastItemMedia extends AppModel {
     var $useTable = 'podcast_item_media';
     var $validate = array();
 	var $order = 'PodcastItemMedia.id ASC';
+	var $common_meta_injection = array('default' => null ); 
+	var $itunes_meta_injection = array('ipod-all' => 'ipod-all/','desktop-all' => 'desktop-all/','hd' => 'hd/','hd-1080' => 'hd-1080/' );
 
     var $belongsTo = array(
 
@@ -30,15 +32,23 @@ class PodcastItemMedia extends AppModel {
 		if( strtoupper( $row['status'] ) == YES ) {
 						
 			$data['PodcastItemMedia']['processed_state'] = MEDIA_AVAILABLE; // Media available
+
+			if( $row['flavour'] == 'default' || $row['flavour'] == 'transcript' ) {
+				
+				$data['PodcastItem']['id'] = $row['podcast_item_id'];
+				$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE;
+			}
 			
 		} else {
 			
 			$data['PodcastItemMedia']['processed_state'] = -1; // Error in transcoding
-		}
+			
+			if( $row['flavour'] == 'default' || $row['flavour'] == 'transcript' ) {
+				
+				$data['PodcastItem']['id'] = $row['podcast_item_id'];
+				$data['PodcastItem']['processed_state'] = -1; // Error in transcoding
+			}
 
-		if( $row['flavour'] == 'default' ) {
-			$data['PodcastItem']['id'] = $row['podcast_item_id'];
-			$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE;
 		}
 			
 		$data['PodcastItemMedia']['filename'] = str_replace('//','/',$row['destination_filename'] ); // Quick fudge to fix minor API issue;
@@ -47,8 +57,11 @@ class PodcastItemMedia extends AppModel {
 		// the array element "original_filename" else it will exist within "destination_filename" 
 		// for non transcoded media such as MP3 files.
 		if( isSet( $row['original_filename'] ) ) {
+			
 			$data['PodcastItemMedia']['original_filename'] = $row['original_filename'];
+			
 		} else {
+			
 			$data['PodcastItemMedia']['original_filename'] = $row['destination_filename'];
 		}
 
@@ -60,6 +73,43 @@ class PodcastItemMedia extends AppModel {
 
 		$this->set( $data );
 		return $this->saveAll();
+	}	
+
+	/*
+	 * @name : metaInject
+	 * @description : Reads through every flavour of item media and build an array on meta data for injection.
+	 * @updated : 18th August 2011
+	 * @by : Charles Jackson
+	 */	
+	function buildMetaData( $conditions ) {
+		
+		$data = array();
+		$meta_injection = array();
+		
+		$data = $this->find('all', array('conditions' => $conditions ) );
+		
+		if( empty( $data ) )
+			return false;
+			
+		foreach( $data['PodcastItemMedia'] as $media ) {
+			
+			if( isSet( $this->common_meta_injection[$media['media_type']] ) ) {
+				
+				$inject['podcast_item_id'] = $id;
+				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$common_meta_injection[$media['media_type']];
+				$inject['destination_filename'] = $data['PodcastItem']['filename'];
+				  $meta_injection[] = $this->PodcastItem->commonMetaInjection( $inject );
+				
+			} elseif( isSet( $this->itunes_meta_injection[$media['media_type']] ) ) {
+				
+				$inject['podcast_item_id'] = $id;
+				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$itunes_meta_injection[$media['media_type']];
+				$inject['destination_filename'] = $media['filename'];
+				$meta_injection[] = $this->PodcastItem->itunesMetaInjection( $inject );
+			}
+		}
+		
+		return $meta_injection;
 	}	
 	
 }

@@ -433,7 +433,7 @@ class PodcastItemsController extends AppController {
 						
 					// The media is not transcoded and we can transfer direct to the media box. We include an additional element
 					// entitled "media" that we can recognise in the callback.
-					} elseif( $this->Workflow->getWorkflow() == DELIVER_WITHOUT_TRANSCODING ) {
+					} elseif( $this->Workflow->getTranscode() == false ) {
 						
 						if( $this->Api->deliverWithoutTranscoding( 
 							array( 
@@ -442,7 +442,7 @@ class PodcastItemsController extends AppController {
 								'source_filename' => $this->data['PodcastItem']['filename'],
 								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
-								'workflow' => 'audio'
+								'workflow' => $this->Workflow->getWorkflow()
 									)
 								)
 							)
@@ -702,19 +702,28 @@ class PodcastItemsController extends AppController {
             $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
             
         } else {
-
-			if( $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
-
-				// Set the deleted status to "2", scheduled for deletion.
-				$this->data['PodcastItem']['deleted'] = 2;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
+			
+			// Check to see if any flavours of media exist and if true, delete them
+			if( $this->PodcastItem->listAssociatedMedia( $this->data )  ) {
 				
-				$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );
+				if(  $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+	
+					// Set the deleted status to "2", scheduled for deletion.
+					$this->data['PodcastItem']['deleted'] = 2;
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
+					
+					$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );
+					
+				} else {
+					
+					$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+				}
 				
 			} else {
-				
-				$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+
+				$this->PodcastItem->delete( $id );				
+				$this->Session->setFlash('We successfully deleted the media.', 'default', array( 'class' => 'success' ) );
 			}
         }
         
@@ -783,13 +792,19 @@ class PodcastItemsController extends AppController {
 	 * @name : _metaInjectWhenNeeded
 	 * @description : Checks to see if a file needs meta injection (at time of writing MP3's only, then builds an array that is passed 
 	 * to the API.
+	 * @note : 9 = 'available'
 	 * @updated : 18th August 2011
 	 * @by : Charles Jackson
 	 */
 	function _metaInjectWhenNeeded() {
 		
-		if( $this->PodcastItem->needsInjection( $this->data['PodcastItem']['id'] ) )
-			return $this->Api->metaInjection( $this->PodcastItem->metaInject( $this->data['PodcastItem']['id'] ) );
+		if( $this->PodcastItem->needsInjection( $this->data['PodcastItem']['id'] ) && $this->data['PodcastItem']['processed_state'] == 9 )
+			return $this->Api->metaInjection( $this->PodcastItemMedia->buildMetaData( 
+				array( 
+					'PodcastMedia.podcast_item_id' => $this->data['PodcastItem']['id']
+					) 
+				)
+			);
 			
 		return true;
 	}

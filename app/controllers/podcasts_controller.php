@@ -945,7 +945,8 @@ class PodcastsController extends AppController {
         $this->autoRender = false;
         $this->recursive = -1;
         $podcasts_for_deletion = array();
-
+		$this->Podcast->begin();
+		
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast we pass into an array and loop through as if the data
         // was posted via a form.
@@ -961,6 +962,7 @@ class PodcastsController extends AppController {
 
             	$podcasts_for_deletion[] = array( 
 					'source_path' => $podcast['Podcast']['custom_id'].'/',
+					'destination_path' => $podcast['Podcast']['custom_id'].'/',					
             		'collection_deletion' => 1
 				);
             	

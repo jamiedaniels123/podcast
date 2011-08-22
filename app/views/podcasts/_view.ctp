@@ -1,12 +1,12 @@
-<div class="wrapper">
+<div class="wrapper" id="PodcastSummaryContainer">
     
     <div class="float_right images_container">
-        <h3 style="display:block;"><?php echo PODCAST; ?> Image</h3>
+        <h2 style="display:block;"><?php echo ucfirst( PODCAST ); ?> Image</h2>
         <?php echo !empty( $this->data['Podcast']['image_copyright'] ) ? $this->data['Podcast']['image_copyright'] : 'Copyright Unknown'; ?>
         <div class="clear"></div>
-        <img width="100" src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="podcast image" />
-        
-        
+        <div>
+        	<img width="100" src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="podcast image" />
+        </div>
     </div>
     <div class="float_left two_column">
         <dl>

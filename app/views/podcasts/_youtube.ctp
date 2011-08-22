@@ -4,7 +4,7 @@
     
     <img src="/img/collection-youtube-large.png"  width="46" height="33" />
     
-    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>"/>
+    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>" title="approval status" class="approval_status" />
     
     
 		
@@ -26,7 +26,7 @@
         </div>
     </div>
     
-
+   <div class="clear"></div>
    <div class="wrapper ">
    <ul class="youtube">
 	    <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="button open-close juggle">View</a></li>
@@ -64,12 +64,9 @@
                     
 				<?php endif; ?>
 				
-		<?php endif; ?>
+			<?php endif; ?>
 
-	    </ul>
-        </div>
-
-    
-    
-</fieldset>
+	    	</ul>
+		</div>
+	</fieldset>
 </div>

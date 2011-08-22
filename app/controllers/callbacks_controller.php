@@ -88,18 +88,23 @@ class CallbacksController extends AppController {
 				// Needed to retrieve the meta data.
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
+
+				// Needed to retrieve the meta data.
+				if( is_object( $podcastItemMedia ) == false )
+					$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 					
 					if( ( $row['status'] == YES ) ) {
 
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						
-						//@TODO - We need to identify the type of injection based on the flavour.
-						//if( $podcastItem->needsInjection( $row['podcast_item_id'] ) {
-							if( $this->Api->metaInjection( $podcastItem->commonMetaInjection( $row ) ) == false )
+						if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
+							
+							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Injecting meta data');							
+							
+							if( $this->Api->metaInject( $podcastItemMedia->buildMetaData( array( 'PodcastItemMedia.podcast_item' => $row['podcast_item_id'], 'PodcastItemMedia.media_type' => $row['flavour'] ) ) ) == false )
 								$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
-						//}
+						}
  					}
 				}
 			}
@@ -120,6 +125,7 @@ class CallbacksController extends AppController {
 					
 					$this->data['PodcastItem']['youtube_id'] = 	null;
 					$this->data['PodcastItem']['youtube_flag'] = NO;
+					$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error youtube upload/refresh. Please see data from Admin API bellow.');					
 				}
 				
 				$podcastItem->set( $this->data );
