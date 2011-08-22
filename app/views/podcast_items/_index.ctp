@@ -53,11 +53,11 @@
 						
 								<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 								
-									<a class="button off-black" href="/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details"><span>edit</span></a>
+									<a class="button edit" href="/podcast_items/edit/<?php echo $podcast_item['id']; ?>" title="edit media details">edit</a>
 									
 									<?php if( ( ( $podcast_item['processed_state'] == MEDIA_AVAILABLE ) && ( $this->Object->isPublished( $podcast_item ) == false ) ) ): ?>
 									
-										<a class="button white" href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');"><span>delete</span></a>
+										<a class="button delete" href="/podcast_items/delete/<?php echo $podcast_item['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');">delete</a>
 
 									<?php endif; ?>
                                     
@@ -74,13 +74,13 @@
 	    
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
-	        <a href="/" class="toggler button blue" data-status="unticked">Select/deselect all</a>
-			<a class="button white multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items"><span><img src="/img/icon-16-link-delete.png" alt="Delete" width="16" height="16" class="icon" />Delete</span></button>
+	        <a href="/" class="toggler button setting" data-status="unticked">Select/deselect all</a>
+			<a class="button delete multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items">Delete</button>
 		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes include</span></button>
-		        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject"><span><img src="/img/icon-16-itunes.png" alt="iTunes" width="16" height="16" class="icon" />iTunes exclude</span></button>
+		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove">iTunes include</button>
+		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemItunesReject">iTunes exclude</button>
 		        
 			<?php endif; ?>
 			
@@ -88,9 +88,9 @@
 				        
 				<?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) ) : ?>
                 
-                    <a class="button white multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube upload</span></button>
+                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/upload" id="PodcastItemYoutubeUpload">YouTube upload</button>
                     
-                    <a class="button white multiple_action_button" href="/youtube/podcast_items/refresh" id="PodcastItemYoutubeRefresh"><span><img src="/img/icon-16-youtube.png" alt="Youtube" width="16" height="16" class="icon" />YouTube refresh</span></button>
+                    <a class="button youtube-icon multiple_action_button" href="/youtube/podcast_items/refresh" id="PodcastItemYoutubeRefresh">YouTube refresh</button>
                     
 				<?php endif; ?>
 	        
