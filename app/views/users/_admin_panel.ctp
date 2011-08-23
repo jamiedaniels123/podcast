@@ -3,6 +3,11 @@
     <legend>Administration Panel</legend>
 
         <div class="float_left">
+
+            <ul style="list-style:none;">
+                <li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;" ><a href="/admin/notifications">Notifications</a></li>
+            </ul>
+
             <ul style="list-style:none;">
                 <li  style="line-height: 22px; background-image: url(/img/icon-16-link.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/users">User Administration</a></li>
             </ul>

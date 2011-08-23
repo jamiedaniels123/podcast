@@ -3,6 +3,7 @@ class PodcastItem extends AppModel {
 	
 	
     var $name = 'PodcastItem';
+	var $order = 'PodcastItem.id ASC';
     var $validate = array(
         
         'podcast_id' => array(
@@ -386,7 +387,7 @@ class PodcastItem extends AppModel {
 		if( empty( $this->data ) )
 			return false;
 			
-		if( ( strtolower( $this->getExtension( $data['PodcastItem']['filename'] ) ) == 'mp3' ) )
+		if( ( strtolower( $this->getExtension( $this->data['PodcastItem']['original_filename'] ) ) == 'mp3' ) )
 			return true;
 			
 		return false;

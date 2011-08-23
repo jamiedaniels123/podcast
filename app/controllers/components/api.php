@@ -145,11 +145,9 @@ class ApiComponent extends Object {
      * @updated : 12th July 2011
      * @by : Charles Jackson
      */
-    function metaInjection( $data ) {
+    function metaInject( $data ) {
     	
-		$this->params = array( $data );
-
-        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $this->params ), count( $this->params ) ) );
+        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), count( $this->params ) ) );
         return $this->getStatus();
     }
     

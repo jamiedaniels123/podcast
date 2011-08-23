@@ -109,7 +109,7 @@ class PodcastItemsController extends AppController {
 					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Please use the refresh button.', 'default', array( 'class' => 'alert' ) );
 				}	
 												
-                $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+                $this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
 				exit;
             }
 			
@@ -118,8 +118,9 @@ class PodcastItemsController extends AppController {
 
         } else {
 
+			
             $this->data = $this->PodcastItem->findById( $id );
-
+			
             // We did not find the podcast, redirect.
             if( empty( $this->data ) ) {
 

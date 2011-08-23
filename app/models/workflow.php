@@ -43,15 +43,14 @@ class Workflow extends AppModel {
 		if( in_array( $this->file_extension, $this->not_for_transcoding ) ) {
 
 			$this->setTranscode( false ); // Does not need to be transcoded
+			$this->setWorkflow( 'not-for-transcoding' );
 			
-			if( strtolower( $this->file_extension ) == 'transcript' ) {
+			if( strtolower( $this->file_extension ) == 'pdf' ) {
 
-				$this->setWorkflow( 'transcript' );				
 				$this->setMediaType( 'transcript' );					
 				
 			} else {
-				
-				$this->setWorkflow( 'audio' );
+
 				$this->setMediaType( 'audio' );	
 			}
 

@@ -84,7 +84,8 @@ class CallbacksController extends AppController {
 			
 			// If we need to kick-off some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
-
+				
+				$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data,'Possible meta injection');
 				// Needed to retrieve the meta data.
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
@@ -100,10 +101,8 @@ class CallbacksController extends AppController {
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
 						if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
 							
-							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Injecting meta data');							
-							
 							if( $this->Api->metaInject( $podcastItemMedia->buildMetaData( array( 'PodcastItemMedia.podcast_item' => $row['podcast_item_id'], 'PodcastItemMedia.media_type' => $row['flavour'] ) ) ) == false )
-								$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error injecting meta data');
+								$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $podcastItemMedia->meta_injection,'Error injecting meta data');
 						}
  					}
 				}

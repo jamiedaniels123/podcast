@@ -7,7 +7,7 @@ class PodcastItemMedia extends AppModel {
 	var $order = 'PodcastItemMedia.id ASC';
 	var $common_meta_injection = array('default' => null ); 
 	var $itunes_meta_injection = array('ipod-all' => 'ipod-all/','desktop-all' => 'desktop-all/','hd' => 'hd/','hd-1080' => 'hd-1080/' );
-
+	var $meta_injection = array();
     var $belongsTo = array(
 
         'PodcastItem' => array(
@@ -33,7 +33,7 @@ class PodcastItemMedia extends AppModel {
 						
 			$data['PodcastItemMedia']['processed_state'] = MEDIA_AVAILABLE; // Media available
 
-			if( $row['flavour'] == 'default' || $row['flavour'] == 'transcript' ) {
+			if( $row['flavour'] == 'default' ) {
 				
 				$data['PodcastItem']['id'] = $row['podcast_item_id'];
 				$data['PodcastItem']['processed_state'] = MEDIA_AVAILABLE;
@@ -84,32 +84,31 @@ class PodcastItemMedia extends AppModel {
 	function buildMetaData( $conditions ) {
 		
 		$data = array();
-		$meta_injection = array();
-		
+		$this->recursive = 2;
 		$data = $this->find('all', array('conditions' => $conditions ) );
 		
 		if( empty( $data ) )
 			return false;
 			
-		foreach( $data['PodcastItemMedia'] as $media ) {
+		foreach( $data as $row ) {
 			
-			if( isSet( $this->common_meta_injection[$media['media_type']] ) ) {
+			if( isSet( $this->common_meta_injection[$row['PodcastItemMedia']['media_type']] ) ) {
 				
 				$inject['podcast_item_id'] = $id;
-				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$common_meta_injection[$media['media_type']];
-				$inject['destination_filename'] = $data['PodcastItem']['filename'];
-				  $meta_injection[] = $this->PodcastItem->commonMetaInjection( $inject );
+				$inject['destination_path'] = $row['PodcastItem']['custom_id'].'/'.$common_meta_injection[$row['PodcastItemMedia']['media_type']];
+				$inject['destination_filename'] = $row['PodcastItem']['filename'];
+				$this->meta_injection[] = $this->PodcastItem->commonMetaInjection( $inject );
 				
-			} elseif( isSet( $this->itunes_meta_injection[$media['media_type']] ) ) {
+			} elseif( isSet( $this->itunes_meta_injection[$row['PodcastItemMedia']['media_type']] ) ) {
 				
 				$inject['podcast_item_id'] = $id;
-				$inject['destination_path'] = $data['PodcastItem']['custom_id'].'/'.$itunes_meta_injection[$media['media_type']];
-				$inject['destination_filename'] = $media['filename'];
-				$meta_injection[] = $this->PodcastItem->itunesMetaInjection( $inject );
+				$inject['destination_path'] = $row['PodcastItem']['Podcast']['custom_id'].'/'.$itunes_meta_injection[$row['PodcastItemMedia']['media_type']];
+				$inject['destination_filename'] = $row['PodcastItemMedia']['filename'];
+				$this->meta_injection[] = $this->PodcastItem->itunesMetaInjection( $inject );
 			}
 		}
 		
-		return $meta_injection;
+		return $this->meta_injection;
 	}	
 	
 }
