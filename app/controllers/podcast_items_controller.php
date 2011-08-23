@@ -318,36 +318,6 @@ class PodcastItemsController extends AppController {
         $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
     }
     
-        
-   /*
-     * @name : consider_youtube
-     * @description : Enables a peeps to submit an item of media for youtube consideration.
-     * @updated : 20th June 2011
-     * @by : Charles Jackson
-     */
-    /*function consider_youtube( $id = null ) {
-    	
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
-
-            $this->data = $this->PodcastItem->findById( $key );
-    	
-	        if( !empty( $this->data ) ) {
-	        	
-                $this->data['PodcastItem']['consider_for_youtube'] = true;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save(); 
-	        }
-			
-			$this->emailTemplates->_sendYoutubeConsiderEmail( $this->data, $this->getYoutubeUsers() );
-        }
-        
-        $this->Session->setFlash('The '.MEDIA.' has been successfully submitted for Youtube approval.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( array('youtube' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    } */
-
     /*
      * @name : filechucker
      * @description : Called by the filechucker script directly after a successful upload. It is used by both
@@ -770,10 +740,12 @@ class PodcastItemsController extends AppController {
 	 */
 	function _metaInjectWhenNeeded() {
 		
+		$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
+		
 		if( $this->PodcastItem->needsInjection( $this->data['PodcastItem']['id'] ) && $this->data['PodcastItem']['processed_state'] == 9 )
-			return $this->Api->metaInjection( $this->PodcastItemMedia->buildMetaData( 
+			return $this->Api->metaInject( $podcastItemMedia->buildMetaData( 
 				array( 
-					'PodcastMedia.podcast_item_id' => $this->data['PodcastItem']['id']
+					'PodcastItemMedia.podcast_item' => $this->data['PodcastItem']['id']
 					) 
 				)
 			);

@@ -140,14 +140,14 @@ class ApiComponent extends Object {
     }
 
     /*
-     * @name : metaInjection
+     * @name : metaInject
      * @description : Initiates a meta injection of the files passed as a parameter. 
      * @updated : 12th July 2011
      * @by : Charles Jackson
      */
     function metaInject( $data ) {
     	
-        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), count( $this->params ) ) );
+        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), count( $this->params ), 1 ) );
         return $this->getStatus();
     }
     

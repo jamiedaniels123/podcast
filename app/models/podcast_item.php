@@ -344,7 +344,7 @@ class PodcastItem extends AppModel {
 		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
 		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
 		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
+		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['youtube_series_playlist_text'];
 		
 		return $meta_data;
 	}
