@@ -253,6 +253,7 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function ifPodcast( $check = array() ) {
+		
         // It is not a podcast so no need for field to be populated.
         if( $this->data['Podcast']['podcast_flag'] == true ) {
 
@@ -1237,6 +1238,14 @@ class Podcast extends AppModel {
 		if( !empty( $user_id ) )
 			$this->data['Podcast']['owner_id'] = $user_id;
 			
+		// Now reset any flags ensuring it is not published on iTunes or Youtube
+		$this->data['Podcast']['publish_youtube_date'] = null;
+		$this->data['Podcast']['intended_youtube_flag'] = null;
+		$this->data['Podcast']['consider_for_youtube'] = null;
+		$this->data['Podcast']['consider_for_itunesu'] = null;
+		$this->data['Podcast']['intended_itunesu_flag'] = null;
+		$this->data['Podcast']['publish_itunes_u'] = null;		
+				
 		$this->set( $this->data );
 		
 		// Because we have unset the majority of association force a save without validation else it will cause
@@ -1255,6 +1264,8 @@ class Podcast extends AppModel {
 			foreach( $this->data['PodcastItems'] as $podcast_item ) {
 				
 				$podcast_item['id'] = null;
+				$podcast_item['youtube_flag'] = 'N';
+				$podcast_item['itunes_flag'] = 'N';
 				$podcast_item['podcast_id'] = $this->data['Podcast']['id'];
 				$this->PodcastItems->set( $podcast_item ); 
 				$this->PodcastItems->save();

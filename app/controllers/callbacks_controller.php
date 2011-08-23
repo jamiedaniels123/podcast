@@ -21,49 +21,49 @@ class CallbacksController extends AppController {
 
 	/*
 	 * @name : 1st July 2011
-	 * @description :
-	 * @updated :
-	 * @by : Charles Jackson and Jamie Daniels
+	 * @description : This is the URL called by the Admin API. It processes the JSON encoded commands it receives.
+	 * @updated : 23rd August 2011
+	 * @by : Charles Jackson
 	 */
 	function add() {
 		
 		$this->layout='callback';
-		$this->Callback->setData(file_get_contents("php://input"));
-		$user = ClassRegistry::init('User');
+		$this->Callback->setData( file_get_contents("php://input") );
+		$user = ClassRegistry::init( 'User' );
 		$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'Callback Alert' );
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
-			$this->set('status', json_encode( array( 'status'=>'ACK', 'data'=>'Message received', 'timestamp' => time() ) ) );
+			$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
 
 			if( $this->Callback->hasErrors() )
-				$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'This callback has errors, see information below as received from the Admin API');
+				$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'This callback has errors, see information below as received from the Admin API');
 				
 			// If we have transcoded media then we need to save the flavour and possibly update the processed state 
 			if( in_array( $this->Callback->data['command'], $this->process_transcode ) ) {
 					
 				// Save the processed state
 				if( is_object( $podcastItemMedia ) == false )
-					$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
+					$podcastItemMedia = ClassRegistry::init( 'PodcastItemMedia' );
 					
 				// We only trancode media 1 at a time but it is still wrapped in a for loop to give a generic structure to all
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 					
 					// A function created during the development stages to ernssure the API is giving a valid response
-					if( $this->Callback->malformed($row, 'transcode' ) ) {
+					if( $this->Callback->malformed( $row, 'transcode' ) ) {
 						
-						$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$row,'The Admin API has returned malformed data row. See row below :');
+						$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row, 'The Admin API has returned malformed data row. See row below :');
 						
 					} else {
 						
 						if( $podcastItemMedia->saveFlavour( $row ) == false )
-							$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$podcastItemMedia->data,'Could not save a newly transcoded flavour of media, see debug information from the Podcast Admin Server');
+							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $podcastItemMedia->data, 'Could not save a newly transcoded flavour of media, see debug information from the Podcast Admin Server' );
 							
 					}
 					
-					$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
+					$this->Folder->cleanUp( $row['source_path'], $row['original_filename'] );
 				}
 			}
 			
@@ -134,7 +134,7 @@ class CallbacksController extends AppController {
 
 		} else {
 			
-			$this->emailTemplates->__sendCallbackErrorEmail($user->getAdministrators(),$this->Callback->data,'Failed to understand command');
+			$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'Failed to understand command' );
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}
