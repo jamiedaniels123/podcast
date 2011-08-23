@@ -25,6 +25,8 @@ class Feed extends AppModel {
         'desktop-all' => array('media_type' => 'desktop-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true ),
         'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true )
     );
+	
+	var $default_rss_flavours = array( '240','270','360','480','540','720','1080' );
 
     var $itunes_title_suffix = array(
         '3gp' => 'Mobile Video',
@@ -332,6 +334,22 @@ class Feed extends AppModel {
             $item['atom:link']['attrib']['type'] = 'text/html';
         }
 
+		// If we are creating a default flavour of RSS feed then we need to create atom links for all 'sister' default flavours 
+		// that exist such as 270, 720, 1080 etc...
+		// @TODO : Need to finish this routine when the API is back online.
+		if( strtolower( $this->media_type ) == 'default' ) {
+			
+			$default_flavours = array();
+			$default_flavours = $this->getDefaultFlavours();
+			$x=0;
+			foreach( $default_flavours as $default_flavour ) {
+				$item['media:group'][$x]['media:content']['attrib']['height'] = $default_flavour['PodcastItemMedia']['media_type'];
+				$item['media:group'][$x]['media:content']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.$default_flavour['PodcastItemMedia'][$x]['filename'];
+				$item['media:group'][$x]['media:content']['attrib']['type'] = 	'video/mp4';
+				$x++;
+			}
+		}
+		
         $this->podcast_items[] = $item;
     }
 
@@ -757,4 +775,23 @@ class Feed extends AppModel {
         return false;
 
     }
+	
+	/*
+	 * @name : getDefaultFlavours
+	 * @description : Will retrieve all 'default flavours' as defined in the class property for a specific podcast_item_id.
+	 * @updated : 23rd August 2011
+	 * @by : Charles Jackson
+	 */
+	function getDefaultFlavours() {
+		
+		$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
+		
+		return $podcastItemMedia->find('all', array(
+			'conditions' => array(
+				'PodcastItemMedia.podcast_item' =>  $this->podcast_item['id'],
+				'PodcastItemMedia.media_type' =>  $this->default_rss_flavours
+				)
+			)
+		);
+	}
 }

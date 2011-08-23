@@ -233,37 +233,6 @@ class PodcastItemsController extends AppController {
 		
 		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 	 }	 	 
-   /*
-     * @name : consider_itunes
-     * @description : Enables a peeps to submit an item of media for itunesu consideration
-     * approving them.
-     * @updated : 20th June 2011
-     * @by : Charles Jackson
-     */
-	/*function consider_itunes( $id = null ) {
-
-    	$this->PodcastItem->recursive = -1;
-    	
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
-
-            $this->data = $this->PodcastItem->findById( $key );
-    	
-	        if( !empty( $this->data ) ) {
-	        	
-                $this->data['PodcastItem']['consider_for_itunesu'] = true;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
-	        }
-			
-			$this->emailTemplates->_sendItunesConsiderEmail( $this->data, $this->getItunesUsers() );
-        }
-        
-        $this->Session->setFlash('Your '.MEDIA.' has been successfully submitted for iTunes approval.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
-    } */
 
    /*
      * @name : itunes_approve
@@ -287,6 +256,7 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'Y';
+					$this->data['PodcastItem']['published_flag'] = 'Y'; // Legacy, been superseded by itunes_flag but still needed.
 					$this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
 					
 					$this->PodcastItem->set( $this->data );
@@ -329,6 +299,7 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'N';
+					$this->data['PodcastItem']['published_flag'] = 'N'; // Legacy, been superseded by itunes_flag but still needed.
 					$this->data['PodcastItem']['consider_for_itunesu'] = false;
 					
 					$this->PodcastItem->set( $this->data );
