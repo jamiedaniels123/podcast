@@ -319,6 +319,10 @@ class PodcastsController extends AppController {
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
+				
+				// Once a collection has been syndicated it cannot be 'unsyndicated'. We set a tempoary flag that cannot be
+				// overwritten and is passed in the form. If set to true people will not be able to unsyndicate a collection.
+				$this->data['Podcast']['syndicated'] = $this->data['Podcast']['podcast_flag'];
             }
         }
 		

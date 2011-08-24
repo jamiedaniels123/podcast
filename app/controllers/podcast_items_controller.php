@@ -126,7 +126,7 @@ class PodcastItemsController extends AppController {
 
                 $this->Session->setFlash('Could not find your podcast media. Please try again.', 'default', array( 'class' => 'error' ) );
                 $this->cakeError('error404');
-            }
+			}
         }
 
 		$this->_setYoutubeOptions();        

@@ -116,7 +116,7 @@
                         <?php echo $podcast['Podcast']['itunes_u_url']; ?>
                     </td>
                     <td class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>>
-                        <img src="/img<?php echo $this->Object->syndicated( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for itunes" />
+                        <img src="/img<?php echo $this->Object->syndicated( $podcast['Podcast']['podcast_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for itunes" />
                     </td>
 
                     <td class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>>

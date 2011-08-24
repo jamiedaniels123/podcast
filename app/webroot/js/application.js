@@ -11,14 +11,15 @@ jQuery(document).ready(function($) {
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
-    if( jQuery('#PodcastFlagLink').length ) {
+    if( jQuery('#PodcastSyndicated').length > 0 ) {
 
     	var is_podcast = jQuery('#PodcastPodcastFlag').val();
     	
         show_hide_podcast_elements( is_podcast );
-        
+
         jQuery('#PodcastFlagLink').live('click',function(e) {
         	
+			e.preventDefault();
         	var is_podcast = jQuery('#PodcastPodcastFlag').val();
 
         	if( is_podcast == 1 ) {
@@ -251,11 +252,11 @@ function show_hide_podcast_elements( is_podcast ) {
 
     if( is_podcast == 1 ) {
 
-        jQuery('.podcast_container').show('slow');
+        jQuery('#PodcastSyndicationContainer').show('slow');
 
     } else {
 
-        jQuery('.podcast_container').hide('slow');
+        jQuery('#PodcastSyndicationContainer').hide('slow');
     }
 }
 

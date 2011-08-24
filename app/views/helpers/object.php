@@ -49,13 +49,10 @@ class ObjectHelper extends AppHelper {
      * @updated : 20th June 2011
      * @by : Charles Jackson
      */
-    function syndicated( $object = array() ) {
+    function syndicated( $flag = null ) {
 
     	// Podcast level
-    	if( isSet( $object['podcast_flag'] ) )
-        	return $object['podcast_flag'] == true ? true : false;
-    	
-		return false;
+       	return $flag == true ? true : false;
     }
 	    
     /*

@@ -14,7 +14,6 @@
             <li><input type="checkbox" name="data[Podcast][course_code]" class="personalise" data-target="course_code" <?php echo $this->Miscellaneous->columnActive($active_columns, 'course_code'); ?>>Course Code</li>
             <li><input type="checkbox" name="data[Podcast][created]" class="personalise" data-target="created" <?php echo $this->Miscellaneous->columnActive($active_columns, 'created'); ?>>Created</li>
             <li><input type="checkbox" name="data[Podcast][explicit]" class="personalise" data-target="explicit" <?php echo $this->Miscellaneous->columnActive($active_columns, 'explicit'); ?>>Explicit</li>
-            
             <li><input type="checkbox" name="data[Podcast][thumbnail]" class="personalise" data-target="thumbnail" <?php echo $this->Miscellaneous->columnActive($active_columns, 'thumbnail'); ?>>Image</li>
 				<li><input type="checkbox" name="data[Podcast][thumbnail_copyright]" class="personalise" data-target="thumbnail_copyright" <?php echo $this->Miscellaneous->columnActive($active_columns, 'thumbnail_copyright'); ?>>Image Copyright</li>
 				<li><input type="checkbox" name="data[Podcast][thumbnail_logoless]" class="personalise" data-target="thumbnail_logoless" <?php echo $this->Miscellaneous->columnActive($active_columns, 'thumbnail_logoless'); ?>>Image Logoless</li>
@@ -31,7 +30,7 @@
             <li><input type="checkbox" name="data[Podcast][preferred_node]" class="personalise" data-target="preferred_node" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_node'); ?>>Preferred Node</li>
 			<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
 			<li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
-			<li><input type="checkbox" name="data[Podcast][podcast_flag]" class="personalise" data-target="podast_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'podcast_flag'); ?>>Syndicated</li>
+			<li><input type="checkbox" name="data[Podcast][podcast_flag]" class="personalise" data-target="podcast_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'podcast_flag'); ?>>Syndicated</li>
 			
 			<li><input type="checkbox" name="data[Podcast][consider_for_itunes]" class="personalise" data-target="consider_for_itunes" <?php echo $this->Miscellaneous->columnActive($active_columns, 'consider_for_itunes'); ?>>Consider iTunes</li>
 			<li><input type="checkbox" name="data[Podcast][intended_itunesu_flag]" class="personalise" data-target="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'intended_itunesu_flag'); ?>>Intended iTunes</li>
