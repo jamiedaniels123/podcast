@@ -106,7 +106,7 @@ class PodcastItemsController extends AppController {
 				} else {
 					
 					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
-					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. Please use the refresh button.', 'default', array( 'class' => 'alert' ) );
+					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
 				}	
 												
                 $this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
