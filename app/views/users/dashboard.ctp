@@ -15,7 +15,9 @@
 					<?php echo $this->Session->read('Auth.User.full_name'); ?></p>
             <img src="/img/temp-avatar.png" />
 					<!--LOGOUT BUTTON-->
-					<?php if( $this->Session->check('Auth.User.id') ) : ?>
+					<?php if( $this->Session->check('Backup.User.id') ) : ?>
+            		<br /><a href="/admin/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Psuedo Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
+					<?php elseif( $this->Session->check('Auth.User.id') ) : ?>
             		<br /><a href="/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
             		<?php endif; ?>
            			 <!--/LOGOUT BUTTON-->
@@ -63,3 +65,6 @@
     <?php echo $this->element('../users/_admin_panel'); ?>
 <?php endif; ?>
 </fieldset>
+<pre>
+	<?php print_r( $_SESSION ); ?>
+</pre>
