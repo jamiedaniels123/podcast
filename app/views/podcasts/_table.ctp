@@ -23,6 +23,7 @@
         <th class="contact_name" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'contact_name'); ?>><?php echo $this->Paginator->sort('Contact Name','contact_name');?></th>
         <th class="contact_email" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'contact_email'); ?>><?php echo $this->Paginator->sort('Contact Email','contact_email');?></th>
         <th class="itunes_u_url" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunesu_url'); ?>><?php echo $this->Paginator->sort('ItunesU Url','itunes_u_url');?></th>                
+		<th class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>><?php echo $this->Paginator->sort('Syndicated','podcast_flag');?></th>        
 		<th class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>><?php echo $this->Paginator->sort('Consider iTunesU','consider_for_itunes');?></th>        
 		<th class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>><?php echo $this->Paginator->sort('Intended iTunesU','intended_itunesu_flag');?></th>
 		<th class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>><?php echo $this->Paginator->sort('iTunesU Published','publish_itunes_u');?></th>
@@ -30,7 +31,7 @@
 		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('Intended Youtube','intended_youtube_flag');?></th>
 		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('Youtube Published','publish_youtube');?></th>
 		<th class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>><?php echo $this->Paginator->sort('Open Learn','openlearn_epub');?></th>
-        <th class="actions">Actions</th>
+        <!-- <th class="actions">Actions</th> -->
     </tr>
     <?php
     // Check to see if there is an incremental count on this->data, the ['Meta'] exists so just looking for integer count
@@ -114,28 +115,32 @@
                     <td class="itunes_u_url" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunes_u_url'); ?>>
                         <?php echo $podcast['Podcast']['itunes_u_url']; ?>
                     </td>
+                    <td class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>>
+                        <img src="/img<?php echo $this->Object->syndicated( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for itunes" />
+                    </td>
+
                     <td class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>>
-                        <img src="/img/<?php echo $this->Object->considerForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for itunes" />
+                        <img src="/img<?php echo $this->Object->considerForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for itunes" />
                     </td>
                     <td class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>>
-                        <img src="/img/<?php echo $this->Object->intendedForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="intended for itunes" />
+                        <img src="/img<?php echo $this->Object->intendedForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="intended for itunes" />
                     </td>
                     <td class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>>
-                        <img src="/img/<?php echo $this->Object->itunesPublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="itunes published" />
+                        <img src="/img<?php echo $this->Object->itunesPublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="itunes published" />
                     </td>
                     <td class="consider_for_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_youtube'); ?>>
-                        <img src="/img/<?php echo $this->Object->considerForYoutube( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for youtube" />
+                        <img src="/img<?php echo $this->Object->considerForYoutube( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="consider for youtube" />
                     </td>
                     <td class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>>
-                        <img src="/img/<?php echo $this->Object->intendedForYoutube( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="intended for youtube" />
+                        <img src="/img<?php echo $this->Object->intendedForYoutube( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="intended for youtube" />
                     </td>
                     <td class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>>
-                        <img src="/img/<?php echo $this->Object->youtubePublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="youtube published" />
+                        <img src="/img<?php echo $this->Object->youtubePublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="youtube published" />
                     </td>
                     <td class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>>
                         <img src="/img/<?php echo $this->Object->isOpenLearn( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn published" />
                     </td>
-                    <td class="actions">
+<!--                     <td class="actions">
                         <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
                         
                             <?php if( $this->Object->isDeleted( $podcast['Podcast'] ) ) : ?>
@@ -152,7 +157,7 @@
                         	<a class="button edit" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
                             <a class="button rss" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Refresh RSS</a>
                         <?php endif; ?>
-                    </td>
+                    </td> -->
                 </tr>
 <?php
         endforeach;

@@ -115,7 +115,7 @@
 			<a class="button edit" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">Edit</a>
 			
 
-			<a class="button refresh" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>">Refresh RSS</a>
+			<a class="button rss refresh" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>">Refresh RSS</a>
 		
 		<?php endif; ?>
 

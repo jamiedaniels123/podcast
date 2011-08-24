@@ -109,7 +109,7 @@ class AppController extends Controller {
         
         } else {
 
-	        $active_columns = array('title','owner','created','thumbnail');
+	        $active_columns = array('title','owner','created','thumbnail', 'media', 'publish_itunes_u','publish_youtube','podcast_flag');
 			$this->Cookie->write($cookie_name,$active_columns, false );
        }
        

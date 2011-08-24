@@ -31,6 +31,7 @@
             <li><input type="checkbox" name="data[Podcast][preferred_node]" class="personalise" data-target="preferred_node" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_node'); ?>>Preferred Node</li>
 			<li><input type="checkbox" name="data[Podcast][preferred_url]" class="personalise" data-target="preferred_url" <?php echo $this->Miscellaneous->columnActive($active_columns, 'preferred_url'); ?>>Preferred URL</li>
 			<li><input type="checkbox" name="data[Podcast][title]" class="personalise" data-target="title" <?php echo $this->Miscellaneous->columnActive($active_columns, 'title'); ?>>Title</li>
+			<li><input type="checkbox" name="data[Podcast][podcast_flag]" class="personalise" data-target="podast_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'podcast_flag'); ?>>Syndicated</li>
 			
 			<li><input type="checkbox" name="data[Podcast][consider_for_itunes]" class="personalise" data-target="consider_for_itunes" <?php echo $this->Miscellaneous->columnActive($active_columns, 'consider_for_itunes'); ?>>Consider iTunes</li>
 			<li><input type="checkbox" name="data[Podcast][intended_itunesu_flag]" class="personalise" data-target="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnActive($active_columns, 'intended_itunesu_flag'); ?>>Intended iTunes</li>

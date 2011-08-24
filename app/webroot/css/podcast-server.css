@@ -364,3 +364,8 @@ div#PodcastItunesContainer .float_left, div#PodcastSummaryContainer .float_left 
 	
 	width: 70%;
 }
+
+td.publish_itunes_u, td.publish_youtube, th.publish_itunes_u, th.publish_youtube, td.media, th.media, td.consider_for_youtube, th.consider_for_youtube, td.intended_youtube_flag, th.intended_youtube_flag, td.consider_for_itunes, th.consider_for_itunes, td.intended_itunesu_flag, th.intended_itunesu_flag, td.podcast_flag, th.podcast_flag {
+	
+	text-align: center!important;	
+}

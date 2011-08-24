@@ -42,7 +42,22 @@ class ObjectHelper extends AppHelper {
 
         return false;
     }
-    
+
+    /*
+     * @name : syndicated
+     * @description : Retruns a bool depending up the value of the flag.
+     * @updated : 20th June 2011
+     * @by : Charles Jackson
+     */
+    function syndicated( $object = array() ) {
+
+    	// Podcast level
+    	if( isSet( $object['podcast_flag'] ) )
+        	return $object['podcast_flag'] == true ? true : false;
+    	
+		return false;
+    }
+	    
     /*
      * @name : considerForItunes
      * @description : Retruns a bool depending up the value of the flag.
