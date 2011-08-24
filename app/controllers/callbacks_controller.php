@@ -63,7 +63,7 @@ class CallbacksController extends AppController {
 							
 					}
 					
-					$this->Folder->cleanUp( $row['source_path'], $row['original_filename'] );
+					//$this->Folder->cleanUp( $row['source_path'], $row['original_filename'] );
 				}
 			}
 			
@@ -78,7 +78,7 @@ class CallbacksController extends AppController {
 
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					$this->Folder->cleanUp( $row['source_path'],$row['source_filename'] );
+					//$this->Folder->cleanUp( $row['source_path'],$row['source_filename'] );
 				}
 			}
 			

@@ -152,6 +152,11 @@ class Podcast extends AppModel {
             'className' => 'PodcastLink',
             'foreignKey' => 'podcast_id'
         ),
+		'MediaCount' => array(
+            'className' => 'PodcastItem',
+            'foreignKey' => 'podcast_id',
+			'fields' => 'MediaCount.id'
+		),
         'PodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
@@ -1093,19 +1098,22 @@ class Podcast extends AppModel {
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 				// May need to refine this.
-		        unset( $this->hasMany['PublishedPodcastItems'] );
-		        unset( $this->hasMany['PodcastLinks'] );
-		        unset( $this->hasMany['PodcastModerators'] );
-		        unset( $this->hasMany['ModeratorUserGroups'] );
-				unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
-		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
-				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
-				unset( $this->hasAndBelongsToMany['Categories'] );
-				unset( $this->hasAndBelongsToMany['Nodes'] );
-				unset( $this->Owner->hasMany['Podcasts'] );
 				unset( $this->belongsTo['PreferredNode'] );
 				unset( $this->belongsTo['Language'] );				
-				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );
+				unset( $this->hasAndBelongsToMany['Categories'] );
+				unset( $this->hasAndBelongsToMany['Nodes'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+		        unset( $this->hasMany['PodcastModerators'] );				
+		        unset( $this->hasMany['PublishedPodcastItems'] );
+		        unset( $this->hasMany['PodcastLinks'] );
+				unset( $this->hasMany['PodcastItems'] );
+
+
+				/*unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
+		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
+				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
+				unset( $this->Owner->hasMany['Podcasts'] );
+				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );*/
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.

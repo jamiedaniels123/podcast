@@ -31,8 +31,8 @@
             
             
         <ul>
-            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> collections.</a></li>
-            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
+            <!-- <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> collections.</a></li>
+            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li> -->
 			<?php if( $this->Permission->isItunesUser() ) : ?>
 	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-itunes.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/itunes/podcasts" class="button">Itunes collections</a></li>
     		<?php endif; ?>
@@ -65,6 +65,3 @@
     <?php echo $this->element('../users/_admin_panel'); ?>
 <?php endif; ?>
 </fieldset>
-<pre>
-	<?php print_r( $_SESSION ); ?>
-</pre>

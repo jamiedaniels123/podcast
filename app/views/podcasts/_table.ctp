@@ -14,7 +14,7 @@
         <th class="owner" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'owner'); ?>><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
         <th class="created" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'created'); ?>><?php echo $this->Paginator->sort('Created');?></th>
         <th class="author" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'author'); ?>><?php echo $this->Paginator->sort('Author');?></th>
-        <th class="media" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'media'); ?>><?php echo $this->Paginator->sort('Media',count('PodcastItems') );?></th>
+        <th class="media" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'media'); ?>><?php echo $this->Paginator->sort('Media',count('MediaCount') );?></th>
         <th class="course_code" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'course_code'); ?>><?php echo $this->Paginator->sort('Course Code','course_code' );?></th>
         <th class="preferred_node" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'preferred_node'); ?>><?php echo $this->Paginator->sort('Preferred Node','PreferredNode.title');?></th>
         <th class="preferred_url" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'preferred_url'); ?>><?php echo $this->Paginator->sort('Preferred URL','preferred_url');?></th>
@@ -89,7 +89,7 @@
                         <?php echo $podcast['Podcast']['author']; ?>
                     </td>
                     <td class="media" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'media'); ?>>
-                        <?php echo count( $podcast['PodcastItems'] ); ?>
+                        <?php echo count( $podcast['MediaCount'] ); ?>
                     </td>
                     <td class="course_code" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'course_code'); ?>>
                         <?php echo $podcast['Podcast']['course_code']; ?>
