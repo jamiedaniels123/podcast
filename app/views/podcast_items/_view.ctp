@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" id="PodcastItemSummaryContainer">
     <div class="float_right images_container">
             <?php echo !empty( $this->data['Podcast']['image_copyright'] ) ? $this->data['Podcast']['image_copyright'] : 'Copyright Unknown'; ?>
         <div class="clear"></div>
