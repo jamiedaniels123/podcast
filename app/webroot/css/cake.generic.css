@@ -973,8 +973,14 @@ ul#PodcastColumnOptions li {
 	font-weight: bold;	
 }
 
-form#PodcastEditForm img, #PodcastAddForm img {
+form#PodcastEditForm .thumbnail img, #PodcastAddForm img {
 	
 	padding: 10px;	
+	width: 100px;
 	
+}
+
+.text_right {
+	
+	text-align: right;	
 }

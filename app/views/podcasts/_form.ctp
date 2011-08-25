@@ -195,8 +195,8 @@
         </div>
         <div class="input file">
             <div class="image thumbnail wrapper">
-                <div class="float_right">
-                    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
+                <div class="float_right text_right">
+                    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="thumbnail image" />
                     <?php if( !empty( $this->data['Podcast']['image'] ) ) : ?>
                     	<div class="clear"></div>
                         <a class="button delete" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')">delete</a>

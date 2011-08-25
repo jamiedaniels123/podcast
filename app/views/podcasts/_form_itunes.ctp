@@ -9,14 +9,24 @@
     	
     <div id="PodcastItunesContainer" class="itunes_container itunes" style="display:none">
         <div class="input file">
-            <label for="PodcastNewImageLogoless">Logoless image</label>
-            <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">
-            <input type="hidden" id="PodcastImageLogoless" name="data[Podcast][image_logoless]" value="<?php echo $this->data['Podcast']['image_logoless']; ?>">            
-            <?php echo $this->Form->error('Podcast.image_logoless'); ?>
-        </div>
-        <div class="image thumbnail">
-           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
-            <a href="/podcasts/delete_image/image_logoless/<?php echo $this->data['Podcast']['id']; ?>" title="delete logoless image" onclick="return confirm('Are you sure you wish to delete the logoless screen image?')">delete</a>
+
+            <div class="image thumbnail wrapper">
+                <div class="float_right text_right">
+           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="thumbnail image" />
+                    <?php if( !empty( $this->data['Podcast']['image_logoless'] ) ) : ?>
+                    	<div class="clear"></div>
+                        <a class="button delete" href="/podcasts/delete_image/image_logoless/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the iTunes logoless image?')">delete</a>
+                    <?php endif; ?>
+			    </div>
+				<div class="float_left">
+                    <label for="PodcastNewImageLogoless">Logoless image</label>
+                    <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">
+                    <input type="hidden" id="PodcastImageLogoless" name="data[Podcast][image_logoless]" value="<?php echo $this->data['Podcast']['image_logoless']; ?>">            
+                    <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
+				</div>            
+	            <?php echo $this->Form->error('Podcast.image_logoless'); ?>
+		        <div class="clear"></div>
+			</div>
         </div>
         <div class="input text">
             <label for="PodcastImageLlCopyright">Copyright/credit</label>

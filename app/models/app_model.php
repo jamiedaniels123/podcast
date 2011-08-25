@@ -151,15 +151,14 @@ class AppModel extends Model {
     function getStandardImageName( $image_filename = null ) {
 
         $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
-        $standard_filename += RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
-
+        $standard_filename .= RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
         return $standard_filename;
     }
 
     function getThumbnailImageName( $image_filename = null ) {
 
         $thumbnail_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
-        $thumbnail_filename += THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
+        $thumbnail_filename.= THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
 
         return $thumbnail_filename;
     }

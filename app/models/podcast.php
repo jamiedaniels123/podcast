@@ -1060,8 +1060,10 @@ class Podcast extends AppModel {
 	 */	
 	function deleteImages( $podcast = array(), $image_type = null ) {
 
+
 		if( !isSet( $podcast[$image_type] ) )
 			return false;
+
 			
 		$media_images = array();
 		
