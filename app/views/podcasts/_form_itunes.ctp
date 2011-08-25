@@ -34,19 +34,23 @@
             <?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastNewImageWide">Widescreen Image</label>
-            <input type="file" id="PodcastNewImageWide" name="data[Podcast][new_image_wide]">
-            <input type="hidden" id="PodcastImageWide" name="data[Podcast][image_wide]" value="<?php echo $this->data['Podcast']['image_wide']; ?>">            
-            <?php echo $this->Form->error('Podcast.image_wide'); ?>
-        </div>
-        <div class="image thumbnail">
-           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" title="thumbnail image" />
-            <a href="/podcasts/delete_image/image_wide/<?php echo $this->data['Podcast']['id']; ?>" title="delete widescreen image" onclick="return confirm('Are you sure you wish to delete the wide screen image?')">delete</a>   
-        </div>
-        <div class="input text">
-            <label for="PodcastImageWideCopyright">Copyright/credit</label>
-            <input type="text" size="60" id="PodcastImageWideCopyright" name="data[Podcast][image_wide_copyright]" value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
-            <?php echo $this->Form->error('Podcast.image_wide_copyright'); ?>
+            <div class="image thumbnail wrapper">
+                <div class="float_right text_right">
+           <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="thumbnail image" />
+                    <?php if( !empty( $this->data['Podcast']['image_wide'] ) ) : ?>
+                    	<div class="clear"></div>
+                        <a class="button delete" href="/podcasts/delete_image/image_wide/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the iTunes wide image?')">delete</a>
+                    <?php endif; ?>
+			    </div>
+				<div class="float_left">
+                    <label for="PodcastNewImageWide">Widescreen Image</label>
+                    <input type="file" id="PodcastNewImageWide" name="data[Podcast][new_image_wide]">
+                    <input type="hidden" id="PodcastImageWide" name="data[Podcast][image_wide]" value="<?php echo $this->data['Podcast']['image_wide']; ?>">            
+                    <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
+				</div>            
+	            <?php echo $this->Form->error('Podcast.image_wide'); ?>
+		        <div class="clear"></div>
+			</div>
         </div>
         <div class="input file">
             <label for="PodcastNewArtworkFile">Artwork File</label>
