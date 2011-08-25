@@ -973,7 +973,7 @@ ul#PodcastColumnOptions li {
 	font-weight: bold;	
 }
 
-form#PodcastEditForm .thumbnail img, #PodcastAddForm img {
+form#PodcastEditForm .thumbnail img, #PodcastAddForm .thumbnail img, #PodcastItemEditForm .thumbnail img {
 	
 	padding: 10px;	
 	width: 100px;

@@ -131,8 +131,6 @@
 		<div class="float_left">
 			<div class="input select">
             <label for="UsersUsers">All Users</label>
-            
-			
 				
 				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
 					<?php foreach( $users as $key => $value ) : ?>
