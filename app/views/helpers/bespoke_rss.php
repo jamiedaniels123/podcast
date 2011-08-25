@@ -169,17 +169,17 @@ class BespokeRssHelper extends RssHelper {
                     $attrib = $val;
                     $val = null;
                     break;
+				case 'atom:link' :
+					$elements[$key] = $this->itemLevelAtom( $key, $val );	
+					break;
+				case 'media:group' :
+					$val = $this->itemLevelMedia( $key, $val );	
+					break;
             }
 
-			// If we are processing an atom:link at item level we need to call the specific routine below.
-			// We should refactor this and incorporate into the case statement above for a more elegant solution.
-			if( $key == 'atom:link' ) {
+			// Not an atom:link, process as normal.
+			if( $key != 'atom:link' ) {
 
-				$elements[$key] = $this->itemLevelAtom( $key, $val );
-				
-			} else {
-				
-				// Not an atom:link, process as normal.
 				if ( !is_null( $val ) && $escape )
 					$val = h($val);
 	
@@ -193,6 +193,37 @@ class BespokeRssHelper extends RssHelper {
         return $this->elem('item', $att, $content, !($content === null));
     }
 
+	/*
+	 * @name : itemLevelMedia
+	 * @description : We need too create "media:group" with several sub properties not catered for within the basic helpers.
+	 * @updated : 23rd August 2011
+	 * @by : Charles Jackson
+	 */
+    function itemLevelMedia($key, $values = array() ) {
+
+        $elems = '';
+        foreach ($values as $value ) {
+			foreach ($value as $elem => $data) {
+				$attributes = array();
+				if (is_array($data)) {
+					if (isset($data['attrib']) && is_array($data['attrib'])) {
+						$attributes = $data['attrib'];
+						unset($data['attrib']);
+					} else {
+						$innerElements = '';
+						foreach ($data as $subElement => $value) {
+								$innerElements .= $this->elem($subElement, array(), $value);
+						}
+						$data = $innerElements;
+					}
+				}
+				$elems .= $this->elem($elem, $attributes, $data);
+
+			}
+		}
+       	return $elems;
+    }
+	
     /*
      * @name : clean
      * @description : Cleans all characters not supported by UTF-8 on RSS. Taken
@@ -213,7 +244,7 @@ class BespokeRssHelper extends RssHelper {
 	
 	/*
 	 * @name : itemLevelAtom
-	 * @description : We need to include aton:link within the item elements so it maybe picked up and read by the media player
+	 * @description : We need to include atom:link within the item elements so it maybe picked up and read by the media player
 	 * because it contains the shortcode to the media item. It is above an beyond the scope of the built-in helpers hence
 	 * we extend here to cope.
 	 * @updated : 19th August 2011

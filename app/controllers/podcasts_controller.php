@@ -54,11 +54,12 @@ class PodcastsController extends AppController {
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
         }
-            
+		
+        $this->Podcast->recursive = -1;
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
 
-		$this->Podcast->recursive = 2;
-        $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
+		$this->Podcast->recursive = 1;
+        $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.id' => $id_numbers ) );
 
     }
 
@@ -319,6 +320,10 @@ class PodcastsController extends AppController {
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
+				
+				// Once a collection has been syndicated it cannot be 'unsyndicated'. We set a tempoary flag that cannot be
+				// overwritten and is passed in the form. If set to true people will not be able to unsyndicate a collection.
+				$this->data['Podcast']['syndicated'] = $this->data['Podcast']['podcast_flag'];
             }
         }
 		
@@ -945,7 +950,8 @@ class PodcastsController extends AppController {
         $this->autoRender = false;
         $this->recursive = -1;
         $podcasts_for_deletion = array();
-
+		$this->Podcast->begin();
+		
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast we pass into an array and loop through as if the data
         // was posted via a form.
@@ -961,6 +967,7 @@ class PodcastsController extends AppController {
 
             	$podcasts_for_deletion[] = array( 
 					'source_path' => $podcast['Podcast']['custom_id'].'/',
+					'destination_path' => $podcast['Podcast']['custom_id'].'/',					
             		'collection_deletion' => 1
 				);
             	

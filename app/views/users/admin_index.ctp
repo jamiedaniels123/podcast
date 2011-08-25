@@ -44,6 +44,8 @@
                 <td class="actions">
                     <a href="/admin/users/edit/<?php echo $user['User']['id']; ?>" id="edit_user_<?php echo $user['User']['id']; ?>">edit</a>
                     <a href="/admin/users/status/<?php echo $user['User']['id']; ?>" id="deactivate_user_<?php echo $user['User']['id']; ?>" onclick="return confirm('Are you sure?');"><?php echo $user['User']['status'] ? 'deactivate' : 'activate'; ?></a>
+                    <a href="/admin/users/login/<?php echo $user['User']['id']; ?>" id="login_user_<?php echo $user['User']['id']; ?>" onclick="return confirm('You are about to login as this user. Are you sure?');">login</a>
+
                 </td>
             </tr>
 <?php

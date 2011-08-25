@@ -329,8 +329,8 @@ class UsersController extends AppController {
             $this->User->save();
         }
 
-        $this->Session->setFlash( 'Terms and conditions have been reset. Users willl be forced to agree next time they login.', 'default', array( 'class' => 'success' ) );
-        $this->redirect( $this->referer() );
+        $this->Session->setFlash( 'Terms and conditions have been reset. Users will be forced to agree next time they login.', 'default', array( 'class' => 'success' ) );
+        $this->redirect( array('admin' => false, 'action' => 'dashboard' ) );
     }
 
     /*
@@ -360,8 +360,48 @@ class UsersController extends AppController {
             $this->Session->setFlash( 'We could not find the user you were looking for. Perhaps that have already been approved?', 'default', array( 'class' => 'error' ) );
         }
 
-        $this->redirect( '/dashboard' );
+           $this->redirect( array('admin' => false, 'action' => 'dashboard' ) );
     }
 
+	/*
+	 * @name : admin_login
+	 * @description : Enables an administrator to login as any other registered member.
+	 * @updated : 24th August 2011
+	 * @by : Charles Jackson
+	 */
+	function admin_login( $id ) {
+
+		$this->autoRender = false;		
+		$this->data = $this->User->findById( $id );
+		
+		$this->Session->write('Backup', $this->Session->read('Auth') );
+		
+		$this->Session->write( 'Auth.User', $this->data['User'] );
+		
+		$this->redirect( array( 'admin' => false, 'action' => 'dashboard') );
+	}
+	
+	/*
+	 * @name : pseudo
+	 * @description : Enables an administrator to relinquish psudeo control
+	 * @updated : 24th August 2011
+	 * @by : Charles Jackson
+	 */
+	 function pseudo() {
+		 
+		$this->autoRender = false;
+		if( $this->Session->read('Backup.User') ) {
+			$this->Session->write('Auth.User', $this->Session->read('Backup.User') );
+			unset( $_SESSION['Backup'] );
+		}
+		$this->redirect( array( 'admin' => false, 'action' => 'dashboard' ) ); 
+	 }
+	 
+	 function admin_sams() {
+		 
+		 $soap = ClassRegistry::init('Soap');
+		 $soap->SoapMethod( array('mySoapParams'));
+		 die('fffff');
+	 }
 }
 ?>

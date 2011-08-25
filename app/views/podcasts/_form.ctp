@@ -1,4 +1,5 @@
 <input type="hidden" id="PodcastMediaLocation" name="data[Podcast][media_location]" value="<?php echo $this->data['Podcast']['media_location']; ?>">
+<input type="hidden" id="PodcastSyndicated" name="data[Podcast][syndicated]" value="<?php echo $this->data['Podcast']['syndicated']; ?>">
 
 <div class="input text form_title" id="content">
     <label for="PodcastTitle">Title</label>
@@ -29,12 +30,8 @@
                 <div class="multiple-button">
                 <div class="move float_right" data-source="ModeratorGroups" data-target="MemberGroups"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                 </div>
-                
                 <div class="clear"></div>
 			</div>
-            
-            
-            
          </div>
 		
         <div class="float_left">
@@ -179,12 +176,14 @@
     <div class="clear"></div>
     
     <div class="link">
-		<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Syndicate this <?php echo PODCAST; ?></a>
+    	<?php if( $this->Object->syndicated( $this->data['Podcast']['syndicated'] ) == false ) : ?>
+			<a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Syndicate this <?php echo PODCAST; ?></a>
+		<?php endif; ?>
     	<input type="hidden" id="PodcastPodcastFlag" value="<?php echo trim( $this->data['Podcast']['podcast_flag'] );?>" name="data[Podcast][podcast_flag]">
 	</div>
     
     <div class="clear"></div>
-    <div class="podcast_container" style="display:none;">
+    <div id="PodcastSyndicationContainer" class="podcast_container" style="display:none;">
         <div class="input textarea">
             <label for="summary">Summary</label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">

@@ -26,19 +26,19 @@ class AppController extends Controller {
 			
 			// If the current user is attempting to view an admin method ensure the "administrator" flag on their
 			// profile is set to TRUE.
-			if( $this->Permission->isAdminRouting() && $this->Permission->isAdministrator() == false ) {
+			if( $this->isAdminRouting() && $this->isAdministrator() == false ) {
 	
 				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
 				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
 				
 			} 
 			
-			if( $this->Permission->isItunesRouting() && $this->Permission->isItunesUser() == false ) {
+			if( $this->isItunesRouting() && $this->isItunesUser() == false ) {
 				
 				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
 				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
 			
-			} elseif( $this->Permission->isYoutubeRouting() && $this->Permission->isYoutubeUser() == false ) {
+			} elseif( $this->isYoutubeRouting() && $this->isYoutubeUser() == false ) {
 	
 				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
 				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
@@ -109,11 +109,97 @@ class AppController extends Controller {
         
         } else {
 
-	        $active_columns = array('title','owner','created','thumbnail');
+	        $active_columns = array('title','owner','created','thumbnail', 'media', 'publish_itunes_u','publish_youtube','podcast_flag');
 			$this->Cookie->write($cookie_name,$active_columns, false );
        }
        
        return $active_columns;
     }    
 
+    /*
+     * @name : isItunesUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isItunesUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+            return true;
+
+        return false;
+    }
+	
+    /*
+     * @name : isYoutubeUser
+     * @description : Returns a bool depending upon whether the user is a youtube user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isYoutubeUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == 'Y' )
+            return true;
+
+        return false;
+
+    }	
+	
+    /*
+     * @name : isAdministrator
+     * @description : Returns a bool.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function isAdministrator() {
+
+		if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.administrator') == true )
+			return true;
+			
+        return false;
+    }	
+	
+	
+	
+    /*
+     * @name : isAdminRouting
+     * @description : Checks to see if the current URL is an admin page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isAdminRouting() {
+
+        if( substr( $this->action, 0, 6 ) == 'admin_' )
+            return true;
+        
+        return false;
+    }
+	
+    /*
+     * @name : isItunesRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isItunesRouting() {
+
+        if( substr( $this->action, 0, 7 ) == 'itunes_' )
+            return true;
+        
+        return false;
+    }
+    
+    /*
+     * @name : isYoutubeRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    function isYoutubeRouting() {
+    	
+        if( substr( $this->action, 0, 8 ) == 'youtube_' )
+            return true;
+        
+        return false;
+    }	
 }

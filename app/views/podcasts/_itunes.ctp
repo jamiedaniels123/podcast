@@ -4,27 +4,26 @@
     
     <img src="/img/collection-itunes-large.png"  width="46" height="33" />
     
-    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>"/>
-    
+    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'itunes' ); ?>" title="approval status" class="approval_status" />
 
 
     <div class="itunes" id="PodcastItunesContainer" style="display:none">
         <div class="float_right images_container">
             <div>
-                <h2><?php echo PODCAST; ?> Image Logoless</h2>
+                <h2><?php echo ucfirst( PODCAST ); ?> Image Logoless</h2>
                 <?php echo !empty( $this->data['Podcast']['image_ll_copyright'] ) ? $this->data['Podcast']['image_ll_copyright'] : 'Copyright Unknown'; ?>
                 <div class="clear"></div>        
                 <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="podcast logoless image" />
             </div>
             <div>
-                <h2><?php echo PODCAST; ?> Image Wide</h2>
+                <h2><?php echo ucfirst( PODCAST ); ?> Image Wide</h2>
                 <?php echo !empty( $this->data['Podcast']['image_wide_copyright'] ) ? $this->data['Podcast']['image_wide_copyright'] : 'Copyright Unknown'; ?>
                 <div class="clear"></div>        
                 <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION); ?>" class="thumbnail" title="podcast wide image" />
             </div>
     
         </div>
-        <div class="float_left two_column">    
+        <div class="float_left two_column" >    
             <dl>
                 <dt>Author: </dt>
                 <dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
@@ -86,7 +85,7 @@
             </dl>    
         </div>
     </div>
-    
+    <div class="clear"></div>
 	<div class="wrapper">
         <ul class="itunes">
 	    <li><a href="/" id="PodcastItemItunesToggle" data-target="PodcastItunesContainer" class="button open-close juggle">View</a></li>

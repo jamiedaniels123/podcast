@@ -15,7 +15,9 @@
 					<?php echo $this->Session->read('Auth.User.full_name'); ?></p>
             <img src="/img/temp-avatar.png" />
 					<!--LOGOUT BUTTON-->
-					<?php if( $this->Session->check('Auth.User.id') ) : ?>
+					<?php if( $this->Session->check('Backup.User.id') ) : ?>
+            		<br /><a href="/users/pseudo" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Psuedo Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
+					<?php elseif( $this->Session->check('Auth.User.id') ) : ?>
             		<br /><a href="/users/logout" title="logout link" style="margin-left:10px;" class="button orange"  id="logout_link">Logout <!--<?php echo $this->Session->read('Auth.User.full_name'); ?>--></a>
             		<?php endif; ?>
            			 <!--/LOGOUT BUTTON-->
@@ -29,8 +31,8 @@
             
             
         <ul>
-            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> collections.</a></li>
-            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li>
+            <!-- <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> collections.</a></li>
+            <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li> -->
 			<?php if( $this->Permission->isItunesUser() ) : ?>
 	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-itunes.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/itunes/podcasts" class="button">Itunes collections</a></li>
     		<?php endif; ?>

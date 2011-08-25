@@ -36,8 +36,8 @@
 	        <?php endforeach; ?>
 	    </table>
 	        <a href="/" class="toggler button blue" data-status="unticked">Toggle</a>
-	        <a class="button white multiple_action_button" href="/podcast_items/approve" id="PodcastItemsApproveMultiple"><span>approve</span></button>
-	        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemsRejectMultiple"><span>reject</span></button>
+	        <a class="button white multiple_action_button" href="/podcast_items/approve" id="PodcastItemsApproveMultiple"><span>approve</span></a>
+	        <a class="button white multiple_action_button" href="/itunes/podcast_items/reject" id="PodcastItemsRejectMultiple"><span>reject</span></a>
     </form>
     
 </fieldset>

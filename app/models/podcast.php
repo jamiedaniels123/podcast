@@ -152,6 +152,11 @@ class Podcast extends AppModel {
             'className' => 'PodcastLink',
             'foreignKey' => 'podcast_id'
         ),
+		'MediaCount' => array(
+            'className' => 'PodcastItem',
+            'foreignKey' => 'podcast_id',
+			'fields' => 'MediaCount.id'
+		),
         'PodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
@@ -253,6 +258,7 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function ifPodcast( $check = array() ) {
+		
         // It is not a podcast so no need for field to be populated.
         if( $this->data['Podcast']['podcast_flag'] == true ) {
 
@@ -789,36 +795,36 @@ class Podcast extends AppModel {
 
         switch( $podcast['filter'] ) {
             case PUBLIC_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case UNPUBLISHED_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.publish_itunes_u'] = 'N';
-                $conditions[0]['Podcast.openlearn_epub'] = 'N';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.publish_itunes_u'] = 'N';
+                $conditions['Podcast.openlearn_epub'] = 'N';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case PUBLISHED_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.publish_itunes_u'] = 'Y';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.publish_itunes_u'] = 'Y';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case OPENLEARN_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.openlearn_epub'] = 'Y';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.openlearn_epub'] = 'Y';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case PRIVATE_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'private';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'private';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case DELETED_PODCAST:
-                $conditions[0]['Podcast.deleted'] = 1;
+                $conditions['Podcast.deleted'] = 1;
         }
 
          if( !empty( $podcast['search'] ) && ( $podcast['search'] != INPUT_GREETING ) ) {
@@ -1074,34 +1080,6 @@ class Podcast extends AppModel {
 			
 		return $media_images;
 	}
-
-	/* 
-	 * @name : makeEveryoneReadOnly
-	 * @description : When a podcast has been approved we need to find every moderator (group or individual) and give them
-	 * read-only access.
-	 * @updated : 6th June 2011
-	 * @by : Charles Jackson
-	 */	
-	/*function makeEveryoneReadOnly( $data = array() ) {
-		
-	
-		foreach( $data['ModeratorGroups'] as $moderator_group ) {
-		
-			$data['MemberGroups'][] = $moderator_group;	
-		}
-
-		foreach( $data['Moderators'] as $moderator ) {
-		
-			$data['Members'][] = $moderator;	
-		}
-		
-		$this->deleteExistingModerators( $data['Podcast']['id'] );
-				
-		$data['PodcastModerators'] = array(); // Clear down the associated hasMany array so we don't resave the data we just deleted
-		$data['ModeratorUserGroups'] = array();  // Clear down the associated hasMany array so we don't resave the data we just deleted
-		
-		return $data;
-	}*/
 	
 	/* 
 	 * @name : stripJoinsByAction
@@ -1120,19 +1098,23 @@ class Podcast extends AppModel {
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 				// May need to refine this.
-		        unset( $this->hasMany['PublishedPodcastItems'] );
-		        unset( $this->hasMany['PodcastLinks'] );
-		        unset( $this->hasMany['PodcastModerators'] );
-		        unset( $this->hasMany['ModeratorUserGroups'] );
-				unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
-		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
-				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
+				unset( $this->belongsTo['PreferredNode'] );
+				unset( $this->belongsTo['Language'] );
+				unset( $this->Owner->hasMany['Podcasts'] );				
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
+		        unset( $this->hasMany['ModeratorUserGroups'] );
+		        unset( $this->hasMany['PodcastModerators'] );				
+		        unset( $this->hasMany['PublishedPodcastItems'] );
+		        unset( $this->hasMany['PodcastLinks'] );
+				unset( $this->hasMany['PodcastItems'] );
+
+
+				/*unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
+		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
+				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
 				unset( $this->Owner->hasMany['Podcasts'] );
-				unset( $this->belongsTo['PreferredNode'] );
-				unset( $this->belongsTo['Language'] );				
-				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );
+				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );*/
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
@@ -1237,6 +1219,14 @@ class Podcast extends AppModel {
 		if( !empty( $user_id ) )
 			$this->data['Podcast']['owner_id'] = $user_id;
 			
+		// Now reset any flags ensuring it is not published on iTunes or Youtube
+		$this->data['Podcast']['publish_youtube_date'] = null;
+		$this->data['Podcast']['intended_youtube_flag'] = null;
+		$this->data['Podcast']['consider_for_youtube'] = null;
+		$this->data['Podcast']['consider_for_itunesu'] = null;
+		$this->data['Podcast']['intended_itunesu_flag'] = null;
+		$this->data['Podcast']['publish_itunes_u'] = null;		
+				
 		$this->set( $this->data );
 		
 		// Because we have unset the majority of association force a save without validation else it will cause
@@ -1255,6 +1245,8 @@ class Podcast extends AppModel {
 			foreach( $this->data['PodcastItems'] as $podcast_item ) {
 				
 				$podcast_item['id'] = null;
+				$podcast_item['youtube_flag'] = 'N';
+				$podcast_item['itunes_flag'] = 'N';
 				$podcast_item['podcast_id'] = $this->data['Podcast']['id'];
 				$this->PodcastItems->set( $podcast_item ); 
 				$this->PodcastItems->save();
@@ -1294,8 +1286,6 @@ class Podcast extends AppModel {
 		) );
 			
 		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {
-		
-
 			
 			$this->data = $data;
 			$this->commit();

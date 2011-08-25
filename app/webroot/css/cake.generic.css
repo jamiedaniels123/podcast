@@ -916,7 +916,7 @@ div.float_left dl dd {
 div.two_column {
 	padding: 5px;
 	margin:15px 0 25px 55px;
-	width: 700px;
+	#width: 700px;
 	background-color:#E5F3FA;	
 }
 
