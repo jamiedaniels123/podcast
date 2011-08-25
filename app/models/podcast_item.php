@@ -251,7 +251,9 @@ class PodcastItem extends AppModel {
 			'destination_filename' => $this->data['YoutubeVideo']['filename'],			
 			'source_path' => $this->data['Podcast']['custom_id'].'/youtube/',
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
-			'meta_data' => array(
+			'meta_data' => $this->encode_meta_data(
+				array(
+		
 				'title' => $this->data['PodcastItem']['youtube_title'],
 				'description' => $this->data['PodcastItem']['youtube_description'],
 				'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
@@ -265,13 +267,25 @@ class PodcastItem extends AppModel {
 				'video_response' => $this->data['PodcastItem']['youtube_video_response'],
 				'ratings' => $this->data['PodcastItem']['youtube_ratings'],
 				'embedding' => $this->data['PodcastItem']['youtube_embedding'],
-				'syndication' => $this->data['PodcastItem']['youtube_syndication']
+				'syndication' => $this->data['PodcastItem']['youtube_syndication']		
+				)
 			)
 		);
 		
 		return $youtube_data;
 	}
-	
+
+	/*
+	 * @name : encode_meta_data
+	 * @description : Due to the ftreeform nature of the description field we use a 'heavier' encoding method
+	 * than the normal json encode.
+	 * @updated : 25th August 2011
+	 * @by : Charles Jackson
+	 */	
+	function encode_meta_data( $meta_data = array() ) {
+		
+		return strtr( base64_encode( addslashes( gzcompress( serialize( $meta_data ), 9 ) ) ), '+/=', '-_,');				
+	}
 	
 	/*
 	 * @name : hasYoutubeFlavour
@@ -333,20 +347,26 @@ class PodcastItem extends AppModel {
 	 */
 	function itunesMetaInjection( $row ) {
 
-		$meta_data = array();
+		$inject = array();
 		$data = $this->findById( $row['podcast_item_id'] );
 
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['youtube_series_playlist_text'];
+		$inject['destination_path'] = $row['destination_path'];
+		$inject['destination_filename'] = $row['destination_filename'];
 		
-		return $meta_data;
+		$inject['meta_data'] = $this->encode_meta_data ( 
+		
+			array( 
+				'title' => $data['PodcastItem']['youtube_title'],
+				'genre' => 'Podcast',
+				'author' => $data['PodcastItem']['author'],
+				'course_code' => $data['Podcast']['course_code'],
+				'podcast_title' => $data['PodcastItem']['youtube_title'],
+				'year' => date("Y"),
+				'comments' => 'Item from '.$data['Podcast']['youtube_series_playlist_text'],
+			)
+		);
+		
+		return $inject;
 	}
 		
 	/*
@@ -357,20 +377,24 @@ class PodcastItem extends AppModel {
 	 */
 	function commonMetaInjection( $row ) {
 
-		$meta_data = array();
+		$inject = array();
 		$data = $this->findById( $row['podcast_item_id'] );
 
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $this->data['title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['Podcast']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['Podcast']['title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['title'];
+		$inject['destination_path'] = $row['destination_path'];
+		$inject['destination_filename'] = $row['destination_filename'];
+		$inject['meta_data'] = $this->encode_meta_data(
+			array( 
+				'title' => $data['title'],
+				'genre' => 'Podcast',
+				'author' => $data['Podcast']['author'],
+				'course_code' => $data['Podcast']['course_code'],
+				'podcast_title' => $data['Podcast']['title'],
+				'year' => date("Y"),
+				'comments' => 'Item from '.$data['Podcast']['title']
+			)
+		);
 		
-		return $meta_data;
+		return $inject;
 	}		
 	
 	/*

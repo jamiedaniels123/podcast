@@ -2,19 +2,15 @@
 	<legend><h3>YouTube</h3></legend>
     
     <img src="/img/collection-youtube-large.png" width="45" height="34" />
+    <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'youtube' ); ?>" title="approval status" class="approval_status" />
     
-    
-	<div class="wrapper youtube  two_column">
-    <dl>
-	    <dt></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'youtube' ); ?>" /></dd>
-    </dl>
-    </div>	
-    
-    <a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="button white juggle"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">View</a>	
-    
-    <div class="wrapper youtube two_column" id="PodcastItemYoutubeContainer" style="display:none">	
+   <div class="wrapper ">
+       <ul class="youtube">
+            <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="button white juggle"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">View</a></li>
+        </ul>
+   </div>
+   <div class="clear"></div>
+   <div class="wrapper youtube two_column" id="PodcastItemYoutubeContainer" style="display:none">	
     <dl>
         <dt>Published: </dt>
         <dd><?php echo strtoupper( $this->data['PodcastItem']['youtube_flag'] ) == YES ? 'Yes' : 'No'; ?>&nbsp;</dd>
@@ -87,4 +83,5 @@
             <dd><?php echo nl2br( $this->data['PodcastItem']['youtube_notes'] ); ?>&nbsp;</dd>
         </dl>
 	</fieldset>    
+    </div>
 </fieldset>

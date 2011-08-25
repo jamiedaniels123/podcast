@@ -4,7 +4,7 @@ class PodcastItemMedia extends AppModel {
     var $name = 'PodcastItemMedia';
     var $useTable = 'podcast_item_media';
     var $validate = array();
-	var $common_meta_injection = array('default' => null ); 
+	var $common_meta_injection = array('default' => '' ); 
 	var $itunes_meta_injection = array('ipod-all' => 'ipod-all/','desktop-all' => 'desktop-all/','hd' => 'hd/','hd-1080' => 'hd-1080/' );
 	var $meta_injection = array();
     var $belongsTo = array(
@@ -94,7 +94,8 @@ class PodcastItemMedia extends AppModel {
 			if( isSet( $this->common_meta_injection[$row['PodcastItemMedia']['media_type']] ) ) {
 				
 				$inject['podcast_item_id'] = $row['PodcastItemMedia']['podcast_item'];
-				$inject['destination_path'] = $row['PodcastItem']['custom_id'].'/'.$this->common_meta_injection[$row['PodcastItemMedia']['media_type']];
+				$inject['destination_path'] = $row['PodcastItem']['Podcast']['custom_id'].'/'.$this->common_meta_injection[$row['PodcastItemMedia']['media_type']];
+
 				$inject['destination_filename'] = $row['PodcastItem']['filename'];
 				$this->meta_injection[] = $this->PodcastItem->commonMetaInjection( $inject );
 				
