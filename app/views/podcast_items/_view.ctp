@@ -39,18 +39,25 @@
     </div>
 </div>
 <div class="clear"></div>
-<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
-
-    <?php echo $this->element('../podcast_items/_itunes'); ?>
+<div class="two-column-controls">
+	<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
     
-    <?php if( $this->Permission->isYoutubeUser() ) : ?>
+        <?php echo $this->element('../podcast_items/_itunes'); ?>
         
-        <?php echo $this->element('../podcast_items/_youtube'); ?>
-    
-    <?php else : ?>
-    
-        <?php echo $this->element('../podcast_items/_youtube_lite'); ?>
+        <?php if( $this->Permission->isYoutubeUser() ) : ?>
+            
+            <?php echo $this->element('../podcast_items/_youtube'); ?>
+        
+        <?php else : ?>
+        
+            <?php echo $this->element('../podcast_items/_youtube_lite'); ?>
+            
+        <?php endif; ?>
         
     <?php endif; ?>
-    
-<?php endif; ?>
+     <?php 
+	if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
+		<a href="/podcast_items/edit/<?php echo $this->data['PodcastItem']['id'];?>" title="edit" class="button edit">Edit <?php echo MEDIA; ?></a>
+		<a class="button delete" href="/podcast_items/delete/<?php echo $this->data['PodcastItem']['id']; ?>" title="delete media" onclick="return confirm('Are you sure you wish to delete this media?');">Delete</a>
+        
+	<?php endif; ?>
