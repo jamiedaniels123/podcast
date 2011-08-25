@@ -2,7 +2,7 @@
 <input type="hidden" id="PodcastSyndicated" name="data[Podcast][syndicated]" value="<?php echo $this->data['Podcast']['syndicated']; ?>">
 
 <div class="input text form_title" id="content">
-    <label for="PodcastTitle">Title</label>
+    <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
     <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
@@ -185,7 +185,7 @@
     <div class="clear"></div>
     <div id="PodcastSyndicationContainer" class="podcast_container" style="display:none;">
         <div class="input textarea">
-            <label for="summary">Summary</label>
+            <label for="summary">Summary <span class="required">(Required)</span></label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
             <textarea id="summary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             
@@ -248,7 +248,7 @@
             <?php echo $this->Form->error('Podcast.contact_email'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastLink">Web URL</label>
+            <label for="PodcastLink">Web URL <span class="required">(Required)</span></label>
             <input type="text" size="60" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
             
             <span class="tip-text">Optional URL of a web page you want linked to this particular track</span>
@@ -289,7 +289,7 @@
             <div class="float_left">
                 <div class="input select">
                     
-                    <label for="Nodes">Nodes</label>
+                    <label for="Nodes">Nodes <span class="required">(Required)</span></label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
                     <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
                         <?php if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) ) : ?>

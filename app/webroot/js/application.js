@@ -6,8 +6,8 @@ jQuery(document).ready(function($) {
 	}
 
 	// Creates the animated 'flash' that occurs when displaying an error message (red banner)
-	if( jQuery('#flashMessage.error').length ) {
-		jQuery('#flashMessage.error').effect('highlight', { color: '#ff0000' }, 2000 );
+	if( jQuery('#flashMessage.error .error_message').length ) {
+		jQuery('#flashMessage.error .error_message').effect('highlight', { color: '#ff0000' }, 2000 );
 	}
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
