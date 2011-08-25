@@ -89,7 +89,7 @@ class ApiComponent extends Object {
      */
     function renameFileMediaServer( $data = array() ) {
 
-        $this->setResponse( json_decode( $this->__sendMessage('rename-file-on-media-server', ADMIN_API, $data ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('rename-file-on-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
         return $this->getStatus();
     }
 
@@ -102,7 +102,7 @@ class ApiComponent extends Object {
     function youtubeUpload( $data = array() ) {
     	
 		$this->params = array( $data );
-        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-upload', ADMIN_API, $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-upload', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
 	
@@ -115,7 +115,7 @@ class ApiComponent extends Object {
     function youtubeRefresh( $data = array() ) {
     	
 		$this->params = array( $data );
-        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-update', ADMIN_API, $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('youtube-file-update', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
 	
@@ -135,7 +135,7 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->setResponse( json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
 
@@ -147,7 +147,7 @@ class ApiComponent extends Object {
      */
     function metaInject( $data ) {
     	
-        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data ), count( $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('update-file-metadata', ADMIN_API, $data, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
     
@@ -170,7 +170,7 @@ class ApiComponent extends Object {
 			)
         );
 
-        $this->setResponse( json_decode( $this->__sendMessage('transcode-media-and-deliver', ADMIN_API, $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('transcode-media-and-deliver', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
 		return $this->getStatus();
 
     }
@@ -190,7 +190,7 @@ class ApiComponent extends Object {
             )
         );
 
-        $this->setResponse( json_decode( $this->__sendMessage('checkFile', ADMIN_API, $this->params ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('checkFile', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
     }
 

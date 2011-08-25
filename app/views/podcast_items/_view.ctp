@@ -39,14 +39,18 @@
     </div>
 </div>
 <div class="clear"></div>
-<?php echo $this->element('../podcast_items/_itunes'); ?>
-<?php if( $this->Permission->isYoutubeUser() ) : ?>
-	
-	<?php echo $this->element('../podcast_items/_youtube'); ?>
+<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 
-<?php else : ?>
-
-	<?php echo $this->element('../podcast_items/_youtube_lite'); ?>
-	
+    <?php echo $this->element('../podcast_items/_itunes'); ?>
+    
+    <?php if( $this->Permission->isYoutubeUser() ) : ?>
+        
+        <?php echo $this->element('../podcast_items/_youtube'); ?>
+    
+    <?php else : ?>
+    
+        <?php echo $this->element('../podcast_items/_youtube_lite'); ?>
+        
+    <?php endif; ?>
+    
 <?php endif; ?>
-

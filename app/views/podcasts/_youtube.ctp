@@ -5,31 +5,9 @@
     <img src="/img/collection-youtube-large.png"  width="46" height="33" />
     
     <img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['Podcast'], 'youtube' ); ?>" title="approval status" class="approval_status" />
-    
-    
-		
-    <div class="youtube" id="PodcastYoutubeContainer" style="display:none">
-        <div class="float_right images_container">
-			&nbsp;
-        </div>
-        <div class="float_left two_column">    
-            <dl>
-                <dt>Series Playlist: </dt>
-                <dd><?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>&nbsp;</dd>
-                <dt>Series Playlist Link: </dt>
-                <dd><?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>&nbsp;</dd>
-                <dt>Channel: </dt>
-                <dd><?php echo $this->data['Podcast']['youtube_channel']; ?>&nbsp;</dd>
-                <dt>Course Code: </dt>
-                <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
-            </dl>    
-        </div>
-    </div>
-    
-   <div class="clear"></div>
-   <div class="wrapper ">
-   <ul class="youtube">
-	    <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="button open-close juggle">View</a></li>
+   <div class="wrapper">
+	   <ul class="youtube">
+	   <li><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastYoutubeContainer" class="button open-close juggle">View</a></li>
 	    <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForYoutube( $this->data['Podcast'] ) == false ) && $this->Permission->isYoutubeUser() == false ) : ?>
         
 				<li><a href="/podcasts/consider/youtube/<?php echo $this->data['Podcast']['id']; ?>" class="button white" id="PodcastYoutubeSubmit" onclick="return confirm('You are about to submit this collection to the Youtube team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
@@ -68,5 +46,24 @@
 
 	    	</ul>
 		</div>
+        <div class="clear"></div>
+        <div class="youtube" id="PodcastYoutubeContainer" style="display:none">
+            <div class="float_right images_container">
+                &nbsp;
+            </div>
+            <div class="float_left two_column">    
+                <dl>
+                    <dt>Series Playlist: </dt>
+                    <dd><?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>&nbsp;</dd>
+                    <dt>Series Playlist Link: </dt>
+                    <dd><?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>&nbsp;</dd>
+                    <dt>Channel: </dt>
+                    <dd><?php echo $this->data['Podcast']['youtube_channel']; ?>&nbsp;</dd>
+                    <dt>Course Code: </dt>
+                    <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
+                </dl>    
+            </div>
+        </div>
+        
 	</fieldset>
 </div>

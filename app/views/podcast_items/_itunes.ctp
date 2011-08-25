@@ -2,17 +2,17 @@
 	<legend><h3>iTunes U</h3></legend>
     
     <img src="/img/collection-itunes-large.png" width="45" height="34" />
+    
+	<img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'itunes' ); ?>" />
 
-    <div class="wrapper itunes two_column">
-    <dl>
-	    <dt></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->Object->getApprovalStatus( $this->data['PodcastItem'], 'itunes' ); ?>" /></dd>
-    </dl>
-    </div>	
-    
-    <a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle button white"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">View</a>	
-    
+   <div class="wrapper ">
+       <ul class="youtube">
+            <li>
+				<a href="/" id="PodcastItemItunesToggle" data-target="PodcastItemItuneContainer" class="juggle button white"><img class="icon" alt="Edit this record" src="/img/icon-16-open.png">View</a>
+			</li>
+        </ul>
+   </div>
+   <div class="clear"></div>
     <div class="wrapper itunes  two_column" id="PodcastItemItuneContainer" style="display:none">
 	   	<dl>
 	        <dt>ePub ISBN: </dt>
