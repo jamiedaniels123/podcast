@@ -127,20 +127,6 @@ class PermissionComponent extends Object {
 
         return false;
     }
-
-    /*
-     * @name : isAdministrator
-     * @description : Accepts an array and search through looking for the current user
-     * id in the ['id']. Returns a bool.
-     * @updated : 20th May 2011
-     * @by : Charles Jackson
-     */
-    function isAdministrator() {
-
-		if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.administrator') == true )
-                    return true;
-        return false;
-    }
         
     /*
      * @name : __isModerator
@@ -200,36 +186,6 @@ class PermissionComponent extends Object {
     }
 
     /*
-     * @name : isItunesUser
-     * @description : Returns a bool depending upon whether the user is an itunes user.
-     * @updated : 20th May 2011
-     * @by : Charles Jackson
-     */
-    function isItunesUser() {
-
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
-            return true;
-
-        return false;
-
-    }
-
-    /*
-     * @name : isYoutubeUser
-     * @description : Returns a bool depending upon whether the user is a youtube user.
-     * @updated : 20th May 2011
-     * @by : Charles Jackson
-     */
-    function isYoutubeUser() {
-
-        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == 'Y' )
-            return true;
-
-        return false;
-
-    }
-
-    /*
      * @name : __inMemberGroup
      * @description : Accepts an array and performs a recursive search through looking for the current user
      * id in the ['id'].
@@ -271,72 +227,7 @@ class PermissionComponent extends Object {
 
         return count( $this->errors );
     }
-	
-    /*
-     * @name : isAdminRouting
-     * @description : Checks to see if the current URL is an admin page and returns a boolean.
-     * @updated : 31st May 2011
-     * @by : Charles Jackson
-     */
-    function isAdminRouting() {
-
-        if( substr( $this->controller->action, 0, 6 ) == 'admin_' )
-            return true;
-        
-        return false;
-    }
     
-    /*
-     * @name : isItunesRouting
-     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
-     * @updated : 31st May 2011
-     * @by : Charles Jackson
-     */
-    function isItunesRouting() {
-
-        if( substr( $this->controller->action, 0, 7 ) == 'itunes_' )
-            return true;
-        
-        return false;
-    }
-    
-    /*
-     * @name : isYoutubeRouting
-     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
-     * @updated : 31st May 2011
-     * @by : Charles Jackson
-     */
-    function isYoutubeRouting() {
-
-    	
-        if( substr( $this->controller->action, 0, 8 ) == 'youtube_' )
-            return true;
-        
-        return false;
-    }
-    
-	/*
-	 * @name : statusUpdate
-	 * @description : When a user trys to update the status of a collection this method ensure they permission.
-	 * It is called from the podcasts controller / "status" method.
-	 * @updated : 1st August 2011
-	 * @by : Charles Jackson
-	 */ 
-	function statusUpdate( $media = null, $consider = null, $intended = null, $publish = null ) {
-		
-		if( $this->isItunesUser() && strtoupper( $media ) == 'ITUNES' )
-			return true;
-			
-		if( $this->isYoutubeUser() && strtoupper( $media ) == 'YOUTUBE' )
-			return true;
-
-		if( $consider == 1 && strtoupper( $intended == NO ) && strtoupper( $publish == NO ) )
-			return true;
-
-		return false;
-	}    
-	
-	
     /*
      * @name : youTubePrivileges
      * @description : 
@@ -345,7 +236,7 @@ class PermissionComponent extends Object {
      */    
     function youTubePrivileges( $podcast = array() ) {
   	
-    	if( ( $this->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
+    	if( ( $this->controller->isYoutubeUser() ) && ( $this->Object->considerForYoutube( $podcast ) || $this->Object->intendedForYoutube( $podcast ) || $this->Object->youtubePublished( $podcast ) ) )
     		return true;
     		
     	return false;
@@ -358,13 +249,123 @@ class PermissionComponent extends Object {
      * @by : Charles Jackson
      */    
     function iTunesPrivileges( $podcast = array() ) {
-    	if( ( $this->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
+		
+    	if( ( $this->controller->isItunesUser() ) && ( $this->Object->considerForItunes( $podcast ) || $this->Object->intendedForItunes( $podcast ) || $this->Object->itunesPublished( $podcast ) ) )
     		return true;
     		
     	return false;
     }
 
+
+	/*
+	 * @name : statusUpdate
+	 * @description : When a user trys to update the status of a collection this method ensure they permission.
+	 * It is called from the podcasts controller / "status" method.
+	 * @updated : 1st August 2011
+	 * @by : Charles Jackson
+	 */ 
+	/*function statusUpdate( $media = null, $consider = null, $intended = null, $publish = null ) {
+		
+		if( $this->isItunesUser() && strtoupper( $media ) == 'ITUNES' )
+			return true;
+			
+		if( $this->isYoutubeUser() && strtoupper( $media ) == 'YOUTUBE' )
+			return true;
+
+		if( $consider == 1 && strtoupper( $intended == NO ) && strtoupper( $publish == NO ) )
+			return true;
+
+		return false;
+	}   */ 	
 	
+    /*
+     * @name : isItunesUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    /*function isItunesUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+            return true;
+
+        return false;
+
+    }*/
+
+    /*
+     * @name : isYoutubeUser
+     * @description : Returns a bool depending upon whether the user is a youtube user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    /* function isYoutubeUser() {
+
+        if( strtoupper( $this->Session->read('Auth.User.YouTube') ) == 'Y' )
+            return true;
+
+        return false;
+
+    } */
+	
+	
+    /*
+     * @name : isAdministrator
+     * @description : Accepts an array and search through looking for the current user
+     * id in the ['id']. Returns a bool.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    /* function isAdministrator() {
+
+		if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.administrator') == true )
+                    return true;
+        return false;
+    } */	
+	
+	
+	    /*
+     * @name : isAdminRouting
+     * @description : Checks to see if the current URL is an admin page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    /* function isAdminRouting() {
+
+        if( substr( $this->controller->action, 0, 6 ) == 'admin_' )
+            return true;
+        
+        return false;
+    }*/
+	
+    /*
+     * @name : isItunesRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    /* function isItunesRouting() {
+
+        if( substr( $this->controller->action, 0, 7 ) == 'itunes_' )
+            return true;
+        
+        return false;
+    } */
+    
+    /*
+     * @name : isYoutubeRouting
+     * @description : Checks to see if the current URL is an itunes specific page and returns a boolean.
+     * @updated : 31st May 2011
+     * @by : Charles Jackson
+     */
+    /* function isYoutubeRouting() {
+
+    	
+        if( substr( $this->controller->action, 0, 8 ) == 'youtube_' )
+            return true;
+        
+        return false;
+    } */	
 }
 
 ?>

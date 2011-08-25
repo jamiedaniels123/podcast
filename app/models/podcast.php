@@ -795,36 +795,36 @@ class Podcast extends AppModel {
 
         switch( $podcast['filter'] ) {
             case PUBLIC_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case UNPUBLISHED_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.publish_itunes_u'] = 'N';
-                $conditions[0]['Podcast.openlearn_epub'] = 'N';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.publish_itunes_u'] = 'N';
+                $conditions['Podcast.openlearn_epub'] = 'N';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case PUBLISHED_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.publish_itunes_u'] = 'Y';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.publish_itunes_u'] = 'Y';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case OPENLEARN_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'public';
-                $conditions[0]['Podcast.openlearn_epub'] = 'Y';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'public';
+                $conditions['Podcast.openlearn_epub'] = 'Y';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case PRIVATE_ITUNEU_PODCAST:
-                $conditions[0]['Podcast.intended_itunesu_flag'] = 'Y';
-                $conditions[0]['Podcast.itunesu_site'] = 'private';
-                $conditions[0]['Podcast.deleted'] = 0;
+                $conditions['Podcast.intended_itunesu_flag'] = 'Y';
+                $conditions['Podcast.itunesu_site'] = 'private';
+                $conditions['Podcast.deleted'] = 0;
                 break;
             case DELETED_PODCAST:
-                $conditions[0]['Podcast.deleted'] = 1;
+                $conditions['Podcast.deleted'] = 1;
         }
 
          if( !empty( $podcast['search'] ) && ( $podcast['search'] != INPUT_GREETING ) ) {
@@ -1099,7 +1099,8 @@ class Podcast extends AppModel {
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 				// May need to refine this.
 				unset( $this->belongsTo['PreferredNode'] );
-				unset( $this->belongsTo['Language'] );				
+				unset( $this->belongsTo['Language'] );
+				unset( $this->Owner->hasMany['Podcasts'] );				
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );

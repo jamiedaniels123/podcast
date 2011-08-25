@@ -54,11 +54,12 @@ class PodcastsController extends AppController {
 	        $this->set('search_criteria', null );
 	        $this->set('filter', null );
         }
-            
+		
+        $this->Podcast->recursive = -1;
         $id_numbers = $this->Podcast->getUserPodcasts( $this->Session->read('Auth.User.id'), $this->data['Podcast'] );
 
-		$this->Podcast->recursive = 2;
-        $this->data['Podcasts'] = $this->paginate('Podcast', array('Podcast.id' => $id_numbers ) );
+		$this->Podcast->recursive = 1;
+        $this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.id' => $id_numbers ) );
 
     }
 

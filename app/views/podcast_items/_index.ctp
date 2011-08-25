@@ -1,6 +1,6 @@
 <div class="wrapper" style="margin-top: 40px;">
 <fieldset id="podcast_media">
-    <legend><h3>Collection Media</h3></legend>
+    <legend><h3>Collection <?php echo MEDIA; ?>s</h3></legend>
     
     <img src="/img/collection-large.png" />
     

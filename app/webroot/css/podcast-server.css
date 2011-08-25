@@ -210,8 +210,8 @@ h3 a:hover {text-decoration: underline;}
 }
 
 #admin_panel legend	{
-	margin-top:20px;	
-	}
+	padding-top:20px!important;	
+}
 
 .footer-panel	{
 	background: #ececed; 

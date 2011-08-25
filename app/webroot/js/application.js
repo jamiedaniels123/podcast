@@ -223,6 +223,28 @@ jQuery(document).ready(function($) {
 		    	jQuery('#PodcastItemYoutubeDescription').val(text);
     	}
     });
+	
+	// Filechucker 
+	// This routine will make an ajax call to determine if the current user is an 
+	// iTunes user. If they are not an itunes user it will hide various filechucker form elements.
+	// The routine it calls is within the app_controller.
+	if( jQuery('.formfield_03').length > 0 ) {
+
+		jQuery.ajax(
+		{
+			type: "GET",
+			url: "/user/isItunesUser",
+			success:
+				function( responseData ) {
+					
+					// If false hide various element
+					if( responseData == false ) {
+						
+						jQuery('.formfield_03').hide();
+					}
+				}
+		});		
+	}
 });
 
 // Makes an ajax call to a method in the app_controller

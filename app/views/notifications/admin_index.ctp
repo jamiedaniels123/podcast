@@ -1,31 +1,32 @@
 <fieldset class="notifications index">
-    <legend><h3>Your notifications</h3></legend>
-    
-    <p class="leader">
-    	Below is a list of notifications for yout attention. Unread notifications are highlighted in red.
-    </p>
+    <legend><h3>Notifications</h3></legend>
     
     <div class="clear"></div>
-    <table>
-        <thead>
-            <tr>
-	            <th class="checkbox">Select</th>
-                <th class="title"><?php echo $this->Paginator->sort('Subject','title');?></th>
-                <th class="type"><?php echo $this->Paginator->sort('Type','type');?></th>
-                <th class="actions">Actions</th>
-            </tr>
-        </thead>
-        <?php foreach( $this->data['Notifications'] as $notification ) : ?>
-            <tr>
-                <td></td>
-                <td><?php echo $notification['Notification']['title']; ?></td>
-                <td><?php echo $notification['Notification']['type']; ?></td>
-                <td><?php echo $this->Time->prettyLongDateTime( $notification['Notification']['created'] ); ?></td>
-                <td class="actions">
-                    <a class="button rss" href="/notifications/view/<?php echo $notification['Notification']['id']; ?>">View</a>
-                    <a class="button rss" href="/notifications/delete/<?php echo $notification['Notification']['id']; ?>">Delete</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-	</table>
+    <form method="post" action="">
+        <table>
+            <thead>
+                <tr>
+                    <th class="checkbox">Select</th>
+                    <th class="type"><?php echo $this->Paginator->sort('Type','type');?></th>
+                    <th class="title"><?php echo $this->Paginator->sort('Subject','title');?></th>
+                    <th class="created"><?php echo $this->Paginator->sort('Created','created');?></th>                
+                </tr>
+            </thead>
+            <?php foreach( $this->data['Notifications'] as $notification ) : ?>
+                <tr>
+                    <td class="checkbox">
+                        <input type="checkbox" name="data[Notification][Checkbox][<?php echo $notification['Notification']['id']; ?>]" class="notification_selection" id="NotificationCheckbox<?php echo $notification['Notification']['id']; ?>">
+                    </td>
+                    <td><?php echo $notification['Notification']['type']; ?></td>
+                    <td><?php echo $notification['Notification']['title']; ?></td>
+                    <td><?php echo $this->Time->getPrettyLongDateTime( $notification['Notification']['created'] ); ?></td>                
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <div class="left">
+            <a href="/" class="toggler button setting" data-status="unticked">Select/Unselect all</a>
+            <a class="button delete multiple_action_button" type="button" href="/admin/notifications/delete" id="delete_multiple_podcasts">Delete</a>
+        </div>  
+	</form>
+        
 </fieldset>

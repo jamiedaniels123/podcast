@@ -382,17 +382,26 @@ class UsersController extends AppController {
 	}
 	
 	/*
-	 * @name : admin_logout
+	 * @name : pseudo
 	 * @description : Enables an administrator to relinquish psudeo control
 	 * @updated : 24th August 2011
 	 * @by : Charles Jackson
 	 */
-	 function admin_logout() {
+	 function pseudo() {
 		 
 		$this->autoRender = false;
-		$this->Session->write('Auth.User', $this->Session->read('Backup.User') );
-		unset( $_SESSION['Backup'] );
+		if( $this->Session->read('Backup.User') ) {
+			$this->Session->write('Auth.User', $this->Session->read('Backup.User') );
+			unset( $_SESSION['Backup'] );
+		}
 		$this->redirect( array( 'admin' => false, 'action' => 'dashboard' ) ); 
+	 }
+	 
+	 function admin_sams() {
+		 
+		 $soap = ClassRegistry::init('Soap');
+		 $soap->SoapMethod( array('mySoapParams'));
+		 die('fffff');
 	 }
 }
 ?>
