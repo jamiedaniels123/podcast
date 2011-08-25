@@ -194,20 +194,25 @@
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastNewImage">Image</label>
-            <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
-            <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
-            
-            <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
-            
-            <?php echo $this->Form->error('Podcast.image'); ?>
- 
-            <div class="image thumbnail" style="line-height:32px;">
-          	<img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
-            <a class="button white"  style="vertical-align: middle; margin: 0 0 0 10px;" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><img src="/webroot/img/icon-16-link-delete.png" class="icon" />delete</a>
-        	</div>
-        
+            <div class="image thumbnail wrapper">
+                <div class="float_right">
+                    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
+                    <?php if( !empty( $this->data['Podcast']['image'] ) ) : ?>
+                    	<div class="clear"></div>
+                        <a class="button delete" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')">delete</a>
+                    <?php endif; ?>
+			    </div>
+				<div class="float_left">
+                    <label for="PodcastNewImage">Image</label>
+                    <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
+                    <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
+                    <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
+				</div>            
+        	    <?php echo $this->Form->error('Podcast.image'); ?>
+		        <div class="clear"></div>
+			</div>
 		</div>
+
         
         
         <div class="input select">

@@ -1060,22 +1060,22 @@ class Podcast extends AppModel {
 	 */	
 	function deleteImages( $podcast = array(), $image_type = null ) {
 
-		if( !isSet( $podcast['Podcast'][$image_type] ) )
+		if( !isSet( $podcast[$image_type] ) )
 			return false;
 			
 		$media_images = array();
 		
 		$media_images[] = array( 
-			'destination_path' => $podcast['Podcast']['custom_id'].'/',
-			'filename' => $podcast['Podcast'][$image_type]
+			'destination_path' => $podcast['custom_id'].'/',
+			'destination_filename' => $podcast[$image_type]
 			);
 		$media_images[] = array( 
-			'destination_path' => $podcast['Podcast']['custom_id'].'/',
-			'filename' => $this->getStandardImageName( $podcast['Podcast'][$image_type] )
+			'destination_path' => $podcast['custom_id'].'/',
+			'destination_filename' => $this->getStandardImageName( $podcast[$image_type] )
 			);
 		$media_images[] = array( 
-			'destination_path' => $podcast['Podcast']['custom_id'].'/',
-			'filename' => $this->getThumbnailImageName( $podcast['Podcast'][$image_type] )
+			'destination_path' => $podcast['custom_id'].'/',
+			'destination_filename' => $this->getThumbnailImageName( $podcast[$image_type] )
 			);
 			
 		return $media_images;
