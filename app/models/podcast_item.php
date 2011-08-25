@@ -27,7 +27,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author',
             'dependent' => true
         )
     );
@@ -384,7 +384,7 @@ class PodcastItem extends AppModel {
 		$inject['destination_filename'] = $row['destination_filename'];
 		$inject['meta_data'] = $this->encode_meta_data(
 			array( 
-				'title' => $data['title'],
+				'title' => $data['Podcast']['title'],
 				'genre' => 'Podcast',
 				'author' => $data['Podcast']['author'],
 				'course_code' => $data['Podcast']['course_code'],

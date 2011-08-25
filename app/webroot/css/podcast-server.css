@@ -360,7 +360,7 @@ div#PodcastItunesContainer .float_right, div#PodcastSummaryContainer .float_righ
 	width: 15%;
 }
 
-div#PodcastItunesContainer .float_left, div#PodcastSummaryContainer .float_left, div#PodcastItemSummaryContainer .float_left, #PodcastItemItuneContainer .float_left {
+div#PodcastItunesContainer .float_left, div#PodcastSummaryContainer .float_left, div#PodcastItemSummaryContainer .float_left, #PodcastItemItuneContainer .float_left, #PodcastItemYoutubeContainer .float_left {
 	
 	width: 70%;
 }
