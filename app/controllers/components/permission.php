@@ -13,6 +13,18 @@ class PermissionComponent extends Object {
     var $controller = null;
     private $errors = array();
 
+
+    /*
+     * @name : initialize
+     * @description : Grab the controller reference for later use.
+     * @updated : 24th May 2011
+     * @by : Charles Jackson
+     */
+    function initialize( & $controller) {
+		
+       $this->controller = & $controller;
+    }
+	
     /*
      * @name : toView
      * @description : Take the data array and makes various calls to ensure they have the necessary permissions to view
@@ -94,22 +106,6 @@ class PermissionComponent extends Object {
         return false;
     }
 
-    /*
-     * NOTHING TO SEE HERE FOLKS!!!
-     * Below this line are the generic methods that are combined by the functions above. They should not need to be touched.
-     */
-
-    /*
-     * @name : initialize
-     * @description : Grab the controller reference for later use.
-     * @updated : 24th May 2011
-     * @by : Charles Jackson
-     */
-    function initialize( & $controller) {
-		
-       $this->controller = & $controller;
-    }
-    
     /*
      * @name : isOwner
      * @description : If set, compares the value of Auth.User.id against the user_id passed as a parameter and returns
@@ -257,6 +253,8 @@ class PermissionComponent extends Object {
     }
 
 
+	// DEPRECIATED - TO BE DELETED WHEN 1111% CERTAIN  ( 25th August 2011 - Charles Jackson )
+	
 	/*
 	 * @name : statusUpdate
 	 * @description : When a user trys to update the status of a collection this method ensure they permission.

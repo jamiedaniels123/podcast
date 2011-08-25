@@ -1,10 +1,11 @@
 jQuery(document).ready(function($) {
 
+	// Creates the animated 'flash' that occurs when displaying a success message (green banner)
 	if( jQuery('#flashMessage.success').length ) {
-
 		jQuery('#flashMessage.success').effect('highlight', { color: '#00c500' }, 2000 );
 	}
 
+	// Creates the animated 'flash' that occurs when displaying an error message (red banner)
 	if( jQuery('#flashMessage.error').length ) {
 		jQuery('#flashMessage.error').effect('highlight', { color: '#ff0000' }, 2000 );
 	}
@@ -32,8 +33,6 @@ jQuery(document).ready(function($) {
         		jQuery('#PodcastPodcastFlag').val(1);
         		show_hide_podcast_elements( 1 );
         	}
-        	
-            
         });
     }
 
@@ -129,6 +128,8 @@ jQuery(document).ready(function($) {
 		
     })
     
+	// For those DOM elements with a class of "input_greeting" this routine will
+	// clear the input value if it matches the title attribute
     jQuery('.input_greeting').each( function(e) {
 
 		jQuery(this).focus( function () {
@@ -142,7 +143,9 @@ jQuery(document).ready(function($) {
 			}
 		});
     });
-    
+
+	// For those DOM elements with a class of "input_greeting" and an empty value
+	// this routine will populate with the value of the attribute field.
     jQuery('.input_greeting').each( function(e) {
 
 		jQuery(this).blur( function () {
@@ -157,6 +160,8 @@ jQuery(document).ready(function($) {
 		});
 	});
     
+	// This routine will hide/display the "personalise" element that enables peeps to 
+	// dynamically pick which columns they wish to display on any podcast table.
     jQuery('.personalise').live('click',function(e) {
 
     	var target = jQuery(this).attr('data-target');
@@ -282,6 +287,31 @@ function show_hide_podcast_elements( is_podcast ) {
     }
 }
 
+// Will tick all the checkboxes on the dashboard, at time of publication the only
+// checkboxes are those associated with the podcast listing.
+function tickCheckboxes() {
+
+    jQuery('input[type="checkbox"]').each(function(index) {
+
+        jQuery(this).attr('checked',true);
+
+    });
+
+}
+
+// Will untick all the checkboxes on the dashboard, at time of publication the only
+// checkboxes are those associated with the podcast listing.
+function unTickCheckboxes() {
+
+    jQuery('input[type="checkbox"]').each(function(index) {
+
+        jQuery(this).attr('checked',false);
+
+    });
+}
+
+// DEPRECIATED - TO BE DELETED WHEN 1111% CERTAIN  ( July 2011 - Charles Jackson )
+
 // Will show or hide the itunes container divs depending
 // upon the status of the checkbox. Called on page load and when the
 // user clicks the checkbox.
@@ -315,27 +345,3 @@ function show_hide_podcast_elements( is_podcast ) {
         jQuery('.youtube_container').hide('slow');
     }
 }*/
-
-// Will tick all the checkboxes on the dashboard, at time of publication the only
-// checkboxes are those associated with the podcast listing.
-function tickCheckboxes() {
-
-    jQuery('input[type="checkbox"]').each(function(index) {
-
-        jQuery(this).attr('checked',true);
-
-    });
-
-}
-
-// Will untick all the checkboxes on the dashboard, at time of publication the only
-// checkboxes are those associated with the podcast listing.
-function unTickCheckboxes() {
-
-    jQuery('input[type="checkbox"]').each(function(index) {
-
-        jQuery(this).attr('checked',false);
-
-    });
-}
-
