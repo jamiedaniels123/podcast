@@ -21,27 +21,21 @@ class AppController extends Controller {
     function beforeFilter() {
     	
     	$this->alert = false;
+
     	
 		if( $this->RequestHandler->isAjax() == false ) {
 			
-			// If the current user is attempting to view an admin method ensure the "administrator" flag on their
-			// profile is set to TRUE.
-			if( $this->isAdminRouting() && $this->isAdministrator() == false ) {
-	
-				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
-				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
+			// If the current user is attempting to view an admin, youtube or itunes specific method ensure they have permission else
+			// redirect to a 404 page and create a row on the notifications table alerting admin to the attempt.
+			if( ( $this->isAdminRouting() && $this->isAdministrator() == false ) || ( $this->isItunesRouting() && $this->isItunesUser() == false ) || ( $this->isYoutubeRouting() && $this->isYoutubeUser() == false ) ) {
+
+				// It would appear the user has attempted to access a URL to which they have no permission.
+				// Create a row on the notifications table
+				$notification = ClassRegistry::init('Notification');
+				$notification->unauthorisedAccess( $this->Session->read('Auth.User'), $this->params['url']['url'] );
 				
-			} 
-			
-			if( $this->isItunesRouting() && $this->isItunesUser() == false ) {
-				
-				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
-				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
-			
-			} elseif( $this->isYoutubeRouting() && $this->isYoutubeUser() == false ) {
-	
-				$this->Session->setFlash('You do not have permission to access this page.', 'default', array(), 'error');
-				$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
+				$this->Session->setFlash( 'Could not find the page you were looking for. Please try again', 'default', array( 'class' => 'error' ) );
+				$this->cakeError('error404');
 			}
 			
 			

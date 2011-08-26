@@ -50,6 +50,9 @@
                 <dt>Geo Location: </dt>
                 <dd><?php echo $this->data['PodcastItem']['geo_location']; ?>&nbsp;</dd>
             </dl>
+		</div>
+        <div class="clear"></div>
+        <div class="float_left two_column"> 
             <fieldset>
                 <legend>Management</legend>
                 <dl>
@@ -86,7 +89,7 @@
                     <dt>Notes: </dt>
                     <dd><?php echo nl2br( $this->data['PodcastItem']['youtube_notes'] ); ?>&nbsp;</dd>
                 </dl>
-            </fieldset> 
-		</div>   
+            </fieldset>
+		</div> 
     </div>
 </fieldset>

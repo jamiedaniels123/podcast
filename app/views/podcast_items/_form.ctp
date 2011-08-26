@@ -3,7 +3,9 @@
 <input type="hidden" id="PodcastTitle" name="data[Podcast][title]" value="<?php echo $this->data['Podcast']['title']; ?>">
 <input type="hidden" id="PodcastItemProcessedState" name="data[PodcastItem][processed_state]" value="<?php echo $this->data['PodcastItem']['processed_state']; ?>">
 <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
-<input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">    
+<input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">
+<input type="hidden" id="PodcastItemYoutubeFlag" name="data[PodcastItem][youtube_flag]" value="<?php echo $this->data['PodcastItem']['youtube_flag']; ?>">
+<input type="hidden" id="PodcastItemItunesFlag" name="data[PodcastItem][itunes_flag] value="<?php echo $this->data['PodcastItem']['itunes_flag']; ?>">
 
 <div class="input text form_title" id="content">
     <label for="PodcastItemTitle">Title</label>

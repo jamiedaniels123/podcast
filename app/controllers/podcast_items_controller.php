@@ -93,9 +93,10 @@ class PodcastItemsController extends AppController {
 
 		if ( !empty( $this->data ) ) {
            	
+			$this->PodcastItem->set( $this->data );	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-				
-				$this->PodcastItem->set( $this->data );
+			
+				$this->PodcastItem->set( $this->data );	
             	$this->PodcastItem->saveAll();
 
 				// May not need meta injection
@@ -132,6 +133,40 @@ class PodcastItemsController extends AppController {
 		$this->_setYoutubeOptions();        
     }
 
+	/*
+	 * @name : publish
+	 * @description : Will set the published_flag to 'Y' for any podcast_item meaning it will appear on RSS feeds.
+	 * @updated : 26th August 2011
+	 * @by : Charles Jackson
+	 */
+	function publish( $id = null ) {
+		
+		$this->PodcastItem->recursive = -1;
+		
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+			$this->data = $this->PodcastItem->findById( $key );			
+			
+			if( $this->Object->readyForPublication( $this->data['PodcastItem'] ) ) {
+				
+				$this->data['PodcastItem']['published_flag'] = 'Y';
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been successfully published.', 'default', array( 'class' => 'success' ) );
+
+			} else {
+				
+				$this->Session->setFlash('Cannot publish '. MEDIA.'(s) that are unavailable or have no title.', 'default', array( 'class' => 'alert' ) );
+				break;
+			}
+		}
+		
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+	}
+	
 	/*
 	 * @name : youtube_upload
 	 * @description : Upload a new video to youtube.

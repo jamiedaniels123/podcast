@@ -10,8 +10,13 @@ class PodcastItem extends AppModel {
             'Rule1' => array(
                 'rule' => 'numeric',
                 'allowEmpty' => false,
-                'message' => 'Cannot identify the podcast you are trying to associate with this media.'
+                'message' => 'Cannot identify the podcast you are trying to associate with this track.'
             )
+        ),
+        'title' => array(
+			'rule' => 'notempty',
+			'allowEmpty' => false,
+			'message' => 'Please provide a title for this track.'
         ),
         'target_url' => array(
             'Rule1' => array(
@@ -74,6 +79,7 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
+		$this->data['PodcastItem']['title'] = $params['url']['f1name'];
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
 		
