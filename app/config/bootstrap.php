@@ -61,13 +61,13 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('SERVER_ENV', 'ACCT');
 		DEFINE('DOMAIN_NAME', 'podcast-api-acc.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
-		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-acc.open.ac.uk/');
 		break;
 	case 'podcast-admin.open.ac.uk':
 		DEFINE('SERVER_ENV', 'LIVE');
 		DEFINE('DOMAIN_NAME', 'podcast-api-acc.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
-		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-acc.open.ac.uk/');
 		break;
 	default:
 		die('ERROR: Unknown server.  Check app/config/bootstrap.php');

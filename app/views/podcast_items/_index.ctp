@@ -15,6 +15,7 @@
 	            	<th class="collection-title">Name</th>
 	                <th class="">Uploaded</th>
 	                <th class="icon-col">Available</th>
+	                <th class="icon-col">Published</th>                                        
 	            	<th class="icon-col">iTunes</th>                
 	            	<th class="icon-col">YouTube</th>
 	            	<th class="actions">Actions</th>
@@ -35,7 +36,8 @@
 			            </td>
 		                <td  class="collection-title"><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : $podcast_item['filename']; ?></a></td>
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
-		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>
+		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>	
+                        <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
 		            	<td  class="icon-col">
                         
@@ -76,7 +78,8 @@
 	    
 	        <a href="/" class="toggler button setting" data-status="unticked">Select/deselect all</a>
 			<a class="button delete multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items">Delete</a>
-		
+			<a class="button publish multiple_action_button" href="/podcast_items/publish" id="publish_multiple_podcast_items">Publish</a>
+            		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
 		        <a class="button itunes-icon multiple_action_button" href="/itunes/podcast_items/approve" id="PodcastItemItunesApprove">iTunes include</a>

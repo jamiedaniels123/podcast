@@ -10,8 +10,13 @@ class PodcastItem extends AppModel {
             'Rule1' => array(
                 'rule' => 'numeric',
                 'allowEmpty' => false,
-                'message' => 'Cannot identify the podcast you are trying to associate with this media.'
+                'message' => 'Cannot identify the podcast you are trying to associate with this track.'
             )
+        ),
+        'title' => array(
+			'rule' => 'notempty',
+			'allowEmpty' => false,
+			'message' => 'Please provide a title for this track.'
         ),
         'target_url' => array(
             'Rule1' => array(
@@ -27,7 +32,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author',
             'dependent' => true
         )
     );
@@ -74,6 +79,7 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
+		$this->data['PodcastItem']['title'] = $params['url']['f1name'];
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
 		
@@ -384,7 +390,7 @@ class PodcastItem extends AppModel {
 		$inject['destination_filename'] = $row['destination_filename'];
 		$inject['meta_data'] = $this->encode_meta_data(
 			array( 
-				'title' => $data['title'],
+				'title' => $data['Podcast']['title'],
 				'genre' => 'Podcast',
 				'author' => $data['Podcast']['author'],
 				'course_code' => $data['Podcast']['course_code'],

@@ -2,7 +2,7 @@
 <input type="hidden" id="PodcastSyndicated" name="data[Podcast][syndicated]" value="<?php echo $this->data['Podcast']['syndicated']; ?>">
 
 <div class="input text form_title" id="content">
-    <label for="PodcastTitle">Title</label>
+    <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
     <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
@@ -131,8 +131,6 @@
 		<div class="float_left">
 			<div class="input select">
             <label for="UsersUsers">All Users</label>
-            
-			
 				
 				<select id="UsersUsers" multiple="multiple" name="data[Users][Users][]">
 					<?php foreach( $users as $key => $value ) : ?>
@@ -185,7 +183,7 @@
     <div class="clear"></div>
     <div id="PodcastSyndicationContainer" class="podcast_container" style="display:none;">
         <div class="input textarea">
-            <label for="summary">Summary</label>
+            <label for="summary">Summary <span class="required">(Required)</span></label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
             <textarea id="summary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             
@@ -194,20 +192,25 @@
             <?php echo $this->Form->error('Podcast.summary'); ?>
         </div>
         <div class="input file">
-            <label for="PodcastNewImage">Image</label>
-            <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
-            <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
-            
-            <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
-            
-            <?php echo $this->Form->error('Podcast.image'); ?>
- 
-            <div class="image thumbnail" style="line-height:32px;">
-          	<img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], THUMBNAIL_EXTENSION ); ?>" title="thumbnail image" />
-            <a class="button white"  style="vertical-align: middle; margin: 0 0 0 10px;" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><img src="/webroot/img/icon-16-link-delete.png" class="icon" />delete</a>
-        	</div>
-        
+            <div class="image thumbnail wrapper">
+                <div class="float_right text_right">
+                    <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="thumbnail image" />
+                    <?php if( !empty( $this->data['Podcast']['image'] ) ) : ?>
+                    	<div class="clear"></div>
+                        <a class="button delete" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')">delete</a>
+                    <?php endif; ?>
+			    </div>
+				<div class="float_left">
+                    <label for="PodcastNewImage">Image</label>
+                    <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
+                    <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
+                    <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
+				</div>            
+        	    <?php echo $this->Form->error('Podcast.image'); ?>
+		        <div class="clear"></div>
+			</div>
 		</div>
+
         
         
         <div class="input select">
@@ -248,7 +251,7 @@
             <?php echo $this->Form->error('Podcast.contact_email'); ?>
         </div>
         <div class="input text">
-            <label for="PodcastLink">Web URL</label>
+            <label for="PodcastLink">Web URL <span class="required">(Required)</span></label>
             <input type="text" size="60" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
             
             <span class="tip-text">Optional URL of a web page you want linked to this particular track</span>
@@ -289,7 +292,7 @@
             <div class="float_left">
                 <div class="input select">
                     
-                    <label for="Nodes">Nodes</label>
+                    <label for="Nodes">Nodes <span class="required">(Required)</span></label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
                     <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
                         <?php if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) ) : ?>

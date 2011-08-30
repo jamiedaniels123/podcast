@@ -136,8 +136,13 @@ class ObjectComponent extends Object {
 		return false;
 	}
 	
-
-    
+	function readyForPublication( $object ) {
+		
+		if( $this->isAvailable( $object ) && !empty( $object['title'] ) )
+			return true;
+			
+		return false;
+	}
 }
 
 ?>

@@ -53,7 +53,7 @@ class PodcastItemsController extends AppController {
 
         if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
 
-            $this->Session->setFlash('Could not identify the podcast you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
 
         } else {
@@ -78,7 +78,7 @@ class PodcastItemsController extends AppController {
         // We did not find the podcast, error and redirect.
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
-            $this->Session->setFlash( 'Could not find your item media file. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash( 'Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
         }
     }
@@ -93,20 +93,21 @@ class PodcastItemsController extends AppController {
 
 		if ( !empty( $this->data ) ) {
            	
+			$this->PodcastItem->set( $this->data );	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-				
-				$this->PodcastItem->set( $this->data );
+			
+				$this->PodcastItem->set( $this->data );	
             	$this->PodcastItem->saveAll();
 
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
 					
-					$this->Session->setFlash('Your podcast item has been successfully updated.', 'default', array( 'class' => 'success' ) );
+					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
 					
 				} else {
 					
 					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
-					$this->Session->setFlash('Your podcast item has been successfully updated but the meta injection failed. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
+					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated but the meta injection failed. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
 				}	
 												
                 $this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
@@ -114,7 +115,7 @@ class PodcastItemsController extends AppController {
             }
 			
             $this->errors = $this->PodcastItem->invalidFields( $this->data );
-            $this->Session->setFlash('Could not update your media. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('Could not update your '.MEDIA.'. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
 
         } else {
 
@@ -124,7 +125,7 @@ class PodcastItemsController extends AppController {
             // We did not find the podcast, redirect.
             if( empty( $this->data ) ) {
 
-                $this->Session->setFlash('Could not find your podcast media. Please try again.', 'default', array( 'class' => 'error' ) );
+                $this->Session->setFlash('Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
                 $this->cakeError('error404');
 			}
         }
@@ -132,6 +133,40 @@ class PodcastItemsController extends AppController {
 		$this->_setYoutubeOptions();        
     }
 
+	/*
+	 * @name : publish
+	 * @description : Will set the published_flag to 'Y' for any podcast_item meaning it will appear on RSS feeds.
+	 * @updated : 26th August 2011
+	 * @by : Charles Jackson
+	 */
+	function publish( $id = null ) {
+		
+		$this->PodcastItem->recursive = -1;
+		
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+			$this->data = $this->PodcastItem->findById( $key );			
+			
+			if( $this->Object->readyForPublication( $this->data['PodcastItem'] ) ) {
+				
+				$this->data['PodcastItem']['published_flag'] = 'Y';
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been successfully published.', 'default', array( 'class' => 'success' ) );
+
+			} else {
+				
+				$this->Session->setFlash('Cannot publish '. MEDIA.'(s) that are unavailable or have no title.', 'default', array( 'class' => 'alert' ) );
+				break;
+			}
+		}
+		
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+	}
+	
 	/*
 	 * @name : youtube_upload
 	 * @description : Upload a new video to youtube.
@@ -159,7 +194,7 @@ class PodcastItemsController extends AppController {
 							$this->data['PodcastItem']['youtube_id'] = 1;
 							$this->PodcastItem->set( $this->data );
 							$this->PodcastItem->save();
-							$this->Session->setFlash('Collection has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
+							$this->Session->setFlash( MEDIA.' has been successfully scheduled for upload to youtube.', 'default', array( 'class' => 'success' ) );
 						} else {
 							
 							$this->Session->setFlash('Unable to publish '.MEDIA.' to youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
@@ -212,7 +247,7 @@ class PodcastItemsController extends AppController {
 						$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
 						$this->PodcastItem->set( $this->data );
 						$this->PodcastItem->save();
-						$this->Session->setFlash('Collection has been successfully scheduled for a youtube meta data refresh.', 'default', array( 'class' => 'success' ) );
+						$this->Session->setFlash( MEDIA.' has been successfully scheduled for a youtube meta data refresh.', 'default', array( 'class' => 'success' ) );
 					} else {
 						
 						$this->Session->setFlash('Unable to refresh '.MEDIA.' on Youtube. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
@@ -389,14 +424,14 @@ class PodcastItemsController extends AppController {
 								)
 							)
 						{
-							$this->Session->setFlash('Media file has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
+							$this->Session->setFlash( MEDIA.' has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
 							$this->PodcastItem->commit();
 							
 				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							
-							$this->Session->setFlash('We were unable to transfer your file to the media server. Please try again', 'default', array( 'class' => 'error' ) );
+							$this->Session->setFlash('We were unable to transfer your '.MEDIA.' to the media server. Please try again', 'default', array( 'class' => 'error' ) );
 						}
 						
 					// This media needs to be transcoded.
@@ -412,21 +447,21 @@ class PodcastItemsController extends AppController {
 							
 							// Witwoo! Everything worked.						
 							$this->PodcastItem->commit();
-							$this->Session->setFlash('Your podcast media has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
+							$this->Session->setFlash('Your '.MEDIA.' has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
 
 				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							
 							// Could not schedule for transcoding.
-							$this->Session->setFlash('Could not schedule your media for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+							$this->Session->setFlash('Could not schedule your '.MEDIA.' for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
 						}
 					}
 					
                 } else {
 					
                     // Could not copy file from the default folder in the transcoding specific folder on the admin box.
-					$this->Session->setFlash('Could not copy your uploaded media. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+					$this->Session->setFlash('Could not copy your '.MEDIA.'. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
 				}
             }
 			
@@ -434,7 +469,7 @@ class PodcastItemsController extends AppController {
 
 			// The file did not upload capture the errors.
 			$this->errors = $this->PodcastItem->invalidFields( $this->data );
-			$this->Session->setFlash('Could not save your media information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
+			$this->Session->setFlash('Could not save your '.MEDIA.' information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
 		}
 		
 		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );		
@@ -540,17 +575,17 @@ class PodcastItemsController extends AppController {
 						$this->PodcastItem->set( $this->data );
 						$this->PodcastItem->save();
 		
-						$this->Session->setFlash('We successfully deleted the podcast media.', 'default', array( 'class' => 'success' ) );
+						$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
 					
 					} else {
 					
-						$this->Session->setFlash('We could not delete the media. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+						$this->Session->setFlash('We could not delete '.MEDIA.'. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 						break;
 					}
 					
 		        } else {
 				
-					$this->Session->setFlash('Cannot delete media that is published or not yet available.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot delete '.MEDIA.' that is published or not yet available.', 'default', array( 'class' => 'error' ) );
 					break;
 				}
 			}
@@ -585,19 +620,19 @@ class PodcastItemsController extends AppController {
 				if( $this->Api->deleteFileOnMediaServer( 
 					array(
 							'destination_path' => $this->data['Podcast']['custom_id'].'/',  
-							'filename' => $this->data['PodcastItem'][$attachment.'_filename'],  
+							'destination_filename' => $this->data['PodcastItem'][$attachment.'_filename'],  
 						)
 					) 
 				) {
 
-					$this->Session->setFlash('The media attachment has been deleted.', 'default', array( 'class' => 'success' ) );
-			        $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+					$this->Session->setFlash('The '.MEDIA.' attachment has been deleted.', 'default', array( 'class' => 'success' ) );
+			        $this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
 			        exit;	
 				}
 			}
         }
         
-		$this->Session->setFlash('There has been a problem deleting the media attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
+		$this->Session->setFlash('There has been a problem deleting the '.MEDIA.' attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
 	    $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
     }
 
@@ -621,7 +656,7 @@ class PodcastItemsController extends AppController {
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) ) {
 
-            $this->Session->setFlash( 'Could not find your chosen media. Please try again.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash( 'Could not find your chosen '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->cakeError('error404');
         }
     }
@@ -641,7 +676,7 @@ class PodcastItemsController extends AppController {
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) ) {
 
-            $this->Session->setFlash('We could not find the podcast media you were looking for.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('We could not find the '.MEDIA.' you were looking for.', 'default', array( 'class' => 'error' ) );
             
         } else {
 			
@@ -655,17 +690,17 @@ class PodcastItemsController extends AppController {
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
 					
-					$this->Session->setFlash('We successfully scheduled the media for deletion.', 'default', array( 'class' => 'success' ) );
+					$this->Session->setFlash('We successfully scheduled the '.MEDIA.' for deletion.', 'default', array( 'class' => 'success' ) );
 					
 				} else {
 					
-					$this->Session->setFlash('We could not schedule the media file for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('We could not schedule the '.MEDIA.' for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 				}
 				
 			} else {
 
 				$this->PodcastItem->delete( $id );				
-				$this->Session->setFlash('We successfully deleted the media.', 'default', array( 'class' => 'success' ) );
+				$this->Session->setFlash('We successfully deleted the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
 			}
         }
         
@@ -687,7 +722,7 @@ class PodcastItemsController extends AppController {
 
         if( empty( $this->data ) ) {
 
-            $this->Session->setFlash('We could not identify the media you are trying to restore.', 'default', array( 'class' => 'error' ) );
+            $this->Session->setFlash('We could not identify the '.MEDIA.' you are trying to restore.', 'default', array( 'class' => 'error' ) );
 
         } else {
 
@@ -698,11 +733,11 @@ class PodcastItemsController extends AppController {
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
                 
-                $this->Session->setFlash('We successfully restored the media.', 'default', array( 'class' => 'success' ) );
+                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
 
             } else {
 
-                $this->Session->setFlash('We were unable to restore the media, please try again.', 'default', array( 'class' => 'error' ) );
+                $this->Session->setFlash('We were unable to restore the '.MEDIA.', please try again.', 'default', array( 'class' => 'error' ) );
             }
 
         }
