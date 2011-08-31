@@ -18,6 +18,10 @@ class PodcastItem extends AppModel {
 			'allowEmpty' => false,
 			'message' => 'Please provide a title for this track.'
         ),
+        'published_flag' => array(
+            'rule' => array('readyForPublication'),
+            'message' => 'You cannot publish tracks that are unavailable or do not have a title.'
+        ),
         'target_url' => array(
             'Rule1' => array(
                 'rule' => 'url',
@@ -423,6 +427,27 @@ class PodcastItem extends AppModel {
 		return false;
 	}
 
+    /*
+     * @name : readyForPublication
+     * @description : Custom validation method called from the validation array. If the user has chosen to
+     * publish this media ensure it has a title and is available.
+     * NOTE: The $check array will contain an associative array eg: array( 'field-name' => field-value )
+     * @updated : 26th August 2011
+     * @by : Charles Jackson
+     */
+    function readyForPublication( $check = array() ) {
+		
+		// get the value of the field being passed
+        $value = array_shift( $check );
 
+		// They are publishing media
+        if( $value == 'Y' ) {
+			
+			if( ( $this->data['PodcastItem']['processed_state'] != 9 ) || ( empty( $this->data['PodcastItem']['title'] ) ) )
+                return false;
+        }
+
+        return true;
+    }
 }
 

@@ -29,7 +29,7 @@
     <input type="hidden" value="N" id="PodcastItemPublishedFlag_" name="data[PodcastItem][published_flag]">
     <input type="checkbox" id="PodcastItemPublishedFlag" value="Y" <?php echo $this->data['PodcastItem']['published_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][published_flag]">
     <label for="PodcastItemPublishedFlag">Published?</label>
-    <?php echo $this->Form->error('PodcastItem.publiished_flag'); ?>
+    <?php echo $this->Form->error('PodcastItem.published_flag'); ?>
 </div>
 
 <div class="input text">

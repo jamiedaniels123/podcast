@@ -30,16 +30,13 @@ class CallbacksController extends AppController {
 		$this->layout='callback';
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
-		$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'Callback Alert' );
+		$notification = ClassRegistry::init('Notification');
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
 			$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
 
-			if( $this->Callback->hasErrors() )
-				$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'This callback has errors, see information below as received from the Admin API');
-				
 			// If we have transcoded media then we need to save the flavour and possibly update the processed state 
 			if( in_array( $this->Callback->data['command'], $this->process_transcode ) ) {
 					
@@ -51,27 +48,25 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					// A function created during the development stages to ernssure the API is giving a valid response
-					if( $this->Callback->malformed( $row, 'transcode' ) ) {
-						
-						$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row, 'The Admin API has returned malformed data row. See row below :');
-						
-					} else {
-						
-						if( $podcastItemMedia->saveFlavour( $row ) == false )
-							$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $podcastItemMedia->data, 'Could not save a newly transcoded flavour of media, see debug information from the Podcast Admin Server' );
-							
-					}
+					//if( $podcastItemMedia->saveFlavour( $row ) == false )
+					$podcastItemMedia->saveFlavour( $row );
+					$notification->unableSaveFlavour( $podcastItemMedia->data, $row );
 					
-					$this->Folder->cleanUp( $row['source_path'], $row['original_filename'] );
+					// There will only be 1 copy of the transcoded file sitting in the root folder. Wait for a response
+					// from the API regarding the 'default' flavour and delete. We could delete at anytime but 
+					// if we try to delete the same file more than once it will create an error in the notifications
+					// panel.
+					if( strtolower( $row['flavour'] ) == 'default' ) {
+						
+						//if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'] ) == false )
+							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+					}
 				}
 			}
 			
 			// Called when we are HARD DELETING a podcast or podcast item we must remove them from the database.
-			if( in_array( $this->Callback->data['command'], $this->deletion_request ) ) {
-				
+			if( in_array( $this->Callback->data['command'], $this->deletion_request ) )
 				$this->Callback->processDeletions();
-			}			
 				
 			// Does the API command signify a need to delete a local file structure?
 			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
@@ -79,9 +74,14 @@ class CallbacksController extends AppController {
 				foreach( $this->Callback->data['data'] as $row ) {
 
 					if ( isSet( $row['source_filename'] ) && !empty( $row['original_filename'] ) ) {
-						$this->Folder->cleanUp( $row['source_path'],$row['original_filename'] );
+						
+						//if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'] ) == false )
+							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+							
 					} else {
-						$this->Folder->cleanUp( $row['source_path'],$row['source_filename'] );						
+						
+						//if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'] ) == false )
+							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );
 					}
 				}
 			}
@@ -89,7 +89,6 @@ class CallbacksController extends AppController {
 			// If we need to kick-off some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
 				
-				$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data,'Possible meta injection');
 				// Needed to retrieve the meta data.
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
@@ -105,8 +104,8 @@ class CallbacksController extends AppController {
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
 						if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
 							
-							if( $this->Api->metaInject( $podcastItemMedia->buildMetaData( array( 'PodcastItemMedia.podcast_item' => $row['podcast_item_id'], 'PodcastItemMedia.media_type' => $row['flavour'] ) ) ) == false )
-								$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $podcastItemMedia->meta_injection,'Error injecting meta data');
+							$this->Api->metaInject( $podcastItemMedia->buildMetaData( array( 'PodcastItemMedia.podcast_item' => $row['podcast_item_id'], 'PodcastItemMedia.media_type' => $row['flavour'] ) ) );
+							
 						}
  					}
 				}
@@ -128,7 +127,7 @@ class CallbacksController extends AppController {
 					
 					$this->data['PodcastItem']['youtube_id'] = 	null;
 					$this->data['PodcastItem']['youtube_flag'] = NO;
-					$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error youtube upload/refresh. Please see data from Admin API bellow.');					
+					//$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error youtube upload/refresh. Please see data from Admin API bellow.');					
 				}
 				
 				$podcastItem->set( $this->data );
@@ -137,7 +136,7 @@ class CallbacksController extends AppController {
 
 		} else {
 			
-			$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $this->Callback->data, 'Failed to understand command' );
+			$notification->malformedData( $this->Callback->data );
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}

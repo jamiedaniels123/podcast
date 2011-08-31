@@ -148,10 +148,20 @@ class AppModel extends Model {
         return substr( $filename, ( strrpos( $filename, '.' ) + 1 ), strlen( $filename ) );
     }
 
+	
     function getStandardImageName( $image_filename = null ) {
 
-        $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
-        $standard_filename .= RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
+		// Does the filename have an extension?
+		if( strrpos( $image_filename, '.' ) ) {
+			
+	        $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
+	        $standard_filename .= RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
+			
+		} else {
+			
+			$standard_filename .= RESIZED_IMAGE_EXTENSION;
+		}
+		
         return $standard_filename;
     }
 

@@ -11,6 +11,8 @@ class FolderComponent extends Object {
 	function buildHtaccessFile( $data = array() ) {
 
 		$text = "RewriteEngine on\n";
+		$text = "RewriteCond %{REQUEST_FILENAME} !-f\n";
+		$text = "RewriteRule ^feeds/.*\.jpg$ /feeds/default-project-thumbnail.png [L]\n";
 		
 		if( $data['Podcast']['deleted']	 ) {
 			
