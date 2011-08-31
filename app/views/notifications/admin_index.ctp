@@ -10,6 +10,7 @@
                     <th class="type"><?php echo $this->Paginator->sort('Type','type');?></th>
                     <th class="title"><?php echo $this->Paginator->sort('Subject','title');?></th>
                     <th class="created"><?php echo $this->Paginator->sort('Created','created');?></th>                
+                    <th class="actions">Actions</th>
                 </tr>
             </thead>
             <?php foreach( $this->data['Notifications'] as $notification ) : ?>
@@ -20,6 +21,10 @@
                     <td><?php echo $notification['Notification']['type']; ?></td>
                     <td><?php echo $notification['Notification']['title']; ?></td>
                     <td><?php echo $this->Time->getPrettyLongDateTime( $notification['Notification']['created'] ); ?></td>                
+                    <td class="actions">
+                    	<a href="/admin/notifications/view/<?php echo $notification['Notification']['id']; ?>" class="button edit" title="view details">view</a>
+                    	<a href="/admin/notifications/delete/<?php echo $notification['Notification']['id']; ?>" class="button delete" title="view details" onclick="return confirm('Are you sure you wish to delete this notification');">delete</a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>

@@ -37,8 +37,6 @@ class AppController extends Controller {
 				$this->Session->setFlash( 'Could not find the page you were looking for. Please try again', 'default', array( 'class' => 'error' ) );
 				$this->cakeError('error404');
 			}
-			
-			
 
 			// Set the page title in the browser
 			$this->set('title_for_layout', ucwords( $this->params['controller'].' &rarr; '.$this->params['action'] ) );

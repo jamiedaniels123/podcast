@@ -17,7 +17,7 @@
 
 				<ul style="list-style:none;">
 
-					<li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;" ><a href="/admin/notifications">Notifications (in development)</a></li>
+					<li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;" ><a href="/admin/notifications">Notifications</a></li>
 
 					<li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/logs">Admin API Logs</a></li>
 

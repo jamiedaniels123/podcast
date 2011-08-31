@@ -9,21 +9,21 @@ class Feed extends AppModel {
     // The following array defines the flavours of RSS we will attempt to create if available.
     var $rss_flavours = array(
 
-        '3gp' => array('media_type' => '3gp', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'audio' => array('media_type' => 'audio', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'desktop' => array('media_type' => 'desktop', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'hd' => array('media_type' => 'hd', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'iphone' => array('media_type' => 'iphone', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'ipod' => array('media_type' => 'ipod', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'large' => array('media_type' => 'large', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true  ),
-        'transcript' => array('media_type' => 'transcript', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true ),
-        'youtube' => array('media_type' => 'youtube', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false, 'interlace' => true ),
-        'extra' => array('media_type' => 'extra', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true ),
-        'default' => array('media_type' => '', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false, 'interlace' => true ),
-        'high' => array('media_type' => 'high', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => false, 'interlace' => true ),
-        'ipod-all' => array('media_type' => 'ipod-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true ),
-        'desktop-all' => array('media_type' => 'desktop-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true ),
-        'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => true, 'interlace' => true )
+        '3gp' => array('media_type' => '3gp', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'audio' => array('media_type' => 'audio', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'desktop' => array('media_type' => 'desktop', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'hd' => array('media_type' => 'hd', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'iphone' => array('media_type' => 'iphone', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'ipod' => array('media_type' => 'ipod', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'large' => array('media_type' => 'large', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+        'transcript' => array('media_type' => 'transcript', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
+        'youtube' => array('media_type' => 'youtube', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
+        'extra' => array('media_type' => 'extra', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
+        'default' => array('media_type' => 'default', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
+        'high' => array('media_type' => 'high', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
+        'ipod-all' => array('media_type' => 'ipod-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
+        'desktop-all' => array('media_type' => 'desktop-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
+        'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 )
     );
 	
 	var $default_rss_flavours = array( '240','270','360','480','540','720','1080' );
@@ -128,7 +128,7 @@ class Feed extends AppModel {
 
     function defineDataDefaults() {
 
-        // Append the suffix to the poodcast title.
+        // Append the suffix to the podcast title.
         $this->data['Podcast']['title'] .= " " . $this->title_suffix;
 
         if (!empty($this->data['Podcast']['image'])) {
@@ -137,9 +137,9 @@ class Feed extends AppModel {
             $this->podcast_standard_image = parent::getStandardImageName($this->data['Podcast']['image']);
             $this->podcast_thumbnail_image = parent::getThumbnailImageName($this->data['Podcast']['image']);
             $this->podcast_image_extension = parent::getExtension($this->data['Podcast']['image']);
-        }
-
-
+		
+		}
+		
         // If the feed is for iTunes check we have an author else
         // set the default author text string as defined in the bootstrap.
         if ( ( strtoupper( $this->data['Podcast']['intended_itunesu_flag'] ) == YES ) && ( empty($this->data['Podcast']['author'] ) ) )
@@ -208,8 +208,11 @@ class Feed extends AppModel {
         $channelData['media:description'] = $this->data['Podcast']['summary'];
         $channelData['media:keywords'] = $this->data['Podcast']['keywords'];
 
-        if ( !empty( $this->podcast_path_and_image ) )
+        if ( !empty( $this->podcast_path_and_image ) ) {
             $channelData['media:thumbnail']['attrib']['url'] = $this->podcast_path_and_image;
+		} else {
+			$channelData['media:thumbnail']['attrib']['url'] = DEFAULT_MEDIA_URL.FEEDS.'default-project-thumbnail.png';
+		}
         // END - Yahoo specific elements
 
         // BEGIN - iTunes specific elements
@@ -282,16 +285,20 @@ class Feed extends AppModel {
 
         if( strtoupper( $this->podcast_item_image_extension ) == 'PDF' ) {
 
-            $item['media:thumbnail']['attrib']['url'] = $this->media_server.'/images/'.$this->podcast_item_thumbnail_image;
+            $item['media:thumbnail']['url'] = $this->media_server.'/images/'.$this->podcast_item_thumbnail_image;
 
         } elseif( !empty( $this->podcast_item_standard_image ) ) {
 
-            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image;
+            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image;
 
         } elseif( !empty( $this->podcast_item_image ) ) {
 
-            $item['media:thumbnail']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image;
-        }
+            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image;
+        } else {
+			
+            $item['media:thumbnail']['url'] = DEFAULT_MEDIA_URL.FEEDS.'default-project-thumbnail.png';
+			
+		}
 
         // BEGIN - iTunes specific
         $item['itunes:summary'] = $this->podcast_item['summary'];
@@ -328,7 +335,7 @@ class Feed extends AppModel {
 		// We include this element for the media player, it reads the RSS feed and extracts the shortcode.
         if ( !empty($this->podcast_item['shortcode'] ) ) {
 
-            $item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/custom_id#'.$this->podcast_item['shortcode'];
+            $item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#'.$this->podcast_item['shortcode'];
 			$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];			
             $item['atom:link']['attrib']['rel'] = 'alternate';
             $item['atom:link']['attrib']['type'] = 'text/html';
@@ -337,7 +344,7 @@ class Feed extends AppModel {
 		// If we are creating a default flavour of RSS feed then we need to create atom links for all 'sister' default flavours 
 		// that exist such as 270, 720, 1080 etc...
 		// @TODO : Need to finish this routine when the API is back online.
-		if( strtolower( $this->media_type ) == 'default' ) {
+		if( empty( $this->media_type ) ) {
 			
 			$default_flavours = array();
 			$default_flavours = $this->getDefaultFlavours();
@@ -420,6 +427,10 @@ class Feed extends AppModel {
     function setMediaType( $media_type = null ) {
 
         $this->media_type = $media_type;
+		
+		if( $this->media_type == 'default' )
+			$this->media_type = null;
+		
     }
 
     /*
@@ -536,7 +547,7 @@ class Feed extends AppModel {
 
         if( empty( $this->data['Podcast']['image'] ) ) {
             
-            $this->podcast_path_and_image = null;
+            $this->podcast_path_and_image = DEFAULT_MEDIA_URL.FEEDS.'default-project-thumbnail.png';
 
         } else {
             
@@ -588,9 +599,12 @@ class Feed extends AppModel {
 
     function setPodcastMedia() {
 
+		$status = false;
+		$this->podcast_media = array();
+		
 		// Due to legacy issues we cannot guarantee a "default" flavoured entry will exist on the
 		// podcast_item_media table. As such we take the value straight from the podcast_items table.
-		if( strtolower( $this->media_type == 'default' ) ) {
+		if( empty( $this->media_type ) ) {
 		
 			$this->podcast_media['filename'] = $this->podcast_item['filename'];
 			$this->podcast_media['duration'] = $this->podcast_item['duration'];
@@ -598,18 +612,18 @@ class Feed extends AppModel {
 			
 		} else {
 			
+			
 			foreach ( $this->podcast_item['PodcastMedia'] as $podcast_media ) {
-	
-				$this->podcast_media = array();
-	
-				if ( $podcast_media['media_type'] == $this->media_type || $this->media_type = 'default' ) {
+
+				if ( $podcast_media['media_type'] == $this->media_type ) {
 					$this->podcast_media = $podcast_media;
-					return true;
+					$status = true;
+					break;
 				}
 			}
 		}
 		
-        return false;
+        return $status;
     }
 
     /*
@@ -620,29 +634,41 @@ class Feed extends AppModel {
      */
     function setPodcastItemMediaFolder() {
 
-        $this->podcast_item_media_folder = isSet($this->media_folder[$this->media_type]) ? '/'.$this->media_folder[$this->media_type].'/' : '/';
+        $this->podcast_item_media_folder = ( !empty( $this->media_type ) && isSet( $this->media_folder[$this->media_type] ) ) ? '/'.$this->media_folder[$this->media_type] : '/';
     }
 
     /*
      * @name : setPodcastItemImageDetails
-     * @description :
+     * @description : Sets the default value of the image at item level. If there is no image we leave the class property empty
+	 * and use the default image stored on the media server : /feeds/default-project-thumbnail.png
      * @updated : 15th June 2011
      * @by : Charles Jackson
      */
     function setPodcastItemImageDetails() {
 
-        $this->podcast_item_image = $this->podcast_item['image_filename'];
-        $this->podcast_item_standard_image = parent::getStandardImageName( $this->podcast_item['image_filename'] );
-
-        if( strtoupper( $this->podcast_item_image_extension ) == 'PDF' ) {
-
-            $this->podcast_item_thumbnail_image = 'pdf-icon.jpg';
-
-        } else {
-            
-            $this->podcast_item_thumbnail_image = parent::getThumbnailImageName( $this->podcast_item['image_filename'] );
-        }
-        $this->podcast_item_image_extension = parent::getExtension( $this->podcast_item['image_filename'] );
+		if( !empty( $this->podcast_item['image_filename'] ) ) {
+			
+			$this->podcast_item_image = $this->podcast_item['image_filename'];
+			$this->podcast_item_standard_image = parent::getStandardImageName( $this->podcast_item['image_filename'] );
+	
+			if( strtoupper( $this->podcast_item_image_extension ) == 'PDF' ) {
+	
+				$this->podcast_item_thumbnail_image = 'pdf-icon.jpg';
+	
+			} else {
+				
+				$this->podcast_item_thumbnail_image = parent::getThumbnailImageName( $this->podcast_item['image_filename'] );
+			}
+			
+			$this->podcast_item_image_extension = parent::getExtension( $this->podcast_item['image_filename'] );
+			
+		} else {
+			
+			$this->podcast_item_image = null;
+			$this->podcast_item_standard_image = null;
+			$this->podcast_item_thumbnail_image = null;
+			$this->podcast_item_image_extension = null;
+		}
     }
 
     /*
@@ -714,9 +740,21 @@ class Feed extends AppModel {
         fclose($fh);
     }
 
-    function buildParameters( $id, $flavour ) {
+    /*
+     * @name : buildParameters
+     * @description : Buils the parameters that are passed to the feeds_controller view method that generates the RSS feeds captured 
+	 * by the calling routine. 
+     * @updated : 30th August 2011
+     * @by : Charles Jackson
+     */
+    function buildParameters( $id, $flavour, $player = false ) {
 
-        return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'/'.$flavour['interlace'].'.rss' );
+		// We wish to build a RSS feed called "player.xml" that contains all podcast items regardless of whether they are published
+		if( $player )
+		    return ($id.'/'.$flavour['media_type'].'/player.xml/'.$flavour['itunes_complete'].'/'.$flavour['interlace'].'/PlayerItems.rss' );		
+		
+		// We are building the defacto RSS feeds containing all published items.
+	    return ($id.'/'.$flavour['media_type'].'/'.$flavour['rss_filename'].'/'.$flavour['itunes_complete'].'/'.$flavour['interlace'].'/PublishedPodcastItems.rss' );
     }
 
 	/*
@@ -728,9 +766,15 @@ class Feed extends AppModel {
 	 */
     function buildRssPath( $podcast = array(), $flavour = array() ) {
 
+		if( $flavour['media_type'] == 'default' ) {
+			
+			$flavour['media_type'] = null;
+			
         // The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
-        if( !empty( $flavour['media_type'] ) )
+		} else {
+			
 			$flavour['media_type'] = $flavour['media_type'].'/';
+		}
 
 		return $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'];
     }

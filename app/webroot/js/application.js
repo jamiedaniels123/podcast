@@ -98,11 +98,21 @@ jQuery(document).ready(function($) {
 
         e.preventDefault();
 
-        if( confirm('Are you sure?') ) {
-            var action = jQuery(this).attr('href');
-            jQuery(this).parents('form:first').attr('action',action);
-            jQuery(this).closest("form").submit();
-        }
+		var checkboxes = jQuery(this).parents('form:first').find("input[type=checkbox]");
+		
+		if( checkboxes.filter(':checked').length ) {
+
+			jQuery(this).parents('form:first').attr('action',action);
+			if( confirm('Are you sure?') ) {
+				var action = jQuery(this).attr('href');
+				jQuery(this).parents('form:first').attr('action',action);
+				jQuery(this).closest("form").submit();
+			}
+			
+		} else {
+			
+			alert('You must select at least one object using the checkboxes provided');			
+		}
     });
 
 	// Will show or hide a DOM element when a link is clicked.  Probably been better named "toggle"
@@ -235,13 +245,14 @@ jQuery(document).ready(function($) {
 	// The routine it calls is within the app_controller.
 	if( jQuery('.formfield_03').length > 0 ) {
 
+
 		jQuery.ajax(
 		{
 			type: "GET",
-			url: "/user/isItunesUser",
+			url: "/users/isItunesUser",
 			success:
 				function( responseData ) {
-					
+
 					// If false hide various element
 					if( responseData == false ) {
 						

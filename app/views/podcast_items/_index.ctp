@@ -42,7 +42,6 @@
 		            	<td  class="icon-col">
                         
                         <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
-                        
 	                        <img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'youtube' ); ?>" class="icon">
                             
 						<?php else : ?>

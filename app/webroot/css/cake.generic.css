@@ -337,6 +337,7 @@ fieldset legend {
 	font-size: 1.4em;
 	font-weight: normal;
 	padding: 0 0 0 0;
+
 }
 
 fieldset fieldset {
@@ -983,4 +984,10 @@ form#PodcastEditForm .thumbnail img, #PodcastAddForm .thumbnail img, #PodcastIte
 .text_right {
 	
 	text-align: right;	
+}
+
+fieldset#notification div {
+	
+	padding-top: 10px;
+	padding-left : 0px;	
 }
