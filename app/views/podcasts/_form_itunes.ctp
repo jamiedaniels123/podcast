@@ -4,10 +4,10 @@
      <img src="/img/collection-itunes-large.png" width="45" height="33" alt="iTunes" />
      
 	<div class="link" style="margin-top: 20px;">
-	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="PodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
+	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="FormPodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
     </div>	
     	
-    <div id="PodcastItunesContainer" class="itunes_container itunes" style="display:none">
+    <div id="FormPodcastItunesContainer" class="itunes_container itunes" style="display:none">
         <div class="input file">
 
             <div class="image thumbnail wrapper">

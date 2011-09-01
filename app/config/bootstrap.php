@@ -69,6 +69,12 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-acc.open.ac.uk/');
 		break;
+	case 'local.podcast.com':
+		DEFINE('SERVER_ENV', 'DEV');
+		DEFINE('DOMAIN_NAME', 'local.podcast.com' );
+		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+		break;
 	default:
 		die('ERROR: Unknown server.  Check app/config/bootstrap.php');
 }
