@@ -152,7 +152,6 @@
                     	<div class="move float_left" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories"><img src="/img/multiple-button-left.png" alt="Move right" class="icon" /></div>
                     </div>
                     <div class="clear"></div>                    
-                    
                 </div>
             </div>
         </div>
