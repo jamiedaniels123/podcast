@@ -963,7 +963,7 @@ class PodcastsController extends AppController {
             $podcast = $this->Podcast->findById( $key );
         
             // Did we find the podcast else, ignore.
-            if( !empty( $podcast ) ) {
+            if( !empty( $podcast['Podcast'] ) && isSet( $podcast['Podcast'] ) ) {
 
             	$podcasts_for_deletion[] = array( 
 					'source_path' => $podcast['Podcast']['custom_id'].'/',
@@ -1158,25 +1158,7 @@ class PodcastsController extends AppController {
 		return true;
 	}
 
-    /*
-     * @name : __generateRSSFeeds
-     * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.
-     * @updated : 23rd June 2011
-     * @by : Charles Jackson
-     */
-    protected function __generateRSSFeeds( $id = null ) {
 
-        $podcast = null;
-
-        $this->Podcast->recursive = -1; // Minimise the amount of data we retrieve.
-        $podcast = $this->Podcast->findById( $id );
-
-        if( empty( $podcast ) )
-            return false;
-
-			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-            return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
-    }
 
     /*
      * @name : _setPodcastFormOptions

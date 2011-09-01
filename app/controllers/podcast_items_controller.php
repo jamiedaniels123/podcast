@@ -102,7 +102,16 @@ class PodcastItemsController extends AppController {
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
 					
-					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
+                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
+						
+						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
+					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated we were unable to refresh to RSS feeds. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
+						
+					}
 					
 				} else {
 					
@@ -142,7 +151,8 @@ class PodcastItemsController extends AppController {
 	function publish( $id = null ) {
 		
 		$this->PodcastItem->recursive = -1;
-		
+		$status = true;
+				
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
@@ -159,10 +169,20 @@ class PodcastItemsController extends AppController {
 
 			} else {
 				
+				$status = false;
 				$this->Session->setFlash('Cannot publish '. MEDIA.'(s) that are unavailable or have no title.', 'default', array( 'class' => 'alert' ) );
 				break;
 			}
 		}
+
+		if( $status ) {
+			
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been published but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			}
+		}
+		
 		
 		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
 	}
@@ -301,7 +321,13 @@ class PodcastItemsController extends AppController {
 				
 			}
 			
-			$this->Session->setFlash('Your '.MEDIA.' has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been approved but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			} else {
+			
+				$this->Session->setFlash('Your '.MEDIA.' has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+			}
 				
 		} else {
 				
@@ -342,8 +368,14 @@ class PodcastItemsController extends AppController {
 					$this->PodcastItem->save();
 				}
 			}
+
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been approved but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			} else {
 			
-			$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
+				$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
+			}
 			
 		} else {
 			
@@ -419,7 +451,9 @@ class PodcastItemsController extends AppController {
 								'source_filename' => $this->data['PodcastItem']['filename'],
 								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
-								'workflow' => $this->Workflow->getWorkflow()
+								'podcast_id' => $this->data['PodcastItem']['podcast_id'],
+								'workflow' => $this->Workflow->getWorkflow(),
+								'created' => time()
 									)
 								)
 							)
@@ -438,7 +472,7 @@ class PodcastItemsController extends AppController {
 					} else {
 						
 						// Transcode the media
-						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'] ) ) {
+						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'] ) ) {
 	
 							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
 							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatioFloat();
@@ -575,8 +609,15 @@ class PodcastItemsController extends AppController {
 						$this->PodcastItem->set( $this->data );
 						$this->PodcastItem->save();
 		
-						$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
-					
+
+						if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+							
+							$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been deleted but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+						} else {
+
+							$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+						}
+						
 					} else {
 					
 						$this->Session->setFlash('We could not delete '.MEDIA.'. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
@@ -591,7 +632,7 @@ class PodcastItemsController extends AppController {
 			}
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( array('admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
     }
 
     /*
@@ -732,8 +773,14 @@ class PodcastItemsController extends AppController {
 				$this->data['PodcastItem']['deleted'] = false;
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
+
+				if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+					
+					$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been restored but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+				} else {
                 
-                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+	                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+				}
 
             } else {
 

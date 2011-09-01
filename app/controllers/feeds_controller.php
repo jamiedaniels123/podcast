@@ -14,7 +14,7 @@ class FeedsController extends AppController {
         if( $this->RequestHandler->isRss() )
             $this->helpers = array('BespokeRss');
         
-        $this->Auth->allow( 'view' );
+        $this->Auth->allow( 'view','add' );
         parent::beforeFilter();
     }
 

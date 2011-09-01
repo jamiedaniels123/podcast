@@ -125,19 +125,20 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcodeMedia( $path, $filename, $workflow ) {
+    /*function transcodeMedia( $path, $filename, $workflow ) {
 
         $this->params = array(
 			array(
 				'workflow' => $workflow,
 				'source_path' => $path.'/',
-				'source_filename' => $filename
+				'source_filename' => $filename,
+				'created' => time()
 			)
         );
 
         $this->setResponse( json_decode( $this->__sendMessage('transcode-media', ADMIN_API, $this->params, count( $this->params ) ), 1 ) );
         return $this->getStatus();
-    }
+    }*/
 
     /*
      * @name : metaInject
@@ -157,7 +158,7 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id ) {
+    function transcodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id, $podcast_id ) {
 
         $this->params = array(
 			array(
@@ -166,7 +167,9 @@ class ApiComponent extends Object {
 				'destination_path' => $path.'/',
 				'source_filename' => $filename,
 				'destination_filename' => $filename,
-				'podcast_item_id' => $podcast_item_id
+				'podcast_item_id' => $podcast_item_id,
+				'podcast_id' => $podcast_id,
+				'created' => time()
 			)
         );
 

@@ -71,8 +71,8 @@
                     </td>                        
                     <td class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>>
 						<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-	                        <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
-                        <?php else : ?>
+
+	                        <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>                        <?php else : ?>
 	                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
 						<?php endif; ?>
                     </td>

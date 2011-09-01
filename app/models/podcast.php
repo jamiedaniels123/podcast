@@ -155,6 +155,7 @@ class Podcast extends AppModel {
 		'MediaCount' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
+			'conditions' => 'MediaCount.deleted = 0',
 			'fields' => 'MediaCount.id'
 		),
         'PodcastItems' => array(

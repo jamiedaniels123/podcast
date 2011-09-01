@@ -2,10 +2,11 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server','deliver-without-transcoding');
+	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server');
 	var $requires_meta_injection = array('deliver-without-transcoding');
 	var $process_transcode = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
+	var $rss_refresh = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $youtube = array('youtube-file-upload');
 	
     /*
@@ -26,17 +27,21 @@ class CallbacksController extends AppController {
 	 * @by : Charles Jackson
 	 */
 	function add() {
-		
+		$this->autoRender = false;
 		$this->layout='callback';
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
+		shell_exec('curl '.APPLICATION_URL.'/feeds/add/34');
+
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
-			$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
-
+			//$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
+			echo json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) );
+			flush();
+			
 			// If we have transcoded media then we need to save the flavour and possibly update the processed state 
 			if( in_array( $this->Callback->data['command'], $this->process_transcode ) ) {
 					
@@ -48,9 +53,8 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					//if( $podcastItemMedia->saveFlavour( $row ) == false )
-					$podcastItemMedia->saveFlavour( $row );
-					$notification->unableSaveFlavour( $podcastItemMedia->data, $row );
+					if( $podcastItemMedia->saveFlavour( $row ) == false )
+						$notification->unableSaveFlavour( $podcastItemMedia->data, $row );
 					
 					// There will only be 1 copy of the transcoded file sitting in the root folder. Wait for a response
 					// from the API regarding the 'default' flavour and delete. We could delete at anytime but 
@@ -58,8 +62,8 @@ class CallbacksController extends AppController {
 					// panel.
 					if( strtolower( $row['flavour'] ) == 'default' ) {
 						
-						//if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'] ) == false )
-							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+						if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
 					}
 				}
 			}
@@ -75,13 +79,13 @@ class CallbacksController extends AppController {
 
 					if ( isSet( $row['source_filename'] ) && !empty( $row['original_filename'] ) ) {
 						
-						//if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'] ) == false )
-							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+						if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
 							
 					} else {
 						
-						//if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'] ) == false )
-							//$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );
+						if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );
 					}
 				}
 			}
@@ -127,17 +131,29 @@ class CallbacksController extends AppController {
 					
 					$this->data['PodcastItem']['youtube_id'] = 	null;
 					$this->data['PodcastItem']['youtube_flag'] = NO;
-					//$this->emailTemplates->__sendCallbackErrorEmail( $user->getAdministrators(), $row,'Error youtube upload/refresh. Please see data from Admin API bellow.');					
 				}
 				
 				$podcastItem->set( $this->data );
 				$podcastItem->save();
 			}
+			
+			if( in_array( $this->Callback->data['command'], $this->rss_refresh ) ) {
+				
+				foreach( $this->Callback->data['data'] as $row ) {
+					
+					// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+					shell_exec('curl '.APPLICATION_URL.'feeds/add/'.$row['podcast_id'].' /dev/null & echo $!');
+					
+	    	        //$this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $row['podcast_id'] ) );
+				}
+			}
 
 		} else {
 			
-			$notification->malformedData( $this->Callback->data );
-			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
+			$notification->malformedData( $this->Callback->json );
+			//$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
+			echo json_encode( array( 'status' => 'NACK', 'data '=> 'Message received but I dont understand what it means', 'timestamp' => time() ) );
+			flush();			
 		}
 	}
 }

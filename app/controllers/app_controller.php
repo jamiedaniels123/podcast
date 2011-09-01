@@ -194,4 +194,26 @@ class AppController extends Controller {
         
         return false;
     }	
+	
+	
+    /*
+     * @name : __generateRSSFeeds
+     * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    protected function __generateRSSFeeds( $id = null ) {
+
+        $podcast = null;
+		$Podcast = ClassRegistry::init('Podcast');
+		
+        $Podcast->recursive = -1; // Minimise the amount of data we retrieve.
+        $podcast = $Podcast->findById( $id );
+
+        if( empty( $podcast ) )
+            return false;
+
+			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+            return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
+    }	
 }
