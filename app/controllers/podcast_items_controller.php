@@ -102,15 +102,14 @@ class PodcastItemsController extends AppController {
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
 					
-                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] )  == false ) {
+                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
 						
 						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
 						
 					} else {
 						
-					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
-					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated we were unable to refresh to RSS feeds. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
-						
+						// Attempted to meta injection but failed. Alert the user but do not roll back the database.
+						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated we were unable to refresh to RSS feeds. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
 					}
 					
 				} else {
@@ -506,7 +505,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('Could not save your '.MEDIA.' information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
 		}
 		
-		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );		
+		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
 		$this->PodcastItem->rollback();
 		
         $this->redirect( array( 'action' => 'add', $this->Session->read('Podcast.podcast_id') ) );

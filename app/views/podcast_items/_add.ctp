@@ -28,6 +28,7 @@
                 <li class="admin_panel_list" style="background: url(/img/icon-16-quicktime.png) no-repeat;background-position: 0px 4px;">QuickTime (.mov)</li>
                 <li class="admin_panel_list" style="background: url(/img/icon-16-windows-media.png) no-repeat;background-position: 0px 4px;">Windows Media (.wmv) <span class="tip">Only standard video codecs supported</span></li>
                 <li class="admin_panel_list" style="background: url(/img/icon-16-3gp.png) no-repeat;background-position: 0px 4px;">Mobile 3gp (.3gp .3g2)</li>
+                <li class="admin_panel_list">Flash (.flv)</li>
             </ul>
         </div>
         

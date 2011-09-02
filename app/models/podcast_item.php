@@ -13,11 +13,6 @@ class PodcastItem extends AppModel {
                 'message' => 'Cannot identify the podcast you are trying to associate with this track.'
             )
         ),
-        'title' => array(
-			'rule' => 'notempty',
-			'allowEmpty' => false,
-			'message' => 'Please provide a title for this track.'
-        ),
         'published_flag' => array(
             'rule' => array('readyForPublication'),
             'message' => 'You cannot publish tracks that are unavailable or do not have a title.'
@@ -83,7 +78,6 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
-		$this->data['PodcastItem']['title'] = $params['url']['f1name'];
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
 		

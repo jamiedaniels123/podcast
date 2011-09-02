@@ -24,6 +24,41 @@ class Callback extends AppModel {
 			$this->json = $dataMess[1];
 			$this->data=json_decode($dataMess[1],true);
 		}
+		
+		/*$this->data = array(
+
+			'command' => 'transcode-media-and-deliver',
+			'number' => '9',
+			'failed' => '0',
+			'data' => array
+				(
+					'0' => array
+						(
+							'workflow' => 'video',
+							'source_path' => '1616_helloworld/',
+							'destination_path' => '1616_helloworld//',
+							'source_filename' => '15305_Wildlife-480p.mov',
+							'destination_filename' => '15305_Wildlife.mov',
+							'podcast_item_id' => '15305',
+							'podcast_id' => '1616',
+							'created' => '1314882521',
+							'original_filename' => '15305_Wildlife.wmv',
+							'flavour' => 'default',
+							'duration' => '1.35',
+							'cqIndex' => '7670',
+							'number' => '1',
+							'result' => 'Y',
+							'debug' => '/data/web/media-podcast-api-dev.open.ac.uk/file-transfer/destination/7670_1616_helloworld%2F15305_Wildlife-480p.mov to /data/web/media-podcast-dev.open.ac.uk/www/feeds/1616_helloworld//15305_Wildlife.mov',
+							'status' => 'Y',
+							'mqIndex' => '706',
+							'step' => '8'
+						)
+		
+				),
+		
+			'timestamp' => '1314882656',
+		);*/
+		
 	}
 
 	/*
@@ -86,7 +121,7 @@ class Callback extends AppModel {
 					$podcast = ClassRegistry::init('Podcast');
 				
 				// Did the deletion work?	
-				if( (int)$row['status'] ) {
+				if( strtoupper( $row['status'] ) == YES ) {
 					
 					// Deletion worked, delete the row from the DB
 					$podcast->delete( $row['podcast_id'] );
@@ -98,6 +133,12 @@ class Callback extends AppModel {
 					$data['Podcast']['deleted'] = 1;
 					$podcast->set( $data );
 					$podcast->save();
+					
+					// Create a row in the notifications table.
+					if( !isSet( $notification ) || !is_object( $notification ) )
+						$notification = ClassRegistry::init('Notification');
+						
+					$notification->unableToDelete( $row );
 				}
 				
 			// We are deleting a podcast_item.	
@@ -105,14 +146,28 @@ class Callback extends AppModel {
 				
 				$podcast_item_id = $row['podcast_item_id'];
 				
-				if( !is_object( $podcast_item_media ) )
-					$podcast_item_media = ClassRegistry::init('PodcastItemMedia');
+				if( !is_object( $podcastItem ) )
+					$podcastItem = ClassRegistry::init('PodcastItem');
 				
 				// Did the deletion work?	
-				if( (int)$row['status'] ) {
+				if( strtoupper( $row['status'] ) == YES ) {
 					
 					// Deletion worked, delete the flavour from the podcast_item_media table
-					$podcast->delete( $row['podcast_id'] );
+					$podcastItem->delete( $podcast_item_id );
+					
+				} else {
+
+					// Deletion did not work, set the deleted status to "1" so it will reappear on the admin views
+					$data = $podcastItem->findById( $podcast_item_id );
+					$data['PodcastItem']['deleted'] = 1;
+					$podcastItem->set( $data );
+					$podcastItem->save();
+										
+					// Create a row in the notifications table.
+					if( !isSet( $notification ) || !is_object( $notification ) )
+						$notification = ClassRegistry::init('Notification');
+						
+					$notification->unableToDelete( $row );					
 				}
 			}
 		}

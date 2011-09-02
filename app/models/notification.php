@@ -69,18 +69,18 @@ class Notification extends AppModel {
 
 	/*
 	 * @name : unableToDelete
-	 * @description : Called from the callback model when we receive a failure to transcode notice
+	 * @description : Called from the callback model when we receive a failure to delete status
 	 * @updated : 26th August 2011
 	 * @by : Charles Jackson
 	 */
-	function unableToDelete( $user, $data ) {
+	function unableToDelete( $data = array() ) {
 		
 		$this->create();
 		$this->data['Notification']['user_id'] = 0;
-		$this->data['Notification']['title'] = 'Malformed Data from the API';
+		$this->data['Notification']['title'] = 'Unable to delete from media server';
 		$this->data['Notification']['type'] = 'Error';
 		$this->data['Notification']['admin_only'] = true;
-		$this->data['Notification']['message'] = 'The following callback from the Admin API has been indentified as malformed : <pre>'.$data.'</pre>';
+		$this->data['Notification']['message'] = 'The Admin API has reported a failure to delete. Details below : <pre>'.$data.'</pre>';
 		$this->save( $this->data );
 	}	
 	

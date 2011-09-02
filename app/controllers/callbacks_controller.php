@@ -27,26 +27,25 @@ class CallbacksController extends AppController {
 	 * @by : Charles Jackson
 	 */
 	function add() {
-		$this->autoRender = false;
+		
+		Configure::write('debug', '0');
 		$this->layout='callback';
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
-		shell_exec('curl '.APPLICATION_URL.'/feeds/add/34');
-
+		$this->emailTemplates->__sendCallbackErrorEmail( array(),$this->Callback->data,'contain created');
+		
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
-			//$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
-			echo json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) );
-			flush();
-			
+			$this->set('status', json_encode( array( 'status' => 'ACK', 'data '=> 'Message received', 'timestamp' => time() ) ) );
+
 			// If we have transcoded media then we need to save the flavour and possibly update the processed state 
 			if( in_array( $this->Callback->data['command'], $this->process_transcode ) ) {
 					
 				// Save the processed state
-				if( is_object( $podcastItemMedia ) == false )
+				if( isSet( $podcastItemMedia ) == false || is_object( $podcastItemMedia ) == false )
 					$podcastItemMedia = ClassRegistry::init( 'PodcastItemMedia' );
 					
 				// We only trancode media 1 at a time but it is still wrapped in a for loop to give a generic structure to all
@@ -62,8 +61,9 @@ class CallbacksController extends AppController {
 					// panel.
 					if( strtolower( $row['flavour'] ) == 'default' ) {
 						
-						if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+						$this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] );
+						/*if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );*/
 					}
 				}
 			}
@@ -79,13 +79,15 @@ class CallbacksController extends AppController {
 
 					if ( isSet( $row['source_filename'] ) && !empty( $row['original_filename'] ) ) {
 						
-						if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );
+						$this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] );
+						/*if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );*/
 							
 					} else {
 						
-						if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );
+						$this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] );
+						/*if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] ) == false )
+							$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );*/
 					}
 				}
 			}
@@ -141,19 +143,15 @@ class CallbacksController extends AppController {
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 					
-					// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-					shell_exec('curl '.APPLICATION_URL.'feeds/add/'.$row['podcast_id'].' /dev/null & echo $!');
-					
-	    	        //$this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $row['podcast_id'] ) );
+					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
+					shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
 				}
 			}
 
 		} else {
 			
 			$notification->malformedData( $this->Callback->json );
-			//$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
-			echo json_encode( array( 'status' => 'NACK', 'data '=> 'Message received but I dont understand what it means', 'timestamp' => time() ) );
-			flush();			
+			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}
 }

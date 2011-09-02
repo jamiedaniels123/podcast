@@ -2,6 +2,7 @@
 class NotificationsController extends AppController {
 
 	var $name = 'Notifications';
+	var $paginate = array('limit' => 50);	
 	
     /*
      * @name : beforeFilter
@@ -12,6 +13,7 @@ class NotificationsController extends AppController {
     function beforeFilter() {
         
         parent::beforeFilter();
+
     }
 
     /*

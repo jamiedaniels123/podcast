@@ -213,7 +213,7 @@ class AppController extends Controller {
         if( empty( $podcast ) )
             return false;
 
-			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-            return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
+		// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+		return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
     }	
 }

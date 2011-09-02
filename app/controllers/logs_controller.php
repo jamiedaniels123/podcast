@@ -2,8 +2,18 @@
 class LogsController extends AppController {
 
 	var $name = 'Logs';
-	var $useTable = false;
+	var	$paginate = array('limit' => 100);
 
+    /*
+     * @name : beforeFilter
+     * @description : Called before any other method.
+     * @updated : 2nd June 2010
+	 * @by : Charles Jackson
+     */
+    function beforeFilter() {
+        
+        parent::beforeFilter();
+    }
 
 	function admin_index() {
 		

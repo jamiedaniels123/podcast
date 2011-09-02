@@ -1,7 +1,8 @@
 <?php
 class FolderComponent extends Object {
 
-
+    
+	
 	/*
 	 * @name : buildHtaccessFile
 	 * @description : Builds a htaccess file using the podcast values passed as a parameter.
@@ -227,6 +228,8 @@ class FolderComponent extends Object {
      * @by : Charles Jackson
      */
 	function cleanUp( $path, $filename, $date_time_stamp = null ) {
+
+		//$this->emailTemplates->__sendCallbackErrorEmail( array(),$file_system_date_time_stamp.' --- '.$date_time_stamp,'the file system datetimestamp');
 		
 		$folders = array();
 		$path = str_replace('//','/',$path); // Quick fudge to fix minor API issue

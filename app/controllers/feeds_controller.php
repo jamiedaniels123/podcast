@@ -113,6 +113,8 @@ class FeedsController extends AppController {
      */
     function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true, $key = null ) {
 
+		Configure::write('debug', '0');
+		
         $podcast_items = array();
         
         $Podcast = ClassRegistry::init('Podcast');
@@ -210,7 +212,7 @@ class FeedsController extends AppController {
 
         } else {
 
-            $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'] ) );
+            $this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $this->data['Podcast']['id'], $this->data['Podcast'], $this->data['Podcast']['rss_type'] ) );
 
             // Create a filename prefixed with the current users ID so as not to overwrite another users preview file.
             $this->Feed->writeRssFile( WWW_ROOT .'rss/'.$this->Session->read('Auth.User.id').'_debug.xml', $this->data );

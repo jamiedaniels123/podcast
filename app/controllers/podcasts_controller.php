@@ -157,7 +157,8 @@ class PodcastsController extends AppController {
 
 				if( $this->Podcast->saveAll() ) {
 					
-					$this->Podcast->commit();					
+					$this->Podcast->commit();	
+									
 					if( $this->__generateRSSFeeds( $this->Podcast->getLastInsertId() ) ) {
 
 						$this->Session->setFlash('Collection has been successfully created.', 'default', array( 'class' => 'success' ) );
@@ -966,8 +967,9 @@ class PodcastsController extends AppController {
             if( !empty( $podcast['Podcast'] ) && isSet( $podcast['Podcast'] ) ) {
 
             	$podcasts_for_deletion[] = array( 
-					'source_path' => $podcast['Podcast']['custom_id'].'/',
-					'destination_path' => $podcast['Podcast']['custom_id'].'/',					
+					'source_path' => $podcast['Podcast']['custom_id'],
+					'destination_path' => $podcast['Podcast']['custom_id'],
+					'podcast_id' => $podcast['Podcast']['id'],
             		'collection_deletion' => 1
 				);
             	
