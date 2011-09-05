@@ -311,7 +311,7 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'Y';
-					$this->data['PodcastItem']['published_flag'] = 'Y'; // Legacy, been superseded by itunes_flag but still needed.
+					$this->data['PodcastItem']['published_flag'] = 'Y'; // Automatically publish the track if wanted on itunes.
 					$this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
 					
 					$this->PodcastItem->set( $this->data );
@@ -345,8 +345,6 @@ class PodcastItemsController extends AppController {
      */
 	function itunes_reject( $id = null ) {
     	
-    	$this->PodcastItem->recursive = -1;
-    	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
@@ -360,7 +358,6 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'N';
-					$this->data['PodcastItem']['published_flag'] = 'N'; // Legacy, been superseded by itunes_flag but still needed.
 					$this->data['PodcastItem']['consider_for_itunesu'] = false;
 					
 					$this->PodcastItem->set( $this->data );
@@ -370,7 +367,7 @@ class PodcastItemsController extends AppController {
 
 			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
 				
-				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been approved but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been removed but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
 			} else {
 			
 				$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
