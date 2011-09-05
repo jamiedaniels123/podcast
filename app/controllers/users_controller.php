@@ -106,11 +106,9 @@ class UsersController extends AppController {
 	 */    
     function dashboard() {
 
-        $this->data = $this->User->getDashboardData( $this->Session->read('Auth.User.id' ) );
-        $notification = ClassRegistry::init('Notification');
-		
+        $notification = ClassRegistry::init('Notification');	
 		if( $this->Session->read('Auth.User.administrator' ) && $notification->unreadSystemNotifications() ) {
-
+	
 			$this->Session->setFlash('There are unread system notifications.', 'default', array( 'class' => 'alert' ) );
 		}
 		

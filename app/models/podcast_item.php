@@ -229,7 +229,7 @@ class PodcastItem extends AppModel {
 				break;
 			case 'add':
 		        // Unset this join else we will get duplicate rows on the various joins.
-		        unset( $this->Podcast->Owner->hasMany['Podcasts'] );
+		        unset( $this->Podcast->hasMany['PodcastItems'] );
 				break;
 			default:
 				break;	

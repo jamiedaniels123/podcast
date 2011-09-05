@@ -127,11 +127,11 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-			
+			$this->PodcastItem->recursive = 3;
             $this->data = $this->PodcastItem->findById( $id );
 			
             // We did not find the podcast, redirect.
-            if( empty( $this->data ) ) {
+            if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 
                 $this->Session->setFlash('Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
                 $this->cakeError('error404');

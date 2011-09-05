@@ -1111,13 +1111,6 @@ class Podcast extends AppModel {
 		        unset( $this->hasMany['PublishedPodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 				unset( $this->hasMany['PodcastItems'] );
-
-
-				/*unset( $this->ModeratorGroups->hasMany['GroupModerators'] );
-		        unset( $this->hasAndBelongsToMany['iTuneCategories'] );				
-				unset( $this->ModeratorGroups->hasAndBelongsToMany['Podcasts'] );
-				unset( $this->Owner->hasMany['Podcasts'] );
-				unset( $this->Owner->hasAndBelongsToMany['UserGroups'] );*/
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
@@ -1156,21 +1149,24 @@ class Podcast extends AppModel {
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
 			case 'copy':
-				$this->unBindModel( array( 'hasMany' => array('PodcastLinks' ) ) );
-				$this->unBindModel( array( 'hasMany' => array('PublishedPodcastItems' ) ) );
-				$this->unBindModel( array( 'hasMany' => array('PodcastModerators' ) ) );
-				$this->unBindModel( array( 'hasMany' => array('ModeratorUserGroups' ) ) );
-				$this->unBindModel( array( 'hasMany' => array('WaitingItunesApproval' ) ) );
-				$this->unBindModel( array( 'hasMany' => array('WaitingYoutubeApproval' ) ) );
-				$this->unBindModel( array( 'hasAndBelongsToMany' => array('ModeratorGroups' ) ) );
-				$this->unBindModel( array( 'hasAndBelongsToMany' => array('MemberGroups' ) ) );
-				$this->unBindModel( array( 'hasAndBelongsToMany' => array('Members' ) ) );
-				$this->unBindModel( array( 'hasAndBelongsToMany' => array('Moderators' ) ) );
-				$this->unBindModel( array( 'hasOne' => array('UserPodcast' ) ) );
-				$this->unBindModel( array( 'belongsTo' => array('PreferredNode' ) ) );
-				$this->unBindModel( array( 'belongsTo' => array('Language' ) ) );
-				$this->unBindModel( array( 'belongsTo' => array('Owner' ) ) );				
+				unset( $this->hasMany['PodcastLinks'] );
+				unset( $this->hasMany['PublishedPodcastItems'] );
+				unset( $this->hasMany['PodcastModerators'] );
+				unset( $this->hasMany['ModeratorUserGroups'] );
+				unset( $this->hasMany['WaitingItunesApproval'] );
+				unset( $this->hasMany['WaitingYoutubeApproval'] );
+				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );								
+				unset( $this->hasAndBelongsToMany['MemberGroups'] );								
+				unset( $this->hasAndBelongsToMany['Members'] );								
+				unset( $this->hasAndBelongsToMany['Moderators'] );																
+				unset( $this->hasOne['UserPodcast'] );				
+				unset( $this->belongsTo['PreferredNode'] );				
+				unset( $this->belongsTo['Language'] );				
+				unset( $this->belongsTo['Owner'] );
 				break;
+			case 'view':
+			case 'admin_view':
+				unset( $this->Owner->hasMany['Podcasts'] );
 			default:
 				break;	
 		}
