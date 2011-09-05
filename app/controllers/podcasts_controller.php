@@ -520,7 +520,15 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully rejected this podcast, it will not appear on itunes.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'itunes' => true, 'action' => 'index' ) );
+			
+			if( $this->Permission->toView( $this->data ) ) {
+				
+				$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			
+			} else {
+				
+				$this->redirect( array( 'itunes' => true, 'action' => 'index' ) );
+			}
 			
 		} else {
 
@@ -536,8 +544,9 @@ class PodcastsController extends AppController {
 	 * @by : Charles Jackson
 	 */
 	function youtube_reject( $id = null ) {
+
+		$this->Podcast->recursive = 2;
 		
-    	$this->Podcast->recursive = 2;
     	$this->data = $this->Podcast->findById( $id );
 		
 		if( !empty( $this->data ) ) {
@@ -552,7 +561,16 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully rejected this podcast for youtube.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'youtube' => true, 'action' => 'index' ) );
+			
+			if( $this->Permission->toView( $this->data ) ) {
+				
+				$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			
+			} else {
+				
+				$this->redirect( array( 'youtube' => true, 'action' => 'index' ) );
+			}			
+			
 			
 		} else {
 
