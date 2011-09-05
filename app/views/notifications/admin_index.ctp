@@ -1,6 +1,10 @@
 <fieldset class="notifications index">
-    <legend><h3>Notifications</h3></legend>
-    
+    <legend>Notifications</legend>
+    <div class="clear"></div>
+    <p>
+    	Are created by the system to alert administrators when something unexpected has occurred. They do not always signal
+        a problem, merely a scenario that may need investigating. Unread notifications are in <span class="unread">bold</span>.
+    </p>    
     <div class="clear"></div>
     <form method="post" action="">
         <table>
@@ -14,7 +18,7 @@
                 </tr>
             </thead>
             <?php foreach( $this->data['Notifications'] as $notification ) : ?>
-                <tr>
+                <tr <?php echo $notification['Notification']['unread'] ? 'class="unread"' : '' ; ?>>
                     <td class="checkbox">
                         <input type="checkbox" name="data[Notification][Checkbox][<?php echo $notification['Notification']['id']; ?>]" class="notification_selection" id="NotificationCheckbox<?php echo $notification['Notification']['id']; ?>">
                     </td>

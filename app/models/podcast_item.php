@@ -31,7 +31,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author', 'Podcast.shortcode',
             'dependent' => true
         )
     );
@@ -257,7 +257,6 @@ class PodcastItem extends AppModel {
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
 			'meta_data' => $this->encode_meta_data(
 				array(
-		
 				'title' => $this->data['PodcastItem']['youtube_title'],
 				'description' => $this->data['PodcastItem']['youtube_description'],
 				'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
@@ -271,7 +270,8 @@ class PodcastItem extends AppModel {
 				'video_response' => $this->data['PodcastItem']['youtube_video_response'],
 				'ratings' => $this->data['PodcastItem']['youtube_ratings'],
 				'embedding' => $this->data['PodcastItem']['youtube_embedding'],
-				'syndication' => $this->data['PodcastItem']['youtube_syndication']		
+				'syndication' => $this->data['PodcastItem']['youtube_syndication'],
+				'shortcode' => $this->data['Podcast']['shortcode']
 				)
 			)
 		);

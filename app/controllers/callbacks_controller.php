@@ -33,8 +33,6 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
-		$this->emailTemplates->__sendCallbackErrorEmail( array(),$this->Callback->data,'contain created');
-		
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
@@ -51,9 +49,17 @@ class CallbacksController extends AppController {
 				// We only trancode media 1 at a time but it is still wrapped in a for loop to give a generic structure to all
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
-					
-					if( $podcastItemMedia->saveFlavour( $row ) == false )
+
+					$this->emailTemplates->__sendCallbackErrorEmail( array(),$row,'transcoding');					
+					if( empty( $row['flavour'] ) ) {
+						
+						$this->emailTemplates->__sendCallbackErrorEmail( array(),$this->Callback->data,'no media type');
+						$notification->malformedData( $this->Callback->data );
+						
+					} elseif( $podcastItemMedia->saveFlavour( $row ) == false ) {
+						
 						$notification->unableSaveFlavour( $podcastItemMedia->data, $row );
+					}
 					
 					// There will only be 1 copy of the transcoded file sitting in the root folder. Wait for a response
 					// from the API regarding the 'default' flavour and delete. We could delete at anytime but 
@@ -124,19 +130,23 @@ class CallbacksController extends AppController {
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
 
-				$this->data = $podcastItem->findById( $this->Callback->data['data'][0]['podcast_item_id'] );
-				if( ( $this->Callback->data['data'][0]['status'] ) == YES ) {
+				foreach( $this->Callback->data['data'] as $row ) {
 					
-					$this->data['PodcastItem']['youtube_id'] = $this->Callback->data['data'][0]['youtube_id'];
+					$this->data = $podcastItem->findById( $row['podcast_item_id'] );
 					
-				} else {
+					if( ( $row['status'] ) == YES ) {
+						
+						$this->data['PodcastItem']['youtube_id'] = $row['youtube_id'];
+						
+					} else {
+						
+						$this->data['PodcastItem']['youtube_id'] = 	null;
+						$this->data['PodcastItem']['youtube_flag'] = NO;
+					}
 					
-					$this->data['PodcastItem']['youtube_id'] = 	null;
-					$this->data['PodcastItem']['youtube_flag'] = NO;
+					$podcastItem->set( $this->data );
+					$podcastItem->save();
 				}
-				
-				$podcastItem->set( $this->data );
-				$podcastItem->save();
 			}
 			
 			if( in_array( $this->Callback->data['command'], $this->rss_refresh ) ) {

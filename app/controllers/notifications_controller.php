@@ -71,8 +71,16 @@ class NotificationsController extends AppController {
 		
 		$this->data = $this->Notification->findById( $id );
 		
-		if( empty( $this->data ) )
+		if( empty( $this->data ) ) {
+			
 			$this->cakeError('error404');
+			
+		} else {
+			
+			$this->data['Notification']['unread'] = 0;
+			$this->Notification->set( $this->data );
+			$this->Notification->save();
+		}
 	}
 			
 	/*

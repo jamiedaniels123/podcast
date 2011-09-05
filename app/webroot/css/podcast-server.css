@@ -370,3 +370,8 @@ td.publish_itunes_u, td.publish_youtube, th.publish_itunes_u, th.publish_youtube
 	
 	text-align: center!important;	
 }
+
+.unread {
+	
+	font-weight: bold!important;	
+}

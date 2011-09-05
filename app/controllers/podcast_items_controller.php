@@ -97,7 +97,7 @@ class PodcastItemsController extends AppController {
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
 			
 				$this->PodcastItem->set( $this->data );	
-            	$this->PodcastItem->saveAll();
+            	$this->PodcastItem->save();
 
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
