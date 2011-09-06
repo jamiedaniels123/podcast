@@ -9,8 +9,7 @@ class PodcastItemsController extends AppController {
     var $paginate = array( 'limit' => 5, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
 
     function beforeFilter() {
-    	
-    	$this->PodcastItem->stripJoinsByAction( $this->action );
+
     	parent::beforeFilter();
     }
         

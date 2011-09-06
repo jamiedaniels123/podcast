@@ -210,34 +210,6 @@ class PodcastItem extends AppModel {
 			'comments' => 'Item from '.$data['Podcast']['title']			
 		);
 	}
-		
-	/* 
-	 * @name : stripJoinsByAction
-	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
-	 * every time we load a page. As well as using the "recursive" command and the "containable" to limit how much info 
-	 * any "find" statement retrieve we also use this method to unset many of the joins dynamically further reducing the 
-	 * overhead on the database.  
-	 * NOTE: The "containable" method makes a distinct SQL select statement for every join hence I have resorted to this
-	 * method on occasion.
-	 * @updated : 19th June 2011
-	 * @by : Charles Jackson
-	 */	
-	function stripJoinsByAction( $action = null ) {
-		
-		switch ( $action ) {
-			case 'add':
-		        // Unset this join else we will get duplicate rows on the various joins.
-		        unset( $this->Podcast->hasMany['PodcastItems'] );
-				unset( $this->Podcast->belongsTo['Owner'] );
-				unset( $this->Podcast->hasMany['PodcastItems'] );
-				unset( $this->Podcast->hasMany['PublishedPodcastItems'] );
-				unset( $this->Podcast->hasMany['MediaCount'] );
-				unset( $this->Podcast->hasMany['Nodes'] );
-				break;
-			default:
-				break;	
-		}
-	}
 	
 	/*
 	 * @name : buildYoutubeData
