@@ -44,28 +44,7 @@ class PodcastItemsController extends AppController {
         if( (int)$podcast_id ) {
 
 			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
-            $this->data = $this->PodcastItem->Podcast->find( 'first', array(
-				'conditions' => array( 'Podcast.id' => $podcast_id ),
-				'fields' => array( 'Podcast.*' ),
-				'contain' => array(
-					'Moderators' => array(
-						'fields' => array(
-							'Moderators.*'
-						)
-					),
-					'ModeratorGroups' => array(
-						'fields' => array(
-							'ModeratorGroups.*'
-						),
-						'Users' => array(
-							'fields' => array(
-								'Users.*'
-							)
-						)
-					)
-				)
-			
-			)  );
+            $this->data = $this->PodcastItem->Podcast->edit( $podcast_id );
 
             // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
             // in the session.

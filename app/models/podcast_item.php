@@ -225,10 +225,6 @@ class PodcastItem extends AppModel {
 	function stripJoinsByAction( $action = null ) {
 		
 		switch ( $action ) {
-			case 'itunes_approve':
-			case 'youtube_approve':
-				unset( $this->hasOne['Transcript'] );
-				break;
 			case 'add':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->Podcast->hasMany['PodcastItems'] );
