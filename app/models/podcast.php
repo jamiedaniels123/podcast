@@ -1559,4 +1559,62 @@ class Podcast extends AppModel {
 			)
 		) );
 	}
+	
+	/*
+	 * @name : rss
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * feeds/add controller/method when generating rss feeds.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function rss( $conditions = array() ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => $conditions,
+			'fields' => array( 
+				'Podcast.*',
+			),
+			'contain' => array(
+				'PlayerItems' => array(
+					'fields' => array(
+						'PlayerItems.*'
+					),
+					'PodcastMedia' => array(
+						'fields' => array(
+							'PodcastMedia.*'
+						)
+					),
+					'Transcript' => array(
+						'fields' => array(
+							'Transcript.*'
+						)
+					)
+				),
+				'PublishedPodcastItems ' => array(
+					'fields' => array(
+						'PublishedPodcastItems .*'
+					),
+					'PodcastMedia' => array(
+						'fields' => array(
+							'PodcastMedia.*'
+						)
+					),
+					'Transcript' => array(
+						'fields' => array(
+							'Transcript.*'
+						)
+					)
+				),
+				'iTuneCategories' => array(
+					'fields' => array(
+						'iTuneCategories.*'
+						)
+					)
+				)				
+			)
+		);
+	}
+
 }

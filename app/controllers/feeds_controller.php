@@ -29,8 +29,8 @@ class FeedsController extends AppController {
 
         $this->autoRender = false;
 
-        $this->Podcast = ClassRegistry::init('Podcast');
-        $this->Podcast->recursive = -1;
+        $Podcast = ClassRegistry::init('Podcast');
+		$Podcast->recursive = -1;
 		
         // If we are calling this method using "requestAction" as opposed to a redirect then we must take the
         // ID from $this->params array. See model function for indepth explanation.
@@ -43,11 +43,10 @@ class FeedsController extends AppController {
         if( $id )
             $this->data['Podcast']['Checkbox'][$id] = true;
 
-
         foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
 			// First lets try and retrieve the podcast we wish to create RSS feeds for.
-			$podcast = $this->Podcast->findById( $key );
+			$podcast = $Podcast->findById( $key );
 			$rss_array = array();
 			$player_rss_array = array();			
 
@@ -56,7 +55,6 @@ class FeedsController extends AppController {
 				
 				foreach( $this->Feed->rss_flavours as $flavour ) {
 					
-					//if( $flavour['media_type'] == 'default' ) {
 					// We do everything twice, first time through we create the genuine RSS feeds that only contains
 					// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the
 					// media player and contains all available podcast items regardless of whether they are published.
@@ -74,7 +72,6 @@ class FeedsController extends AppController {
 					$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
 					$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
 					$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
-					//}
 				}
 
 				if( $this->Api->transferFileMediaServer( $rss_array ) == false ) {
@@ -113,8 +110,6 @@ class FeedsController extends AppController {
      */
     function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true, $key = null ) {
 
-		Configure::write('debug', '0');
-		
         $podcast_items = array();
         
         $Podcast = ClassRegistry::init('Podcast');
@@ -126,15 +121,16 @@ class FeedsController extends AppController {
 				'className' => 'PodcastItem',
             	'foreignKey' => 'podcast_id',
 				'conditions' => array ("PlayerItems.deleted = 0"),
-				'order' => array( 'PlayerItems.publication_date' => 'DESC' )))));
-
-		// Make sure the podcast has not been soft-deleted.
-        $this->data = $Podcast->find( 'first', array(
+				'order' => array( 'PlayerItems.publication_date' => 'DESC' )
+					)
+				)
+			)
+		);
 		
-            'conditions' => array(
+		// Make sure the podcast has not been soft-deleted.
+        $this->data = $Podcast->rss( array(
 				'Podcast.id' => $id,
 				'Podcast.deleted' => false
-                )
             )
         );
 
@@ -204,10 +200,10 @@ class FeedsController extends AppController {
 
         if( empty( $this->data ) ) {
 
-            $this->Podcast = ClassRegistry::init('Podcast');
-            $this->Podcast->recursive = -1;
-            $this->data['Podcasts'] = $this->Podcast->find('all', array('conditions' => array('Podcast.deleted' => 0), 'order' => 'Podcast.title ASC' ) );
-            //$this->data['MediaTypes'] = $this->Feed->itunes_title_suffix;
+            $Podcast = ClassRegistry::init('Podcast');
+            $Podcast->recursive = -1;
+            $this->data['Podcasts'] = $Podcast->find('all', array('conditions' => array('Podcast.deleted' => 0), 'order' => 'Podcast.title ASC' ) );
+
 			$this->data['MediaTypes'] = $this->Feed->rss_flavours;
 
         } else {
