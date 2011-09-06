@@ -1,11 +1,11 @@
 <fieldset class="youtube">
 	<legend>Youtube</legend>
 	<dl>
-	    <dt><a href="/" id="PodcastItemYoutubeToggle" data-target="PodcastItemYoutubeContainer" class="juggle">Toggle</a></dt>
+	    <dt><a href="/" id="PodcastItemYoutubeToggle" data-target="FormPodcastItemYoutubeContainer" class="juggle">Toggle</a></dt>
 	    <dt>Published: </dt>
 	    <dd><img src="/img<?php echo $this->data['PodcastItem']['youtube_flag'] == YES ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
     </dl>
-    <div id="PodcastItemYoutubeContainer" class="wrapper youtube" style="display:none">		
+    <div id="FormPodcastItemYoutubeContainer" class="wrapper youtube" style="display:none">		
     <div class="input text">
         <label for="PodcastItemYoutubeTitle">Title</label>
         <input type="text" id="PodcastItemYoutubeTitle" name="data[PodcastItem][youtube_title]" value="<?php echo $this->data['PodcastItem']['youtube_title']; ?>">
@@ -65,7 +65,6 @@
 	<div class="wrapper" id="youtube_subject_playlists_container">
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="YoutubeSubjectPlaylists" data-target="PodcastItemAllYoutubeSubjectPlaylists">Move &rarr;</span>
 				<label for="YoutubeSubjectPlaylists">Subject Playlists</label>
 				<select name="data[YoutubeSubjectPlaylists][]" class="selected" multiple="multiple" id="YoutubeSubjectPlaylists">
 					<?php if( isSet( $this->data['YoutubeSubjectPlaylists'] ) && is_array( $this->data['YoutubeSubjectPlaylists'] ) ) : ?>
@@ -76,10 +75,13 @@
 				</select>
 				<?php echo $this->Form->error('PodcastItem.YoutubeSubjectPlaylists'); ?>
 			</div>
+            <div class="multiple-button">
+            <div class="move float_right" data-source="YoutubeSubjectPlaylists" data-target="PodcastItemAllYoutubeSubjectPlaylists"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+            </div>
+            <div class="clear"></div>
 		</div>
 		<div class="float_left">
 			<div class="input select">
-				<span class="move" data-source="PodcastItemAllYoutubeSubjectPlaylists" data-target="YoutubeSubjectPlaylists">&larr; Move</span>
 				<label for="PodcastItemAllYoutubeSubjectPlaylists">All Playlists</label>
 				<input type="hidden" name="data[Podcast][PodcastItemAllYoutubeSubjectPlaylists]" value="" id="PodcastItemAllYoutubeSubjectPlaylists_" />
 				<select name="data[PodcastItem][AllYoutubeSubjectPlaylists][]" multiple="multiple" id="PodcastItemAllYoutubeSubjectPlaylists">
@@ -88,6 +90,11 @@
 					<?php endforeach; ?>
 				</select>
 			</div>
+            <div class="multiple-button">
+            <div class="move float_left" data-source="PodcastItemAllYoutubeSubjectPlaylists" data-target="YoutubeSubjectPlaylists"><img src="/img/multiple-button-left.png" alt="Move right" class="icon" /></div>
+            </div>
+            <div class="clear"></div>                
+            
 		</div>
 	</div>
 </fieldset>
