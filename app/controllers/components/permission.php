@@ -84,6 +84,16 @@ class PermissionComponent extends Object {
                 return true;
         }
 
+        // Only podcast containers have owners and moderator groups so check they exist before we call the routine
+        if( isSet( $data['Podcast']['owner_id'] ) ) {
+
+            if( $this->isOwner( $data['Podcast']['owner_id'] ) )
+                return true;
+
+            if( $this->__inModeratorGroup( $data['ModeratorGroups'] ) )
+                return true;
+        }
+
         if( ( isSet( $data['Moderators'] ) ) && ( $this->__isModerator( $data['Moderators'] ) ) )
             return true;
 

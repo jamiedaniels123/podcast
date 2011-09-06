@@ -7,7 +7,12 @@ class PodcastsController extends AppController {
     private $errors = array();
     var $html = null; // Used to store errors created by the images component.
     
-    var $paginate = array( 'limit' => 20, 'page' => 1, 'order' => 'Podcast.id DESC' );
+    var $paginate = array( 
+		'limit' => 20, 
+		'page' => 1, 
+		'order' => 'Podcast.id DESC',
+		'fields' => 'Podcast.id, Podcast.custom_id, Podcast.deleted, Podcast.preferred_url, Podcast.created, Podcast.copyright, Podcast.title, Podcast.node_id, Podcast.preferred_node, Podcast.image, Podcast.image_copyright, Podcast.image_logoless, Podcast.image_ll_copyright, Podcast.image_wide, Podcast.image_wide_copyright, Podcast.author, Podcast.itunes_u_url, Podcast.language, Podcast.explicit, Podcast.owner_id, Podcast.contact_name, Podcast.contact_email, Podcast.course_code, Podcast.publish_itunes_u, Podcast.intended_itunesu_flag, Podcast.openlearn_epub, Podcast.openlearn_epub, Podcast.consider_for_itunesu, Podcast.consider_for_youtube, Podcast.intended_youtube_flag, Podcast.podcast_flag, Owner.id, Owner.firstname, Owner.lastname, PreferredNode.title' 
+		);
 
     function beforeFilter() {
     	
@@ -91,7 +96,7 @@ class PodcastsController extends AppController {
      */
     function vle_index() {
 
-		$this->Podcast->recursive = 3;
+		$this->Podcast->recursive = 2;
 		$this->set('active_columns', $this->cookieStanding( 'Podcasts' ) );
 		
 		$this->data['Podcasts'] = $this->paginate('Podcast', array( 'Podcast.owner_id' => VLE_USER ) );
@@ -199,9 +204,8 @@ class PodcastsController extends AppController {
      */
     function view( $id = null ) {
 
-        $this->Podcast->recursive = 2;
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->Podcast->findById( $id );
+        $this->data = $this->Podcast->view( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) || $this->Permission->toView( $this->data ) == false ) {
@@ -219,8 +223,6 @@ class PodcastsController extends AppController {
      */
     function edit( $id = null ) {
 
-        $this->Podcast->recursive = 2;
-        
         if ( !empty( $this->data ) ) {
 
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
@@ -276,8 +278,7 @@ class PodcastsController extends AppController {
 						$this->Podcast->commit(); // Everything hunky dory, commit the changes.
 						$this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
 
-						$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
-						$this->data = $this->Podcast->findById( $this->Podcast->id );
+			            $this->data = $this->Podcast->edit( $this->Podcast->id );						
 						
 						// They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
 						if( $this->Permission->toView( $this->data ) ) {
@@ -308,7 +309,7 @@ class PodcastsController extends AppController {
 
         } else {
 
-            $this->data = $this->Podcast->findById( $id );
+            $this->data = $this->Podcast->edit( $id );
 
             // We did not find the podcast, redirect.
             if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
@@ -396,8 +397,7 @@ class PodcastsController extends AppController {
 	 */
 	function consider( $media, $id ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 			
@@ -440,8 +440,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_approve( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -473,8 +472,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_approve( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+    	$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -505,8 +503,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_reject( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -545,9 +542,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_reject( $id = null ) {
 
-		$this->Podcast->recursive = 2;
-		
-    	$this->data = $this->Podcast->findById( $id );
+    	$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -587,8 +582,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_publish( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -619,8 +613,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_publish( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -651,8 +644,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_unpublish( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -681,8 +673,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_unpublish( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
-    	$this->data = $this->Podcast->findById( $id );
+		$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -710,8 +701,8 @@ class PodcastsController extends AppController {
      * @by : Charles Jackson
      */ 
     function copy( $id = null ) {
-		$this->Podcast->recursive = 2;
-		$this->data = $this->Podcast->findById( $id ) ;
+		
+		$this->data = $this->Podcast->all( $id ) ;
 		
 		if( !empty( $this->data ) ) {
 			
@@ -791,46 +782,6 @@ class PodcastsController extends AppController {
         }
     }
 
-
-    /*
-     * @name : admin_add
-     * @description : Displays a form that enables administrators to add a row to the podcasts table. If the form is
-     * populated it will validate the data and save if possible.
-     * @name : Charles Jackson
-     * @by : 5th May 2011
-     */
-    /*function admin_add() {
-
-        if ( !empty( $this->data ) ) {
-
-            // Assign the podcast to the current user.
-            $this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Podcast']['private'] = YES; // Default to private.
-
-            $this->Podcast->set( $this->data ); // Hydrate the object.
-
-            if( $this->Podcast->save() ) { 
-
-				$this->data['Podcast']['custom_id'] = $this->Podcast->getLastInsertId().'_'.$this->Podcast->buildSafeFilename( $this->data['Podcast']['title'] );
-	            $this->Podcast->save( $this->data );
-                
-                $this->redirect( array( 'action' => 'admin_view', $this->Podcast->getLastInsertId() ) );
-
-            } else {
-
-                // Rebuild the dynamic select boxes according to the users current selections else they will merely display ID numbers.
-                $this->data = $this->Podcast->rebuild( $this->data );
-
-                $this->errors = $this->Podcast->invalidFields( $this->data );
-                $this->Session->setFlash('Could not create your collection. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
-            }
-        }
-        
-        // Need to retrieve form options such as additional users and catagories etc... on the system.
-        $this->__setPodcastFormOptions();
-        
-    }*/
-
     /*
      * @name : admin_view
      * @desscription : Enables an adminitrator to view details of an individual podcast.
@@ -839,9 +790,8 @@ class PodcastsController extends AppController {
      */
     function admin_view( $id = null ) {
 		
-    	$this->Podcast->recursive = 2;
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->Podcast->findById( $id );
+        $this->data = $this->Podcast->view( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) ) {
@@ -860,8 +810,6 @@ class PodcastsController extends AppController {
      */
     function admin_edit( $id = null ) {
 
-        $this->Podcast->recursive = 2;
-        
         if ( !empty( $this->data ) ) {
 
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
@@ -915,9 +863,8 @@ class PodcastsController extends AppController {
 						$this->Podcast->commit(); // Everything hunky dory, commit the changes.
 						$this->Session->setFlash('Your collection has been successfully updated.', 'default', array( 'class' => 'success' ) );
 
-						$this->Podcast->recursive = 2; // Increase the recursive level so we retrieve enough information to check permissions.
-						$this->data = $this->Podcast->findById( $this->Podcast->id );
-						
+			            $this->data = $this->Podcast->edit( $this->Podcast->id );						
+												
 						$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
 						exit;
 					}
@@ -938,7 +885,7 @@ class PodcastsController extends AppController {
 
         } else {
 
-            $this->data = $this->Podcast->findById( $id );
+            $this->data = $this->Podcast->edit( $id );
 
             // We did not find the podcast, redirect.
             if( empty( $this->data ) ) {
@@ -1193,28 +1140,30 @@ class PodcastsController extends AppController {
 
         // Get all the nodes
         $Node = ClassRegistry::init('Node');
+		$Node->recursive = -1;
         $nodes = $Node->find('list', array( 'order' => 'Node.title' ) );
         $nodes = $Node->removeDuplicates( $nodes, $this->data, 'Nodes' );
         $this->set('nodes', $nodes );
 
         // Get all the categories
         $Category = ClassRegistry::init('Category');
+		$Category->recursive = -1;
         $categories = $Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
         $categories = $Category->removeDuplicates( $categories, $this->data, 'Categories' );
         $this->set('categories', $categories );
 
         // Get all the itunes categories
         $ItunesuCategory = ClassRegistry::init('ItunesuCategory');
+		$ItunesuCategory->recursive = -1;
         $itunesu_categories = $ItunesuCategory->find('list', array( 'fields' => array('ItunesuCategory.id', 'ItunesuCategory.code_title'), 'order' => array('ItunesuCategory.code_title') ) );
         $itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
         $this->set('itunes_categories', $itunesu_categories );
 
-        // Get all the languages
-        $Language = ClassRegistry::init('Language');
-        $this->set('languages', $Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
+        $this->set('languages', $this->Podcast->Language->find('list', array( 'fields' => array('Language.lang_code', 'Language.language'), 'order' => 'Language.language' ) ) );
 
         // Get all the user groups
         $UserGroup = ClassRegistry::init('UserGroup');
+		$UserGroup->recursive = -1;
         $user_groups = $UserGroup->find('list', array( 'fields' => array('UserGroup.id', 'UserGroup.group_title'), 'order' => array('UserGroup.group_title') ) );
         $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'MemberGroups' );
         $user_groups = $UserGroup->removeDuplicates( $user_groups, $this->data, 'ModeratorGroups' );
@@ -1222,6 +1171,7 @@ class PodcastsController extends AppController {
 
         // Get all the users
         $User = ClassRegistry::init( 'User' );
+		$User->recursive = -1;
         $users = $User->find( 'list', array( 'fields' => array( 'User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
         $users = $User->removeDuplicates( $users, $this->data, 'Members' );
         $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );

@@ -139,6 +139,8 @@ class UsersController extends AppController {
         if( $this->Session->check('Auth.User.id') )
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'login' ) );
 
+		$this->User->recursive = -1;
+		
         // They are posting data
         if ( !empty( $this->data ) ) {
 
@@ -224,6 +226,8 @@ class UsersController extends AppController {
      */
     function admin_index() {
 
+		$this->User->recursive = -1;
+		
         // Have they posted the filter form?
         if( isSet( $this->data['User']['filter'] ) ) {
         	
@@ -248,6 +252,7 @@ class UsersController extends AppController {
     function admin_status( $id ) {
 
         $this->autoRender = false;
+		$this->User->recursive = -1;
         $this->data = $this->User->findById( $id );
 
         if( empty( $this->data ) ) {
@@ -284,6 +289,8 @@ class UsersController extends AppController {
      */
     function admin_edit( $id = null ) {
 
+		$this->User->recursive = -1;
+			
         if ( !empty( $this->data ) ) {
 
             $this->User->set( $this->data );
@@ -302,7 +309,7 @@ class UsersController extends AppController {
             }
 
         } else {
-
+			
             // They are loading the page, get the data using the $id passed as a parameter.
             $this->data = $this->User->findById( $id );
 
@@ -325,6 +332,8 @@ class UsersController extends AppController {
      */
     function admin_reset() {
 
+		$this->User->recursive = -1;
+		
         $this->data = $this->User->find('all');
 
         foreach( $this->data as $user ) {
@@ -376,6 +385,8 @@ class UsersController extends AppController {
 	 */
 	function admin_login( $id ) {
 
+		$this->User->recursive = -1;
+		
 		$this->autoRender = false;		
 		$this->data = $this->User->findById( $id );
 		

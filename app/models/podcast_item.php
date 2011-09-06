@@ -214,9 +214,11 @@ class PodcastItem extends AppModel {
 	/* 
 	 * @name : stripJoinsByAction
 	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
-	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
-	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
-	 * database.  
+	 * every time we load a page. As well as using the "recursive" command and the "containable" to limit how much info 
+	 * any "find" statement retrieve we also use this method to unset many of the joins dynamically further reducing the 
+	 * overhead on the database.  
+	 * NOTE: The "containable" method makes a distinct SQL select statement for every join hence I have resorted to this
+	 * method on occasion.
 	 * @updated : 19th June 2011
 	 * @by : Charles Jackson
 	 */	
@@ -230,6 +232,11 @@ class PodcastItem extends AppModel {
 			case 'add':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->Podcast->hasMany['PodcastItems'] );
+				unset( $this->Podcast->belongsTo['Owner'] );
+				unset( $this->Podcast->hasMany['PodcastItems'] );
+				unset( $this->Podcast->hasMany['PublishedPodcastItems'] );
+				unset( $this->Podcast->hasMany['MediaCount'] );
+				unset( $this->Podcast->hasMany['Nodes'] );
 				break;
 			default:
 				break;	
@@ -424,6 +431,89 @@ class PodcastItem extends AppModel {
 
         return true;
     }
+
+	/*
+	 * @name : get
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcast_items controller on various methods.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function get( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('PodcastItem.id' => $id ),
+			'fields' => array(
+				'PodcastItem.*'
+			),
+			'contain' => array(
+				'PodcastMedia' => array(
+					'fields' => array(
+						'PodcastMedia.id',
+						'PodcastMedia.media_type',
+						'PodcastMedia.filename',
+						'PodcastMedia.processed_state'
+					)
+				),
+				'YoutubeSubjectPlaylists' => array(
+					'fields' => array(
+						'YoutubeSubjectPlaylists.*'
+					)
+				),
+				'Transcript' => array(
+					'fields' => array(
+						'Transcript.*'
+					)
+				),
+				'Podcast' => array(
+					'fields' => array(
+						'Podcast.id',
+						'Podcast.custom_id',
+						'Podcast.title',
+						'Podcast.podcast_flag',
+						'Podcast.course_code'
+					),
+					'Moderators' => array(
+						'fields' => array(
+							'Moderators.id'
+						)
+					),
+					'Members' => array(
+						'fields' => array(
+							'Members.id'
+						)
+					),
+					'ModeratorGroups' => array(
+						'fields' => array(
+							'ModeratorGroups.*'
+						),
+						'Users' => array(
+							'fields' => array(
+								'Users.id'
+							)
+						)				
+					),
+					'MemberGroups' => array(
+						'fields' => array(
+							'MemberGroups.*'
+						),
+						'Users' => array(
+							'fields' => array(
+								'Users.id'
+							)
+						)				
+					),
+					'Owner' => array(
+						'fields' => array(
+							'Owner.*'
+						)
+					)
+				)
+			)
+		) );
+	}
 	
 }
 

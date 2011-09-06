@@ -11,7 +11,7 @@
         <th class="thumbnail_wide_copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'thumbnail_widescreen_copyright'); ?>><?php echo $this->Paginator->sort('Image Widescreen Copyright','image_wide_copyright');?></th>
         <th class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>><?php echo $this->Paginator->sort('title');?></th>
         <th class="copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'copyright'); ?>><?php echo $this->Paginator->sort('copyright');?></th>
-        <th class="owner" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'owner'); ?>><?php echo $this->Paginator->sort('Owner', 'user_id');?></th>
+        <th class="owner" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'owner'); ?>><?php echo $this->Paginator->sort('Owner', 'Owner.firstname');?></th>
         <th class="created" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'created'); ?>><?php echo $this->Paginator->sort('Created');?></th>
         <th class="author" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'author'); ?>><?php echo $this->Paginator->sort('Author');?></th>
         <th class="media" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'media'); ?>><?php echo $this->Paginator->sort('Media',count('MediaCount') );?></th>
@@ -80,7 +80,7 @@
                         <?php echo $podcast['Podcast']['copyright']; ?>
                     </td>
                     <td class="owner" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'owner'); ?>>
-                        <span class="podcast-owner"><?php echo $podcast['Owner']['full_name']; ?></span>
+                        <span class="podcast-owner"><?php echo $podcast['Owner']['firstname'].' '.$podcast['Owner']['lastname']; ?></span>
                     </td>
                     <td class="created" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'created'); ?>>
                         <span><?php echo $this->Time->getPrettyShortDate( $podcast['Podcast']['created'] ); ?></span>

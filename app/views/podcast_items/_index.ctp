@@ -32,7 +32,7 @@
 		                    </td>
 	                    <?php endif; ?>
 			            <td  class="thumbnail">
-			            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'].'.jpg',$podcast_item['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" class="thumbnail" />
+			            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['image_filename'].'.jpg',$this->data['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" class="thumbnail" />
 			            </td>
 		                <td  class="collection-title"><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : 'Untitled '.MEDIA; ?></a></td>
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>

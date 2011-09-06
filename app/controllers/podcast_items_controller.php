@@ -39,11 +39,33 @@ class PodcastItemsController extends AppController {
      */
     function add( $podcast_id ) {
 
-        $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
+        $this->PodcastItem->Podcast->recursive = 2; // Raise the recursive level so we have enough information to check permissions.
 
         if( (int)$podcast_id ) {
 
-            $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
+			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
+            $this->data = $this->PodcastItem->Podcast->find( 'first', array(
+				'conditions' => array( 'Podcast.id' => $podcast_id ),
+				'fields' => array( 'Podcast.*' ),
+				'contain' => array(
+					'Moderators' => array(
+						'fields' => array(
+							'Moderators.*'
+						)
+					),
+					'ModeratorGroups' => array(
+						'fields' => array(
+							'ModeratorGroups.*'
+						),
+						'Users' => array(
+							'fields' => array(
+								'Users.*'
+							)
+						)
+					)
+				)
+			
+			)  );
 
             // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
             // in the session.
@@ -51,14 +73,11 @@ class PodcastItemsController extends AppController {
             $this->Session->write('Podcast.admin', false);
         }
 
-        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
+        if( empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 
             $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
 
-        } else {
-
-            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id, 'PodcastItem.deleted' => false ) );
         }
     }
 	
@@ -70,10 +89,8 @@ class PodcastItemsController extends AppController {
      */
     function view( $id = null ) {
 
-        $this->PodcastItem->recursive = 3; // Raise the recursive level so we can check permissions.
-        
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
@@ -127,8 +144,7 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-			$this->PodcastItem->recursive = 3;
-            $this->data = $this->PodcastItem->findById( $id );
+            $this->data = $this->PodcastItem->get( $id );
 			
             // We did not find the podcast, redirect.
             if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
@@ -404,7 +420,7 @@ class PodcastItemsController extends AppController {
 
             if( $this->PodcastItem->save() ) { // Save the data here so we can use the unique ID created as part of the media filename.
 
-                $this->data = $this->PodcastItem->findById( $this->PodcastItem->getLastInsertId() );
+                $this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
 
 				// Move from the default file chucker upload folder into a specific custom_id folder and rename it
 				// appending the database ID number to the start of the filename to ensure it is unique.
@@ -581,7 +597,6 @@ class PodcastItemsController extends AppController {
     function delete( $id = null ) {
 
         $this->autoRender = false;
-		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions and listAssociatedMedia
 
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast_item we pass into an array and loop through as is the data
@@ -591,7 +606,7 @@ class PodcastItemsController extends AppController {
 
         foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
-        	$this->data = $this->PodcastItem->findById( $key );
+        	$this->data = $this->PodcastItem->get( $key );
         	        		
     	    // If we did not find the podcast media then redirect to the referer.
 	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
@@ -640,8 +655,8 @@ class PodcastItemsController extends AppController {
 	function delete_attachment( $attachment, $id ) {
 		
         $this->autoRender = false;
-		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
-        $this->data = $this->PodcastItem->findById( $id );
+
+        $this->data = $this->PodcastItem->get( $id );
 		
         // If we did not find the podcast media then redirect to the referer.
         if( !empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
@@ -688,7 +703,7 @@ class PodcastItemsController extends AppController {
     function admin_view( $id = null ) {
 
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) ) {
@@ -708,7 +723,7 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) ) {

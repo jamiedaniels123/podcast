@@ -33,6 +33,7 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
+		$this->emailTemplates->__sendCallbackErrorEmail( array(),$this->Callback->data,'Callback received');		
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
@@ -50,10 +51,8 @@ class CallbacksController extends AppController {
 				// API payloads.				 								
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					$this->emailTemplates->__sendCallbackErrorEmail( array(),$row,'transcoding');					
 					if( empty( $row['flavour'] ) ) {
 						
-						$this->emailTemplates->__sendCallbackErrorEmail( array(),$this->Callback->data,'no media type');
 						$notification->malformedData( $this->Callback->data );
 						
 					} elseif( $podcastItemMedia->saveFlavour( $row ) == false ) {

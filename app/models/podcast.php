@@ -595,79 +595,6 @@ class Podcast extends AppModel {
      }
 
      /*
-      * @name : getUserPodcasts
-      * @description : We are using the ORM for this complex SQL. It will return all podcasts to which the currently
-      * logged in user has access as follows :
-      * 1) Are they the owner?
-      * 2) Are they a moderator?
-      * 3) Are they a member?
-      * 4) Are they a member of an associated moderator group?
-      * 5) Are they a member of an associated user group?	  
-      * @updated : 24th May 2011
-      * @by : Charles Jackson
-      */
-     /* function getUserPodcasts( $user_id = null, $podcast = null ) {
-
-       $this->recursive = -1;
-
-        $list = array();
-        $conditions = $this->buildConditions(  $user_id );
-        $conditions = $this->buildFilters( $podcast, $conditions );
-
-
-        $data = $this->find('all',array(
-            'fields' => array(
-                'DISTINCT(Podcast.id)',
-                ),
-            'conditions'=> $conditions,
-            'joins' => array(
-                array(
-                    'table'=>'users',
-                    'alias'=>'Owner',
-                    'type'=>'INNER',
-                    'conditions'=>array(
-                        'Podcast.owner_id = Owner.id'
-                        )
-                    ),
-                array(
-                    'table'=>'user_podcasts',
-                    'alias'=>'UserPodcasts',
-                    'type'=>'LEFT',
-                    'conditions'=>array(
-                        'UserPodcasts.podcast_id = Podcast.id'
-                        )
-                    ),
-                array(
-                    'table'=>'user_group_podcasts',
-                    'alias'=>'UserGroupPodcasts',
-                    'type'=>'LEFT',
-                    'conditions'=>array(
-                        'UserGroupPodcasts.podcast_id = Podcast.id'
-                        )
-                    ),
-                array(
-                    'table'=>'user_user_groups',
-                    'alias'=>'UserUserGroups',
-                    'type'=>'LEFT',
-                    'conditions'=>array(
-                        'UserUserGroups.user_group_id = UserGroupPodcasts.user_group_id'
-                        )
-                    )
-                ),
-            'order'=>array('Podcast.id DESC')
-            )
-        );
-
-        // Create a simple array of ID numbers.
-        foreach( $data as $podcast ) {
-
-            $list[] = $podcast['Podcast']['id'];
-        }
-
-        return $list;
-     } */
-
-     /*
       * @name : getItunesUserPodcasts
       * @description : We are using the ORM for this complex SQL. It will return all podcasts to which the currently
       * logged in user has access as follows :
@@ -1087,9 +1014,11 @@ class Podcast extends AppModel {
 	/* 
 	 * @name : stripJoinsByAction
 	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
-	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
-	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
-	 * database.  
+	 * every time we load a page. As well as using the "recursive" command and the "containable" to limit how much info 
+	 * any "find" statement retrieve we also use this method to unset many of the joins dynamically further reducing the 
+	 * overhead on the database.  
+	 * NOTE: The "containable" method makes a distinct SQL select statement for every join hence I have resorted to this
+	 * method due to the volume of data involved.
 	 * @updated : 19th June 2011
 	 * @by : Charles Jackson
 	 */	
@@ -1099,24 +1028,22 @@ class Podcast extends AppModel {
 			case 'index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
-		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
-				// May need to refine this.
-				unset( $this->belongsTo['PreferredNode'] );
+		        unset( $this->hasMany['PublishedPodcastItems'] );
+				unset( $this->hasMany['PodcastItems'] );
+		        unset( $this->hasMany['PodcastLinks'] );
 				unset( $this->belongsTo['Language'] );
 				unset( $this->Owner->hasMany['Podcasts'] );				
 				unset( $this->hasAndBelongsToMany['Categories'] );
 				unset( $this->hasAndBelongsToMany['Nodes'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );
 		        unset( $this->hasMany['PodcastModerators'] );				
-		        unset( $this->hasMany['PublishedPodcastItems'] );
-		        unset( $this->hasMany['PodcastLinks'] );
-				unset( $this->hasMany['PodcastItems'] );
 				break;
 			case 'admin_index':
 		        // Unset this join else we will get duplicate rows on the various joins.
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 		        unset( $this->hasMany['PublishedPodcastItems'] );
+				unset( $this->hasMany['PodcastItems'] );
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );
@@ -1127,7 +1054,6 @@ class Podcast extends AppModel {
 				unset( $this->hasAndBelongsToMany['MemberGroups'] );
 				unset( $this->hasAndBelongsToMany['Members'] );
 				unset( $this->hasAndBelongsToMany['Moderators'] );
-				unset( $this->belongsTo['PreferredNode'] );
 				break;
 			case 'itunes_index':
 			case 'youtube_index':
@@ -1135,6 +1061,7 @@ class Podcast extends AppModel {
 		        unset( $this->hasOne['UserPodcast'] );
 		        // Unset the rest to prevent a recursive loop on the models creating huge amounts of data
 		        unset( $this->hasMany['PublishedPodcastItems'] );
+				unset( $this->hasMany['PodcastItems'] );				
 		        unset( $this->hasMany['PodcastLinks'] );
 		        unset( $this->hasMany['PodcastModerators'] );
 		        unset( $this->hasMany['ModeratorUserGroups'] );
@@ -1145,28 +1072,8 @@ class Podcast extends AppModel {
 				unset( $this->hasAndBelongsToMany['MemberGroups'] );
 				unset( $this->hasAndBelongsToMany['Members'] );
 				unset( $this->hasAndBelongsToMany['Moderators'] );
-				unset( $this->belongsTo['PreferredNode'] );
 				unset( $this->Owner->hasMany['Podcasts'] );
 				break;
-			case 'copy':
-				unset( $this->hasMany['PodcastLinks'] );
-				unset( $this->hasMany['PublishedPodcastItems'] );
-				unset( $this->hasMany['PodcastModerators'] );
-				unset( $this->hasMany['ModeratorUserGroups'] );
-				unset( $this->hasMany['WaitingItunesApproval'] );
-				unset( $this->hasMany['WaitingYoutubeApproval'] );
-				unset( $this->hasAndBelongsToMany['ModeratorGroups'] );								
-				unset( $this->hasAndBelongsToMany['MemberGroups'] );								
-				unset( $this->hasAndBelongsToMany['Members'] );								
-				unset( $this->hasAndBelongsToMany['Moderators'] );																
-				unset( $this->hasOne['UserPodcast'] );				
-				unset( $this->belongsTo['PreferredNode'] );				
-				unset( $this->belongsTo['Language'] );				
-				unset( $this->belongsTo['Owner'] );
-				break;
-			case 'view':
-			case 'admin_view':
-				unset( $this->Owner->hasMany['Podcasts'] );
 			default:
 				break;	
 		}
@@ -1220,11 +1127,13 @@ class Podcast extends AppModel {
 			
 		// Now reset any flags ensuring it is not published on iTunes or Youtube
 		$this->data['Podcast']['publish_youtube_date'] = null;
-		$this->data['Podcast']['intended_youtube_flag'] = null;
-		$this->data['Podcast']['consider_for_youtube'] = null;
-		$this->data['Podcast']['consider_for_itunesu'] = null;
-		$this->data['Podcast']['intended_itunesu_flag'] = null;
-		$this->data['Podcast']['publish_itunes_u'] = null;		
+		$this->data['Podcast']['publish_itunes_date'] = null;		
+		$this->data['Podcast']['publish_itunes_u'] = 'N';		
+		$this->data['Podcast']['publish_youtube'] = 'N';				
+		$this->data['Podcast']['intended_itunesu_flag'] = 'N';				
+		$this->data['Podcast']['intended_youtube_flag'] = 'N';
+		$this->data['Podcast']['consider_for_youtube'] = false;
+		$this->data['Podcast']['consider_for_itunesu'] = false;
 				
 		$this->set( $this->data );
 		
@@ -1241,22 +1150,27 @@ class Podcast extends AppModel {
 
 		if( isSet( $this->data['PodcastItems'] ) && count( $this->data['PodcastItems'] ) ) {
 			
+			$PodcastItem = ClassRegistry::init('PodcastItem');
+			
 			foreach( $this->data['PodcastItems'] as $podcast_item ) {
+
+				if( $podcast_item['processed_state'] == self::AVAILABLE ) {				
 				
-				$podcast_item['id'] = null;
-				$podcast_item['youtube_flag'] = 'N';
-				$podcast_item['itunes_flag'] = 'N';
-				$podcast_item['podcast_id'] = $this->data['Podcast']['id'];
-				$this->PodcastItems->set( $podcast_item ); 
-				$this->PodcastItems->save();
-				$podcast_item_id = $this->PodcastItems->getLastInsertId();
-				
-				foreach( $podcast_item['PodcastMedia'] as $podcast_media ) {
-				
-					$podcast_media['id'] = null;
-					$podcast_media['podcast_item'] = $podcast_item_id;
-					$this->PodcastItems->PodcastMedia->set( $podcast_media );
-					$this->PodcastItems->PodcastMedia->save();
+					$podcast_item['id'] = null;
+					$podcast_item['youtube_flag'] = 'N';
+					$podcast_item['itunes_flag'] = 'N';
+					$podcast_item['podcast_id'] = $this->data['Podcast']['id'];
+					$PodcastItem->set( $podcast_item ); 
+					$PodcastItem->save();
+					$podcast_item_id = $PodcastItem->getLastInsertId();
+					
+					foreach( $podcast_item['PodcastMedia'] as $podcast_media ) {
+						
+						$podcast_media['id'] = null;
+						$podcast_media['podcast_item'] = $podcast_item_id;
+						$this->PodcastItems->PodcastMedia->set( $podcast_media );
+						$this->PodcastItems->PodcastMedia->save();
+					}
 				}
 			}
 		}
@@ -1313,5 +1227,336 @@ class Podcast extends AppModel {
 
 			$this->data[$key][] = $association['id'];
 		}
+	}
+	
+	/*
+	 * @name : edit
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcasts controller on the edit and admin_edit methods. It can be further refined by limitinng the columns
+	 * retrieved and not just the relationships.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function edit( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('Podcast.id' => $id ),
+			'fields' => array( 'Podcast.*' ),
+			'contain' => array(
+				'Moderators' => array(
+					'fields' => array(
+						'Moderators.*'
+					)
+				),
+				'Members' => array(
+					'fields' => array(
+						'Members.*'
+					)
+				),
+				'ModeratorGroups' => array(
+					'fields' => array(
+						'ModeratorGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'MemberGroups' => array(
+					'fields' => array(
+						'MemberGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'PreferredNode' => array(
+					'fields' => array(
+						'PreferredNode.*'
+					)
+				),
+				'Owner' => array(
+					'fields' => array(
+						'Owner.*'
+					)
+				),
+				'Categories' => array(
+					'fields' => array(
+						'Categories.*'
+					)
+				),
+				'Nodes' => array(
+					'fields' => array(
+						'Nodes.*'
+					)
+				),
+				'iTuneCategories' => array(
+					'fields' => array(
+						'iTuneCategories.*'
+					)
+				)
+			)
+		) );
+	}
+
+	/*
+	 * @name : view
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcasts controller on the view and admin_view methods. It can be further refined by limiting the columns
+	 * retrieved and not just the relationships.
+	 * @NOTE: This method retrieves MORE data then the "edit" method directly above.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function view( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('Podcast.id' => $id ),
+			'fields' => array( 'Podcast.*' ),
+			'contain' => array(
+				'Moderators' => array(
+					'fields' => array(
+						'Moderators.*'
+					)
+				),
+				'Members' => array(
+					'fields' => array(
+						'Members.*'
+					)
+				),
+				'ModeratorGroups' => array(
+					'fields' => array(
+						'ModeratorGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'MemberGroups' => array(
+					'fields' => array(
+						'MemberGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'PreferredNode' => array(
+					'fields' => array(
+						'PreferredNode.*'
+					)
+				),
+				'Owner' => array(
+					'fields' => array(
+						'Owner.*'
+					)
+				),
+				'Categories' => array(
+					'fields' => array(
+						'Categories.*'
+					)
+				),
+				'Nodes' => array(
+					'fields' => array(
+						'Nodes.*'
+					)
+				),
+				'iTuneCategories' => array(
+					'fields' => array(
+						'iTuneCategories.*'
+					)
+				),
+				'PodcastItems' => array(
+					'fields' => array(
+						'PodcastItems.id',
+						'PodcastItems.title',
+						'PodcastItems.image_filename',
+						'PodcastItems.created',
+						'PodcastItems.processed_state',
+						'PodcastItems.published_flag',
+						'PodcastItems.deleted',
+					)
+				),
+				'Language' => array(
+					'fields' => array(
+						'Language.*'
+					)
+				)
+			)
+		) );
+	}
+
+	/*
+	 * @name : statusUpdate
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcasts controller when updating the statuus value between "consider", "intended" and "published" for both
+	 * iTunes and Youtube
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function statusUpdate( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('Podcast.id' => $id ),
+			'fields' => array( '
+				Podcast.id, 
+				Podcast.title, 
+				Podcast.summary, 
+				Podcast.consider_for_itunesu, 
+				Podcast.intended_itunesu_flag,
+				Podcast.publish_itunes_u,
+				Podcast.publish_itunes_date,
+				Podcast.consider_for_youtube,
+				Podcast.intended_youtube_flag,
+				Podcast.publish_youtube,
+				Podcast.publish_youtube_date' 
+			),
+			'contain' => array(
+				'Moderators' => array(
+					'fields' => array(
+						'Moderators.id'
+					)
+				),
+				'Members' => array(
+					'fields' => array(
+						'Members.id'
+					)
+				),
+				'ModeratorGroups' => array(
+					'fields' => array(
+						'ModeratorGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.id'
+						)
+					)				
+				),
+				'MemberGroups' => array(
+					'fields' => array(
+						'MemberGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.id'
+						)
+					)				
+				),
+				'Owner' => array(
+					'fields' => array(
+						'Owner.id',
+						'Owner.first_name',
+						'Owner.last_name'
+					)
+				)
+			)
+		) );
+	}
+
+	/*
+	 * @name : all
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcasts controller on the copy method and retrieves all data relating to a podcast.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function all( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('Podcast.id' => $id ),
+			'fields' => array( 'Podcast.*' ),
+			'contain' => array(
+				'Moderators' => array(
+					'fields' => array(
+						'Moderators.*'
+					)
+				),
+				'Members' => array(
+					'fields' => array(
+						'Members.*'
+					)
+				),
+				'ModeratorGroups' => array(
+					'fields' => array(
+						'ModeratorGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'MemberGroups' => array(
+					'fields' => array(
+						'MemberGroups.*'
+					),
+					'Users' => array(
+						'fields' => array(
+							'Users.*'
+						)
+					)				
+				),
+				'PreferredNode' => array(
+					'fields' => array(
+						'PreferredNode.*'
+					)
+				),
+				'Owner' => array(
+					'fields' => array(
+						'Owner.*'
+					)
+				),
+				'Categories' => array(
+					'fields' => array(
+						'Categories.*'
+					)
+				),
+				'Nodes' => array(
+					'fields' => array(
+						'Nodes.*'
+					)
+				),
+				'iTuneCategories' => array(
+					'fields' => array(
+						'iTuneCategories.*'
+					)
+				),
+				'PodcastItems' => array(
+					'fields' => array(
+						'PodcastItems.id',
+						'PodcastItems.title',
+						'PodcastItems.image_filename',
+						'PodcastItems.created',
+						'PodcastItems.processed_state',
+						'PodcastItems.published_flag',
+						'PodcastItems.deleted',
+					),
+					'PodcastMedia' => array(
+						'fields' => array(
+							'PodcastMedia.*'
+						)
+					)
+				),
+				'Language' => array(
+					'fields' => array(
+						'Language.*'
+					)
+				)
+			)
+		) );
 	}
 }
