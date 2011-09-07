@@ -13,11 +13,6 @@ class PodcastItem extends AppModel {
                 'message' => 'Cannot identify the podcast you are trying to associate with this track.'
             )
         ),
-        'title' => array(
-			'rule' => 'notempty',
-			'allowEmpty' => false,
-			'message' => 'Please provide a title for this track.'
-        ),
         'published_flag' => array(
             'rule' => array('readyForPublication'),
             'message' => 'You cannot publish tracks that are unavailable or do not have a title.'
@@ -28,7 +23,29 @@ class PodcastItem extends AppModel {
                 'allowEmpty' => true,
                 'message' => 'If entered, you must provide a valid item link URL.'
             )
+        ),
+        'youtube_link_1' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (1) URL.'
+            )
+        ),
+        'youtube_link_2' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (2) URL.'
+            )
+        ),
+        'youtube_link_3' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (3) URL.'
+            )
         )
+		
     );
 
     var $belongsTo = array(
@@ -36,7 +53,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author', 'Podcast.shortcode',
             'dependent' => true
         )
     );
@@ -83,7 +100,6 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
-		$this->data['PodcastItem']['title'] = $params['url']['f1name'];
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
 		
@@ -216,27 +232,6 @@ class PodcastItem extends AppModel {
 			'comments' => 'Item from '.$data['Podcast']['title']			
 		);
 	}
-		
-	/* 
-	 * @name : stripJoinsByAction
-	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
-	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
-	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
-	 * database.  
-	 * @updated : 19th June 2011
-	 * @by : Charles Jackson
-	 */	
-	function stripJoinsByAction( $action = null ) {
-		
-		switch ( $action ) {
-			case 'itunes_approve':
-			case 'youtube_approve':
-				unset( $this->hasOne['Transcript'] );
-				break;
-			default:
-				break;	
-		}
-	}
 	
 	/*
 	 * @name : buildYoutubeData
@@ -263,7 +258,6 @@ class PodcastItem extends AppModel {
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
 			'meta_data' => $this->encode_meta_data(
 				array(
-		
 				'title' => $this->data['PodcastItem']['youtube_title'],
 				'description' => $this->data['PodcastItem']['youtube_description'],
 				'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
@@ -277,7 +271,8 @@ class PodcastItem extends AppModel {
 				'video_response' => $this->data['PodcastItem']['youtube_video_response'],
 				'ratings' => $this->data['PodcastItem']['youtube_ratings'],
 				'embedding' => $this->data['PodcastItem']['youtube_embedding'],
-				'syndication' => $this->data['PodcastItem']['youtube_syndication']		
+				'syndication' => $this->data['PodcastItem']['youtube_syndication'],
+				'shortcode' => $this->data['Podcast']['shortcode']
 				)
 			)
 		);
@@ -325,29 +320,6 @@ class PodcastItem extends AppModel {
 		return true;
 	}	
 
-	/*
-	 * @name : youtubeMetaInjection
-	 * @description : Takes a row from the callbacks controller and build youtube meta data for injection
-	 * @updated : 13th July 2011
-	 * @by : Charles Jackson
-	 */
-	/* function youtubeMetaInjection( $row ) {
-
-		$meta_data = array();
-		$data = $this->findById( $row['podcast_item_id'] );
-		
-		$meta_data['destination_path'] = $row['destination_path'];
-		$meta_data['destination_filename'] = $row['destination_filename'];
-		$meta_data['meta_data']['title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['genre'] = 'Podcast';
-		$meta_data['meta_data']['author'] = $data['PodcastItem']['author'];
-		$meta_data['meta_data']['course_code'] = $data['Podcast']['course_code'];
-		$meta_data['meta_data']['podcast_title'] = $data['PodcastItem']['youtube_title'];
-		$meta_data['meta_data']['year'] = date("Y");
-		$meta_data['meta_data']['comments'] = 'Item from '.$data['Podcast']['series_playlist'];
-		
-		return $meta_data;
-	} */
 
 	/*
 	 * @name : itunesMetaInjection
@@ -449,5 +421,89 @@ class PodcastItem extends AppModel {
 
         return true;
     }
+
+	/*
+	 * @name : get
+	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
+	 * podcast_items controller on various methods.
+	 * @updated : 6th September 2011
+	 * @by : Charles Jackson
+	 */
+	function get( $id ) {
+		
+		$this->Behaviors->attach('Containable');
+		
+		return $this->find('first', array(
+			'conditions' => array('PodcastItem.id' => $id ),
+			'fields' => array(
+				'PodcastItem.*'
+			),
+			'contain' => array(
+				'PodcastMedia' => array(
+					'fields' => array(
+						'PodcastMedia.id',
+						'PodcastMedia.media_type',
+						'PodcastMedia.filename',
+						'PodcastMedia.processed_state'
+					)
+				),
+				'YoutubeSubjectPlaylists' => array(
+					'fields' => array(
+						'YoutubeSubjectPlaylists.*'
+					)
+				),
+				'Transcript' => array(
+					'fields' => array(
+						'Transcript.*'
+					)
+				),
+				'Podcast' => array(
+					'fields' => array(
+						'Podcast.id',
+						'Podcast.custom_id',
+						'Podcast.title',
+						'Podcast.podcast_flag',
+						'Podcast.course_code'
+					),
+					'Moderators' => array(
+						'fields' => array(
+							'Moderators.id'
+						)
+					),
+					'Members' => array(
+						'fields' => array(
+							'Members.id'
+						)
+					),
+					'ModeratorGroups' => array(
+						'fields' => array(
+							'ModeratorGroups.*'
+						),
+						'Users' => array(
+							'fields' => array(
+								'Users.id'
+							)
+						)				
+					),
+					'MemberGroups' => array(
+						'fields' => array(
+							'MemberGroups.*'
+						),
+						'Users' => array(
+							'fields' => array(
+								'Users.id'
+							)
+						)				
+					),
+					'Owner' => array(
+						'fields' => array(
+							'Owner.*'
+						)
+					)
+				)
+			)
+		) );
+	}
+	
 }
 

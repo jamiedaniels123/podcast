@@ -51,6 +51,7 @@ class UserGroup extends AppModel {
             'joinTable' => 'user_group_podcasts',
             'foreignKey' => 'user_group_id',
             'associationForeignKey' => 'podcast_id',
+			'fields' => 'Podcasts.id,Podcasts.title',
             'unique' => true
         )
     );
@@ -106,23 +107,23 @@ class UserGroup extends AppModel {
         
         // Now we must delete all rows in the magic join table user_user_groups that belong
         // to this usergroup and have a moderator flag set  to true.
-        $this->GroupModerator = ClassRegistry::init('UserUserGroup');
+        $GroupModerator = ClassRegistry::init('UserUserGroup');
 
-        $this->GroupModerator->recursive = -1;
-        $group_moderators = $this->GroupModerator->find( 'all', array( 'conditions' => array( 'user_group_id' => $this->data['UserGroup']['id'], 'moderator' => true ) ) );
+        $GroupModerator->recursive = -1;
+        $group_moderators = $GroupModerator->find( 'all', array( 'conditions' => array( 'user_group_id' => $this->data['UserGroup']['id'], 'moderator' => true ) ) );
 
         
-        $this->GroupModerator->begin();
+        $GroupModerator->begin();
         
         foreach( $group_moderators as $group_moderator ) {
 
-            if( $this->GroupModerator->delete( $group_moderator['UserUserGroup']['id'] ) == false ) {
-                $this->GroupModerator->rollback();
+            if( $GroupModerator->delete( $group_moderator['UserUserGroup']['id'] ) == false ) {
+                $GroupModerator->rollback();
                 return false;
             }
         }
 
-        $this->GroupModerator->commit();
+        $GroupModerator->commit();
 
         // The "HBTM Moderator" array is used for reading only, they are saved under the "hasMany GroupModerator" array
         // so we may set the additonal moderator flag to true on the join table. (not possible in  HBTM).
@@ -144,9 +145,10 @@ class UserGroup extends AppModel {
         $data = array();
         $users = array();
         
-        $this->User = ClassRegistry::init('User');
-
-        $data = $this->User->find('all', array('conditions' => array( 'User.id' => $user_ids ) ) );
+        $User = ClassRegistry::init('User');
+		$User->recursive = -1;
+		
+        $data = $User->find('all', array('conditions' => array( 'User.id' => $user_ids ) ) );
 
         // The data retrieved is not in the correct format, need to massage it here.
         foreach( $data as $user ) {
@@ -257,4 +259,30 @@ class UserGroup extends AppModel {
      	
      	return $conditions;
     }     
+	
+	/* 
+	 * @name : stripJoinsByAction
+	 * @description : There are a lot of joins in this model and we do not wish to retrieve all information
+	 * every time we load a page. As well as using the "recursive" command to set how deep any "find" statement will
+	 * dig we also use this method to unset many of the joins dynamically further reducing the overhead on the
+	 * database.  
+	 * @updated : 19th June 2011
+	 * @by : Charles Jackson
+	 */	
+	function stripJoinsByAction( $action = null ) {
+		
+		switch ( $action ) {
+			case 'index':
+				// We must unbind this relationship else we will get dupliate entries on the join.
+				unset( $this->hasOne['UserUserGroup'] );
+				unset( $this->Members->hasMany['Podcasts'] );
+				unset( $this->Moderators->hasMany['Podcasts'] );
+				unset( $this->Users->hasMany['Podcasts'] );
+				unset( $this->hasAndBelongsToMany['Podcasts'] );
+				break;
+			default:
+				break;	
+		}
+	}
+	
 }

@@ -62,7 +62,7 @@ class User extends AppModel {
             'fields' => array('Podcasts.id', 'Podcasts.title')
         )
     );
-
+	
     /*
      * @name : __construct
      * @description : Standard model constructor, we are currently using it to define a virtual field of full_name.
@@ -126,9 +126,16 @@ class User extends AppModel {
                         'Podcasts.id'
                         )
                     )
-                )
-            )
-        );
+                ),
+				'UnreadSystemNotification' => array(
+					'fields' => array(
+						'UnreadSystemNotification.id',
+						'UnreadSystemNotification.unread',
+						'UnreadSystemNotification.admin_only'
+						)
+					)
+				)
+			);
     }
 		
     /*

@@ -788,8 +788,14 @@ class Feed extends AppModel {
     function buildApiEntry( $custom_id, $media_type = null, $file_name = null ) {
 
         // The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
-        if( !empty( $media_type ) )
+		if( strtolower( $media_type ) == 'default' ) {
+			
+			$media_type = null;
+			
+		} elseif( !empty( $media_type ) ) {
+			
             $media_type .= '/';
+		}
 
 		return
 			array(

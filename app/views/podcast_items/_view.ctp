@@ -32,7 +32,7 @@
             <dt>Target URL Text</dt>
             <dd><?php echo $this->data['PodcastItem']['target_url_text']; ?>&nbsp;</dd>
             <dt>Transcript</dt>
-            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['Transcript']['filename'] ); ?>			</dd>
+            <dd><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['transcript_filename'] ); ?>			</dd>
             <dt>Parent Collection</dt>
             <dd><?php echo $this->data['Podcast']['title']; ?>&nbsp;</dd>
         </dl>

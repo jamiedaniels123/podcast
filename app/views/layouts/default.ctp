@@ -21,6 +21,7 @@
         echo $this->Html->css('podcast-server');
         echo $this->Html->css('ou-header');
         echo $scripts_for_layout;
+		flush();
     ?>
     
     <!--[if IE]>

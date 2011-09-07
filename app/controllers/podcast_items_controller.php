@@ -9,8 +9,7 @@ class PodcastItemsController extends AppController {
     var $paginate = array( 'limit' => 5, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
 
     function beforeFilter() {
-    	
-    	$this->PodcastItem->stripJoinsByAction( $this->action );
+
     	parent::beforeFilter();
     }
         
@@ -39,11 +38,12 @@ class PodcastItemsController extends AppController {
      */
     function add( $podcast_id ) {
 
-        $this->PodcastItem->Podcast->recursive = 3; // Raise the recursive level so we have enough information to check permissions.
+        $this->PodcastItem->Podcast->recursive = 2; // Raise the recursive level so we have enough information to check permissions.
 
         if( (int)$podcast_id ) {
 
-            $this->data = $this->PodcastItem->Podcast->findById( $podcast_id );
+			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
+            $this->data = $this->PodcastItem->Podcast->edit( $podcast_id );
 
             // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
             // in the session.
@@ -51,14 +51,11 @@ class PodcastItemsController extends AppController {
             $this->Session->write('Podcast.admin', false);
         }
 
-        if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
+        if( empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 
             $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->redirect( $this->referer() );
 
-        } else {
-
-            $this->data['PodcastsItems'] = $this->paginate('PodcastItem', array('PodcastItem.podcast_id' => $podcast_id, 'PodcastItem.deleted' => false ) );
         }
     }
 	
@@ -70,10 +67,8 @@ class PodcastItemsController extends AppController {
      */
     function view( $id = null ) {
 
-        $this->PodcastItem->recursive = 3; // Raise the recursive level so we can check permissions.
-        
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
@@ -93,16 +88,25 @@ class PodcastItemsController extends AppController {
 
 		if ( !empty( $this->data ) ) {
            	
-			$this->PodcastItem->set( $this->data );	
-            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-			
+
+            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
+				
 				$this->PodcastItem->set( $this->data );	
-            	$this->PodcastItem->saveAll();
+				
+            	$this->PodcastItem->save();
 
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
 					
-					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
+                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
+						
+						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+						// Attempted to meta injection but failed. Alert the user but do not roll back the database.
+						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated we were unable to refresh to RSS feeds. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
+					}
 					
 				} else {
 					
@@ -119,11 +123,10 @@ class PodcastItemsController extends AppController {
 
         } else {
 
-			
-            $this->data = $this->PodcastItem->findById( $id );
+            $this->data = $this->PodcastItem->get( $id );
 			
             // We did not find the podcast, redirect.
-            if( empty( $this->data ) ) {
+            if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 
                 $this->Session->setFlash('Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
                 $this->cakeError('error404');
@@ -142,7 +145,8 @@ class PodcastItemsController extends AppController {
 	function publish( $id = null ) {
 		
 		$this->PodcastItem->recursive = -1;
-		
+		$status = true;
+				
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
@@ -159,10 +163,20 @@ class PodcastItemsController extends AppController {
 
 			} else {
 				
+				$status = false;
 				$this->Session->setFlash('Cannot publish '. MEDIA.'(s) that are unavailable or have no title.', 'default', array( 'class' => 'alert' ) );
 				break;
 			}
 		}
+
+		if( $status ) {
+			
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been published but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			}
+		}
+		
 		
 		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
 	}
@@ -292,7 +306,7 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) && $this->data['Podcast']['podcast_flag'] == true ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'Y';
-					$this->data['PodcastItem']['published_flag'] = 'Y'; // Legacy, been superseded by itunes_flag but still needed.
+					$this->data['PodcastItem']['published_flag'] = 'Y'; // Automatically publish the track if wanted on itunes.
 					$this->data['PodcastItem']['consider_for_itunesu'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
 					
 					$this->PodcastItem->set( $this->data );
@@ -301,7 +315,13 @@ class PodcastItemsController extends AppController {
 				
 			}
 			
-			$this->Session->setFlash('Your '.MEDIA.' has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been approved but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			} else {
+			
+				$this->Session->setFlash('Your '.MEDIA.' has been successfully approved for publication on iTunes.', 'default', array( 'class' => 'success' ) );
+			}
 				
 		} else {
 				
@@ -320,8 +340,6 @@ class PodcastItemsController extends AppController {
      */
 	function itunes_reject( $id = null ) {
     	
-    	$this->PodcastItem->recursive = -1;
-    	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
 		            
@@ -335,15 +353,20 @@ class PodcastItemsController extends AppController {
 				if( !empty( $this->data ) ) {
 					
 					$this->data['PodcastItem']['itunes_flag'] = 'N';
-					$this->data['PodcastItem']['published_flag'] = 'N'; // Legacy, been superseded by itunes_flag but still needed.
 					$this->data['PodcastItem']['consider_for_itunesu'] = false;
 					
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
 				}
 			}
+
+			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been removed but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+			} else {
 			
-			$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
+				$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
+			}
 			
 		} else {
 			
@@ -376,7 +399,7 @@ class PodcastItemsController extends AppController {
 
             if( $this->PodcastItem->save() ) { // Save the data here so we can use the unique ID created as part of the media filename.
 
-                $this->data = $this->PodcastItem->findById( $this->PodcastItem->getLastInsertId() );
+                $this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
 
 				// Move from the default file chucker upload folder into a specific custom_id folder and rename it
 				// appending the database ID number to the start of the filename to ensure it is unique.
@@ -419,7 +442,9 @@ class PodcastItemsController extends AppController {
 								'source_filename' => $this->data['PodcastItem']['filename'],
 								'destination_filename' => $this->data['PodcastItem']['filename'],
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
-								'workflow' => $this->Workflow->getWorkflow()
+								'podcast_id' => $this->data['PodcastItem']['podcast_id'],
+								'workflow' => $this->Workflow->getWorkflow(),
+								'created' => time()
 									)
 								)
 							)
@@ -438,7 +463,7 @@ class PodcastItemsController extends AppController {
 					} else {
 						
 						// Transcode the media
-						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'] ) ) {
+						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'] ) ) {
 	
 							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
 							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatioFloat();
@@ -472,7 +497,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('Could not save your '.MEDIA.' information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
 		}
 		
-		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );		
+		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
 		$this->PodcastItem->rollback();
 		
         $this->redirect( array( 'action' => 'add', $this->Session->read('Podcast.podcast_id') ) );
@@ -518,15 +543,13 @@ class PodcastItemsController extends AppController {
 		
 		if( $this->Upload->transcript( $this->data, 'new_filename' ) ) {
 
-			$this->data['Transcript']['original_filename'] = $this->data['Transcript']['new_filename']['name'];
-			$this->data['Transcript']['filename'] = $this->Upload->getUploadedFilename();
-			$this->data['Transcript']['media_type'] = strtolower( TRANSCRIPT );
-			$this->data['Transcript']['duration'] = 0;
-			$this->data['Transcript']['podcast_item'] = $this->data['PodcastItem']['id'];
-			$this->data['Transcript']['processed_state'] = 9; // Media available
+			$this->data['PodcastItem']['transcript_filename'] = $this->Upload->getUploadedFilename();
+			$this->data['PodcastItem']['transcript_upload_by'] = $this->Session->read('Auth.User.id');
+			$this->data['PodcastItem']['transcript_upload_when'] = date('Y-m-d H:i:s');
 			
 		} else {
 			
+
 			unset( $this->data['Transcript'] );
 
 		}
@@ -551,7 +574,6 @@ class PodcastItemsController extends AppController {
     function delete( $id = null ) {
 
         $this->autoRender = false;
-		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions and listAssociatedMedia
 
         // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
         // when somebody is deleting an individual podcast_item we pass into an array and loop through as is the data
@@ -561,7 +583,7 @@ class PodcastItemsController extends AppController {
 
         foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
-        	$this->data = $this->PodcastItem->findById( $key );
+        	$this->data = $this->PodcastItem->get( $key );
         	        		
     	    // If we did not find the podcast media then redirect to the referer.
 	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
@@ -575,8 +597,15 @@ class PodcastItemsController extends AppController {
 						$this->PodcastItem->set( $this->data );
 						$this->PodcastItem->save();
 		
-						$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
-					
+
+						if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+							
+							$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been deleted but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+						} else {
+
+							$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+						}
+						
 					} else {
 					
 						$this->Session->setFlash('We could not delete '.MEDIA.'. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
@@ -591,7 +620,7 @@ class PodcastItemsController extends AppController {
 			}
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( array('admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
     }
 
     /*
@@ -603,8 +632,8 @@ class PodcastItemsController extends AppController {
 	function delete_attachment( $attachment, $id ) {
 		
         $this->autoRender = false;
-		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
-        $this->data = $this->PodcastItem->findById( $id );
+
+        $this->data = $this->PodcastItem->get( $id );
 		
         // If we did not find the podcast media then redirect to the referer.
         if( !empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
@@ -651,7 +680,7 @@ class PodcastItemsController extends AppController {
     function admin_view( $id = null ) {
 
         // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // We did not find the podcast, error and redirect.
         if( empty( $this->data ) ) {
@@ -671,7 +700,7 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 
-        $this->data = $this->PodcastItem->findById( $id );
+        $this->data = $this->PodcastItem->get( $id );
 
         // If we did not find the podcast media then redirect to the referer.
         if( empty( $this->data ) ) {
@@ -732,8 +761,14 @@ class PodcastItemsController extends AppController {
 				$this->data['PodcastItem']['deleted'] = false;
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
+
+				if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+					
+					$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been restored but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+				} else {
                 
-                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+	                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+				}
 
             } else {
 

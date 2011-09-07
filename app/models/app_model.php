@@ -151,15 +151,18 @@ class AppModel extends Model {
 	
     function getStandardImageName( $image_filename = null ) {
 
+		$standard_filename = null;
+		$image_filename = trim( $image_filename );
+				
 		// Does the filename have an extension?
 		if( strrpos( $image_filename, '.' ) ) {
 			
 	        $standard_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
-	        $standard_filename .= RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
+	        $standard_filename = $standard_filename.RESIZED_IMAGE_EXTENSION . '.' . $this->getExtension( $image_filename );
 			
-		} else {
+		} elseif( strlen( $image_filename ) ) {
 			
-			$standard_filename .= RESIZED_IMAGE_EXTENSION;
+			$standard_filename = $image_filename.RESIZED_IMAGE_EXTENSION;
 		}
 		
         return $standard_filename;
@@ -167,9 +170,20 @@ class AppModel extends Model {
 
     function getThumbnailImageName( $image_filename = null ) {
 
-        $thumbnail_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
-        $thumbnail_filename.= THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
-
+		$thumbnail_filename = null;
+		$image_filename = trim( $image_filename );
+		
+		// Does the filename have an extension?
+		if( strrpos( $image_filename, '.' ) ) {
+			
+	        $thumbnail_filename = substr( $image_filename, 0, strrpos( $image_filename, '.' ) );
+	        $thumbnail_filename = $thumbnail_filename.THUMBNAIL_EXTENSION . '.' . $this->getExtension( $image_filename );
+			
+		} elseif( !empty( $image_filename ) ) {
+			
+			$thumbnail_filename = $image_filename.THUMBNAIL_EXTENSION;
+		}
+		
         return $thumbnail_filename;
     }
 

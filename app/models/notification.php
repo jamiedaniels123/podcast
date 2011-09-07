@@ -69,24 +69,25 @@ class Notification extends AppModel {
 
 	/*
 	 * @name : unableToDelete
-	 * @description : Called from the callback model when we receive a failure to transcode notice
+	 * @description : Called from the callback model when we receive a failure to delete status
 	 * @updated : 26th August 2011
 	 * @by : Charles Jackson
 	 */
-	function unableToDelete( $user, $data ) {
+	function unableToDelete( $data = array() ) {
 		
 		$this->create();
 		$this->data['Notification']['user_id'] = 0;
-		$this->data['Notification']['title'] = 'Malformed Data from the API';
+		$this->data['Notification']['title'] = 'Unable to delete from media server';
 		$this->data['Notification']['type'] = 'Error';
 		$this->data['Notification']['admin_only'] = true;
-		$this->data['Notification']['message'] = 'The following callback from the Admin API has been indentified as malformed : <pre>'.$data.'</pre>';
+		$this->data['Notification']['message'] = 'The Admin API has reported a failure to delete. Details below : <pre>'.$data.'</pre>';
 		$this->save( $this->data );
 	}	
 	
 	/*
 	 * @name : unableSaveFlavour
-	 * @description : 
+	 * @description : Everytime a transcode-media callback is received we save the flavour in the item_media table. If it fails
+	 * for any reason a row is created on the notifications table.
 	 * @updated : 26th August 2011
 	 * @by : Charles Jackson
 	 */	
@@ -100,7 +101,14 @@ class Notification extends AppModel {
 		$this->data['Notification']['message'] = 'We were unable to save a flavour of media. The specific details as received from the Admin API are as follows.<pre>'.print_r( $api_data, 1 ).'</pre> ... and the derived podcast_item_media we attempted to save was : <pre>'.print_r( $data, 1 ).'</pre>';
 		$this->save( $this->data );		
 	}
-	
+
+	/*
+	 * @name : errorTranscoding
+	 * @description : Everytime a transcode-media callback is received we check the status. If not equal to YES then we report an error
+	 * by inserting a row into the notifications table.
+	 * @updated : 5th September 2011
+	 * @by : Charles Jackson
+	 */		
 	function errorTranscoding( $data = array() ) {
 		
 		$this->create();
@@ -111,7 +119,14 @@ class Notification extends AppModel {
 		$this->data['Notification']['message'] = 'The Admin API reported a transcoding error. Details taken from the appropriate row on the podcast_item_media table can been seen below : <pre>'.print_r( $data, 1 ).'</pre>';
 		$this->save( $this->data );		
 	}
-	
+
+	/*
+	 * @name : unableToCleanFolder
+	 * @description : If we are unable to clean a local folder structure upon receipt of a completed callback
+	 * we insert a row into the notifications table.
+	 * @updated : 5th September 2011
+	 * @by : Charles Jackson
+	 */		
 	function unableToCleanFolder( $row = array(), $path = null ) {
 		
 		$this->create();
@@ -121,5 +136,28 @@ class Notification extends AppModel {
 		$this->data['Notification']['admin_only'] = true;
 		$this->data['Notification']['message'] = 'There has been a problem deleting a local folder structure and or file <i>'.FILE_REPOSITORY.$path.' </i> on the Admin box. We have just completed the transaction transcribed below as passed by the Admin API : <pre>'.print_r( $row, 1 ).'</pre>';
 		$this->save( $this->data );		
+	}
+
+	/*
+	 * @name : unreadSystemNotifications
+	 * @description : Called from users/dashboard for administrators only, it checks to see if there are any unread notifications
+	 * on the system and returns a bool accordingly.
+	 * @updated : 5th September 2011
+	 * @by : Charles Jackson
+	 */
+	function unreadSystemNotifications() {
+		
+		$this->data = $this->find('first',array('conditions' => array(
+			
+			'Notification.unread' => 1,
+			'Notification.admin_only' => 1
+				)
+			)
+		);
+		
+		if( empty( $this->data ) )
+			return false;
+			
+		return true;
 	}
 }

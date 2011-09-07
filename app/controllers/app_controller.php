@@ -31,8 +31,8 @@ class AppController extends Controller {
 
 				// It would appear the user has attempted to access a URL to which they have no permission.
 				// Create a row on the notifications table
-				$notification = ClassRegistry::init('Notification');
-				$notification->unauthorisedAccess( $this->Session->read('Auth.User'), $this->params['url']['url'] );
+				$Notification = ClassRegistry::init('Notification');
+				$Notification->unauthorisedAccess( $this->Session->read('Auth.User'), $this->params['url']['url'] );
 				
 				$this->Session->setFlash( 'Could not find the page you were looking for. Please try again', 'default', array( 'class' => 'error' ) );
 				$this->cakeError('error404');
@@ -50,6 +50,7 @@ class AppController extends Controller {
     	if( $this->RequestHandler->isAjax() == false ) {
     		
 			$Breadcrumb = ClassRegistry::init('Breadcrumb');
+			$Breadcrumb->recursive = 0;
 			$this->set('breadcrumbs', $Breadcrumb->build( $this->params, $this->data  ) );			
     	}
     }
@@ -193,5 +194,27 @@ class AppController extends Controller {
             return true;
         
         return false;
+    }	
+	
+	
+    /*
+     * @name : __generateRSSFeeds
+     * @description : Will retrieve the podcast passed as an ID and try to generate RSS feeds if needed. Returns a bool.
+     * @updated : 23rd June 2011
+     * @by : Charles Jackson
+     */
+    protected function __generateRSSFeeds( $id = null ) {
+
+        $podcast = null;
+		$Podcast = ClassRegistry::init('Podcast');
+		
+        $Podcast->recursive = -1; // Minimise the amount of data we retrieve.
+        $podcast = $Podcast->findById( $id );
+
+        if( empty( $podcast ) )
+            return false;
+
+		// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+		return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
     }	
 }

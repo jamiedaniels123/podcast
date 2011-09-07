@@ -4,10 +4,10 @@
     <img src="/img/collection-itunes-large.png" width="45" height="33" alt="iTunes" />
     
 	<div class="link" style="margin-top: 20px;">
-	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="PodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
+	    <a href="/" id="PodcastItemItunesToggle" class="juggle button white" data-target="FormPodcastItunesContainer"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />View details</a>
     </div>	
 	<input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
-    <div class="itunes_container itunes" id="PodcastItunesContainer" style="display:none">
+    <div class="itunes_container itunes" id="FormPodcastItunesContainer" style="display:none">
         <div class="input file">
             <label for="PodcastNewImageLogoless">Logoless image</label>
             <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">
@@ -84,10 +84,9 @@
             </select>
             <?php echo $this->Form->error('Podcast.itunes_site'); ?>
         </div>
-        <div class="wrapper" id="itune_categories_container">
+        <div class="wrapper" id="itunesCategoriesContainer">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="Categories" data-target="PodcastAllCategories">Move --></span>
                     <label for="Categories">Podcast iTune Categories</label>
                     <input type="hidden" name="data[Categories]" value="" id="Categories_" />
                     <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
@@ -98,11 +97,14 @@
                         <?php endif; ?>
                     </select>
                     <?php echo $this->Form->error('Podcast.Categories'); ?>
+					<div class="multiple-button">
+                    	<div class="move float_right" data-source="Categories" data-target="PodcastAllCategories"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                    </div>
+                    <div class="clear"></div>                    
                 </div>
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAllCategories" data-target="Categories"><-- Move</span>
                     <label for="PodcastAllCategories">All iTune Categories</label>
                     <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
                     <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
@@ -110,6 +112,10 @@
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
+					<div class="multiple-button">
+                    	<div class="move float_left" data-source="PodcastAllCategories" data-target="Categories"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                    </div>
+                    <div class="clear"></div>
                 </div>
             </div>
         </div>
@@ -117,7 +123,6 @@
         <div class="wrapper" id="ituneu_categories_container">
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories">Move --></span>
                     <label for="iTuneCategories">Podcast iTune U Categories</label>
                     <input type="hidden" name="data[iTuneCategories]" value="" id="iTuneCategories_" />
                     <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="iTuneCategories">
@@ -128,11 +133,14 @@
                         <?php endif; ?>
                     </select>
                     <?php echo $this->Form->error('Podcast.iTuneCategories'); ?>
+					<div class="multiple-button">
+                    	<div class="move float_right" data-source="iTuneCategories" data-target="PodcastAlliTuneCategories"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                    </div>
+                    <div class="clear"></div>                    
                 </div>
             </div>
             <div class="float_left">
                 <div class="input select">
-                    <span class="move" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories"><-- Move</span>
                     <label for="PodcastAlliTuneCategories">All iTune U Categories</label>
                     <input type="hidden" name="data[Podcast][PodcastAlliTuneCategories]" value="" id="PodcastAlliTuneCategories_" />
                     <select name="data[Podcast][PodcastAlliTuneCategories][]" multiple="multiple" id="PodcastAlliTuneCategories">
@@ -140,6 +148,10 @@
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
+					<div class="multiple-button">
+                    	<div class="move float_left" data-source="PodcastAlliTuneCategories" data-target="iTuneCategories"><img src="/img/multiple-button-left.png" alt="Move right" class="icon" /></div>
+                    </div>
+                    <div class="clear"></div>                    
                 </div>
             </div>
         </div>

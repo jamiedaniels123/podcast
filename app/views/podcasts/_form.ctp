@@ -185,7 +185,7 @@
         <div class="input textarea">
             <label for="summary">Summary <span class="required">(Required)</span></label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
-            <textarea id="summary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
+            <textarea id="PodcastSummary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             
             <span class="tip-text">4000 characters max. No HTML allowed</span>
             

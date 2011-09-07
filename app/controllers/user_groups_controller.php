@@ -7,6 +7,13 @@ class UserGroupsController extends AppController {
 
     var $paginate = array( 'limit' => 20, 'page' => 1, 'order' => array( 'UserGroup.group_title' => 'ASC' ) );
 
+
+    function beforeFilter() {
+    	
+    	$this->UserGroup->stripJoinsByAction( $this->action );
+    	parent::beforeFilter();
+    }
+
     /*
      * @name : beforeRender
      * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
@@ -21,11 +28,13 @@ class UserGroupsController extends AppController {
             $this->set('errors', $this->errors );
 
 
-        $this->User = ClassRegistry::init('User');
-        $this->users = $this->User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Members' );
-        $this->users = $this->User->removeDuplicates( $this->users, $this->data, 'Moderators' );
-        $this->set('users', $this->users );
+        $User = ClassRegistry::init('User');
+		$User->recursive = -1;
+		
+        $users = $User->find('list', array( 'fields' => array('User.id', 'User.full_name' ), 'order' => 'User.full_name ASC' ) );
+        $users = $User->removeDuplicates( $users, $this->data, 'Members' );
+        $users = $User->removeDuplicates( $users, $this->data, 'Moderators' );
+        $this->set('users', $users );
         parent::beforeRender();
     }
 
@@ -38,8 +47,6 @@ class UserGroupsController extends AppController {
      */
     function index() {
 
-        // We must unbind this relationship else we will get dupliate entries on the join.
-        unset( $this->UserGroup->hasOne['UserUserGroup'] );
         $this->data['UserGroups'] = $this->paginate('UserGroup', array('UserGroup.id' => $this->UserGroup->getUserUserGroups( $this->Session->read('Auth.User.id') ) ) );
     }
 
@@ -215,6 +222,7 @@ class UserGroupsController extends AppController {
      */
     function admin_index() {
 
+		$this->UserGroup->recursive = -1;
         unset( $this->UserGroup->hasOne['UserUserGroup'] );
         
         // Have they posted the filter form?

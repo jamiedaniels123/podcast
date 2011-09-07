@@ -82,12 +82,12 @@ class emailTemplatesComponent extends Object {
         $this->controller->set('data', $data);
         $this->controller->set('errormessage', $errormessage);
         //Do not pass any args to send()
-        
-        foreach( $recipients as $recipient ) {
+        $this->Email->to = 'cj3998@openmail.open.ac.uk';
+        //foreach( $recipients as $recipient ) {
 
-        	$this->Email->to = $recipient['User']['email'];
+        	//$this->Email->to = $recipient['User']['email'];
         	$this->Email->send();
-        }
+        //}
     }
 
     /*

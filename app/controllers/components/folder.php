@@ -1,7 +1,8 @@
 <?php
 class FolderComponent extends Object {
 
-
+    
+	
 	/*
 	 * @name : buildHtaccessFile
 	 * @description : Builds a htaccess file using the podcast values passed as a parameter.
@@ -11,8 +12,8 @@ class FolderComponent extends Object {
 	function buildHtaccessFile( $data = array() ) {
 
 		$text = "RewriteEngine on\n";
-		$text = "RewriteCond %{REQUEST_FILENAME} !-f\n";
-		$text = "RewriteRule ^feeds/.*\.jpg$ /feeds/default-project-thumbnail.png [L]\n";
+		$text .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
+		$text .= "RewriteRule ^feeds/.*\.jpg$ /feeds/default-project-thumbnail.png [L]\n";
 		
 		if( $data['Podcast']['deleted']	 ) {
 			
@@ -226,24 +227,35 @@ class FolderComponent extends Object {
      * @updated : 1st June 2001
      * @by : Charles Jackson
      */
-	function cleanUp( $path, $filename ) {
+	function cleanUp( $path, $filename, $date_time_stamp = null ) {
+
+		//$this->emailTemplates->__sendCallbackErrorEmail( array(),$file_system_date_time_stamp.' --- '.$date_time_stamp,'the file system datetimestamp');
 		
 		$folders = array();
 		$path = str_replace('//','/',$path); // Quick fudge to fix minor API issue
 		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
 			return false;
 		
-		unlink( FILE_REPOSITORY.$path.$filename );
-			
-		if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
-			rmdir( FILE_REPOSITORY.$path );
-			
-		$folders = explode('/',$path );
-		$custom_id = $folders[0];
-		if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
-			return ( rmdir( FILE_REPOSITORY.$custom_id ) );
+		$file_system_date_time_stamp = strtotime( filemtime( FILE_REPOSITORY.$path.$filename ) );
+		
+		// We only want to delete files if they were created prior to the date_time stamp on the current API
+		// call else we may delete files that have been refreshed since this API call was made and a.n.other
+		// more recent API call may still be waiting in the queue.
+		if( ( $date_time_stamp = false ) || ( $file_system_date_time_stamp < $date_time_stamp ) ) {
+		
+			unlink( FILE_REPOSITORY.$path.$filename );
+				
+			if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
+				rmdir( FILE_REPOSITORY.$path );
+				
+			$folders = explode('/',$path );
+			$custom_id = $folders[0];
+			if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
+				return ( rmdir( FILE_REPOSITORY.$custom_id ) );
+		}
 		
 		return true;
+			
 	}
     
 }
