@@ -375,3 +375,11 @@ td.publish_itunes_u, td.publish_youtube, th.publish_itunes_u, th.publish_youtube
 	
 	font-weight: bold!important;	
 }
+
+textarea#PodcastSummary, textarea#PodcastItemSummary, textarea#PodcastItemYoutubeDescription, textarea#PodcastItemYoutubeRightsCleared, textarea#PodcastItemYoutubeNotes {
+	
+	width: 97%;
+	height: 100px;	
+	
+}
+

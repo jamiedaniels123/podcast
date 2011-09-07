@@ -23,7 +23,29 @@ class PodcastItem extends AppModel {
                 'allowEmpty' => true,
                 'message' => 'If entered, you must provide a valid item link URL.'
             )
+        ),
+        'youtube_link_1' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (1) URL.'
+            )
+        ),
+        'youtube_link_2' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (2) URL.'
+            )
+        ),
+        'youtube_link_3' => array(
+            'Rule1' => array(
+                'rule' => 'url',
+                'allowEmpty' => true,
+                'message' => 'If entered, you must provide a valid youtube link (3) URL.'
+            )
         )
+		
     );
 
     var $belongsTo = array(

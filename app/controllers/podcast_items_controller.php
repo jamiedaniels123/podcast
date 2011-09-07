@@ -88,10 +88,11 @@ class PodcastItemsController extends AppController {
 
 		if ( !empty( $this->data ) ) {
            	
-			$this->PodcastItem->set( $this->data );	
-            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates()  ) {
-			
+
+            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
+				
 				$this->PodcastItem->set( $this->data );	
+				
             	$this->PodcastItem->save();
 
 				// May not need meta injection
@@ -542,15 +543,13 @@ class PodcastItemsController extends AppController {
 		
 		if( $this->Upload->transcript( $this->data, 'new_filename' ) ) {
 
-			$this->data['Transcript']['original_filename'] = $this->data['Transcript']['new_filename']['name'];
-			$this->data['Transcript']['filename'] = $this->Upload->getUploadedFilename();
-			$this->data['Transcript']['media_type'] = strtolower( TRANSCRIPT );
-			$this->data['Transcript']['duration'] = 0;
-			$this->data['Transcript']['podcast_item'] = $this->data['PodcastItem']['id'];
-			$this->data['Transcript']['processed_state'] = 9; // Media available
+			$this->data['PodcastItem']['transcript_filename'] = $this->Upload->getUploadedFilename();
+			$this->data['PodcastItem']['transcript_upload_by'] = $this->Session->read('Auth.User.id');
+			$this->data['PodcastItem']['transcript_upload_when'] = date('Y-m-d H:i:s');
 			
 		} else {
 			
+
 			unset( $this->data['Transcript'] );
 
 		}

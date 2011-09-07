@@ -347,7 +347,7 @@ class UploadComponent extends Object {
 				return true;
 			}
 		}
-		
+
         $this->error = 'Could not upload and/or schedule movement of your ' . $this->data_collection . ' document to the media server. If the problem persists please alert an administrator.';
         return false;
     }
