@@ -1385,6 +1385,8 @@ class Podcast extends AppModel {
 						'PodcastItems.processed_state',
 						'PodcastItems.published_flag',
 						'PodcastItems.deleted',
+						'PodcastItems.youtube_flag',
+						'PodcastItems.itunes_flag'
 					)
 				),
 				'Language' => array(
