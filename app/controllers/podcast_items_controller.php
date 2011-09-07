@@ -38,8 +38,6 @@ class PodcastItemsController extends AppController {
      */
     function add( $podcast_id ) {
 
-        $this->PodcastItem->Podcast->recursive = 2; // Raise the recursive level so we have enough information to check permissions.
-
         if( (int)$podcast_id ) {
 
 			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
@@ -144,7 +142,7 @@ class PodcastItemsController extends AppController {
 	 */
 	function publish( $id = null ) {
 		
-		$this->PodcastItem->recursive = -1;
+		$this->PodcastItem->recursive = 0;
 		$status = true;
 				
         if( $id )

@@ -100,6 +100,7 @@ class PodcastItem extends AppModel {
 
         $this->data['PodcastItem']['podcast_id'] = $podcast_id;
         $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
+        $this->data['PodcastItem']['title'] = substr( $params['url']['f1name'], 0, strpos( $params['url']['f1name'], '.' ) );		
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
 		
