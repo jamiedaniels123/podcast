@@ -71,7 +71,8 @@ class VlesController extends AppController {
 					$podcast = $Podcast->findById( $row['id'] );
 					
 					if( !empty( $podcast ) && ( $this->Api->deleteFolderOnMediaServer( array( 
-							'source_path' => $data['Podcast']['custom_id'].'/'
+							'source_path' => $data['Podcast']['custom_id'].'/',
+							'destination_path' => $data['Podcast']['custom_id'].'/'
 							)
 						) 
 					) ) {

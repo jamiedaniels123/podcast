@@ -46,7 +46,6 @@ class ApiComponent extends Object {
      */
     function transferFileMediaServer( $data = array() ) {
 		
-		$data['created'] = time();
         $this->setResponse( json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
 
         return $this->getStatus();
@@ -207,7 +206,7 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function __sendMessage( $command, $mediaUrl, $data, $number = 1 ){
+    function __sendMessage( $command, $mediaUrl, $data, $number = 0 ){
 		
         $postData = array( 'command' => $command ,'number' => $number ,'data' => $data,'timestamp' => time() );
         $postData = array( 'mess' => json_encode( $postData ) );
