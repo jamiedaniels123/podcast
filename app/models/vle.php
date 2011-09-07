@@ -4,9 +4,10 @@ class Vle extends AppModel {
 	var $name = 'Vle';
 	var $validate = array();
 	var $useTable = false;
-	var $commands = array('create-container','delete-container','submit-media','delete-media','get-media-endpoint-url','metadata-update');
 	var $data = array();
-
+	var $json = null;	
+	var $commands = array('create-container','delete-container','submit-media','delete-media','get-media-endpoint-url','metadata-update');
+	
 	/*
 	 * @name : setData
 	 * @description : We json_decode the posted data and assign to the class variable data.
@@ -17,8 +18,11 @@ class Vle extends AppModel {
 	function setData( $data ) {
 
 		$dataMess=explode('=',urldecode($data));
-		if( isSet( $dataMess[1] ) )
+		
+		if( isSet( $dataMess[1] ) ) {
+			$this->json = $dataMess[1];
 			$this->data=json_decode($dataMess[1],true);
+		}
 	}
 
 	/*
@@ -58,28 +62,27 @@ class Vle extends AppModel {
 	
 	/*
 	 * @name : createCollection
-	 * @description : Will create a row on the podcasts table for every row in the data array passed as a parameter to
-	 * the VLE ADD action.
+	 * @description : Will create a row on the podcasts table. Returns a boolean.
 	 * @updated : 15th July 2011
 	 * @by : Charles Jackson
 	 */
-	function createCollection() {
+	function createCollection( $row = array() ) {
 		
 		$podcasts = array();
 		$podcast = ClassRegistry('Podcast');
 		$podcast->create();
 		$podcast->recursive = -1;
 		
-		foreach( $this->data['data'] as $row ) {
-			
-			$this->data['Podcast']['title'] = $row['title'];
-			$podcast->set( $this->data );
+		$this->data['Podcast']['title'] = $row['title'];
+		$this->data['Podcast']['summary'] = $row['description'];
+		$this->data['Podcast']['link'] = $row['weburl']; // AM I POPULATING THE CORRECT COLUMN FOR VLE PURPOSES???
 		
-			if( $podcast->save() )
-				$podcasts[] = array( 'id' => $podcast->getLastInsertId(), 'title' => $row['title'] );
-		}
-		
-		return $podcasts;
+		$podcast->set( $this->data );
+	
+		if( $podcast->save() )
+			return $podcast->getLastInsertId();
+
+		return false;
 	}
 
 	/*

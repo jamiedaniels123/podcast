@@ -26,7 +26,8 @@ class FeedsController extends AppController {
      * @by : Charles Jackson
      */
     function add( $id = null ) {
-
+		
+		Configure::write('debug',0);
         $this->autoRender = false;
 
         $Podcast = ClassRegistry::init('Podcast');
@@ -109,7 +110,8 @@ class FeedsController extends AppController {
      * @by : Charles Jackson
      */
     function view( $id = null, $media_type = null, $rss_filename = null, $itunes_complete = false, $interlace = true, $key = null ) {
-
+		
+		Configure::write('debug',0);
         $podcast_items = array();
         
         $Podcast = ClassRegistry::init('Podcast');
@@ -197,7 +199,8 @@ class FeedsController extends AppController {
      * @by : Charles Jackson
      */
     function admin_preview() {
-
+		
+		Configure::write('debug',0);
         if( empty( $this->data ) ) {
 
             $Podcast = ClassRegistry::init('Podcast');

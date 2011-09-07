@@ -289,11 +289,11 @@ class Feed extends AppModel {
 
         } elseif( !empty( $this->podcast_item_standard_image ) ) {
 
-            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image;
+            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_standard_image.$this->podcast_item_image_extension;
 
         } elseif( !empty( $this->podcast_item_image ) ) {
 
-            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image;
+            $item['media:thumbnail']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_item_image.$this->podcast_item_image_extension;
         } else {
 			
             $item['media:thumbnail']['url'] = DEFAULT_MEDIA_URL.FEEDS.'default-project-thumbnail.png';
@@ -660,7 +660,8 @@ class Feed extends AppModel {
 				$this->podcast_item_thumbnail_image = parent::getThumbnailImageName( $this->podcast_item['image_filename'] );
 			}
 			
-			$this->podcast_item_image_extension = parent::getExtension( $this->podcast_item['image_filename'] );
+			$this->podcast_item_image_extension = '.jpg'; //parent::getExtension( $this->podcast_item['image_filename'] );
+
 			
 		} else {
 			

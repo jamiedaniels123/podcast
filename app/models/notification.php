@@ -139,6 +139,24 @@ class Notification extends AppModel {
 	}
 
 	/*
+	 * @name : malformedVleData
+	 * @description : Called from the callback model when we receive a failure to transcode notice
+	 * @updated : 26th August 2011
+	 * @by : Charles Jackson
+	 */
+	function malformedVleData( $data ) {
+		
+		$this->create();
+		$this->data['Notification']['user_id'] = 0;
+		$this->data['Notification']['title'] = 'Malformed VLE data from the API';
+		$this->data['Notification']['type'] = 'Error';
+		$this->data['Notification']['admin_only'] = true;
+		$this->data['Notification']['message'] = 'The following VLE command sent to /vles/add could not be understood : <pre>'.print_r( $data ).'</pre>';
+		$this->save( $this->data );
+	}	
+	
+	
+	/*
 	 * @name : unreadSystemNotifications
 	 * @description : Called from users/dashboard for administrators only, it checks to see if there are any unread notifications
 	 * on the system and returns a bool accordingly.
