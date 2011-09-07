@@ -471,7 +471,7 @@ class PodcastsController extends AppController {
 	 * @by : Charles Jackson
 	 */
 	function youtube_approve( $id = null ) {
-		
+
     	$this->data = $this->Podcast->statusUpdate( $id );
 		
 		if( !empty( $this->data ) ) {

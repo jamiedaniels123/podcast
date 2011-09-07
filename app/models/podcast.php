@@ -1405,23 +1405,24 @@ class Podcast extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function statusUpdate( $id ) {
-		
+
 		$this->Behaviors->attach('Containable');
 		
 		return $this->find('first', array(
 			'conditions' => array('Podcast.id' => $id ),
-			'fields' => array( '
-				Podcast.id, 
-				Podcast.title, 
-				Podcast.summary, 
-				Podcast.consider_for_itunesu, 
-				Podcast.intended_itunesu_flag,
-				Podcast.publish_itunes_u,
-				Podcast.publish_itunes_date,
-				Podcast.consider_for_youtube,
-				Podcast.intended_youtube_flag,
-				Podcast.publish_youtube,
-				Podcast.publish_youtube_date' 
+			'fields' => array( 
+				'Podcast.id', 
+				'Podcast.title', 
+				'Podcast.summary', 
+				'Podcast.consider_for_itunesu', 
+				'Podcast.intended_itunesu_flag',
+				'Podcast.publish_itunes_u',
+				'Podcast.publish_itunes_date',
+				'Podcast.consider_for_youtube',
+				'Podcast.intended_youtube_flag',
+				'Podcast.publish_youtube',
+				'Podcast.publish_youtube_date',
+				'Podcast.owner_id' 
 			),
 			'contain' => array(
 				'Moderators' => array(
@@ -1457,8 +1458,8 @@ class Podcast extends AppModel {
 				'Owner' => array(
 					'fields' => array(
 						'Owner.id',
-						'Owner.first_name',
-						'Owner.last_name'
+						'Owner.firstname',
+						'Owner.lastname'
 					)
 				)
 			)
