@@ -11,7 +11,7 @@ class UploadComponent extends Object {
     */
 
     var $controller = null;
-    public $allowed_file_types = array('jpeg','jpg','png');
+    public $allowed_file_types = array('jpeg','jpg');
     public $error = null;
     private $data = null; // Contains the full array of data
     private $data_key = null; // The name of the array element

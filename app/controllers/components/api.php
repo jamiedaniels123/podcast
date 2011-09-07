@@ -47,7 +47,7 @@ class ApiComponent extends Object {
     function transferFileMediaServer( $data = array() ) {
 		
 		$data['created'] = time();
-        $this->setResponse( json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data ) ), 1 ) );
+        $this->setResponse( json_decode( $this->__sendMessage('transfer-file-to-media-server', ADMIN_API, $data, count( $data['data'] ) ), 1 ) );
 
         return $this->getStatus();
     }

@@ -15,67 +15,85 @@ class VlesController extends AppController {
     }
 
 	/*
-	 * @name : 1st July 2011
-	 * @description :
-	 * @updated :
-	 * @by : Charles Jackson and Jamie Daniels
+	 * @name : add
+	 * @description : Takes commands from the VLE that have been delivered by the API and gives an ACK or a NACK. It then 
+	 * processes the commands by making several more calls to the API.
+	 * @updated : 7th September 2011
+	 * @by : Charles Jackson
 	 */
 	function add() {
 		
 		$this->layout='vle';
 		$this->Vle->setData(file_get_contents("php://input"));
-		$user = ClassRegistry::init('User');
-
+		$Notification = ClassRegistry::init('Notification');
+		$Podcast = ClassRegistry::init('Podcast');
+		
 		// Is it a valid command
 		if ( $this->Vle->understand() ) {
 			
-			$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$this->Vle->data,'I UNDERSTAND VLE POST');
-
-			if( $this->Vle->hasErrors() )
-				$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$row,'This Vle call has errors');
+			// It's a valid command, let the API know.
+			$this->set('status', json_encode( array( 'status'=>'ACK', 'data'=>'Message received and understand.', 'timestamp'=>time() ) ) );
 				
 			if( strtolower( $this->Vle->data['command'] ) == 'create-container' ) {
 
-				$this->set('status', json_encode( array( 'status' => 'ACK', 'data' => $this->Vle->createCollection(), 'timestamp' => time() ) ) );
-				
+				foreach( $this->data['data'] as $row ) {
+					
+					$id = $this->Vle->createCollection( $row );
+					
+					// If the variable podcast is populated then we were successful
+					if( (int)$id  ) {
+						
+						$row['status'] = YES;
+						$row['podcast_id'] = $id;
+						
+					// The creation of the podcast failed, bummer	
+					} else {
+						
+						$row['status'] = NO;
+						$row['podcast_id'] = null;
+					}
+					
+					// Append to a new data array that will be included in the call we make to the API 
+					// so the VLE will now the status of their requests.
+					$data[] = $row;					
+				}
+
 			} elseif( strtolower( $this->Vle->data['command'] ) == 'delete-container' ) {
 				
 				// We are not deferring to the model so we can easily access to API component class.
 				$podcasts = array();
-				$podcast = ClassRegistry('Podcast');
-				$podcast->recursive = -1;
-				$podcast->begin();
+
+				$Podcast->recursive = -1;
+				$Podcast->begin();
 				
 				foreach( $this->data['data'] as $row ) {
 					
-					$data = $podcast->findById( $row['id'] );
+					$podcast = $Podcast->findById( $row['id'] );
 					
-					if( !empty( $data ) ) {
+					if( !empty( $podcast ) && ( $this->Api->deleteFolderOnMediaServer( array( 
+							'source_path' => $data['Podcast']['custom_id'].'/'
+							)
+						) 
+					) ) {
+					
+						$Podcast->delete( $data['Podcast']['id'] );					
+						$Podcast->commit();
+						$row['status'] = YES;
 						
-						$podcast->delete( $data['Podcast']['id'] );
-						$podcasts[] = array( 
-							'source_path' => $data['Podcast']['custom_id'].'/',
-						);
+					} else {
+					
+					
+						$this->Vle->data['status'] = 'NACK';
+						$this->set('status', json_encode( $this->Vle->data ) );
+						$podcast->rollback();
 					}
-				}
-				
-				if( $this->Api->deleteFolderOnMediaServer( $podcasts ) ) {
-					
-					$this->Vle->data['status'] = 'ACK';
-					$this->set('status', json_encode( $this->Vle->data ) );
-					$podcast->commit();
-					
-				} else {
-					
-					$this->Vle->data['status'] = 'NACK';
-					$this->set('status', json_encode( $this->Vle->data ) );
-					$podcast->rollback();
 				}
 			}
 
 		} else {
 			
-			$this->emailTemplates->__sendVleErrorEmail($user->getAdministrators(),$this->Vle->data,'Failed to understand VLE command');
+			// We cannot understand the VLE command that has been sent.
+			$Notification->malformedVleData( $this->Vle->json );
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
 	}

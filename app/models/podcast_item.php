@@ -184,9 +184,18 @@ class PodcastItem extends AppModel {
 		// Loop through the media and append to an array
         foreach( $data['PodcastMedia'] as $media ) {
         	
+			if( strtolower( $media['media_type'] ) == 'default' ) {
+				
+				$media['media_type'] = null;
+				
+			} else {
+				
+				$media['media_type'] = $media['media_type'].'/';
+			}
+			
         	$media_files[] = array( 
-				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',
-				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'].'/',				
+				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
+				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
 				'source_filename' => $media['filename'],
 				'destination_filename' => '.'.$media['filename'],
         		'podcast_item_id' => '.'.$media['podcast_item'],

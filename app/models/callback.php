@@ -24,41 +24,6 @@ class Callback extends AppModel {
 			$this->json = $dataMess[1];
 			$this->data=json_decode($dataMess[1],true);
 		}
-		
-		/*$this->data = array(
-
-			'command' => 'transcode-media-and-deliver',
-			'number' => '9',
-			'failed' => '0',
-			'data' => array
-				(
-					'0' => array
-						(
-							'workflow' => 'video',
-							'source_path' => '1616_helloworld/',
-							'destination_path' => '1616_helloworld//',
-							'source_filename' => '15305_Wildlife-480p.mov',
-							'destination_filename' => '15305_Wildlife.mov',
-							'podcast_item_id' => '15305',
-							'podcast_id' => '1616',
-							'created' => '1314882521',
-							'original_filename' => '15305_Wildlife.wmv',
-							'flavour' => 'default',
-							'duration' => '1.35',
-							'cqIndex' => '7670',
-							'number' => '1',
-							'result' => 'Y',
-							'debug' => '/data/web/media-podcast-api-dev.open.ac.uk/file-transfer/destination/7670_1616_helloworld%2F15305_Wildlife-480p.mov to /data/web/media-podcast-dev.open.ac.uk/www/feeds/1616_helloworld//15305_Wildlife.mov',
-							'status' => 'Y',
-							'mqIndex' => '706',
-							'step' => '8'
-						)
-		
-				),
-		
-			'timestamp' => '1314882656',
-		);*/
-		
 	}
 
 	/*
