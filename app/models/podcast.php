@@ -1387,6 +1387,13 @@ class Podcast extends AppModel {
 						'PodcastItems.deleted',
 						'PodcastItems.youtube_flag',
 						'PodcastItems.itunes_flag'
+					),
+					'YoutubeVideo' => array(
+						'fields' => array(
+							'YoutubeVideo.id',
+							'YoutubeVideo.podcast_item',
+							'YoutubeVideo.filename'
+						)
 					)
 				),
 				'Language' => array(
