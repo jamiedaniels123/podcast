@@ -176,7 +176,7 @@
 	    </div>    	
 	    <div class="input text">
 	        <label for="PodcastItemYoutubeDateUploaded">Date Uploaded</label>
-	        <input type="text" id="PodcastItemYoutubeDateUploaded" name="data[PodcastItem][youtube_date_uploaded]" value="<?php echo $this->data['PodcastItem']['youtube_date_uploaded']; ?>">
+	        <input type="text" class="datepicker" id="PodcastItemYoutubeDateUploaded" name="data[PodcastItem][youtube_date_uploaded]" value="<?php echo $this->data['PodcastItem']['youtube_date_uploaded']; ?>">
 	        <?php echo $this->Form->error('PodcastItem.youtube_date_uploaded'); ?>
 	    </div>    	
 	    <div class="input textarea">

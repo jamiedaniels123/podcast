@@ -133,13 +133,13 @@
         <div class="input text">
             <label for="PodcastRightsDate">Rights Date</label>
             <input type="hidden" value="" id="PodcastRightsDate_" name="data[Podcast][rights_date]">
-            <input type="text" size="60" id="PodcastRightsDate" value="<?php echo (int)$this->data['Podcast']['rights_date'] ? $this->data['Podcast']['rights_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][rights_date]">
+            <input type="text" size="60" class="datepicker" id="PodcastRightsDate" value="<?php echo (int)$this->data['Podcast']['rights_date'] ? $this->data['Podcast']['rights_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][rights_date]">
             <?php echo $this->Form->error('Podcast.rights_date'); ?>
         </div>
         <div class="input text">
             <label for="PodcastMetadataDate">Metadata Date</label>
             <input type="hidden" value="" id="PodcastMetadataDate_" name="data[Podcast][metadata_date]">
-            <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][metadata_date]">
+            <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker" name="data[Podcast][metadata_date]">
             <?php echo $this->Form->error('Podcast.metadata_date'); ?>
         </div>
         <div class="clear"></div>

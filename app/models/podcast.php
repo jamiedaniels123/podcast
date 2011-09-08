@@ -1377,6 +1377,7 @@ class Podcast extends AppModel {
 					)
 				),
 				'PodcastItems' => array(
+					'order' => 'PodcastItems.id ASC',
 					'fields' => array(
 						'PodcastItems.id',
 						'PodcastItems.title',
