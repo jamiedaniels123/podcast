@@ -3,7 +3,7 @@ class PodcastItem extends AppModel {
 	
 	
     var $name = 'PodcastItem';
-	var $order = 'PodcastItem.id ASC';
+	var $order = 'PodcastItem.title ASC';
     var $validate = array(
         
         'podcast_id' => array(
