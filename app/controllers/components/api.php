@@ -158,7 +158,7 @@ class ApiComponent extends Object {
      * @updated : 7th June 2011
      * @by : Ian Newton / Charles Jackson
      */
-    function transcodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id, $podcast_id ) {
+    function transcodeMediaAndDeliver( $path, $filename, $workflow, $podcast_item_id, $podcast_id, $provider = null ) {
 
         $this->params = array(
 			array(
@@ -169,7 +169,8 @@ class ApiComponent extends Object {
 				'destination_filename' => $filename,
 				'podcast_item_id' => $podcast_item_id,
 				'podcast_id' => $podcast_id,
-				'created' => time()
+				'created' => time(),
+				'provider' => $provider
 			)
         );
 

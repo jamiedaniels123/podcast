@@ -77,7 +77,12 @@
 	    
 	        <a href="/" class="toggler button setting" data-status="unticked">Select/deselect all</a>
 			<a class="button delete multiple_action_button" href="/podcast_items/delete" id="delete_multiple_podcast_items">Delete</a>
-			<a class="button publish multiple_action_button" href="/podcast_items/publish" id="publish_multiple_podcast_items">Publish</a>
+            
+			<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
+
+				<a class="button publish multiple_action_button" href="/podcast_items/publish" id="publish_multiple_podcast_items">Publish</a>
+                
+			<?php endif; ?>
             		
 			<?php if( $this->Permission->isItunesUser() && $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 				        
