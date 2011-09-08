@@ -264,6 +264,12 @@ h3 a:hover {text-decoration: underline;}
 
 .icon-col	{
 	margin: 0 auto;	
+
+}
+
+fieldset#podcast_media .icon-col {
+	
+	text-align: center;	
 }
 
 .auto_select_and_submit		{

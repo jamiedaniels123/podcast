@@ -125,7 +125,6 @@ class PodcastItemMedia extends AppModel {
 			
 			if( $row['flavour'] == 'default' || $row['flavour'] == 'transcript' ) {
 				
-				
 				$this->data['PodcastItem']['processed_state'] = -1; // Error in transcoding
 			}
 

@@ -202,6 +202,7 @@ class PodcastItemsController extends AppController {
 						
 						if( $this->Api->youtubeUpload( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
 							$this->data['PodcastItem']['youtube_flag'] = 'Y';
+							$this->data['PodcastItem']['published_flag'] = 'Y'; // Automatically publish the track if wanted on youtube.
 							$this->data['PodcastItem']['consider_for_youtube'] = true; // NB: Should already be set to true but set again as an attempt to cleanup the DB moving forward
 							$this->data['PodcastItem']['youtube_id'] = 1;
 							$this->PodcastItem->set( $this->data );

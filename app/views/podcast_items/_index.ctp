@@ -16,6 +16,7 @@
 	                <th class="">Uploaded</th>
 	                <th class="icon-col">Available</th>
 	                <th class="icon-col">Published</th>                                        
+	                <th class="icon-col">Podcast.open.ac.uk</th>                                                            
 	            	<th class="icon-col">iTunes</th>                
 	            	<th class="icon-col">YouTube</th>
 	            	<th class="actions">Actions</th>
@@ -37,6 +38,7 @@
 		                <td  class="collection-title"><a href="/podcast_items/view/<?php echo $podcast_item['id']; ?>"><?php echo strlen( $podcast_item['title'] ) ? $podcast_item['title'] : 'Untitled '.MEDIA; ?></a></td>
 		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['created'] ); ?></td>
 		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['processed_state'] ); ?></td>	
+                        <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
                         <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item, 'itunes' ); ?>" class="icon"></td>
 		            	<td  class="icon-col">
