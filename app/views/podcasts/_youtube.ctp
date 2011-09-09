@@ -30,15 +30,15 @@
 				
 					<li><a class="button unapprove" href="/youtube/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubeReject" onclick="return confirm('You are about to set this collection as being removed from Youtube. Are you sure?');">Unapprove</a></li>
 
-					<?php if( $this->Object->youtubePublished( $this->data['Podcast'] ) == false ) : ?>			
+					<?php //if( $this->Object->youtubePublished( $this->data['Podcast'] ) == false ) : ?>			
                 
-                            <li><a class="button approve" href="/youtube/podcasts/publish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubePublish" onclick="return confirm('You are about to set this collection as published on Youtube. Are you sure?');">Set as Published</a></li>
+                            <!-- <li><a class="button approve" href="/youtube/podcasts/publish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubePublish" onclick="return confirm('You are about to set this collection as published on Youtube. Are you sure?');">Set as Published</a></li>
                         
-                    <?php elseif( $this->Object->youtubePublished( $this->data['Podcast'] ) ) : ?>				
+                    <?php //elseif( $this->Object->youtubePublished( $this->data['Podcast'] ) ) : ?>				
                         
-                            <li><a class="button unapprove" href="/youtube/podcasts/unpublish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubePublish" onclick="return confirm('You are about to set this collection as published on Youtube. Are you sure?');">Set as Unpublished</a></li>
+                            <li><a class="button unapprove" href="/youtube/podcasts/unpublish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastYoutubePublish" onclick="return confirm('You are about to set this collection as published on Youtube. Are you sure?');">Set as Unpublished</a></li> -->
                         
-                    <?php endif; ?>
+                    <?php //endif; ?>
                     
 				<?php endif; ?>
 				

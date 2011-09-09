@@ -85,7 +85,7 @@ class PodcastItemsController extends AppController {
     function edit( $id = null ) {
 
 		if ( !empty( $this->data ) ) {
-           	
+			
 			$this->PodcastItem->set( $this->data );	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
 				
@@ -136,7 +136,8 @@ class PodcastItemsController extends AppController {
 
 	/*
 	 * @name : publish
-	 * @description : Will set the published_flag to 'Y' for any podcast_item meaning it will appear on RSS feeds.
+	 * @description : Will set the published_flag to 'Y' for any podcast_item meaning it will appear on RSS feeds and be
+	 * available for upload to youtube.
 	 * @updated : 26th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -176,6 +177,52 @@ class PodcastItemsController extends AppController {
 		}
 		
 		
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+	}
+
+	/*
+	 * @name : publish
+	 * @description : Will set the published_flag to 'N' for any podcast_item, regenerate the RSS feeds and if appropriate
+	 * refresh youtube.
+	 * @NOTE : In the magic "beforeSave" podcast_item model method I set channel flags such as "youtube_flag" according
+	 * to the value of the "published_flag". 
+	 * @updated : 9th September 2011
+	 * @by : Charles Jackson
+	 */
+	function unpublish( $id = null ) {
+		
+		$this->PodcastItem->recursive = 0;
+		$status = true;
+				
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
+		            
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+
+			$this->data = $this->PodcastItem->findById( $key );			
+			
+			if( $this->data['PodcastItem']['published_flag'] == 'Y' ) {
+				
+				$this->data['PodcastItem']['published_flag'] = 'N';
+				
+				$this->PodcastItem->set( $this->data );
+				$this->PodcastItem->save();
+
+				// Generate the RSS Feeds
+				$this->__generateRSSFeeds( $this->data['PodcastItem']['podcast_id'] );
+				
+				// If this track has been published on youtube update the privacy settings to private
+				if( $this->data['PodcastItem']['youtube_flag'] == 'Y' ) {
+					
+					$this->data['PodcastItem']['youtube_privacy'] = 'Hidden';
+					$this->Api->youtubeRefresh( $this->PodcastItem->buildYoutubeData( $this->data ) );					
+				}
+
+				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been successfully unpublished and all channels have been successfully updated.', 'default', array( 'class' => 'success' ) );
+
+			}
+		}
+
 		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
 	}
 	

@@ -83,6 +83,8 @@
 			<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
 
 				<a class="button publish multiple_action_button" href="/podcast_items/publish" id="publish_multiple_podcast_items">Publish</a>
+
+				<a class="button publish multiple_action_button" href="/podcast_items/unpublish" id="publish_multiple_podcast_items">Unpublish</a>
                 
 			<?php endif; ?>
             		
