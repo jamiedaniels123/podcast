@@ -5,7 +5,7 @@
 <input type="hidden" id="PodcastItemFilename" name="data[PodcastItem][filename]" value="<?php echo $this->data['PodcastItem']['filename']; ?>">
 <input type="hidden" id="PodcastItemMediaPodcastItem" name="data[PodcastItemMedia][podcast_item]" value="<?php echo $this->data['PodcastItem']['id']; ?>">
 <input type="hidden" id="PodcastItemYoutubeFlag" name="data[PodcastItem][youtube_flag]" value="<?php echo $this->data['PodcastItem']['youtube_flag']; ?>">
-<input type="hidden" id="PodcastItemItunesFlag" name="data[PodcastItem][itunes_flag] value="<?php echo $this->data['PodcastItem']['itunes_flag']; ?>">
+<input type="hidden" id="PodcastItemItunesFlag" name="data[PodcastItem][itunes_flag]" value="<?php echo $this->data['PodcastItem']['itunes_flag']; ?>">
 
 <div class="input text form_title" id="content">
     <label for="PodcastItemTitle">Title</label>
@@ -23,13 +23,6 @@
     <label for="PodcastItemAuthor">Author</label>
     <textarea id="PodcastItemAuthor" size="60"  name="data[PodcastItem][author]"><?php echo $this->data['PodcastItem']['author']; ?></textarea>
     <?php echo $this->Form->error('PodcastItem.author'); ?>
-</div>
-
-<div class="input checkbox">
-    <input type="hidden" value="N" id="PodcastItemPublishedFlag_" name="data[PodcastItem][published_flag]">
-    <input type="checkbox" id="PodcastItemPublishedFlag" value="Y" <?php echo $this->data['PodcastItem']['published_flag'] == 'Y' ? 'checked="checked"' : '';?> name="data[PodcastItem][published_flag]">
-    <label for="PodcastItemPublishedFlag">Published?</label>
-    <?php echo $this->Form->error('PodcastItem.published_flag'); ?>
 </div>
 
 <div class="input text">

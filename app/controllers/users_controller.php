@@ -13,7 +13,7 @@ class UsersController extends AppController {
      */
     function beforeFilter() {
         
-        $this->Auth->allow( 'register', 'login', 'home', 'apply' );
+        $this->Auth->allow( 'register', 'login', 'home', 'apply', 'isItunesUser' );
         parent::beforeFilter();
     }
 
@@ -419,5 +419,20 @@ class UsersController extends AppController {
 		 $soap->SoapMethod( array('mySoapParams'));
 		 die('fffff');
 	 }
+	 
+    /*
+     * @name : isItunesUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 20th May 2011
+     * @by : Charles Jackson
+     */
+    function itunesuser() {
+		
+		$this->autoRender = false;
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+            return true;
+
+        return false;
+    }	 
 }
 ?>

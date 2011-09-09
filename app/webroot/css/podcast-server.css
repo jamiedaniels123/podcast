@@ -264,6 +264,12 @@ h3 a:hover {text-decoration: underline;}
 
 .icon-col	{
 	margin: 0 auto;	
+
+}
+
+fieldset#podcast_media .icon-col {
+	
+	text-align: center;	
 }
 
 .auto_select_and_submit		{
@@ -383,3 +389,39 @@ textarea#PodcastSummary, textarea#PodcastItemSummary, textarea#PodcastItemYoutub
 	
 }
 
+#embedsizes {
+	list-style:none;
+	margin-top:40px;
+
+	font-size:70%;
+}
+#embedsizes li.sizebox480 {
+	display:inline;
+	padding:10px 5px 10px 5px;
+	color:#666;
+	background-color:#CCC;
+	border:solid thin #999;
+	margin-top:0px;
+}
+#embedsizes li.sizebox560 {
+	color:#666;
+	background-color:#CCC;
+	border:solid thin #999;
+	display:inline;
+	padding:12px 8px 12px 8px;
+}
+#embedsizes li.sizebox640 {
+	color:#666;
+	background-color:#CCC;
+	border:solid thin #999;
+	display:inline;
+	padding:16px 14px 16px 14px;
+}
+
+#embedsizes li.sizebox853 {
+	color:#666;
+	background-color:#CCC;
+	border:solid thin #999;
+	display:inline;
+	padding:20px 22px 20px 22px;
+}

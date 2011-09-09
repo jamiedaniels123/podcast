@@ -14,8 +14,10 @@ class PodcastItem extends AppModel {
             )
         ),
         'published_flag' => array(
-            'rule' => array('readyForPublication'),
-            'message' => 'You cannot publish tracks that are unavailable or do not have a title.'
+			'Rule1' => array(
+				'rule' => array('readyForPublication'),
+				'message' => 'You cannot publish tracks that are unavailable or do not have a title.'
+			)
         ),
         'target_url' => array(
             'Rule1' => array(
@@ -90,6 +92,26 @@ class PodcastItem extends AppModel {
             'unique' => true
         )
 	);
+	
+    /*
+     * @name : beforeSave
+     * @description : Magic method automatically called after validation and before data is saved.
+     * At time of publication I am using it to check to ensure all channels are unpublished if the item itself is
+	 * unpublished.
+     * @updated : 9th September 2011
+     * @by : Charles Jackson
+     */
+    function beforeSave() {
+
+        if( $this->data['PodcastItem']['published_flag'] == 'N' ) {
+			
+			$this->data['PodcastItem']['youtube_flag'] = 'N';
+			$this->data['PodcastItem']['itunes_flag'] = 'N';
+		}
+		
+        return true;
+    }
+		
     /*
      * @name : createFromUrlVariables
      * @description : Called from the ADD method directly after a successful filechucker upload

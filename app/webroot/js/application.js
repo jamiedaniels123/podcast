@@ -249,7 +249,7 @@ jQuery(document).ready(function($) {
 		jQuery.ajax(
 		{
 			type: "GET",
-			url: "/users/isItunesUser",
+			url: "/users/itunesuser",
 			success:
 				function( responseData ) {
 

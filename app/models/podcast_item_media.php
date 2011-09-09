@@ -25,14 +25,14 @@ class PodcastItemMedia extends AppModel {
 	 */
 	 function updateExistingFlavour( $row = array() ) {
 		 
-		 $this->data = $this->find('first', array( 'conditions' => 
+		$this->data = $this->find('first', array( 'conditions' => 
 		 
 		 	array(
 		 		'PodcastItemMedia.podcast_item' => $row['podcast_item_id'],
 				'PodcastItemMedia.media_type' => $row['flavour']
-					)
 				)
-			);
+			)
+		);
 			
 		if( empty( $this->data ) )
 			return false;
@@ -40,7 +40,9 @@ class PodcastItemMedia extends AppModel {
 		$this->hydrate( $row );			
 		
 		$this->set( $this->data );
-		return $this->saveAll();			
+		$this->saveAll();
+			
+		return true;
 	 }
 	 
 	
@@ -122,7 +124,6 @@ class PodcastItemMedia extends AppModel {
 			$this->data['PodcastItemMedia']['processed_state'] = -1; // Error in transcoding
 			
 			if( $row['flavour'] == 'default' || $row['flavour'] == 'transcript' ) {
-				
 				
 				$this->data['PodcastItem']['processed_state'] = -1; // Error in transcoding
 			}
