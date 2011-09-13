@@ -261,6 +261,33 @@ jQuery(document).ready(function($) {
 				}
 		});		
 	}
+	
+	if( jQuery('#PodcastWizard').length > 0 ) {
+		
+		jQuery('#PodcastWizard').live('click',function (e) {
+			
+			e.preventDefault();
+			jQuery('#modal').dialog({ width: 500, autoOpen: false, modal: true });
+			jQuery('#modal').dialog('open');
+		});
+	}
+	
+	
+	jQuery('.jquery_display').live('click',function(e) {
+		
+		e.preventDefault();
+		var source = jQuery(this).attr('data-source');
+		var target = jQuery(this).attr('data-target');
+		jQuery('#'+source).slideUp();
+		jQuery('#'+target).slideDown();
+		jQuery('#PodcastUpdateButtonContainer').show();
+	});
+	
+	
+	// Controls the display of the tabbed menu, setting the active tab and showing all relevant divs.
+	//jQuery() {
+	//}
+
 });
 
 // Makes an ajax call to a method in the app_controller

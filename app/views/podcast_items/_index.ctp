@@ -1,3 +1,5 @@
+<?php echo $this->element('tabs'); ?>
+<div class="content">
 <div class="wrapper" style="margin-top: 40px;">
 <fieldset id="podcast_media">
     <legend><h3>Collection <?php echo MEDIA; ?>s</h3></legend>
@@ -112,4 +114,5 @@
     </form>
     
 </fieldset>
+</div>
 </div>

@@ -136,15 +136,16 @@ table {
 	border-right:0;
 	clear: both;
 	color: #333;
-	margin: 25px 0 10px 0;
+	margin: 5px 0 10px 0;
 	width: 100%;
-	border-bottom:1px solid #418DB1;
+	border-bottom:5px solid #f2f2f2;
 	border-spacing:0;	
 }
 
 th {
+	background: #f2f2f2;
 	border:0;
-	border-bottom:1px solid #418DB1;
+	border-bottom:1px solid #dddddd;
 	/*text-align: left;*/
 	padding:4px;
 	font-weight: normal;
@@ -903,6 +904,7 @@ div.float_left dl dd {
 .images_container {
 		text-align: center;
 		margin-top:10px;
+		margin-right: 30px;
 }
 .images_container img {
 	margin: 10px;	
@@ -915,8 +917,6 @@ div.float_left dl dd {
 
 div.two_column {
 	padding: 5px;
-	margin:15px 0 25px 55px;
-	#width: 700px;
 	background-color:#E5F3FA;	
 }
 
@@ -990,4 +990,23 @@ fieldset#notification div {
 	
 	padding-top: 10px;
 	padding-left : 0px;	
+}
+
+div.action_buttons {
+	
+	padding-top: 10px;	
+	padding-bottom: 20px;		
+	width: 100%;
+	clear: left;
+}
+
+div.action_buttons ul li {
+	
+	float: left;	
+	list-style-type: none;	
+}
+
+.icon-col {
+	
+	text-align: center;	
 }

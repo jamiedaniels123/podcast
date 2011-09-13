@@ -287,8 +287,8 @@ class ObjectHelper extends AppHelper {
 	
 	/*
 	 * @name : isPodcast
-	 * @description : Checks to ensure the podcast_flag column is set to true. Used to ensure
-	 * a collection is a "podcast" before it can be submitted to itunes or youtube.
+	 * @description : Checks to ensure the "podcast_flag column" is set to true. Used to ensure
+	 * a collection is syndicated before it can be submitted to itunes or youtube.
 	 * @updated : 22nd July 29011
 	 * @by : Charles Jackson
 	 */

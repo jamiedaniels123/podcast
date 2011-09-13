@@ -33,6 +33,7 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
+		$this->emailTemplates->__sendCallbackErrorEmail(array(),$this->Callback->data,'Callback Alert');
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {

@@ -7,7 +7,7 @@
 <p>
     <i><?php echo nl2br( $data['Podcast']['summary'] ); ?></i>
 </p>    
-<a href="<?php echo APPLICATION_URL ?>/podcasts/view/<?php echo $data['Podcast']['id']; ?>" title="link to <?php echo COLLECTION; ?>">
+<a href="<?php echo APPLICATION_URL ?>/podcasts/edit/<?php echo $data['Podcast']['id']; ?>/itunes" title="link to <?php echo COLLECTION; ?>">
 click here to view <?php echo COLLECTION; ?></a>
 <hr />
 

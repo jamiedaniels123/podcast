@@ -20,6 +20,8 @@
         echo $this->Html->css('jquery-ui');
         echo $this->Html->css('podcast-server');
         echo $this->Html->css('ou-header');
+		echo $this->Html->css('type');
+		echo $this->Html->css('interface');
         echo $scripts_for_layout;
 		flush();
     ?>
@@ -51,7 +53,9 @@
             <?php echo $this->Session->flash(); ?>
             <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
-            <?php echo $content_for_layout; ?>
+            <div class="collection_wrapper">
+	            <?php echo $content_for_layout; ?>
+               </div>
         </div>
          
         <div id="footer">
@@ -64,6 +68,6 @@
     <!--/display OU Footer-->
     
 	<?php echo $this->element('sql_dump'); ?>
-    
+    <div id="modal"></div>
 </body>
 </html>

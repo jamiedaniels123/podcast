@@ -132,3 +132,13 @@ form .input-filter {
 	margin:0 0 0 10px;
 }
 
+.content {
+	
+	margin: 0px;
+    background: rgb(222,240,249) url(/img/collection-background.png) top left repeat-x;
+    /*border: 0em outset #BBBBBB;*/
+	float: left;
+	width: 100%;
+	padding-bottom: 1.2em;
+}
+

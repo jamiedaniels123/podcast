@@ -217,4 +217,15 @@ class AppController extends Controller {
 		// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
 		return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
     }	
+	
+    /*
+     * @name : setTabs
+     * @description : Sets view variables that are picked up by the tab menu
+     * @updated : 12 September 2011
+     * @by : Charles Jackson
+     */
+	function setTabs( $podcast = array() ) {
+		
+		$this->set('podcast', $podcast);
+	}
 }

@@ -30,6 +30,26 @@ class PodcastItemsController extends AppController {
     }
 
     /*
+     * @name : index
+     * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
+     * @name : Charles Jackson
+     * @by : 16th May 2011
+     */
+    function index( $id = null ) {
+
+		$this->PodcastItems->Podcast->recursive = -1;
+		$this->PodcastItems->recursive = -1;
+		$this->data = $this->PodcastItem->Podcast->findById( $id );		
+        $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
+
+		// Set the tabs for the menu
+		$this->setTabs( $this->data['Podcast'] );
+
+
+
+    }
+	
+    /*
      * @name : add
      * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
      * @todo : Move this code to the 'add' method. Change of functionality mid project.
@@ -40,6 +60,7 @@ class PodcastItemsController extends AppController {
 
         if( (int)$podcast_id ) {
 
+
 			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
             $this->data = $this->PodcastItem->Podcast->edit( $podcast_id );
 
@@ -47,12 +68,14 @@ class PodcastItemsController extends AppController {
             // in the session.
             $this->Session->write('Podcast.podcast_id', $podcast_id);
             $this->Session->write('Podcast.admin', false);
+			$this->setTabs( $this->data['Podcast'] );
+			$this->set('element', 'media');
         }
 
         if( empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 
             $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
 
         }
     }
@@ -72,7 +95,7 @@ class PodcastItemsController extends AppController {
         if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
 
             $this->Session->setFlash( 'Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->redirect( $this->referer() );
+            $this->cakeError('error404');
         }
     }
 
@@ -223,7 +246,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 
-		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'] ) );
 	}
 	
 	/*
@@ -280,7 +303,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
 	 }
 	 
 	/*
@@ -327,7 +350,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
 	 }	 	 
 
    /*
@@ -374,7 +397,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one '.MEDIA.' item to publish in iTunes.', 'default', array( 'class' => 'error' ) );
 		}
 
-        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
     }
     
    /*
@@ -419,7 +442,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one '.MEDIA.' item.', 'default', array( 'class' => 'error' ) );
 		}
 		
-        $this->redirect( array('itunes' => false, 'controller' => 'podcasts','action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );	
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
     }
     
     /*
@@ -498,7 +521,7 @@ class PodcastItemsController extends AppController {
 							$this->Session->setFlash( MEDIA.' has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
 							$this->PodcastItem->commit();
 							
-				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+							$this->redirect( array( 'admin' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							
@@ -520,7 +543,7 @@ class PodcastItemsController extends AppController {
 							$this->PodcastItem->commit();
 							$this->Session->setFlash('Your '.MEDIA.' has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
 
-				            $this->redirect( array( 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+							$this->redirect( array( 'admin' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
 							
 						} else {
 							
@@ -546,7 +569,7 @@ class PodcastItemsController extends AppController {
 		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
 		$this->PodcastItem->rollback();
 		
-        $this->redirect( array( 'action' => 'add', $this->Session->read('Podcast.podcast_id') ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
 
     }
 

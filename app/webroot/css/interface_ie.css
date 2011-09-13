@@ -1,0 +1,88 @@
+@charset "utf-8";
+/* CSS Document */
+
+@charset "utf-8";
+/* CSS Document */
+
+/*Tabbed interface - Collection*/
+
+div.tab-zone {
+    /*border: 1px dotted #660033;*/
+    margin: 5em 0.6em;
+    padding: 0.6em;
+	}
+
+div.items p:not(:target) {
+    display: none;
+	}
+
+div.items p:target {
+    display: block;
+	}
+
+div.tabs {
+    /*line-height: 1;*/
+    min-height: 32em;
+    position: relative;
+    z-index: 0;
+	width: auto;
+	}
+
+div.tabs > div {
+    float:left;
+	/*display: inline;*/
+	border: 1px solid red;
+	padding: 0;
+	margin: 0;
+	}
+
+div.tabs > div > a {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: rgb(245,250,252);
+    border-left-color: rgb(245,250,252);
+	border-right-color: rgb(186,214,237);
+    border-style: none solid;
+    border-width: 0.1em;
+    padding: 0.6em;
+	}
+
+div.tabs > div:not(:target) > a {
+    background: url(images/collection-tab-background-unselected.png) repeat-x 0 0 rgb(245,250,252);
+    /*border-bottom: medium none;*/
+	}
+
+div.tabs > div:target > a, *:target #default2 > a {
+    background: rgb(245,250,252);
+    /*border-bottom: 0.1em solid red;*/
+	}
+
+div.tabs > div > div {
+    background: rgb(222,240,249) url(images/collection-background.png) top left repeat-x;
+    /*border: 0em outset #BBBBBB;*/
+    bottom: 0;
+    left: 0;
+    overflow: visible;
+    padding: 4em 1em; /* Sets the padding around the content within each tab*/
+    right: 0;
+    top: -0.57em; /* Offsets the tabs to make them look embedded into the panel rather than standing proud */
+    z-index: -2;
+	}
+
+div.tabs > div:not(:target) > div {
+    position: absolute;
+	}
+
+div.tabs > div:target > div, *:target #default2 > div {
+    position: absolute;
+    z-index: -1;
+	}
+
+div.tabs *:target {
+    outline: medium none;
+	}
+
+/*End of tabbed interface - Collection*/	

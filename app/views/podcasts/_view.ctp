@@ -1,5 +1,4 @@
-<div class="wrapper" id="PodcastSummaryContainer">
-    
+<div id="PodcastSummary">
     <div class="float_right images_container">
         <h2 style="display:block;"><?php echo ucfirst( PODCAST ); ?> Image</h2>
         <?php echo !empty( $this->data['Podcast']['image_copyright'] ) ? $this->data['Podcast']['image_copyright'] : 'Copyright Unknown'; ?>
@@ -87,46 +86,7 @@
             </dd>            
         </dl>
     </div>
+    <div class="action_buttons">
+    	<button class="jquery_display"  type="button" class="button blue" data-source="PodcastSummary" data-target="FormPodcastSummary" id="PodcastSummaryButtom"><span>edit</span></button>
+    </div>
 </div>
-<div class="clear"></div>
-
-<div class="two-column-controls">
-
-	<?php if( $this->Object->isPodcast( $this->data['Podcast']['podcast_flag'] ) ) : ?>
-	
-		<?php echo $this->element('../podcasts/_itunes'); ?>
-		<div class="clear"></div>
-		<?php echo $this->element('../podcasts/_youtube'); ?>
-		<div class="clear"></div>
-		
-	<?php endif; ?>
-
-	<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-		
-		<a class="button edit" href="/admin/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">Edit</a>
-
-	<?php else : ?>
-
-		<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-
-			<a class="button add" href="/podcast_items/add/<?php echo $this->data['Podcast']['id'];?>" title="Add">Add media</a>
-				
-		
-			<a class="button edit" href="/podcasts/edit/<?php echo $this->data['Podcast']['id'];?>" title="edit">Edit</a>
-			
-
-			<a class="button rss refresh" onclick="return confirm('Are you sure you wish to refresh the RSS feeds?');" href="/feeds/add/<?php echo $this->data['Podcast']['id']; ?>">Refresh RSS</a>
-		
-		<?php endif; ?>
-
-		<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-
-			<?php if( $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) && $this->Object->intendedForPublication( $this->data['Podcast'] ) == false ) : ?>
-				<a class="button delete" href="/podcasts/delete/<?php echo $this->data['Podcast']['id'];?>" title="delete" onclick="return confirm('Are you sure you wish to delete this collection?');" >Delete</a>
-			<?php endif; ?>
-            
-				<a class="button setting" href="/podcasts/copy/<?php echo $this->data['Podcast']['id'];?>" title="copy" onclick="return confirm('You are about to make a copy of this collection adding it to your library with yourself as owner. Are you sure?');" >Copy</a>
-                
-		<?php endif; ?>
-
-	<?php endif; ?>
