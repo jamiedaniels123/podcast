@@ -429,7 +429,7 @@ function getPodcastItem( id ) {
 				
 				jQuery('#PodcastItemSubmitButton').live('click', function() { 
 
-					jQuery(this).closest('form').ajaxSubmit(options);		
+					jQuery('#PodcastItemEditForm').ajaxSubmit(options);		
 				});
 			},
 		error:
