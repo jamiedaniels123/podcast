@@ -65,6 +65,7 @@ ul.item-tab-zone li > a {
 	border-radius: 4px;
 	border: 0px;
 	font-size: 0.9em;
+	cursor: pointer;
 }
 	
 a.cancel {
@@ -119,5 +120,6 @@ margin-right: 10px;
 .ui-icon-closethick {
 	background-position: 0px;
 }
+
 
 /*--/Tab-Button additions for main style sheet*/
