@@ -100,7 +100,12 @@ div.tabs *:target {
 	background:url(/img/media.png) no-repeat 2px center;
 	padding: 2px 2px 2px 22px!important;
 	}
-	
+
+.collection_tab_rss-icon	{
+	background:url(/img/icon-16-rss.png) no-repeat 2px center;
+	padding: 2px 2px 2px 22px!important;
+	}
+		
 .collection_tab_track-icon	{
 	background:url(/img/track.png) no-repeat 2px center;
 	padding: 2px 2px 2px 22px!important;

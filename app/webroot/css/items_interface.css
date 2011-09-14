@@ -45,7 +45,8 @@ ul.item-tab-zone li > a {
 #item-content .preview {
 	
 	background-color: #58585a;
-	padding: 5px;
+	float: left;
+	width: 100%;
 }
 
 /* Tab-Button additions for main style sheet*/

@@ -24,6 +24,8 @@
          <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
               <div id="media"><a href="/podcast_items/add/<?php echo $podcast['id']; ?>#media"><span class="collection_tab_media-icon">Add Media</span></a>
              </div><!--Preview-embed-->                     
+              <div id="rss"><a href="/feeds/add/<?php echo $podcast['id']; ?>#rss" onclick="return confirm('Are you sure?');"><span class="collection_tab_rss-icon">RSS Refresh</span></a>
+             </div><!--Preview-embed-->                     
         <?php endif ;?>
     
     </div><!--/tabs-->

@@ -115,7 +115,7 @@ class FeedsController extends AppController {
         $podcast_items = array();
         
         $Podcast = ClassRegistry::init('Podcast');
-        $Podcast->recursive = 2;
+        //$Podcast->recursive = 2;
 
 		// We need to dynamically bind a model for the media player that contains all tracks not just those that have been published.
 		$Podcast->bindModel( array(

@@ -18,13 +18,13 @@
 			<?php echo $this->element('../podcast_items/_form_summary'); ?>
 		</div>
 		<div class="youtube" <?php echo $element == 'youtube' ? '' : 'style="display:none"'; ?>>
-			<?php echo $this->element('../podcast_items/_youtube'); ?> 
+
 			<?php if( $this->Permission->isYoutubeUser() ) : ?>
-                
+				<?php echo $this->element('../podcast_items/_youtube'); ?>                 
                 <?php echo $this->element('../podcast_items/_form_youtube'); ?>
             
             <?php else : ?>
-            
+    			<?php echo $this->element('../podcast_items/_youtube_lite'); ?>         
                 <?php echo $this->element('../podcast_items/_form_youtube_lite'); ?>
                 
             <?php endif; ?>
