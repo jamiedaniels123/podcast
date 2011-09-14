@@ -301,6 +301,7 @@ jQuery(document).ready(function($) {
 		var podcast_item_title = jQuery(this).html();
 		jQuery('#modal').dialog({ width: 1000, autoOpen: false, modal: true, title : podcast_item_title });
 		jQuery('#modal').dialog('open');
+		jQuery('.ui-widget-overlay').click(function() { $("#modal").dialog("close"); });
 		getPodcastItem( id );
 	});
 	
