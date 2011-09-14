@@ -10,10 +10,11 @@
     <?php
         echo $this->Javascript->link('jquery.js');
         echo $this->Javascript->link('jquery-ui.js');
-        echo $this->Javascript->link('application.js');
+        echo $this->Javascript->link('jquery-form.js');		
         echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
         echo $this->Javascript->link('jquery.cookie.js');
-
+        echo $this->Javascript->link('application.js');
+		
         echo $this->Html->meta('icon');
         echo $this->Html->meta('rss', '/podcasts/rss.rss');
         echo $this->Html->css('cake.generic');
@@ -22,6 +23,7 @@
         echo $this->Html->css('ou-header');
 		echo $this->Html->css('type');
 		echo $this->Html->css('interface');
+		echo $this->Html->css('items_interface');
         echo $scripts_for_layout;
 		flush();
     ?>

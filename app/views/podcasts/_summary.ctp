@@ -53,11 +53,14 @@
 			<?php endif; ?>
         </dl>
     </div>
-    <div class="action_buttons">
-    	<ul>
-			<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-    	    	<li><a href="/" class="jquery_display button blue"  type="button" data-source="PodcastSummaryContainer" data-target="FormPodcastSummaryContainer" id="PodcastSummaryButton"><span>edit</span></a></li>
-			<?php endif; ?>
-	    </ul>
-	</div>
+
+	<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
+
+
+        <div class="action_buttons">
+            <ul>
+                    <li><a href="/" class="jquery_display button blue"  type="button" data-source="PodcastSummaryContainer" data-target="FormPodcastSummaryContainer" id="PodcastSummaryButton"><span>edit</span></a></li>
+            </ul>
+        </div>
+	<?php endif; ?>
 </div>

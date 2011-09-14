@@ -127,7 +127,7 @@ class PermissionHelper extends AppHelper {
         if( $this->Session->check('Auth.User.id') == false )
             return false;
 
-        if( $user_id == $this->Session->read('Auth.User.id') )
+        if( (int)$user_id == (int)$this->Session->read('Auth.User.id') )
             return true;
 
         return false;
@@ -222,7 +222,7 @@ class PermissionHelper extends AppHelper {
     
     function toUpdate( $data = array() ) {
 
-    	
+
 		if( isSet( $data['Podcast']['owner_id'] ) && $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
 
@@ -234,7 +234,7 @@ class PermissionHelper extends AppHelper {
 			if( $this->isModerator( $data['Moderators'] ) )
 				return true;
 		}
-		
+
 		if( isSet( $data['ModeratorGroups'] ) ) {
 			
 			if( $this->inModeratorGroup( $data['ModeratorGroups'] ) )

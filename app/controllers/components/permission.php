@@ -74,6 +74,7 @@ class PermissionComponent extends Object {
      */
     function toUpdate( $data = array() ) {
 
+
         // Only podcast containers have owners and moderator groups so check they exist before we call the routine
         if( isSet( $data['Owner'] ) && is_array( $data['Owner'] ) ) {
 

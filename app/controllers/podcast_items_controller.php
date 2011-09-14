@@ -44,9 +44,6 @@ class PodcastItemsController extends AppController {
 
 		// Set the tabs for the menu
 		$this->setTabs( $this->data['Podcast'] );
-
-
-
     }
 	
     /*
@@ -86,7 +83,7 @@ class PodcastItemsController extends AppController {
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
-    function view( $id = null ) {
+    /*function view( $id = null ) {
 
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->PodcastItem->get( $id );
@@ -97,7 +94,7 @@ class PodcastItemsController extends AppController {
             $this->Session->setFlash( 'Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->cakeError('error404');
         }
-    }
+    }*/
 
     /*
      * @name : edit
@@ -105,9 +102,12 @@ class PodcastItemsController extends AppController {
      * @updated : 19th May 2011
      * @by : Charles Jackson
      */
-    function edit( $id = null ) {
+    function edit( $id = null, $element = 'summary' ) {
 
+		$this->layout = 'ajax';
 		if ( !empty( $this->data ) ) {
+
+			$this->set('element',$this->data['PodcastItem']['element'] );
 			
 			$this->PodcastItem->set( $this->data );	
             if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
@@ -134,18 +134,19 @@ class PodcastItemsController extends AppController {
 					// Attempted to meta injection but failed. Alert the user but do not roll back the database.
 					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated but the meta injection failed. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
 				}	
-												
-                $this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+				
+                $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'edit', $this->data['PodcastItem']['id'], $element.'#'.$element ) );
 				exit;
             }
 			
+			$this->set('edit_mode',true);
             $this->errors = $this->PodcastItem->invalidFields( $this->data );
             $this->Session->setFlash('Could not update your '.MEDIA.'. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
 
         } else {
 
             $this->data = $this->PodcastItem->get( $id );
-			
+			$this->set('element', $element);
             // We did not find the podcast, redirect.
             if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 
