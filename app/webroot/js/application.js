@@ -1,5 +1,11 @@
 jQuery(document).ready(function($) {
 
+	// Disbale caching of any ajax calls.
+	jQuery.ajaxSetup({
+		
+		cache: false
+	});
+
 	// Creates the animated 'flash' that occurs when displaying a success message (green banner)
 	if( jQuery('#flashMessage.success').length ) {
 		jQuery('#flashMessage.success').effect('highlight', { color: '#00c500' }, 2000 );

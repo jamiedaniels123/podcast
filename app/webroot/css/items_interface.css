@@ -121,5 +121,8 @@ margin-right: 10px;
 	background-position: 0px;
 }
 
-
+#item-content #errors ul {
+	
+	margin-left: 20px;	
+}
 /*--/Tab-Button additions for main style sheet*/

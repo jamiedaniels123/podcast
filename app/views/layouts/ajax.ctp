@@ -13,5 +13,7 @@
              <a href="/" class="PodcastItemPreviewLink">Embed</a>
         </li>
     </ul>
+	<?php echo $this->Session->flash(); ?>
+    <?php echo $this->element('error'); ?>
     <?php echo $content_for_layout; ?>
 </div>
