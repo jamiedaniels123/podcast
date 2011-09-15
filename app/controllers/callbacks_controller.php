@@ -150,9 +150,12 @@ class CallbacksController extends AppController {
 
 					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
 					if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
-						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
-					} else {
+
 						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id'].'/'.$row['flavour']." > /dev/null &");
+
+					} else {
+
+						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
 					}
 				}
 			}
