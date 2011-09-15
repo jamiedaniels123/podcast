@@ -208,5 +208,5 @@
 	        <textarea id="PodcastItemYoutubeNotes" name="data[PodcastItem][youtube_notes]"><?php echo $this->data['PodcastItem']['youtube_notes']; ?></textarea>
 	        <?php echo $this->Form->error('PodcastItem.youtube_notes'); ?>
 	    </div>
-	</div>
+	</fieldset>
 </div>

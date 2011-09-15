@@ -147,6 +147,7 @@ class PodcastItemsController extends AppController {
 
             $this->data = $this->PodcastItem->get( $id );
 			$this->set('element', $element);
+
             // We did not find the podcast, redirect.
             if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 

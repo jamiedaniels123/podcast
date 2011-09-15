@@ -308,7 +308,7 @@ jQuery(document).ready(function($) {
 		jQuery('#modal').dialog({ width: 1000, autoOpen: false, modal: true, title : podcast_item_title });
 		jQuery('#modal').dialog('open');
 		jQuery('.ui-widget-overlay').click(function() { $("#modal").dialog("close"); });
-		getPodcastItem( id );
+		getPodcastItem( id, 'summary' ); // specify the podcast_item ID and the element we wish to display onload.
 	});
 	
 	// Changes the active tab when clicked.
@@ -316,18 +316,35 @@ jQuery(document).ready(function($) {
 		
 		e.preventDefault(); // Stop the link from loading
 
-		// Remove "active" class from existing tab
-		jQuery( "li.active" ).each( function() {
-			var hide = jQuery(this).attr('data-id'); // Grab the associated element
-			jQuery('.'+hide).hide(); // hide the associated element
-			jQuery(this).removeClass('active');	// remove the active class
-		})
-
-		jQuery(this).parent('li').addClass('active'); // Make current tab active by adding class
-
-		var show = jQuery(this).parent('li').attr('data-id'); // Grab the associated element
-		jQuery('.'+show).show(); // show the associated element		
-		jQuery('#PodcastUpdateButtonContainer').hide(); // add the active class
+		// Checxk to see if the user id on the input screen (as opposed to the preview screen) by checking
+		// to see if the form button is visible. If true, prompt the user to save their changes before
+		// continuing.
+		if( jQuery('#PodcastItemSubmitButton').is(":visible") ) {
+			
+			if( confirm('You will lose any unsaved changes. Are you sure you wish to continue?') ) {
+				
+				var id = jQuery(this).parent('li').attr('data-id'); // Grab the podcast_item_id
+				var element = jQuery(this).parent('li').attr('data-element'); // Grab the associated element
+				
+				getPodcastItem( id, element );				
+			}
+			
+		// They are on the preview screen, therefore no changes to save. Carry-on as normal.
+		} else {
+		
+			// Remove "active" class from existing tab
+			jQuery( "li.active" ).each( function() {
+				var hide = jQuery(this).attr('data-element'); // Grab the associated element
+				jQuery('.'+hide).hide(); // hide the associated element
+				jQuery(this).removeClass('active');	// remove the active class
+			})
+	
+			jQuery(this).parent('li').addClass('active'); // Make current tab active by adding class
+	
+			var show = jQuery(this).parent('li').attr('data-element'); // Grab the associated element
+			jQuery('.'+show).show(); // show the associated element		
+			jQuery('#PodcastUpdateButtonContainer').hide(); // add the active class
+		}
 	});
 	
 	
@@ -339,7 +356,7 @@ jQuery(document).ready(function($) {
 		if( confirm('Are you sure you wish to cancel all changes?') ) {
 			
 			var id = jQuery(this).attr('data-id');
-			getPodcastItem( id );
+			getPodcastItem( id, 'summary' );
 		}
 		
 	});
@@ -416,12 +433,13 @@ function unTickCheckboxes() {
 
 // Will get details of the podcast item passed as a parameter and display in a modal. 
 // Then binds the form to an ajax submit.
-function getPodcastItem( id ) {
+function getPodcastItem( id, element ) {
+
 	
 	jQuery.ajax(
 	{
 		type: "GET",
-		url: "/podcast_items/edit/" + id + '/summary',
+		url: "/podcast_items/edit/" + id + '/' + element,
 		success:
 			function( responseData ) {
 				

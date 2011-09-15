@@ -25,7 +25,7 @@ class FeedsController extends AppController {
      * @updated : 16th June 2011
      * @by : Charles Jackson
      */
-    function add( $id = null, $flavour = null ) {
+    function add( $id = null, $passed_flavour = null ) {
 		
 		Configure::write('debug',0);
         $this->autoRender = false;
@@ -57,7 +57,7 @@ class FeedsController extends AppController {
 				foreach( $this->Feed->rss_flavours as $flavour ) {
 
 					// If we have a specific flavour only generate the associated RSS feed else generate them all
-					if( $flavour == null || $flavour == $flavour['media_type'] ) {					
+					if( $passed_flavour == null || $passed_flavour == $flavour['media_type'] ) {					
 					
 						// We do everything twice, first time through we create the genuine RSS feeds that only contains
 						// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the

@@ -20,6 +20,7 @@
 		<div class="youtube" <?php echo $element == 'youtube' ? '' : 'style="display:none"'; ?>>
 
 			<?php if( $this->Permission->isYoutubeUser() ) : ?>
+            
 				<?php echo $this->element('../podcast_items/_youtube'); ?>                 
                 <?php echo $this->element('../podcast_items/_form_youtube'); ?>
             

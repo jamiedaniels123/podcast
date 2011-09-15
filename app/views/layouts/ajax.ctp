@@ -1,15 +1,15 @@
 <div id="item-content">
     <ul class="item-tab-zone">
-        <li class="active" data-id="summary">
+        <li <?php echo $element == 'summary' ? 'class="active"' : '';?> data-element="summary" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">Summary</a>
         </li>
-        <li data-id="youtube">
+        <li <?php echo $element == 'youtube' ? 'class="active"' : '';?> data-element="youtube" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">Youtube</a>
         </li>
-        <li data-id="itunes">
+        <li <?php echo $element == 'itunes' ? 'class="active"' : '';?> data-element="itunes" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">iTunes</a>
         </li>
-        <li data-id="embed">
+        <li <?php echo $element == 'embed' ? 'class="active"' : '';?> data-element="embed" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">Embed</a>
         </li>
     </ul>

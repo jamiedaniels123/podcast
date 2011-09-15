@@ -16,13 +16,13 @@
         <dd><?php echo $this->data['PodcastItem']['rights_approved']; ?>&nbsp;</dd>        
     </dl>
 </div>
-    <?php
-    if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
-        <div class="action_buttons">
-            <ul>
-                <li>
-                    <a href="/" class="jquery_display save"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>edit</span></a>
-                </li>
-            </ul>
-        </div>            
-    <?php endif; ?>  
+<?php
+if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
+	<div class="action_buttons">
+		<ul>
+			<li>
+				<a href="/" class="jquery_display save"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>edit</span></a>
+			</li>
+		</ul>
+	</div>            
+<?php endif; ?>  
