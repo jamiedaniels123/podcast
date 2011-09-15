@@ -1,5 +1,11 @@
 jQuery(document).ready(function($) {
 
+	// Disbale caching of any ajax calls.
+	jQuery.ajaxSetup({
+		
+		cache: false
+	});
+
 	// Creates the animated 'flash' that occurs when displaying a success message (green banner)
 	if( jQuery('#flashMessage.success').length ) {
 		jQuery('#flashMessage.success').effect('highlight', { color: '#00c500' }, 2000 );
@@ -41,7 +47,7 @@ jQuery(document).ready(function($) {
     jQuery('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' });
 
     // The following two events control the multiple select boxes where you can move rows between them.
-    jQuery('.move').click( function() {
+    jQuery('.move').live('click', function() {
 
         var source = jQuery(this).attr('data-source');
         var target = jQuery(this).attr('data-target');
@@ -56,7 +62,7 @@ jQuery(document).ready(function($) {
 
     // When a user submits a form that contains multiple select boxes as described above this routine
     // will capture the choices before the form is actually submitted.
-    jQuery('.auto_select_and_submit').click( function(e) {
+    jQuery('.auto_select_and_submit').live('click', function(e) {
         
         e.preventDefault();
 
@@ -73,6 +79,25 @@ jQuery(document).ready(function($) {
         });
 
         jQuery("#"+form_id).submit();
+    });
+
+    // When a user submits a form that contains multiple select boxes as described above this routine
+    // will capture the choices before the form is actually submitted.
+    jQuery('.auto_select').live('click', function(e) {
+        
+        e.preventDefault();
+
+        var form = jQuery(this).parents('form:first');
+        var form_id = form.attr('id');
+
+        jQuery(this).parents('form:first').find(':input.selected').each(function( index ) {
+
+            jQuery(this).find('option').each(function(i) {
+                jQuery(this).attr('selected','selected');
+            });
+
+
+        });
     });
 
     // Will toggle the notification checkboxes from ticked to unticked
@@ -238,7 +263,7 @@ jQuery(document).ready(function($) {
 		    	jQuery('#PodcastItemYoutubeDescription').val(text);
     	}
     });
-	
+
 	// Filechucker 
 	// This routine will make an ajax call to determine if the current user is an 
 	// iTunes user. If they are not an itunes user it will hide various filechucker form elements.
@@ -261,6 +286,94 @@ jQuery(document).ready(function($) {
 				}
 		});		
 	}
+	
+	// Enables peeps to jump from the preview to the input screen of any tabbed menu	
+	jQuery('.jquery_display').live('click',function(e) {
+		
+		e.preventDefault();
+		var source = jQuery(this).attr('data-source');
+		var target = jQuery(this).attr('data-target');
+		jQuery('#'+source).slideUp();
+		jQuery(this).parents('.action_buttons').hide();
+		jQuery('#'+target).slideDown();
+		jQuery('#PodcastUpdateButtonContainer').show();
+	});
+
+	// Open the modal and makes an ajax call when peeps wish to view/edit a podcast item
+	jQuery('.podcast_item_update').live('click',function(e) {
+
+		e.preventDefault();
+		var id = jQuery(this).attr('data-id');
+		var podcast_item_title = jQuery(this).html();
+		jQuery('#modal').dialog({ width: 1000, autoOpen: false, modal: true, title : podcast_item_title });
+		jQuery('#modal').dialog('open');
+		jQuery('.ui-widget-overlay').click(function() { $("#modal").dialog("close"); });
+		getPodcastItem( id, 'summary' ); // specify the podcast_item ID and the element we wish to display onload.
+	});
+	
+	// Changes the active tab when clicked.
+	jQuery('.PodcastItemPreviewLink').live('click',function(e) {
+		
+		e.preventDefault(); // Stop the link from loading
+
+		// Checxk to see if the user id on the input screen (as opposed to the preview screen) by checking
+		// to see if the form button is visible. If true, prompt the user to save their changes before
+		// continuing.
+		if( jQuery('#PodcastItemSubmitButton').is(":visible") ) {
+			
+			if( confirm('You will lose any unsaved changes. Are you sure you wish to continue?') ) {
+				
+				var id = jQuery(this).parent('li').attr('data-id'); // Grab the podcast_item_id
+				var element = jQuery(this).parent('li').attr('data-element'); // Grab the associated element
+				
+				getPodcastItem( id, element );				
+			}
+			
+		// They are on the preview screen, therefore no changes to save. Carry-on as normal.
+		} else {
+		
+			// Remove "active" class from existing tab
+			jQuery( "li.active" ).each( function() {
+				var hide = jQuery(this).attr('data-element'); // Grab the associated element
+				jQuery('.'+hide).hide(); // hide the associated element
+				jQuery(this).removeClass('active');	// remove the active class
+			})
+	
+			jQuery('#flashMessage').hide(); // Hide flash messages associated to previous tab.
+			jQuery('#flashMessage').hide(); // Hide errors associated to previous tab.
+			
+			jQuery(this).parent('li').addClass('active'); // Make current tab active by adding class
+	
+			var show = jQuery(this).parent('li').attr('data-element'); // Grab the associated element
+			jQuery('.'+show).show(); // show the associated element		
+			jQuery('#PodcastUpdateButtonContainer').hide(); // add the active class
+		}
+	});
+	
+	
+	// When a user clicks the "Cancel" link it will submit an ajax request and retrieve details of the current
+	// podcast_item refreshes all details held on screen.
+	jQuery('.cancel').live('click', function(e) {
+		
+		e.preventDefault();
+		if( confirm('Are you sure you wish to cancel all changes?') ) {
+			
+			var id = jQuery(this).attr('data-id');
+			getPodcastItem( id, 'summary' );
+		}
+		
+	});
+	
+	jQuery('.ajax_link').live('click', function(e) {
+		
+		e.preventDefault();
+		if( confirm('Are you sure you wish to delete?') ) {
+		
+			var url = jQuery(this).attr('href');
+			ajaxCall( url );
+		}
+		
+	});
 });
 
 // Makes an ajax call to a method in the app_controller
@@ -321,38 +434,69 @@ function unTickCheckboxes() {
     });
 }
 
-// DEPRECIATED - TO BE DELETED WHEN 1111% CERTAIN  ( July 2011 - Charles Jackson )
+// Will get details of the podcast item passed as a parameter and display in a modal. 
+// Then binds the form to an ajax submit.
+function getPodcastItem( id, element ) {
 
-// Will show or hide the itunes container divs depending
-// upon the status of the checkbox. Called on page load and when the
-// user clicks the checkbox.
-// NOTE: We have to check to see if the iTunes element actually exists on the page. It is possible
-// for a podcast to have iTune settings but the user does not have iTunes permissions.
-/*function show_hide_itune_elements() {
+	
+	jQuery.ajax(
+	{
+		type: "GET",
+		url: "/podcast_items/edit/" + id + '/' + element,
+		success:
+			function( responseData ) {
+				
+				jQuery('#modal').html(responseData);
+				
+				// Bind the podcast_item form to an ajax query
+				var options = {
+					target: '#modal',
+					replaceTarget: false
+				};
+				
+				jQuery('#PodcastItemSubmitButton').live('click', function() { 
 
-    if( jQuery('#PodcastConsiderForItunesu').is(':checked') ) {
+					jQuery('#PodcastItemEditForm').ajaxSubmit(options);		
+				});
+			},
+		error:
+			function( responseData ) {
+				
+				jQuery('#modal').html('It would appear you have been logged out');
+			}
+	});		
+}
 
-        jQuery('.itunes_container').show('slow');
 
-    } else {
+// Used to convert various links in an ajax solution so they don't reload the page when clicked from
+// inside a modal
+function ajaxCall( url ) {
+	
+	jQuery.ajax(
+	{
+		type: "GET",
+		url: url,
+		success:
+			function( responseData ) {
+				
+				jQuery('#modal').html(responseData);
+				
+				// Bind the podcast_item form to an ajax query
+				var options = {
+					target: '#modal',
+					replaceTarget: false
+				};
+				
+				jQuery('#PodcastItemSubmitButton').live('click', function() { 
 
-        jQuery('.itunes_container').hide('slow');
-    }
-}*/
-
-// Will show or hide the youtube container divs depending
-// upon the status of the checkbox. Called on page load and when the
-// user clicks the checkbox.
-// NOTE: We have to check to see if the Youtube element actually exists on the page. It is possible
-// for a podcast to have Youtube settings but the user does not have Youtube permissions.
-/*function show_hide_youtube_elements() {
-
-    if( jQuery('#PodcastConsiderForYoutube').is(':checked') ) {
-
-        jQuery('.youtube_container').show('slow');
-
-    } else {
-
-        jQuery('.youtube_container').hide('slow');
-    }
-}*/
+					jQuery(this).closest('form').ajaxSubmit(options);		
+				});
+			},
+		error:
+			function( responseData ) {
+				
+				jQuery('#modal').html('It would appear you have been logged out');
+			}
+	});		
+}
+	

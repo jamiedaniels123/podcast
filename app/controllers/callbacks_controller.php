@@ -33,6 +33,7 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
+		$this->emailTemplates->__sendCallbackErrorEmail(array(),$this->Callback->data,'Callback Alert');
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
@@ -146,9 +147,16 @@ class CallbacksController extends AppController {
 			if( in_array( $this->Callback->data['command'], $this->rss_refresh ) ) {
 				
 				foreach( $this->Callback->data['data'] as $row ) {
-					
+
 					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
-					shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
+					if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
+
+						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id'].'/'.$row['flavour']." > /dev/null &");
+
+					} else {
+
+						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
+					}
 				}
 			}
 

@@ -5,27 +5,30 @@
     <title>
         <?php echo $title_for_layout; ?>
     </title>
-    <link rel="stylesheet" type="text/css" media="all" href="/cgi-bin/filechucker.cgi?css" />
-
     <?php
         echo $this->Javascript->link('jquery.js');
         echo $this->Javascript->link('jquery-ui.js');
-        echo $this->Javascript->link('application.js');
+        echo $this->Javascript->link('jquery-form.js');		
         echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
         echo $this->Javascript->link('jquery.cookie.js');
-
+        echo $this->Javascript->link('application.js');
+		
         echo $this->Html->meta('icon');
         echo $this->Html->meta('rss', '/podcasts/rss.rss');
         echo $this->Html->css('cake.generic');
         echo $this->Html->css('jquery-ui');
         echo $this->Html->css('podcast-server');
         echo $this->Html->css('ou-header');
+		echo $this->Html->css('type');
+		echo $this->Html->css('interface');
+		echo $this->Html->css('items_interface');
         echo $scripts_for_layout;
 		flush();
     ?>
     
     <!--[if IE]>
         <link rel="stylesheet" type="text/css" href="/css/all-ie-only.css" />
+        <link rel="stylesheet" type="text/css" href="/css/interface_ie.css" />
 	<![endif]-->
     
 </head>
@@ -51,7 +54,9 @@
             <?php echo $this->Session->flash(); ?>
             <?php echo $this->Session->flash('email'); ?>
             <?php echo $this->element('error'); ?>
-            <?php echo $content_for_layout; ?>
+            <div class="collection_wrapper">
+	            <?php echo $content_for_layout; ?>
+               </div>
         </div>
          
         <div id="footer">
@@ -64,6 +69,6 @@
     <!--/display OU Footer-->
     
 	<?php echo $this->element('sql_dump'); ?>
-    
+    <div id="modal"></div>
 </body>
 </html>

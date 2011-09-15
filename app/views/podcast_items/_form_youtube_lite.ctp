@@ -1,11 +1,4 @@
-<fieldset class="youtube">
-	<legend>Youtube</legend>
-	<dl>
-	    <dt><a href="/" id="PodcastItemYoutubeToggle" data-target="FormPodcastItemYoutubeContainer" class="juggle">Toggle</a></dt>
-	    <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->data['PodcastItem']['youtube_flag'] == YES ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
-    </dl>
-    <div id="FormPodcastItemYoutubeContainer" class="wrapper youtube" style="display:none">		
+<div id="FormPodcastItemYoutubeContainer" class="preview" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
     <div class="input text">
         <label for="PodcastItemYoutubeTitle">Title</label>
         <input type="text" id="PodcastItemYoutubeTitle" name="data[PodcastItem][youtube_title]" value="<?php echo $this->data['PodcastItem']['youtube_title']; ?>">
@@ -97,4 +90,4 @@
             
 		</div>
 	</div>
-</fieldset>
+</div>

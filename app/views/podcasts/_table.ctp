@@ -31,7 +31,6 @@
 		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('Intended Youtube','intended_youtube_flag');?></th>
 		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('Youtube Published','publish_youtube');?></th>
 		<th class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>><?php echo $this->Paginator->sort('Open Learn','openlearn_epub');?></th>
-        <!-- <th class="actions">Actions</th> -->
     </tr>
     <?php
     // Check to see if there is an incremental count on this->data, the ['Meta'] exists so just looking for integer count
@@ -72,8 +71,8 @@
                     <td class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>>
 						<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
 
-	                        <a href="/admin/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>                        <?php else : ?>
-	                        <a href="/podcasts/view/<?php echo $podcast['Podcast']['id']; ?>"><?php echo $podcast['Podcast']['title']; ?></a>
+	                        <a href="/admin/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/sharing#sharing"><?php echo $podcast['Podcast']['title']; ?></a>                        <?php else : ?>
+	                        <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/summary#summary"><?php echo $podcast['Podcast']['title']; ?></a>
 						<?php endif; ?>
                     </td>
                     <td class="copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'copyright'); ?>>
@@ -140,51 +139,20 @@
                     <td class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>>
                         <img src="/img/<?php echo $this->Object->isOpenLearn( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn published" />
                     </td>
-<!--                     <td class="actions">
-                        <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-                        
-                            <?php if( $this->Object->isDeleted( $podcast['Podcast'] ) ) : ?>
-                                <a href="/admin/podcasts/restore/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to restore this podcast?');" id="restore_podcast_<?php echo $podcast['Podcast']['id']; ?>">restore</a>
-                            <?php endif; ?>
-                            <a class="button rss" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Refresh RSS</a>
-                            <a class="button delete" href="/admin/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" id="delete_podcast_<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you with to delete this podcast and all associated media? This action cannot be undone.');">Delete</a>
-
-                    	<?php elseif( $this->Permission->isOwner( $podcast['Owner']['id'] ) ) : ?>
-                        	<a class="button edit" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
-                            <a class="button rss" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Refresh RSS</a>
-                            <a class="button delete" href="/podcasts/delete/<?php echo $podcast['Podcast']['id']; ?>" onclick="return confirm('Are you sure you wish to delete this collection and associated media?');">Delete</a>
-                        <?php elseif( $this->Permission->toUpdate( $podcast ) ) : ?>
-                        	<a class="button edit" href="/podcasts/edit/<?php echo $podcast['Podcast']['id'];?>" title="edit">Edit</a>
-                            <a class="button rss" href="/feeds/add/<?php echo $podcast['Podcast']['id']; ?>">Refresh RSS</a>
-                        <?php endif; ?>
-                    </td> -->
                 </tr>
 <?php
         endforeach;
 endif; ?>
 </table>
 
-<div class="paging">
-
- <p>
-    <?php
-        echo $this->Paginator->counter(array(
-        'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
-        ));
-    ?>
-</p>    
-   <div class="page-controls">
-   	<?php echo $this->Paginator->prev(''.__('previous', true), array(), null, array('class'=>'disabled previous'));?>
- | 	<?php echo $this->Paginator->numbers();?>
-    <?php echo $this->Paginator->next(__('next', true).'', array(), null, array('class'=>'disabled next'));?>
-    </div>
-</div>
+<?php echo $this->element('pagination'); ?>    
 
     <div class="left">
     <a href="/" class="toggler button setting" data-status="unticked">Select/Unselect all</a>
 	<a class="button rss multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts">Refresh RSS</a>
 	<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
 		<a class="button delete multiple_action_button" type="button" href="/admin/podcasts/delete" id="delete_multiple_podcasts">Delete</a>    	
+		<a class="button restore multiple_action_button" type="button" href="/admin/podcasts/restore" id="restore_multiple_podcasts">Restore</a>    	        
 	<?php else : ?>
 		<a class="button delete multiple_action_button" type="button" href="/podcasts/delete" id="delete_multiple_podcasts">Delete</a>
 	<?php endif; ?>

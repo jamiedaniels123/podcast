@@ -112,7 +112,7 @@ class Breadcrumb extends AppModel {
 	 */	
 	function appendId() {
 		
-		if( in_array( strtolower( $this->current_breadcrumb['Breadcrumb']['url'] ), array( '/admin/podcast_items/view/', '/podcast_items/view/','/podcast_items/edit/', '/podcast_items/add/' ) ) && in_array( $this->breadcrumb['Breadcrumb']['url'], array( '/podcasts/view/','/podcasts/edit/', '/admin/podcasts/view/','/admin/podcasts/edit/' ) ) ) {
+		if( in_array( strtolower( $this->current_breadcrumb['Breadcrumb']['url'] ), array( '/admin/podcast_items/view/', '/podcast_items/view/','/podcast_items/edit/', '/podcast_items/add/', '/podcast_items/index/' ) ) && in_array( $this->breadcrumb['Breadcrumb']['url'], array( '/podcasts/view/','/podcasts/edit/', '/admin/podcasts/view/','/admin/podcasts/edit/' ) ) ) {
 
 			if( isSet( $this->data['PodcastItem']['podcast_id'] ) ) {
 					

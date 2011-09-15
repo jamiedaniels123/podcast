@@ -173,7 +173,7 @@ class PodcastsController extends AppController {
 						$this->Session->setFlash('We were unable to generate RSS feeds. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
 					}
 					
-					$this->redirect( array( 'action' => 'view', $this->Podcast->getLastInsertId() ) );
+					$this->redirect( array( 'action' => 'edit', $this->Podcast->getLastInsertId(), '#summary' ) );
 										
 				} else {
 					
@@ -202,7 +202,7 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 20th May 2011
      */
-    function view( $id = null ) {
+    /*function view( $id = null ) {
 
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->Podcast->view( $id );
@@ -213,7 +213,7 @@ class PodcastsController extends AppController {
             $this->Session->setFlash( 'Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->cakeError('error404');
         }
-    }
+    }*/
 
     /*
      * @name : edit
@@ -221,10 +221,15 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 4th May 2011
      */
-    function edit( $id = null ) {
+    function edit( $id = null, $element = 'summary' ) {
 
         if ( !empty( $this->data ) ) {
 
+			unset( $this->Podcast->belongsTo['PreferredNode'] ); // Unset the preferred node else we will insert a new row on the table.
+			
+			// Store the element they are editing so we may reload the correct part of the  form
+			$element = $this->data['Podcast']['element'];
+			
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
             
             $this->Podcast->data = $this->data;
@@ -283,7 +288,8 @@ class PodcastsController extends AppController {
 						// They may no longer have permision to view this podcast if they have changed ownership, therefore double-check.
 						if( $this->Permission->toView( $this->data ) ) {
 
-							$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+							// Call the same URL passing the element so it loads the right tab
+							$this->redirect( array( 'action' => 'edit', $this->data['Podcast']['id'], $element.'#'.$element ) );
 							exit;
 
 						} else {
@@ -304,15 +310,17 @@ class PodcastsController extends AppController {
             $this->data = $this->Podcast->rebuild();
             $this->errors = $this->Podcast->invalidFields( $this->data );
             // We explicitly set confirmed to false incase they have confirmed/failed validation in a single post (silly billy).
-            $this->data['Podcast']['confirmed'] == false;
-
+            $this->data['Podcast']['confirmed'] = false;
+			$this->setTabs( $this->data['Podcast'] );
+			$this->set('element', $element );
+			$this->set('edit_mode', true ); // Forces the view page to display in edit mode by default.
 
         } else {
 
             $this->data = $this->Podcast->edit( $id );
 
             // We did not find the podcast, redirect.
-            if( empty( $this->data ) || $this->Permission->toUpdate( $this->data ) == false ) {
+            if( empty( $this->data ) ) {
 
                 $this->Session->setFlash('Could not find your collection. Please try again.', 'default', array( 'class' => 'error' ) );
                 $this->cakeError('error404');
@@ -326,6 +334,10 @@ class PodcastsController extends AppController {
 				// Once a collection has been syndicated it cannot be 'unsyndicated'. We set a tempoary flag that cannot be
 				// overwritten and is passed in the form. If set to true people will not be able to unsyndicate a collection.
 				$this->data['Podcast']['syndicated'] = $this->data['Podcast']['podcast_flag'];
+				
+				// Set the tabs for the menu
+				$this->setTabs( $this->data['Podcast'] );
+				$this->set('element',$element);
             }
         }
 		
@@ -422,7 +434,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('Your podcast has been successfully submitted for consideration.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'action' => 'view', $id ) );
+			$this->redirect( array( 'action' => 'edit', $id, $media.'#'.$media ) );
 			
 		} else {
 			
@@ -454,7 +466,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully approved this podcast for publication on itunes.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'edit', $id, 'itunes#itunes' ) );
 			
 		} else {
 
@@ -486,7 +498,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully approved this podcast for publication on youtube.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'edit', $id, 'youtube#youtube' ) );
 			
 		} else {
 
@@ -520,7 +532,7 @@ class PodcastsController extends AppController {
 			
 			if( $this->Permission->toView( $this->data ) ) {
 				
-				$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+				$this->redirect( array( 'itunes' => false, 'action' => 'edit', $id, 'itunes#itunes' ) );
 			
 			} else {
 				
@@ -559,7 +571,7 @@ class PodcastsController extends AppController {
 			
 			if( $this->Permission->toView( $this->data ) ) {
 				
-				$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+				$this->redirect( array( 'youtube' => false, 'action' => 'edit', $id, 'youtube#youtube' ) );
 			
 			} else {
 				
@@ -596,7 +608,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully updated this podcast as being published on iTunes.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'edit', $id, 'itunes#itunes' ) );
 			
 		} else {
 
@@ -627,7 +639,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully updated this podcast as being published on Youtube.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'edit', $id, 'youtube#youtube' ) );
 			
 		} else {
 
@@ -656,7 +668,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully updated this podcast as being not published on iTunes.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'itunes' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'itunes' => false, 'action' => 'edit', $id, 'itunes#itunes' ) );
 			
 		} else {
 
@@ -685,7 +697,7 @@ class PodcastsController extends AppController {
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully updated this podcast as being not published on Youtube.', 'default', array( 'class' => 'success' ) );
-			$this->redirect( array( 'youtube' => false, 'action' => 'view', $id ) );
+			$this->redirect( array( 'youtube' => false, 'action' => 'edit', $id, 'youtube#youtube' ) );
 			
 		} else {
 
@@ -726,12 +738,12 @@ class PodcastsController extends AppController {
 						$this->Session->setFlash('The collection copied with errors, please delete this collection and try again. If the problem persist contact an administrator', 'default', array( 'class' => 'alert' ) );
 					
 				}
-				$this->redirect( array( 'action' => 'view', $this->Podcast->data['Podcast']['id'] ) );
+				$this->redirect( array( 'action' => 'edit', $this->Podcast->data['Podcast']['id'], 'summary#summary' ) );
 			}
 		}
 		
 		$this->Session->setFlash('We could not copy your chosen collection. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-		$this->redirect( $this->referer() );
+		$this->cakeError('error404');
 	}
 
     /*
@@ -788,7 +800,7 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 20th May 2011
      */
-    function admin_view( $id = null ) {
+    /*function admin_view( $id = null ) {
 		
         // They are loading the page, get the data using the $id passed as a parameter.
         $this->data = $this->Podcast->view( $id );
@@ -800,7 +812,7 @@ class PodcastsController extends AppController {
             $this->cakeError('error404');
         }
 
-    }
+    }*/
 
     /*
      * @name : admin_edit
@@ -808,10 +820,12 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 4th May 2011
      */
-    function admin_edit( $id = null ) {
+    function admin_edit( $id = null, $element = 'sharing' ) {
 
         if ( !empty( $this->data ) ) {
 
+			unset( $this->Podcast->belongsTo['PreferredNode'] ); // Unset the preferred node else we will insert a new row on the table.
+			
             $this->Podcast->begin(); // begin a transaction so we may rollbaack if anything fails.
             
             $this->Podcast->data = $this->data;
@@ -865,7 +879,7 @@ class PodcastsController extends AppController {
 
 			            $this->data = $this->Podcast->edit( $this->Podcast->id );						
 												
-						$this->redirect( array( 'action' => 'view', $this->data['Podcast']['id'] ) );
+						$this->redirect( array( 'action' => 'edit', $this->data['Podcast']['id'], $element.'#'.$element ) );
 						exit;
 					}
                 }
@@ -881,6 +895,9 @@ class PodcastsController extends AppController {
             $this->errors = $this->Podcast->invalidFields( $this->data );
             // We explicitly set confirmed to false incase they have confirmed/failed validation in a single post (silly billy).
             $this->data['Podcast']['confirmed'] == false;
+			$this->setTabs( $this->data['Podcast'] );
+			$this->set('element', $element );
+			$this->set('edit_mode', true ); // Forces the view page to display in edit mode by default.
 
 
         } else {
@@ -898,6 +915,11 @@ class PodcastsController extends AppController {
                 // We need to track is the ownership changes so make a note here and the original owner with be passed as a
                 // hidden form element.
                 $this->data['Podcast']['current_owner_id'] = $this->data['Podcast']['owner_id'];
+				$this->data['Podcast']['syndicated'] = $this->data['Podcast']['podcast_flag'];
+				// Set the tabs for the menu
+				$this->setTabs( $this->data['Podcast'] );
+				$this->set('element',$element);				
+				
             }
         }
 		
@@ -970,19 +992,21 @@ class PodcastsController extends AppController {
     function admin_restore( $id = null ) {
 
         $this->autoRender = false;
-        $this->data = $this->Podcast->findById( $id );
+        foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-        if( empty( $this->data ) ) {
+            $this->data = $this->Podcast->findById( $key );		
 
-            $this->Session->setFlash('We could not identify the collection you are trying to restore.', 'default', array( 'class' => 'error' ) );
-
-        } else {
-
-
-			$this->data['Podcast']['deleted'] = false;
-			$this->Podcast->set( $this->data ); // Hydrate the object
-			$this->Podcast->save();
-
+			if( empty( $this->data ) ) {
+	
+				$this->Session->setFlash('We could not identify one or more of the collections you are trying to restore.', 'default', array( 'class' => 'error' ) );
+				break;
+				
+			} else {
+	
+				$this->data['Podcast']['deleted'] = false;
+				$this->Podcast->set( $this->data ); // Hydrate the object
+				$this->Podcast->save();
+			}
 			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->buildHtaccessFile( $this->data ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $this->data ) ) ) {
@@ -995,7 +1019,7 @@ class PodcastsController extends AppController {
             }
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 	
 	/*
@@ -1029,8 +1053,17 @@ class PodcastsController extends AppController {
 				
 			}
 		}
+		
+		
+		// Check to see which image we are displaying so we can display the correct podcast form element on redirect.
+		if( in_array( $image_type, array( 'image_logoless','image_wide') ) ) {
 			
-		$this->redirect( $this->referer() );		
+			$this->redirect( array( 'action' => 'edit', $this->data['Podcast']['id'], 'itunes' ) );		
+			
+		} else {
+			
+			$this->redirect( array( 'action' => 'edit', $this->data['Podcast']['id'], 'summary' ) );		
+		}
 	}
 
     // PRIVATE METHODS

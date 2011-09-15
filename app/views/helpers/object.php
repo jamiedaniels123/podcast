@@ -30,6 +30,22 @@ class ObjectHelper extends AppHelper {
     }
 
     /*
+     * @name : isHardDeleted
+     * @description : Accepts an array and returns a bool on whether hard deleted.
+     * We return false if it has already been scheduled for deletion 
+     * @updated : 1st June 2011
+     * @by : Charles Jackson
+     */
+    function isHardDeleted( $object = array() ) {
+
+        if( (int)$object['deleted'] == 2 )
+            return true;
+
+        return false;
+    }
+
+
+    /*
      * @name : scheduledForDeletion
      * @description :  
      * @updated : 18th July 2011
@@ -287,8 +303,8 @@ class ObjectHelper extends AppHelper {
 	
 	/*
 	 * @name : isPodcast
-	 * @description : Checks to ensure the podcast_flag column is set to true. Used to ensure
-	 * a collection is a "podcast" before it can be submitted to itunes or youtube.
+	 * @description : Checks to ensure the "podcast_flag column" is set to true. Used to ensure
+	 * a collection is syndicated before it can be submitted to itunes or youtube.
 	 * @updated : 22nd July 29011
 	 * @by : Charles Jackson
 	 */

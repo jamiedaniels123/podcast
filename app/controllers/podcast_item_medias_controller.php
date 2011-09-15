@@ -31,7 +31,7 @@ class PodcastItemMediasController extends AppController {
 	function admin_delete( $id ) {
 		
         $this->autoRender = false;
-		$this->PodcastItemMedia->recursive = 3; // Raise the recursive from the default so we have the necessary data to check permissions.
+		$this->PodcastItemMedia->recursive = 2;
         $this->data = $this->PodcastItemMedia->findById( $id );
 	
         // If we did not find the podcast media then redirect to the referer.
@@ -61,7 +61,7 @@ class PodcastItemMediasController extends AppController {
 				
         }
         
-		$this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'view', $this->data['PodcastItem']['id'] ) );		
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'edit', $this->data['PodcastItem']['id'], 'flavours' ) );		
 		
     }
 }

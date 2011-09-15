@@ -1299,6 +1299,16 @@ class Podcast extends AppModel {
 					'fields' => array(
 						'iTuneCategories.*'
 					)
+				),
+				'Language' => array(
+					'fields' => array(
+						'Language.*'
+					)
+				),
+				'PreferredNode' => array(
+					'fields' => array(
+						'PreferredNode.*'
+					)
 				)
 			)
 		) );
