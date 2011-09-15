@@ -76,7 +76,7 @@
 	        <?php endforeach; ?>
 	        
 	    </table>
-	    
+
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    
 	        <a href="/" class="toggler button setting" data-status="unticked">Select/deselect all</a>

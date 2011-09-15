@@ -54,6 +54,8 @@
 	        <?php endforeach; ?>
 	        
 	    </table>
+
+		<?php echo $this->element('pagination'); ?>    
 	    
 	    <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	    

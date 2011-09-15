@@ -58,7 +58,7 @@ ul.item-tab-zone li > a {
 	color: rgb(216,217,218);
 	}
 	
-.save {
+button.save, button.edit {
 	color: rgb(61,61,63);
 	background: rgb(241,147,0);
 	padding: 6px 10px!important;
@@ -125,5 +125,17 @@ margin-right: 10px;
 #item-content #errors ul {
 	
 	margin-left: 20px;	
+}
+
+#item-content table tr td, #item-content table tr td a {
+	
+	background-color: #58585a;
+	color: #fff;	
+}
+
+#item-content table tr:nth-child(2n) td, #item-content table tr:nth-child(2n) td a {
+	
+	background-color: #333;
+	color: #fff;	
 }
 /*--/Tab-Button additions for main style sheet*/

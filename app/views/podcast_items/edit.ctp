@@ -37,6 +37,9 @@
 		<div class="embed" <?php echo $element == 'embed' ? '' : 'style="display:none"'; ?>>
 			<?php echo $this->element('../podcast_items/_embed'); ?> 
 		</div>
+		<div class="flavours" <?php echo $element == 'flavours' ? '' : 'style="display:none"'; ?>>
+			<?php echo $this->element('../podcast_item_medias/_index'); ?> 
+		</div>
         <div class="action_buttons" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
         	<ul>
 	            <li><button id="PodcastItemSubmitButton" type="button"  class="save auto_select">Update <?php echo MEDIA; ?></button></li>

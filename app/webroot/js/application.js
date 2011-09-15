@@ -339,6 +339,9 @@ jQuery(document).ready(function($) {
 				jQuery(this).removeClass('active');	// remove the active class
 			})
 	
+			jQuery('#flashMessage').hide(); // Hide flash messages associated to previous tab.
+			jQuery('#flashMessage').hide(); // Hide errors associated to previous tab.
+			
 			jQuery(this).parent('li').addClass('active'); // Make current tab active by adding class
 	
 			var show = jQuery(this).parent('li').attr('data-element'); // Grab the associated element

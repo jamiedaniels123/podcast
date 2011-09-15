@@ -1,19 +1,11 @@
 <div class="wrapper">
-<fieldset id="podcast_media">
-    <legend><h3>Flavours</h3></legend>
-    
-    <img src="/img/collection-large.png" width="45" height="34" />
-    
-    
     <table>
     	<thead>
             <tr>
             	<th>Flavour</th>
             	<th>Filename</th>
                 <th>Processed State</th>
-                <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-                	<th>Actions</th>
-                <?php endif; ?>
+               	<th>Actions</th>
             </tr>
         </thead>
         <?php foreach( $this->data['PodcastMedia'] as $media ) : ?>
@@ -26,13 +18,10 @@
                     <?php echo $this->Attachment->getMediaLink( $this->data['Podcast']['custom_id'], $media ); ?></td>
                 <?php endif; ?>
                 <td class="centered"><?php echo $this->Object->getProcessedState( $media['processed_state'] ); ?></td>
-                <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-                	<td>
-	                    <a class="button white" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" onclick="return confirm('Are you sure you wish to delete this flavour of media?');" id="PodcastItemMediaDelete">Delete</a>
-                    </td>
-                <?php endif; ?>
+               	<td>
+                    <a class="delete ajax_link" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" onclick="return confirm('Are you sure you wish to delete this flavour of media?');" id="PodcastItemMediaDelete">Delete</a>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
-</fieldset>
 </div>

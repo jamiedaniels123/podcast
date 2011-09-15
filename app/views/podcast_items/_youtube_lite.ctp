@@ -1,7 +1,5 @@
 <div id="PodcastItemYoutubeContainer" class="preview" >
     <dl>
-        <dt>Published: </dt>
-	    <dd><img src="/img<?php echo $this->data['PodcastItem']['youtube_flag'] == YES ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" /></dd>
         <dt>Title: </dt>
         <dd><?php echo $this->data['PodcastItem']['youtube_title']; ?>&nbsp;</dd>
         <dt>Description: </dt>
@@ -40,7 +38,7 @@
         <div class="action_buttons">
             <ul>
                 <li>
-                    <a href="/" class="jquery_display save"  type="button" data-source="PodcastItemYoutubeContainer" data-target="FormPodcastItemYoutubeContainer" id="PodcastItemYoutubeButton"><span>edit</span></a>
+                    <button class="jquery_display save"  type="button" data-source="PodcastItemYoutubeContainer" data-target="FormPodcastItemYoutubeContainer" id="PodcastItemYoutubeButton"><span>edit</span></button>
                 </li>
             </ul>
         </div>            

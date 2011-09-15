@@ -6,7 +6,7 @@ class PodcastItemsController extends AppController {
 
     private $errors = array();
 
-    var $paginate = array( 'limit' => 5, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
+    var $paginate = array( 'limit' => 50, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
 
     function beforeFilter() {
 

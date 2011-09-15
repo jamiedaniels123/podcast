@@ -203,19 +203,15 @@ class AppController extends Controller {
      * @updated : 23rd June 2011
      * @by : Charles Jackson
      */
-    protected function __generateRSSFeeds( $id = null ) {
+    protected function __generateRSSFeeds( $id = null, $flavour = null ) {
 
-        $podcast = null;
-		$Podcast = ClassRegistry::init('Podcast');
+		if( (int)$id ) {
+			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
+			return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $id, 'flavour' => $flavour ) );
+			return true;
+		}
 		
-        $Podcast->recursive = -1; // Minimise the amount of data we retrieve.
-        $podcast = $Podcast->findById( $id );
-
-        if( empty( $podcast ) )
-            return false;
-
-		// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-		return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $podcast['Podcast']['id'] ) );
+		return false;
     }	
 	
     /*

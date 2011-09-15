@@ -40,7 +40,7 @@ if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
 	<div class="action_buttons">
 		<ul>
 			<li>
-				<a href="/" class="jquery_display save"  type="button" data-source="PodcastItemSummaryContainer" data-target="FormPodcastItemSummaryContainer" id="PodcastItemSummaryButton"><span>edit</span></a>
+				<button class="jquery_display save"  type="button" data-source="PodcastItemSummaryContainer" data-target="FormPodcastItemSummaryContainer" id="PodcastItemSummaryButton"><span>edit</span></button>
 			</li>
 		</ul>
 	</div>            

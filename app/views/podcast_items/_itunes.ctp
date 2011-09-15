@@ -21,7 +21,7 @@ if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
 	<div class="action_buttons">
 		<ul>
 			<li>
-				<a href="/" class="jquery_display save"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>edit</span></a>
+				<button class="jquery_display save"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>edit</span></button>
 			</li>
 		</ul>
 	</div>            
