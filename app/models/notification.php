@@ -63,7 +63,7 @@ class Notification extends AppModel {
 		$this->data['Notification']['title'] = 'Malformed data from the API';
 		$this->data['Notification']['type'] = 'Error';
 		$this->data['Notification']['admin_only'] = true;
-		$this->data['Notification']['message'] = 'The following callback from the Admin API could not be understood else has been indentified as malformed : <pre>'.print_r( $data ).'</pre>';
+		$this->data['Notification']['message'] = 'The following callback from the Admin API could not be understood else has been indentified as malformed. Below is the data passedf by the API in the original JSON form : <pre>'.print_r( $data ).'</pre>';
 		$this->save( $this->data );
 	}		
 
@@ -109,14 +109,14 @@ class Notification extends AppModel {
 	 * @updated : 5th September 2011
 	 * @by : Charles Jackson
 	 */		
-	function errorTranscoding( $data = array() ) {
+	function errorTranscoding( $data = array(), $row = array() ) {
 		
 		$this->create();
 		$this->data['Notification']['user_id'] = 0;
 		$this->data['Notification']['title'] = 'Error in transcoding';
 		$this->data['Notification']['type'] = 'Error';
 		$this->data['Notification']['admin_only'] = true;
-		$this->data['Notification']['message'] = 'The Admin API reported a transcoding error. Details taken from the appropriate row on the podcast_item_media table can been seen below : <pre>'.print_r( $data, 1 ).'</pre>';
+		$this->data['Notification']['message'] = 'The Admin API reported a transcoding error. Details taken from the appropriate row on the podcast_item_media table can been seen below : <pre>'.print_r( $data, 1 ).'</pre>. The original JSON decoded row pass from the APIcan be seen below : <pre>'.print_r( $row, 1 ).'</pre>';
 		$this->save( $this->data );		
 	}
 

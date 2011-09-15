@@ -992,19 +992,21 @@ class PodcastsController extends AppController {
     function admin_restore( $id = null ) {
 
         $this->autoRender = false;
-        $this->data = $this->Podcast->findById( $id );
+        foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 
-        if( empty( $this->data ) ) {
+            $this->data = $this->Podcast->findById( $key );		
 
-            $this->Session->setFlash('We could not identify the collection you are trying to restore.', 'default', array( 'class' => 'error' ) );
-
-        } else {
-
-
-			$this->data['Podcast']['deleted'] = false;
-			$this->Podcast->set( $this->data ); // Hydrate the object
-			$this->Podcast->save();
-
+			if( empty( $this->data ) ) {
+	
+				$this->Session->setFlash('We could not identify one or more of the collections you are trying to restore.', 'default', array( 'class' => 'error' ) );
+				break;
+				
+			} else {
+	
+				$this->data['Podcast']['deleted'] = false;
+				$this->Podcast->set( $this->data ); // Hydrate the object
+				$this->Podcast->save();
+			}
 			// The file has only been 'soft' deleted by writing a .htaccess file. To retrore the file we merely delete the .htaccess
             // We only perform a soft delete hence we write a .htaccess file that will produce a "404 - Not Found" and transfer to media server.
             if( $this->Folder->buildHtaccessFile( $this->data ) && $this->Api->transferFileMediaServer( $this->Podcast->softDelete( $this->data ) ) ) {
@@ -1017,7 +1019,7 @@ class PodcastsController extends AppController {
             }
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'index' ) );
     }
 	
 	/*

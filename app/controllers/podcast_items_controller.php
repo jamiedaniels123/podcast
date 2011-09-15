@@ -691,7 +691,7 @@ class PodcastItemsController extends AppController {
 			}
         }
 
-        $this->redirect( array('admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['Podcast']['id'] ) );
+        $this->redirect( array('admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
     }
 
     /*
@@ -804,7 +804,7 @@ class PodcastItemsController extends AppController {
 			}
         }
         
-        $this->redirect( array( 'admin' => true, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
     }
 	
     /*
@@ -848,7 +848,7 @@ class PodcastItemsController extends AppController {
 
         }
 
-        $this->redirect( $this->referer() );
+        $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
     }
     
 	/*

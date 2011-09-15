@@ -131,7 +131,7 @@ class PodcastItemMedia extends AppModel {
 
 			// We have an error in transcoding, create a notification.
 			$notification = ClassRegistry::init('Notification');
-			$notification->errorTranscoding( $this->data['PodcastItemMedia'] );
+			$notification->errorTranscoding( $this->data['PodcastItemMedia'], $row );
 		}
 	}
 	
