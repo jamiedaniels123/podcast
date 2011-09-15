@@ -820,7 +820,7 @@ class PodcastsController extends AppController {
      * @name : Charles Jackson
      * @by : 4th May 2011
      */
-    function admin_edit( $id = null, $element = 'summary' ) {
+    function admin_edit( $id = null, $element = 'sharing' ) {
 
         if ( !empty( $this->data ) ) {
 

@@ -19,7 +19,7 @@
                 <?php endif; ?>
                 <td class="centered"><?php echo $this->Object->getProcessedState( $media['processed_state'] ); ?></td>
                	<td>
-                    <a class="delete ajax_link" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" onclick="return confirm('Are you sure you wish to delete this flavour of media?');" id="PodcastItemMediaDelete">Delete</a>
+                    <a class="delete ajax_link" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" id="PodcastItemMediaDelete">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>

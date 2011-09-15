@@ -41,7 +41,7 @@ class PodcastItemsController extends AppController {
 		$this->PodcastItems->recursive = -1;
 		$this->data = $this->PodcastItem->Podcast->findById( $id );		
         $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
-
+		$this->set('element', 'tracks' ); // Set the active element for the tab menu
 		// Set the tabs for the menu
 		$this->setTabs( $this->data['Podcast'] );
     }
@@ -77,25 +77,6 @@ class PodcastItemsController extends AppController {
         }
     }
 	
-    /*
-     * @name : view
-     * @desscription : Enables owners, moderators and members to view details of an individual media file.
-     * @updated : 20th May 2011
-     * @by : Charles Jackson
-     */
-    /*function view( $id = null ) {
-
-        // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->get( $id );
-
-        // We did not find the podcast, error and redirect.
-        if( empty( $this->data )  || $this->Permission->toView( $this->data['Podcast'] ) == false ) {
-
-            $this->Session->setFlash( 'Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->cakeError('error404');
-        }
-    }*/
-
     /*
      * @name : edit
      * @desscription : Displays a form that enables a peep to edit an existing row on the podcast_items table.
@@ -202,11 +183,11 @@ class PodcastItemsController extends AppController {
 		}
 		
 		
-		$this->redirect( array( 'admin' => false, 'controller' => 'podcasts', 'action' => 'view', $this->data['PodcastItem']['podcast_id'] ) );
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
 	}
 
 	/*
-	 * @name : publish
+	 * @name : unpublish
 	 * @description : Will set the published_flag to 'N' for any podcast_item, regenerate the RSS feeds and if appropriate
 	 * refresh youtube.
 	 * @NOTE : In the magic "beforeSave" podcast_item model method I set channel flags such as "youtube_flag" according
@@ -248,7 +229,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 
-		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'] ) );
+		$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
 	}
 	
 	/*
@@ -305,7 +286,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
 	 }
 	 
 	/*
@@ -352,7 +333,7 @@ class PodcastItemsController extends AppController {
 			}
 		}
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
 	 }	 	 
 
    /*
@@ -399,7 +380,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one '.MEDIA.' item to publish in iTunes.', 'default', array( 'class' => 'error' ) );
 		}
 
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
     }
     
    /*
@@ -444,7 +425,7 @@ class PodcastItemsController extends AppController {
 			$this->Session->setFlash('You must select at least one '.MEDIA.' item.', 'default', array( 'class' => 'error' ) );
 		}
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
     }
     
     /*
@@ -571,7 +552,7 @@ class PodcastItemsController extends AppController {
 		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
 		$this->PodcastItem->rollback();
 		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
+		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
 
     }
 
@@ -733,7 +714,7 @@ class PodcastItemsController extends AppController {
         }
         
 		$this->Session->setFlash('There has been a problem deleting the '.MEDIA.' attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
-	    $this->redirect( array( 'action' => 'view', $this->data['PodcastItem']['id'] ) );
+	    $this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
     }
 
     /*
@@ -743,22 +724,20 @@ class PodcastItemsController extends AppController {
      */
 
     /*
-     * @name : admin_view
-     * @desscription : Enables an administrator to view details of an individual media file.
+     * @name : admin_index
+     * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
      * @name : Charles Jackson
-     * @by : 20th May 2011
+     * @by : 16th May 2011
      */
-    function admin_view( $id = null ) {
+    function admin_index( $id = null ) {
 
-        // They are loading the page, get the data using the $id passed as a parameter.
-        $this->data = $this->PodcastItem->get( $id );
-
-        // We did not find the podcast, error and redirect.
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash( 'Could not find your chosen '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->cakeError('error404');
-        }
+		$this->PodcastItems->Podcast->recursive = -1;
+		$this->PodcastItems->recursive = -1;
+		$this->data = $this->PodcastItem->Podcast->findById( $id );		
+        $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
+		$this->set('element', 'tracks' ); // Set the active element for the tab menu
+		// Set the tabs for the menu
+		$this->setTabs( $this->data['Podcast'] );
     }
 
     /*
@@ -771,39 +750,45 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 
-        $this->data = $this->PodcastItem->get( $id );
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
 
-        // If we did not find the podcast media then redirect to the referer.
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash('We could not find the '.MEDIA.' you were looking for.', 'default', array( 'class' => 'error' ) );
-            
-        } else {
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 			
-			// Check to see if any flavours of media exist and if true, delete them
-			if( $this->PodcastItem->listAssociatedMedia( $this->data )  ) {
-				
-				if(  $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+			$this->data = $this->PodcastItem->get( $key );
 	
-					// Set the deleted status to "2", scheduled for deletion.
-					$this->data['PodcastItem']['deleted'] = 2;
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
-					
-					$this->Session->setFlash('We successfully scheduled the '.MEDIA.' for deletion.', 'default', array( 'class' => 'success' ) );
-					
-				} else {
-					
-					$this->Session->setFlash('We could not schedule the '.MEDIA.' for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
-				}
+			// If we did not find the podcast media then redirect to the referer.
+			if( empty( $this->data ) ) {
+	
+				$this->Session->setFlash('We could not find the '.MEDIA.' you were looking for.', 'default', array( 'class' => 'error' ) );
 				
 			} else {
-
-				$this->PodcastItem->delete( $id );				
-				$this->Session->setFlash('We successfully deleted the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+				
+				// Check to see if any flavours of media exist and if true, delete them
+				if( $this->PodcastItem->listAssociatedMedia( $this->data )  ) {
+					
+					if(  $this->Api->deleteFileOnMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+		
+						// Set the deleted status to "2", scheduled for deletion.
+						$this->data['PodcastItem']['deleted'] = 2;
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+						
+						$this->Session->setFlash('We successfully scheduled the '.MEDIA.' for deletion.', 'default', array( 'class' => 'success' ) );
+						
+					} else {
+						
+						$this->Session->setFlash('We could not schedule the '.MEDIA.'(s) for deletion. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+					}
+					
+				} else {
+	
+					$this->PodcastItem->delete( $key );				
+					$this->Session->setFlash('We successfully deleted the '.MEDIA.'(s).', 'default', array( 'class' => 'success' ) );
+				}
 			}
-        }
-        
+		}
+		
         $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
     }
 	
@@ -818,36 +803,43 @@ class PodcastItemsController extends AppController {
 
         $this->autoRender = false;
 		$this->PodcastItem->recursive = 3; // Raise the recursive from the default so we have the necessary data to listAssociatedMedia
-        $this->data = $this->PodcastItem->findById( $id );
+		
+        if( $id )
+            $this->data['PodcastItem']['Checkbox'][$id] = true;
 
-        if( empty( $this->data ) ) {
-
-            $this->Session->setFlash('We could not identify the '.MEDIA.' you are trying to restore.', 'default', array( 'class' => 'error' ) );
-
-        } else {
-
-			if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
-
-				// Soft delete the podcast
-				$this->data['PodcastItem']['deleted'] = false;
-				$this->PodcastItem->set( $this->data );
-				$this->PodcastItem->save();
-
-				if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+			
+			$this->data = $this->PodcastItem->findById( $key );
+	
+			if( empty( $this->data ) ) {
+	
+				$this->Session->setFlash('We could not identify one of more of the '.MEDIA.'s you are trying to restore.', 'default', array( 'class' => 'error' ) );
+	
+			} else {
+	
+				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+	
+					// Soft delete the podcast
+					$this->data['PodcastItem']['deleted'] = false;
+					$this->PodcastItem->set( $this->data );
+					$this->PodcastItem->save();
+	
+					if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+						
+						$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been restored but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+					} else {
 					
-					$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been restored but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+						$this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+					}
+	
 				} else {
-                
-	                $this->Session->setFlash('We successfully restored the '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+	
+					$this->Session->setFlash('We were unable to restore the '.MEDIA.', please try again.', 'default', array( 'class' => 'error' ) );
 				}
-
-            } else {
-
-                $this->Session->setFlash('We were unable to restore the '.MEDIA.', please try again.', 'default', array( 'class' => 'error' ) );
-            }
-
-        }
-
+	
+			}
+		}
+		
         $this->redirect( array( 'admin' => true, 'controller' => 'podcast_items', 'action' => 'index', $this->data['PodcastItem']['podcast_id'].'#tracks' ) );
     }
     

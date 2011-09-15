@@ -96,6 +96,7 @@ ul, li {
 	background: #003d4c;
 	text-decoration: underline;
 }
+
 #content{
 	margin: 20px 0 0 0;
 	background: #fff;
@@ -103,12 +104,14 @@ ul, li {
 	color: #333;
 	padding: 0px 20px 20px 20px;
 	overflow: auto;
-}
+	border: 1px dotted red;
+	}
+
 #footer {
 	clear: both;
 	padding: 6px 10px;
 	text-align: right;
-}
+	}
 
 /** containers **/
 div.form,
@@ -858,7 +861,7 @@ ul#breadcrumb li {
 }
 
 ul#breadcrumb li a	{
-	background: #ccc url(/img/icon-16-link.png) no-repeat 2px center;
+	background: #fff url(/img/icon-16-link.png) no-repeat 2px center;
 	color: #003d4c;
 	border: 0px solid #003d4c;
 	border-radius: 4px;

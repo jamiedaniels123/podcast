@@ -31,6 +31,7 @@ class PodcastItemMediasController extends AppController {
 	function admin_delete( $id ) {
 		
         $this->autoRender = false;
+		$this->PodcastItemMedia->recursive = 2;
         $this->data = $this->PodcastItemMedia->findById( $id );
 	
         // If we did not find the podcast media then redirect to the referer.

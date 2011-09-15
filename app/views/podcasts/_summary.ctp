@@ -54,7 +54,7 @@
         </dl>
     </div>
 
-	<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
+	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 
 
         <div class="action_buttons">

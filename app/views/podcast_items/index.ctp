@@ -17,11 +17,17 @@
 	            	<th class="icon-col">YouTube</th>
 	            </tr>
 	        </thead>
-	        <?php foreach( $this->data['PodcastItems'] as $podcast_item ) : ?>
-	        
+	        <?php 
+				$i = 0;
+				foreach( $this->data['PodcastItems'] as $podcast_item ) :
+					$class = null;
+					if ($i++ % 2 == 0) :
+						$class = ' class=" altrow "';
+					endif;
+                ?>		        
 	        	<?php if( $this->Object->isDeleted( $podcast_item['PodcastItem'] ) == false ) : ?>
 	        	
-		        	<tr>
+		        	<tr <?php echo $class; ?>>
 						<?php if( $this->Permission->toUpdate( $this->data ) && $this->Permission->isAdminRouting( $this->params ) == false ) : ?>
 		                    <td width="15px" align="center">
 	                            <input type="checkbox" name="data[PodcastItem][Checkbox][<?php echo $podcast_item['PodcastItem']['id']; ?>]" class="podcast_item_selection" id="PodcastItemCheckbox<?php echo $podcast_item['PodcastItem']['id']; ?>">

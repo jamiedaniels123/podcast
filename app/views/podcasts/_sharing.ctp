@@ -41,7 +41,7 @@
         </dl>
     <div class="action_buttons">
     	<ul>
-		<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
+	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
             <li><a href="/" class="jquery_display button blue"  type="button" data-source="PodcastSharingContainer" data-target="FormPodcastSharingContainer" id="PodcastSharingButton"><span>edit</span></a></li>
 	    <?php endif; ?>
 	    </ul>
