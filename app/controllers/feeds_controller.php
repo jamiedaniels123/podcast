@@ -25,7 +25,7 @@ class FeedsController extends AppController {
      * @updated : 16th June 2011
      * @by : Charles Jackson
      */
-    function add( $id = null ) {
+    function add( $id = null, $flavour = null ) {
 		
 		Configure::write('debug',0);
         $this->autoRender = false;
@@ -55,24 +55,28 @@ class FeedsController extends AppController {
 			if( !empty( $podcast ) ) {
 				
 				foreach( $this->Feed->rss_flavours as $flavour ) {
+
+					// If we have a specific flavour only generate the associated RSS feed else generate them all
+					if( $flavour == null || $flavour == $flavour['media_type'] ) {					
 					
-					// We do everything twice, first time through we create the genuine RSS feeds that only contains
-					// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the
-					// media player and contains all available podcast items regardless of whether they are published.
-
-					// FIRST TIME THROUGH
-					$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour ) );
-					$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-					$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
-					$rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , $flavour['rss_filename'] );
-
-					// SECOND TIME THROUGH : Top-secret RSS feed for media player, shhh don't tell anyone! :-)
-					//die( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
-					$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
-
-					$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-					$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
-					$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+						// We do everything twice, first time through we create the genuine RSS feeds that only contains
+						// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the
+						// media player and contains all available podcast items regardless of whether they are published.
+	
+						// FIRST TIME THROUGH
+						$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour ) );
+						$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+						$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
+						$rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , $flavour['rss_filename'] );
+	
+						// SECOND TIME THROUGH : Top-secret RSS feed for media player, shhh don't tell anyone! :-)
+						//die( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+						$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+	
+						$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+						$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
+						$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+					}
 				}
 
 				if( $this->Api->transferFileMediaServer( $rss_array ) == false ) {
@@ -115,7 +119,7 @@ class FeedsController extends AppController {
         $podcast_items = array();
         
         $Podcast = ClassRegistry::init('Podcast');
-        //$Podcast->recursive = 2;
+        $Podcast->recursive = 2;
 
 		// We need to dynamically bind a model for the media player that contains all tracks not just those that have been published.
 		$Podcast->bindModel( array(
