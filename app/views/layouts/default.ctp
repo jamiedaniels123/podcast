@@ -5,8 +5,6 @@
     <title>
         <?php echo $title_for_layout; ?>
     </title>
-    <link rel="stylesheet" type="text/css" media="all" href="/cgi-bin/filechucker.cgi?css" />
-
     <?php
         echo $this->Javascript->link('jquery.js');
         echo $this->Javascript->link('jquery-ui.js');
@@ -30,6 +28,7 @@
     
     <!--[if IE]>
         <link rel="stylesheet" type="text/css" href="/css/all-ie-only.css" />
+        <link rel="stylesheet" type="text/css" href="/css/interface_ie.css" />
 	<![endif]-->
     
 </head>
