@@ -153,7 +153,7 @@ DEFINE('YOUTUBE', 'YOUTUBE');
 DEFINE('YES', 'Y');
 DEFINE('NO', 'N');
 
-DEFINE('REGISTER_BY_OUCU', true );
+DEFINE('REGISTER_BY_OUCU', false );
 DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <cj3998@openmail.open.ac.uk>' );
 
 DEFINE('WIDE_SCREEN_FLOAT', '0.5625');

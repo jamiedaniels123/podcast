@@ -1,4 +1,4 @@
-<div id="FormPodcastSummary">
+<div id="FormPodcastSummary" class="one_column">
     <input type="hidden" id="PodcastElement" name="data[Podcast][element]" value="<?php echo $element; ?>">
     <input type="hidden" id="PodcastId" name="data[Podcast][id]" value="<?php echo $this->data['Podcast']['id']; ?>">
     <input type="hidden" id="PodcastCustomId" name="data[Podcast][custom_id]" value="<?php echo $this->data['Podcast']['custom_id']; ?>">
@@ -36,10 +36,10 @@
         <?php endif; ?>
     </div>
     
-    <div class="action_buttons" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>			
+    <div class="action_buttons track_save_cancel" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>			
         <ul>
-            <li><button id="PodcastUpdateButton" type="submit" class="button blue auto_select_and_submit">update</button></li>
-            <li><button id="PodcastCancelButton" type="submit" class="button blue">cancel</button></li>
+            <li><button id="PodcastUpdateButton" type="submit" class="button approve auto_select_and_submit"><span>update</span></button></li>
+            <li><button id="PodcastCancelButton" type="button" class="button delete"><span>cancel</span></button></li>
         </ul>
     </div>
 </div>

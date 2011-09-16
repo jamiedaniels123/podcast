@@ -79,6 +79,15 @@ h3 a:hover {text-decoration: underline;}
 
 /*Specific button decorations*/
 
+#PodcastUpdateButton 	{
+	margin:0 0 0 0;
+	padding:0;
+	}
+	
+#PodcastCancelButton	{
+	border: 0px;
+	}
+
 .add {
 	background:#fff url(/img/add-new.png) no-repeat 2px center;
 	color: #003d4c;
@@ -96,9 +105,13 @@ h3 a:hover {text-decoration: underline;}
 .select_all {
 	background: #418db1;
 	color: #fff;
-	border: 1px solid #fff;
+	border: 1px solid #418db1;
 	padding: 2px 4px 2px 4px!important;
-	}	
+	}
+	
+.select_all:hover	{
+	color: #fff;
+	}
 	
 .delete {
 	/*background:url(/img/icon-16-link-delete.png) no-repeat 2px center #ffffff;*/
@@ -402,7 +415,7 @@ td.publish_itunes_u, td.publish_youtube, th.publish_itunes_u, th.publish_youtube
 
 textarea#PodcastSummary, textarea#PodcastItemSummary, textarea#PodcastItemYoutubeDescription, textarea#PodcastItemYoutubeRightsCleared, textarea#PodcastItemYoutubeNotes {
 	
-	width: 97%;
+	width: 50%;
 	height: 100px;	
 	
 }

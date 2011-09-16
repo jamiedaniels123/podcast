@@ -1,4 +1,4 @@
-<div id="FormPodcastSummaryContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
+<div id="FormPodcastSummaryContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?> class="float_left two_column">
     <div class="input text">
         <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
         <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
@@ -35,7 +35,7 @@
                             <a class="button delete" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')">delete</a>
                         <?php endif; ?>
                     </div>
-                    <div class="float_left">
+                    <div >
                         <label for="PodcastNewImage">Image</label>
                         <input type="file" size="60" id="PodcastNewImage" name="data[Podcast][new_image]">
                         <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
