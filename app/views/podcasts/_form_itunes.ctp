@@ -1,6 +1,6 @@
 <div id="FormPodcastItunesContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?> class="float_left two_columnn content">
 	<div class="input file">
-        <div class="">
+        <div class="image">
             <div class="float_right text_right">
 		       <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="thumbnail image" />
                 <?php if( !empty( $this->data['Podcast']['image_logoless'] ) ) : ?>
@@ -24,7 +24,7 @@
         <?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
 	</div>
     <div class="input file">
-        <div class="">
+        <div class="image">
             <div class="float_right text_right">
 		       <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_wide'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="thumbnail image" />
                 <?php if( !empty( $this->data['Podcast']['image_wide'] ) ) : ?>

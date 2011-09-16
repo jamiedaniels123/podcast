@@ -13,16 +13,26 @@
 
         <?php echo $this->element('../podcasts/_summary'); ?> 
         <?php echo $this->element('../podcasts/_form_summary'); ?> 
+                
     </div>
+    
     <div <?php echo $element == 'sharing' ? 'class="sharing"' : 'style="display:none"'; ?>>        
-        <?php echo $this->element('../podcasts/_sharing'); ?>
+    
         <?php echo $this->element('../podcasts/_form_sharing'); ?>
+        <?php echo $this->element('../podcasts/_sharing'); ?>
+
+        
     </div>
+    
     <div <?php echo $element == 'youtube' ? 'class="youtube"' : 'style="display:none"'; ?>>        
+    
         <?php echo $this->element('../podcasts/_youtube'); ?>
         <?php echo $this->element('../podcasts/_form_youtube'); ?>
+        
     </div>
+    
     <div <?php echo $element == 'itunes' ? 'class="itunes"' : 'style="display:none"'; ?>>        
+    
         <?php echo $this->element('../podcasts/_itunes'); ?>
 
         <?php if( $this->Permission->isItunesUser() ) : ?>
@@ -34,6 +44,7 @@
             <?php echo $this->element('../podcasts/_form_itunes_lite'); ?>
             
         <?php endif; ?>
+        
     </div>
     
     <div class="action_buttons track_save_cancel" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>			

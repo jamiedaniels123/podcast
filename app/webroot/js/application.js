@@ -309,9 +309,9 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var source = jQuery(this).attr('data-source');
 		var target = jQuery(this).attr('data-target');
-		jQuery('#'+source).slideUp();
+		jQuery('#'+source).slideUp('fast');
 		jQuery(this).parents('.action_buttons').hide();
-		jQuery('#'+target).slideDown();
+		jQuery('#'+target).slideDown('fast');
 		jQuery('#PodcastUpdateButtonContainer').show();
 	});
 
