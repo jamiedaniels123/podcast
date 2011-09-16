@@ -57,9 +57,10 @@
 	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
 
 
-        <div class="action_buttons">
+        <div class="action_buttons track_save_cancel">
             <ul>
-                    <li><a href="/" class="jquery_display button blue"  type="button" data-source="PodcastSummaryContainer" data-target="FormPodcastSummaryContainer" id="PodcastSummaryButton"><span>edit</span></a></li>
+                    <li><a href="/" class="jquery_display button edit"  data-source="PodcastSummaryContainer" data-target="FormPodcastSummaryContainer" id="PodcastSummaryButton"><span>edit</span></a></li>
+                    <li><a class="button rss" href="/feeds/add/<?php echo $podcast['id']; ?>" onclick="return confirm('Are you sure?');"><span>RSS Refresh</span></a></li>
             </ul>
         </div>
 	<?php endif; ?>

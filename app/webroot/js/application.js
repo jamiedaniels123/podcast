@@ -15,6 +15,22 @@ jQuery(document).ready(function($) {
 	if( jQuery('#flashMessage.error .error_message').length ) {
 		jQuery('#flashMessage.error .error_message').effect('highlight', { color: '#ff0000' }, 2000 );
 	}
+
+
+	// This is a fix for internet explorer. 
+	// If the user is viewing a tabbed page this will remove the background image from the
+	// currently active tab. In all other browsers this is taken care of by CSS.
+	// Bl**dy silly IE.
+	if ( jQuery('#tab-zone').length > 0 ) { 
+
+		var element = jQuery('#PodcastElement').val();
+		if ( jQuery('#' + element ).length > 0 ) { 
+
+			jQuery( '#' + element ).find('a:first').removeClass('tab_link');
+
+			//alert( jQuery( '#' + element + ':first-child' ).attr('href') );
+		}
+	};
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
@@ -293,9 +309,9 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var source = jQuery(this).attr('data-source');
 		var target = jQuery(this).attr('data-target');
-		jQuery('#'+source).slideUp();
+		jQuery('#'+source).slideUp('fast');
 		jQuery(this).parents('.action_buttons').hide();
-		jQuery('#'+target).slideDown();
+		jQuery('#'+target).slideDown('fast');
 		jQuery('#PodcastUpdateButtonContainer').show();
 	});
 
@@ -310,8 +326,23 @@ jQuery(document).ready(function($) {
 		jQuery('.ui-widget-overlay').click(function() { $("#modal").dialog("close"); });
 		getPodcastItem( id, 'summary' ); // specify the podcast_item ID and the element we wish to display onload.
 	});
+
+	// Changes the active tab when clicked at podcast_item ( track ) level.
+	jQuery('.tab_link').live('click',function(e) {
+		
+		if( jQuery('#PodcastUpdateButton').is(":visible") ) {
+
+			if( confirm('You will lose any unsaved changes. Are you sure you wish to continue?') ) {
+				
+				return true;
+			}
+			
+			e.preventDefault(); // Stop the link from loading			
+		}
+			
+	});
 	
-	// Changes the active tab when clicked.
+	// Changes the active tab when clicked at podcast_item ( track ) level.
 	jQuery('.PodcastItemPreviewLink').live('click',function(e) {
 		
 		e.preventDefault(); // Stop the link from loading
@@ -372,6 +403,21 @@ jQuery(document).ready(function($) {
 			var url = jQuery(this).attr('href');
 			ajaxCall( url );
 		}
+		
+	});
+	
+	// Enables a user to cancel any form input by reloading the page.
+	jQuery('#PodcastCancelButton').click( function(e) {
+		
+		e.preventDefault();
+		if( confirm('WARNING! You will lose all your changes.') ) {
+
+			var url = window.location.pathname;
+			window.location = url;
+			
+		}
+		
+		return false;
 		
 	});
 });

@@ -136,7 +136,7 @@
     
 	<?php if( $this->Permission->isAdminRouting( $this->params ) || ( $this->Object->editing( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['owner_id'] ) ) || ( $this->Object->changeOfOwnership( $this->data['Podcast'] ) && $this->Permission->isOwner( $this->data['Podcast']['current_owner_id'] ) ) ) : ?>
 	
-        <div class="input text">
+        <div class="input text single_row_item">
 			<label for="PodcastOwnerId">Owner</label>
 			<?php if( $this->Object->changeOfOwnership( $this->data['Podcast'] ) ) : ?>
 				<input type="hidden" name="data[Podcast][current_owner_id]" value="<?php echo $this->data['Podcast']['current_owner_id']; ?>" id="PodcastCurrentOwnerId" />
