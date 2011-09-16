@@ -819,6 +819,11 @@ div.float_left {
 	float: left;
 	background-color:rgb(245,250,252);
 	}
+	
+div.track_float_left {
+	float: left;
+	background-color:#58585A;
+	}	
 
 div.clear {
     clear: both;
@@ -938,6 +943,10 @@ div.float_left dl dd {
 div.two_column {
 	padding: 5px;	
 	}
+	
+div.track_two_column {
+	padding: 5px;	
+	}	
 
 div.one_column {
 	padding: 5px;
@@ -1009,7 +1018,7 @@ fieldset#notification div {
 div.action_buttons {	
 	/*padding-top: 10px;	
 	padding-bottom: 20px;*/		
-	width: 100%;
+	/*width: 100%;*/
 	clear: left;
 	}
 
