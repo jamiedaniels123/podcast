@@ -23,7 +23,7 @@
              
 			 <?php if( $this->Permission->isAdminRouting( $this->params ) == false ) : ?>
          
-                 <div id="sharing"><a class="tab_link" href="/podcasts/edit/<?php echo $podcast['id']; ?>/sharing#sharing"><span class="collection_tab_track-icon">Sharing &amp; Ownership</span></a>
+                 <div id="sharing"><a class="tab_link" href="/podcasts/edit/<?php echo $podcast['id']; ?>/sharing#sharing"><span class="collection_tab_sharing-icon">Sharing &amp; Ownership</span></a>
                  </div><!--YouTube-->
                  
                 <?php if( $this->Object->isPodcast( $podcast['podcast_flag'] ) ) : ?>    

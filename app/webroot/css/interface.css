@@ -111,6 +111,11 @@ div.tabs *:target {
 	padding: 2px 2px 2px 22px!important;
 	}
 	
+.collection_tab_sharing-icon	{
+	background:url(/img/icon-sharing.png) no-repeat 2px center;
+	padding: 2px 2px 2px 22px!important;
+	}	
+	
 .collection_tab_summary-icon	{
 	background:url(/img/info.png) no-repeat 2px center;
 	padding: 2px 2px 2px 22px!important;
