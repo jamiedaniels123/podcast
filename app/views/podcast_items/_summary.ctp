@@ -4,6 +4,7 @@
 	        <div class="clear"></div>
             <img src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'].'.jpg', $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="podcast image" />
     </div>
+     <div class="float_left two_column">
     <dl>
         <dt>Title: </dt>
         <dd><?php echo $this->data['PodcastItem']['title']; ?>&nbsp;</dd>
@@ -34,13 +35,14 @@
         <dt>Parent Collection</dt>
         <dd><?php echo $this->data['Podcast']['title']; ?>&nbsp;</dd>
     </dl>
+    </div>
 </div>
 <?php 
 if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
-	<div class="action_buttons">
+	<div class="action_buttons track_save_cancel">
 		<ul>
 			<li>
-				<button class="jquery_display save"  type="button" data-source="PodcastItemSummaryContainer" data-target="FormPodcastItemSummaryContainer" id="PodcastItemSummaryButton"><span>edit</span></button>
+				<button class="jquery_display edit_track button"  type="button" data-source="PodcastItemSummaryContainer" data-target="FormPodcastItemSummaryContainer" id="PodcastItemSummaryButton"><span>Edit</span></button>
 			</li>
 		</ul>
 	</div>            
