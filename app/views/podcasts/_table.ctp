@@ -149,8 +149,8 @@ endif; ?>
 
     <div class="left">
     <a href="/" class="toggler button setting" data-status="unticked">Select/Unselect all</a>
-	<a class="button rss multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts">Refresh RSS</a>
 	<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+		<a class="button rss multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts">Refresh RSS</a>
 		<a class="button delete multiple_action_button" type="button" href="/admin/podcasts/delete" id="delete_multiple_podcasts">Delete</a>    	
 		<a class="button restore multiple_action_button" type="button" href="/admin/podcasts/restore" id="restore_multiple_podcasts">Restore</a>    	        
 	<?php else : ?>
