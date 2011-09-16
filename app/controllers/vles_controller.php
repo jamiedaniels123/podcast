@@ -1,4 +1,35 @@
 <?php
+/*
+ * @NOTES ON VLE : The VLE solution is untested code and will require further modifications. In short, it receives a 
+ * command from the API and acts upon it by sending, if necessary, further commands to the API using a seperate HTTP requests
+ * plus the original request received back to the API with new elements, noteably a "status" element.
+ 
+ * Lastly, for all commands received it will echo an ACK or a NACK. A NACK will only be posted if we are unable to match 
+ * the command sent against the array held in the vle.php model.
+ *
+ * There are 'X' basic VLE commands, all lowercase, understood by the admin box as follows :
+ * 
+ * "CREATE-CONTAINER" : Upon receipt of this command we create a new row on the podcasts database table then
+ * send the original commmand back to the API using a seperate http request with two new elements entitled "status" that equals "Y" or
+ * "N" and "podcast_id".
+ *
+ * "DELETE-CONTAINER" : Delete a row from the podcasts database table, then send a command to the API removing it from the 
+ * medias box, lastly send the original command back to the API with a "status" element that will be passed back to the VLE.
+ *
+ * "DELETE-MEDIA" : Will soft-delete media by posting a command to the API to rename the media file(s) by prefixing "." to the start
+ * and it will then update the appropriate row on the podcast_items table setting the "deleted" flag to "1". Lastly, it returns the
+ * original command back to the API with new "status" element.
+ *
+ * "SUBMIT-MEDIA" : Will insert a new row on the podcast_items table than make a call to the API to transcode the media. Note, the 
+ * "transcode media" command passed to the API will contain an element called "provider" that will contain the value "vle" which enables
+ * the API to pick the media from the VLE location as opposed to the default location on the admin media box. Lastly it will post the original
+ * message back to the admin api with a status flag.
+ * 
+ * "METADATA-UPDATE" : 
+ * 
+ * "GET-MEDIA-ENDPOINT-URL" :
+ *
+ */
 class VlesController extends AppController {
 
 	var $name = 'Vles';
@@ -149,8 +180,9 @@ class VlesController extends AppController {
 					$data[] = $row;
 				}				
 				
-			} elseif( strtolower( $this->Vle->data['command'] ) == 'submit-media' ) {
+			} elseif( strtolower( $this->Vle->data['command'] ) == 'metadata-update' ) {
 				
+			} elseif( strtolower( $this->Vle->data['command'] ) == 'get-media-endpoint-url' ) {
 				
 			}
 
@@ -159,6 +191,7 @@ class VlesController extends AppController {
 			// We cannot understand the VLE command that has been sent.
 			$Notification->malformedVleData( $this->Vle->json );
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
+			
 		}
 	}
 }

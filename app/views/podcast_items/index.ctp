@@ -60,7 +60,9 @@
 		    	<?php endif; ?>
 		    	
 	        <?php endforeach; ?>
+            
 			</tbody>	        
+            
 	    </table>
 
 		<?php echo $this->element('pagination'); ?>    
