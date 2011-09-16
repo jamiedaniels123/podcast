@@ -1,6 +1,6 @@
 <?php echo $this->element('tabs'); ?>
-<div class="content">
-    <p style="margin: 20px 0;">
+<div class="float_left content">
+    <p>
         You can upload files up to 20Gb in size. <?php echo ucfirst( MEDIA ); ?> will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
         Please ensure your filenames end with the correct extension. See below for supported formats.
     </p>

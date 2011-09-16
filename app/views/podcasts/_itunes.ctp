@@ -76,7 +76,7 @@
 	<div class="action_buttons track_save_cancel">
         <ul>
 			<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-                <li><a href="/" class="jquery_display button blue"  data-source="PodcastItunesContainer" data-target="FormPodcastItunesContainer" id="PodcastItunesButton"><span>edit</span></a></li>
+                <li><a href="/" class="jquery_display button edit"  data-source="PodcastItunesContainer" data-target="FormPodcastItunesContainer" id="PodcastItunesButton"><span>edit</span></a></li>
 			<?php endif; ?>
                                 
             <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForItunes( $this->data['Podcast'] ) == false ) && $this->Permission->isItunesUser() == false ) : ?>

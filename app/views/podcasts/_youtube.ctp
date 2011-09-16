@@ -14,7 +14,7 @@
    	<div class="action_buttons track_save_cancel">
     	<ul>
         <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
-	            <li><a href="/" class="jquery_display button blue"  data-source="PodcastYoutubeContainer" data-target="FormPodcastYoutubeContainer" id="PodcastYoutubeButton"><span>edit</span></a></li>
+	            <li><a href="/" class="jquery_display button edit"  data-source="PodcastYoutubeContainer" data-target="FormPodcastYoutubeContainer" id="PodcastYoutubeButton"><span>edit</span></a></li>
 		<?php endif; ?>
         
             <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForYoutube( $this->data['Podcast'] ) == false ) && $this->Permission->isYoutubeUser() == false ) : ?>

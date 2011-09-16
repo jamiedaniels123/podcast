@@ -44,7 +44,7 @@
     <div class="action_buttons track_save_cancel">
     	<ul>
 	<?php if( $this->Permission->toUpdate( $this->data ) || $this->Permission->isAdminRouting( $this->params ) ) : ?>
-            <li><a href="/" class="jquery_display button blue"  type="button" data-source="PodcastSharingContainer" data-target="FormPodcastSharingContainer" id="PodcastSharingButton"><span>edit</span></a></li>
+            <li><a href="/" class="jquery_display button edit"  type="button" data-source="PodcastSharingContainer" data-target="FormPodcastSharingContainer" id="PodcastSharingButton"><span>edit</span></a></li>
 	    <?php endif; ?>
 	    </ul>
 	</div>
