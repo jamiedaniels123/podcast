@@ -1,5 +1,5 @@
 <div id="PodcastYoutubeContainer" <?php echo isSet($edit_mode) ? 'style="display:none"' : ''; ?>>
-    <dl>
+    <div class="float_left one_column"><dl>
         <dt>Series Playlist:&nbsp;</dt>
         <dd><?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>&nbsp;</dd>
         <dt>Series Playlist Link:&nbsp;</dt>
@@ -8,9 +8,10 @@
         <dd><?php echo $this->data['Podcast']['youtube_channel']; ?>&nbsp;</dd>
         <dt>Course Code:&nbsp;</dt>
         <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
-    </dl>    
+    </dl>
+    </div>    
 
-   	<div class="action_buttons">
+   	<div class="action_buttons track_save_cancel">
     	<ul>
         <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	            <li><a href="/" class="jquery_display button blue"  data-source="PodcastYoutubeContainer" data-target="FormPodcastYoutubeContainer" id="PodcastYoutubeButton"><span>edit</span></a></li>

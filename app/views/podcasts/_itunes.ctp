@@ -73,7 +73,7 @@
             <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
         </dl>    
 	</div>
-	<div class="action_buttons">
+	<div class="action_buttons track_save_cancel">
         <ul>
 			<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
                 <li><a href="/" class="jquery_display button blue"  data-source="PodcastItunesContainer" data-target="FormPodcastItunesContainer" id="PodcastItunesButton"><span>edit</span></a></li>
