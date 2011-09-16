@@ -15,6 +15,22 @@ jQuery(document).ready(function($) {
 	if( jQuery('#flashMessage.error .error_message').length ) {
 		jQuery('#flashMessage.error .error_message').effect('highlight', { color: '#ff0000' }, 2000 );
 	}
+
+
+	// This is a fix for internet explorer. 
+	// If the user is viewing a tabbed page this will remove the background image from the
+	// currently active tab. In all other browsers this is taken care of by CSS.
+	// Bl**dy silly IE.
+	if ( jQuery('#tab-zone').length > 0 ) { 
+
+		var element = jQuery('#PodcastElement').val();
+		if ( jQuery('#' + element ).length > 0 ) { 
+
+			jQuery( '#' + element ).find('a:first').removeClass('tab_link');
+
+			//alert( jQuery( '#' + element + ':first-child' ).attr('href') );
+		}
+	};
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.

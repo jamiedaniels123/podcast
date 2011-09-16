@@ -1,13 +1,9 @@
 div.tabs > div > {
 	height: 150px;	
 }
-div.tabs > div > a {
-    background: url(/img/collection-tab-background-unselected.png) repeat-x 0 0 rgb(245,250,252)!important;
-	/*color: #00ff00!important;*/
-    /*border-bottom: medium none;*/
-}
 
-div.tabs > div > a {
+a.tab_link {
+   	background: url(/img/collection-tab-background-unselected.png) repeat-x 0 0 rgb(245,250,252)!important;
     background: rgb(245,250,252);
 	border-right-color: #BAD6ED;
     border-style: none solid none none;
