@@ -1,6 +1,6 @@
-<div id="FormPodcastItunesContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
+<div id="FormPodcastItunesContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?> class="float_left two_columnn content">
 	<div class="input file">
-        <div class="image thumbnail wrapper">
+        <div class="image thumbnail">
             <div class="float_right text_right">
 		       <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image_logoless'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION); ?>" title="thumbnail image" />
                 <?php if( !empty( $this->data['Podcast']['image_logoless'] ) ) : ?>
@@ -8,7 +8,7 @@
                     <a class="button delete" href="/podcasts/delete_image/image_logoless/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the iTunes logoless image?')">delete</a>
                 <?php endif; ?>
             </div>
-            <div class="float_left">
+            <div class="input text">
                 <label for="PodcastNewImageLogoless">Logoless image</label>
                 <input type="file" id="PodcastNewImageLogoless" name="data[Podcast][new_image_logoless]">
                 <input type="hidden" id="PodcastImageLogoless" name="data[Podcast][image_logoless]" value="<?php echo $this->data['Podcast']['image_logoless']; ?>">            
