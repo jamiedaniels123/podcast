@@ -1195,7 +1195,9 @@ class Podcast extends AppModel {
 		//Wrapped in two arrays so we create a multidimensional solution inline with all API commands.
 		$api_information = array( array(
 			'source_path' => $original_custom_id,
-			'destination_path' => $this->data['Podcast']['custom_id']
+			'destination_path' => $this->data['Podcast']['custom_id'],
+			'podcast_id' => $this->data['Podcast']['id'], // We append this information because it is needed by the vle_controller
+			'title' => $this->data['Podcast']['title'] // // We append this information because it is needed by the vle_controller
 		) );
 			
 		if ( $this->saveAll( $this->data, array('validate' => false ) ) ) {

@@ -75,13 +75,13 @@ class VlesController extends AppController {
 					// If the variable podcast is populated then we were successful
 					if( (int)$id  ) {
 						
-						$row['status'] = YES;
+						$row['status'] = 'OK';
 						$row['podcast_id'] = $id;
 						
 					// The creation of the podcast failed, bummer	
 					} else {
 						
-						$row['status'] = NO;
+						$row['status'] = 'NOK';
 						$row['podcast_id'] = null;
 					}
 					
@@ -109,12 +109,12 @@ class VlesController extends AppController {
 					) ) {
 					
 						$Podcast->delete( $data['Podcast']['id'] );					
-						$row['status'] = YES;
+						$row['status'] = 'OK';
 						
 					} else {
 					
 					
-						$row['status'] = NO;
+						$row['status'] = 'NOK';
 					}
 					
 					$data[] = $row;
@@ -136,11 +136,11 @@ class VlesController extends AppController {
 						$podcast_item['PodcastItem']['deleted'] = 1;
 						$Podcast->PodcastItems->set( $podcast_item );					
 						$Podcast->PodcastItems->save();
-						$row['status'] = YES;
+						$row['status'] = 'OK';
 						
 					} else {
 					
-						$row['status'] = NO;
+						$row['status'] = 'NOK';
 					}
 					
 					$data[] = $row;
@@ -168,12 +168,12 @@ class VlesController extends AppController {
 						
 						$this->Api->transcodeMediaAndDeliver( $podcast['Podcast']['custom_id'], $row['filename'], $row['workflow'], $podcast['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'], 'vle' );
 						$Podcast->PodcastItems->commit();
-						$row['status'] = YES;
+						$row['status'] = 'OK';
 							
 					} else {
 							
 						$Podcast->PodcastItems->rollback();
-						$row['status'] = NO;						
+						$row['status'] = 'NOK';						
 					}
 
 					$data[] = $row;
@@ -192,11 +192,11 @@ class VlesController extends AppController {
 						)
 					) ) {
 						
-						$row['status'] = YES;
+						$row['status'] = 'OK';
 						
 					} else {
 						
-						$row['status'] = NO;
+						$row['status'] = 'NOK';
 					}
 					
 					$data[] = $row;
@@ -207,19 +207,51 @@ class VlesController extends AppController {
 				foreach( $this->data['data'] as $row ) {
 
 					$podcast_item = array();
-					
+					$row['status'] = 'NOK';
 					$podcast_item = $Podcast->PodcastItem->findById( $row['mediaID'] );
+					
 					foreach( $podcast_item['PodcastMedia'] as $media ) {
+						
 						
 						if( $media['media_type'] == 'default' ) {
 							$filename = $media['filename'];	
+							$row['status'] = 'OK';
 							break;
 						}
 					}
 					
-					$row['end_point_url'] = $podcast_item['Podcast']['custom_id'].'/'.$filename;
+					$row['url'] = $podcast_item['Podcast']['custom_id'].'/'.$filename;
 					$data[] = $row;
 				}				
+				
+			} elseif( strtolower( $this->Vle->data['command'] ) == 'clone-container' ) {
+				
+				foreach( $this->data['data'] as $row ) {
+					
+					$podcast = array();
+					$api_data = $Podcast->copy( $row['containerID'] );
+					$row['status'] = 'NOK';
+					
+					if( $api_data ) {
+
+						if( $this->Api->copyMediaFolder( $api_data ) ) {
+					
+							if( $this->__generateRSSFeeds( $api_data['podcast_id'] ) ) {
+								
+								$row['status'] = 'OK';
+								$row['containerID'] = $api_data['podcast_id'];
+								
+								// Update the podcast with the new title 
+								$podcast = $Podcast->findById( $api_data['podcast_id'] );
+								$podcast['Podcast']['title'] = $row['title'];
+								$Podcast->set( $podcast );
+								$Podcast->save();
+							}
+						}
+					}
+					
+					$data[] = $row;					
+				} 
 			}
 
 			// Noe send the updated data back to the API using the shared API method "response". The API will pass this back to the
