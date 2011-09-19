@@ -168,7 +168,7 @@ class Podcast extends AppModel {
         'PublishedPodcastItems' => array(
             'className' => 'PodcastItem',
             'foreignKey' => 'podcast_id',
-            'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL', 'PublishedPodcastItems.media_type != "transcript"'
+            'conditions' => 'PublishedPodcastItems.published_flag = "Y"', 'PublishedPodcastItems.processed_state = 9', 'PublishedPodcastItems.title IS NOT NULL'
         ),
         'PodcastModerators' => array(
             'className' => 'UserPodcasts',
@@ -1613,9 +1613,9 @@ class Podcast extends AppModel {
 						)
 					)
 				),
-				'PublishedPodcastItems ' => array(
+				'PublishedPodcastItems' => array(
 					'fields' => array(
-						'PublishedPodcastItems .*'
+						'PublishedPodcastItems.*'
 					),
 					'PodcastMedia' => array(
 						'fields' => array(
@@ -1631,9 +1631,19 @@ class Podcast extends AppModel {
 				'iTuneCategories' => array(
 					'fields' => array(
 						'iTuneCategories.*'
+					)
+				),
+				'Categories' => array(
+					'fields' => array(
+						'Categories.*'
+					),
+					'ParentCategory' => array(
+						'fields' => array(
+							'ParentCategory.*'
+							)
 						)
 					)
-				)				
+				)
 			)
 		);
 	}
