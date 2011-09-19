@@ -28,7 +28,6 @@ namespace :deploy do
 		run "mkdir #{current_release}/app/tmp"
 		run "ln -s #{deploy_to}/#{shared_dir}/tmp #{current_release}/app/tmp/cache"
 		run "ln -s #{deploy_to}/#{shared_dir}/config/.htaccess_root #{current_release}/.htaccess"
-		run "ln -s #{deploy_to}/#{shared_dir}/config/.htaccess_webroot #{current_release}/app/webroot/.htaccess"
 	end
 	
  	task :cake, :roles => :app do 
