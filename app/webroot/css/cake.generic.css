@@ -147,7 +147,7 @@ table {
 	border-right:0;
 	clear: both;
 	color: #333;
-	margin: 5px 0 10px 0;
+	margin: 0px 0 10px 0;
 	width: 100%;
 	border-bottom:5px solid rgb(197,198,200);
 	border-spacing:0;	
@@ -922,6 +922,10 @@ dd img, fieldset.approval .status_image {
 	}
 
 div.float_left dl dd {
+	padding-left: 100px;
+	}
+	
+div.track_float_left dl dd {
 	padding-left: 100px;
 	}
 

@@ -25,7 +25,7 @@
  * the API to pick the media from the VLE location as opposed to the default location on the admin media box. Lastly it will post the original
  * message back to the admin api with a status flag.
  * 
- * "METADATA-UPDATE" : 
+ * "METADATA-UPDATE" : Fires off a meta data injection request to the API and set a status flag accordingly.
  * 
  * "GET-MEDIA-ENDPOINT-URL" :
  *
@@ -153,7 +153,7 @@ class VlesController extends AppController {
 				$data = array();
 				
 				foreach( $this->data['data'] as $row ) {
-
+					
 					$Podcast->PodcastItems->begin();
 					
 					$Podcast->PodcastItems->create();					
@@ -166,25 +166,65 @@ class VlesController extends AppController {
 						
 						$podcast = $Podcast->PodcastItems->findById( $Podcast->PodcastItems->getLastInsertId() );
 						
-						if( $this->Api->transcodeMediaAndDeliver( $podcast['Podcast']['custom_id'], $row['filename'], $row['workflow'], $podcast['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'], 'vle' ) ) {
+						$this->Api->transcodeMediaAndDeliver( $podcast['Podcast']['custom_id'], $row['filename'], $row['workflow'], $podcast['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'], 'vle' );
 						$Podcast->PodcastItems->commit();
+						$row['status'] = YES;
+							
+					} else {
+							
+						$Podcast->PodcastItems->rollback();
+						$row['status'] = NO;						
+					}
+
+					$data[] = $row;
+				}				
+				
+			} elseif( strtolower( $this->Vle->data['command'] ) == 'metadata-update' ) {
+
+				$PodcastItemMedia = ClassRegistry::init('PodcastItemMedia');
+				
+				foreach( $this->data['data'] as $row ) {
+
+					if( $this->Api->metaInject( $podcastItemMedia->buildMetaData( 
+						array( 
+							'PodcastItemMedia.podcast_item' => $row['mediaID']
+							) 
+						)
+					) ) {
 						
 						$row['status'] = YES;
 						
 					} else {
 						
-						$Podcast->PodcastItems->rollback();
 						$row['status'] = NO;
 					}
 					
 					$data[] = $row;
 				}				
 				
-			} elseif( strtolower( $this->Vle->data['command'] ) == 'metadata-update' ) {
-				
 			} elseif( strtolower( $this->Vle->data['command'] ) == 'get-media-endpoint-url' ) {
 				
+				foreach( $this->data['data'] as $row ) {
+
+					$podcast_item = array();
+					
+					$podcast_item = $Podcast->PodcastItem->findById( $row['mediaID'] );
+					foreach( $podcast_item['PodcastMedia'] as $media ) {
+						
+						if( $media['media_type'] == 'default' ) {
+							$filename = $media['filename'];	
+							break;
+						}
+					}
+					
+					$row['end_point_url'] = $podcast_item['Podcast']['custom_id'].'/'.$filename;
+					$data[] = $row;
+				}				
 			}
+
+			// Noe send the updated data back to the API using the shared API method "response". The API will pass this back to the
+			// VLE. 
+			$this->Api->response( $data, $this->Vle->data['command'] );
 
 		} else {
 			
