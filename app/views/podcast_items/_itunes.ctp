@@ -1,4 +1,6 @@
 <div id="PodcastItemItunesContainer"  class="preview" >
+
+<div class="track_float_left track_two_column">
     <dl>
         <dt>ePub ISBN: </dt>
         <dd><?php echo $this->data['PodcastItem']['epub_isbn']; ?>&nbsp;</dd>
@@ -15,13 +17,14 @@
         <dt>Rights Approved: </dt>
         <dd><?php echo $this->data['PodcastItem']['rights_approved']; ?>&nbsp;</dd>        
     </dl>
+    </div>
 </div>
 <?php
 if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
-	<div class="action_buttons">
+	<div class="action_buttons track_save_cancel">
 		<ul>
 			<li>
-				<button class="jquery_display save"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>edit</span></button>
+				<button class="jquery_display button edit_track"  type="button" data-source="PodcastItemItunesContainer" data-target="FormPodcastItemItunesContainer" id="PodcastItemItunesButton"><span>Edit</span></button>
 			</li>
 		</ul>
 	</div>            

@@ -1,53 +1,45 @@
-#item-content {
-	
-	color: #fff;	
-}
-
 @charset "utf-8";
 /* CSS Document */
 
-ul, li {
-	
-	margin: 0px;	
-}
+#item-content {
+	color: #fff;	
+	}
 
-ul.item-tab-zone {
-	
+ul, li {	
+	margin: 0px;	
+	}
+
+ul.item-tab-zone {	
 	float: left;
 	background-color: rgb(88,88,90);
 	width: 100%;
-}
+	}
 
-
-ul.item-tab-zone li {
-	
+ul.item-tab-zone li {	
 	list-style-type: none;	
 	float: left;
 	line-height: 40px;
 	background-color: #d8d9da;
 	color: #58585a;
 	padding: 0px 10px;		
-}
+	}
 
-ul.item-tab-zone li.active {
-	
+ul.item-tab-zone li.active {	
 	background-color: #58585a!important;
 	color: #d8d9da!important;
-}
-
+	}
 
 ul.item-tab-zone li > a {
 	position: relative;	
 	vertical-align:middle;
 	color: inherit;	
-}
+	}
 
 #item-content .preview {
-	
 	background-color: #58585a;
 	float: left;
 	width: 100%;
-}
+	}
 
 /* Tab-Button additions for main style sheet*/
 	
@@ -67,7 +59,7 @@ button.save, button.edit {
 	border: 0px;
 	font-size: 0.9em;
 	cursor: pointer;
-}
+	}
 	
 a.cancel {
 	color: #fff;
@@ -78,64 +70,65 @@ a.cancel {
 	border-radius: 4px;
 	}
 
-.item-tab-zone {
-	
+.item-tab-zone {	
 	padding-bottom: 20px;	
-}
+	}
 
 #item-content .input {
-padding: 0.5em;
-margin-top: 0.5em;
-background: #3d3d3f;
-border-radius: 4px;
-margin-left: 10px;
-margin-right: 10px;
+	padding: 0.5em;
+	margin-top: 0.5em;
+	background: #3d3d3f;
+	border-radius: 4px;
+	margin-left: 10px;
+	margin-right: 10px;
+	}
 
-}
-
-#item-content .tip-text {
-	
+#item-content .tip-text {	
 	color: #ffffff;	
-	
-}
+	}
 
-#item-content label {
-	
+#item-content label {	
 	color: #ffffff;	
-}
+	}
 
 .ui-dialog {
 	background-color: rgb(61,61,63);	
-}
+	}
 
-#PodcastItemEditButton {
-	
+#PodcastItemEditButton {	
 	font-size: 0.9em;	
-}
+	}
 
-.ui-widget-header .ui-icon {
-	
+.ui-widget-header .ui-icon {	
 	background-image: url(/img/tabbed-track-close.png)!important;	
-}
+	}
 
 .ui-icon-closethick {
 	background-position: 0px;
-}
+	}
 
-#item-content #errors ul {
-	
+#item-content #errors ul {	
 	margin-left: 20px;	
-}
+	}
 
-#item-content table tr td, #item-content table tr td a {
-	
+#item-content table tr td, #item-content table tr td a {	
 	background-color: #58585a;
 	color: #fff;	
-}
+	}
 
-#item-content table tr:nth-child(2n) td, #item-content table tr:nth-child(2n) td a {
-	
+#item-content table tr:nth-child(2n) td, #item-content table tr:nth-child(2n) td a {	
 	background-color: #333;
 	color: #fff;	
-}
+	}
 /*--/Tab-Button additions for main style sheet*/
+
+.code	{
+	float:left;
+	margin:0 0 0 0.6em;
+	}
+	
+.code-snippet	{
+	font-family:"Courier New", Courier, monospace;
+	font-size: 1em;
+	background-color: none;
+	}

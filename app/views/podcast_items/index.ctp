@@ -17,6 +17,7 @@
 	            	<th class="icon-col">YouTube</th>
 	            </tr>
 	        </thead>
+			<tbody>            
 	        <?php 
 				$i = 0;
 				foreach( $this->data['PodcastItems'] as $podcast_item ) :
@@ -27,7 +28,7 @@
                 ?>		        
 	        	<?php if( $this->Object->isDeleted( $podcast_item['PodcastItem'] ) == false ) : ?>
 	        	
-		        	<tbody>
+
                     <tr <?php echo $class; ?>>
 						<?php if( $this->Permission->toUpdate( $this->data ) && $this->Permission->isAdminRouting( $this->params ) == false ) : ?>
 		                    <td width="15px" align="center">
@@ -55,12 +56,13 @@
                         <?php endif; ?>
                         </td>
 		            </tr>
-                    </tbody>
-		            
+	            
 		    	<?php endif; ?>
 		    	
 	        <?php endforeach; ?>
-	        
+            
+			</tbody>	        
+            
 	    </table>
 
 		<?php echo $this->element('pagination'); ?>    

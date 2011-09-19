@@ -1,4 +1,5 @@
 <div id="PodcastItemYoutubeContainer"  class="preview" >
+<div class="track_float_left track_two_column">
     <dl>
         <dt>Title: </dt>
         <dd><?php echo $this->data['PodcastItem']['youtube_title']; ?>&nbsp;</dd>
@@ -67,13 +68,14 @@
         <dt>Notes: </dt>
         <dd><?php echo nl2br( $this->data['PodcastItem']['youtube_notes'] ); ?>&nbsp;</dd>
     </dl>
+    </div>
 </div>
     <?php
     if( $this->Permission->toUpdate( $this->data['Podcast'] ) ) : ?>
-        <div class="action_buttons">
+        <div class="action_buttons track_save_cancel">
             <ul>
                 <li>
-                    <button class="jquery_display save"  type="button" data-source="PodcastItemYoutubeContainer" data-target="FormPodcastItemYoutubeContainer" id="PodcastItemYoutubeButton"><span>edit</span></button>
+                    <button class="jquery_display button edit_track"  type="button" data-source="PodcastItemYoutubeContainer" data-target="FormPodcastItemYoutubeContainer" id="PodcastItemYoutubeButton"><span>Edit</span></button>
                 </li>
             </ul>
         </div>            

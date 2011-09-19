@@ -178,6 +178,18 @@ class ApiComponent extends Object {
 		return $this->getStatus();
 
     }
+
+    /*
+     * @name : ApiResponse
+     * @description :  Currently exploited by the VLE callback solution, it passed back updated data received.
+     * @updated : 19th September 2011
+     * @by : Ian Newton / Charles Jackson
+     */
+    function response( $data = array(), $command = null ) {
+
+        $this->setResponse( json_decode( $this->__sendMessage( $command, ADMIN_API, $data, count( $data ) ), 1 ) );
+        return $this->getStatus();
+    }	
     
     /*
      * @name : fileExist

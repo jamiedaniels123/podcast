@@ -147,6 +147,7 @@ class CallbacksController extends AppController {
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 
+					
 					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
 					if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
 
