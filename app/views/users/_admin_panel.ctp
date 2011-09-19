@@ -21,7 +21,6 @@
 
 					<li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/logs">Admin API Logs</a></li>
 
-					<li style="line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/users/sams">Sams (in development)</a></li>
 				</ul>
 			</div>
 			<div class="float_left">
