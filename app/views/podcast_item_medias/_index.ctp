@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <table>
+    <table class="flavours">
     	<thead>
             <tr>
             	<th>Flavour</th>
@@ -19,7 +19,7 @@
                 <?php endif; ?>
                 <td class="centered"><?php echo $this->Object->getProcessedState( $media['processed_state'] ); ?></td>
                	<td>
-                    <a class="delete ajax_link" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" id="PodcastItemMediaDelete">Delete</a>
+                    <a class="delete button ajax_link" href="/admin/podcast_item_medias/delete/<?php echo $media['id']; ?>" id="PodcastItemMediaDelete"><span>Delete</span></a>
                 </td>
             </tr>
         <?php endforeach; ?>
