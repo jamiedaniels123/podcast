@@ -289,14 +289,14 @@ class ObjectHelper extends AppHelper {
 			if( isSet( $object['publish_youtube'] ) && $object['publish_youtube'] == 'Y' )
 				return CORRECT_IMAGE;
 
-			// Podcast level
-			if( isSet( $object['consider_for_youtube'] ) && $object['consider_for_youtube'] == true )
-				return QUESTION_MARK;
-
 			// Podcast Item level
 			if( isSet( $object['youtube_flag'] ) && $object['youtube_flag'] == 'Y' )
 				return CORRECT_IMAGE;
-				
+
+			// Podcast & PodcastItem level
+			if( isSet( $object['consider_for_youtube'] ) && $object['consider_for_youtube'] == true )
+				return QUESTION_MARK;
+
 			return INCORRECT_IMAGE;				
 		}
 	}
