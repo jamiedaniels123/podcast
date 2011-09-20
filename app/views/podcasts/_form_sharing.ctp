@@ -1,9 +1,9 @@
-<div id="FormPodcastSharingContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
+<div class="content" id="FormPodcastSharingContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
 	
     
    <div class="collection_input"><!--Moderator groups-->
         <div id="user_groups_container">
-                <div class="float_left">
+                <div class="float_left_list">
                     <div class="select">
                         <label for="Moderators">Moderator Groups</label>
                             
@@ -22,7 +22,7 @@
                         </div><!--/select-->
                 </div><!--/float_left-->      
             
-                <div class="float_left">
+                <div class="float_left_list">
                     <div class="select">
                         <label for="MemberGroups">Member Groups</label>              	
                         
@@ -36,14 +36,14 @@
                         <?php echo $this->Form->error('Podcast.MemberGroups'); ?>
                         
                         <div class="multiple-button">
-                            <div class="move float_left" data-source="MemberGroups" data-target="ModeratorGroups"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                            <div class="move float_left_list" data-source="MemberGroups" data-target="ModeratorGroups"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
                             <div class="move float_right" data-source="MemberGroups" data-target="UserGroups"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                         </div>                        
                         <div class="clear"></div>                        
                     </div><!--/select-->
                 </div><!--/float_left--> 
             
-                <div class="float_left">
+                <div class="float_left_list">
                     <div class="select">
                         <label for="UserGroups">All User Groups</label>
                         
@@ -72,7 +72,7 @@
     <div id="moderator_container">
             <div class="collection_input"><!--Moderators-->
                        
-              <div class="float_left">
+              <div class="float_left_list">
                     <div class="select">
                     <label for="Moderators">Moderators</label>
                         
@@ -94,7 +94,7 @@
                 	</div><!--/select-->  
             	</div><!--/float_left-->
                 
-                <div class="float_left">
+                <div class="float_left_list">
                     <div class="select">
                     <label for="Members">Members</label>
                         
@@ -109,14 +109,14 @@
                         <?php echo $this->Form->error('Podcast.Members'); ?>
                         
                         <div class="multiple-button">
-                        <div class="move float_left" data-source="Members" data-target="Moderators"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                        <div class="move float_left_list" data-source="Members" data-target="Moderators"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
                         <div class="move float_right" data-source="Members" data-target="UsersUsers"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
                         </div>
                         <div class="clear"></div>
                     </div><!--/select-->
                 </div><!--/float_left-->
                 
-                <div class="float_left">
+                <div class="float_left_list">
                     <div class="select">
                     <label for="UsersUsers">All Users</label>
                         

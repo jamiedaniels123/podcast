@@ -124,6 +124,8 @@ class CallbacksController extends AppController {
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
 
+				$podcastItem->recursive = -1;
+				
 				foreach( $this->Callback->data['data'] as $row ) {
 					
 					$this->data = $podcastItem->findById( $row['podcast_item_id'] );
@@ -131,6 +133,7 @@ class CallbacksController extends AppController {
 					if( ( $row['status'] ) == YES ) {
 						
 						$this->data['PodcastItem']['youtube_id'] = $row['youtube_id'];
+						$this->data['PodcastItem']['youtube_flag'] = YES;
 						
 					} else {
 						

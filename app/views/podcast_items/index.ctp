@@ -46,7 +46,7 @@
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'itunes' ); ?>" class="icon"></td>
 		            	<td  class="icon-col">
                         
-                        <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item['PodcastItem'] ) ) : ?>
+                        <?php if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
 	                        <img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'youtube' ); ?>" class="icon">
                             
 						<?php else : ?>

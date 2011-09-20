@@ -110,8 +110,8 @@ class ObjectHelper extends AppHelper {
     function intendedForYoutube( $object = array() ) {
 
     	// Podcast level
-    	if( isSet( $object['intended_youtube_flag'] ) )
-        	return $object['intended_youtube_flag'] == strtoupper( YES );
+    	if( isSet( $object['intended_youtube_flag'] ) && $object['intended_youtube_flag'] == strtoupper( YES ) )
+        	return true;
         	
         return false;
     }
@@ -321,7 +321,7 @@ class ObjectHelper extends AppHelper {
 	 * @by : Charles Jackson
 	 */
 	function hasYoutubeFlavour( $object = array() ) {
-		
+
 		if( isSet( $object['YoutubeVideo']['filename'] ) && !empty( $object['YoutubeVideo']['filename'] ) )
 			return true;
 			
