@@ -229,8 +229,6 @@ class FolderComponent extends Object {
      */
 	function cleanUp( $path, $filename, $date_time_stamp = null ) {
 
-		//$this->emailTemplates->__sendCallbackErrorEmail( array(),$file_system_date_time_stamp.' --- '.$date_time_stamp,'the file system datetimestamp');
-		
 		$folders = array();
 		$path = str_replace('//','/',$path); // Quick fudge to fix minor API issue
 		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
