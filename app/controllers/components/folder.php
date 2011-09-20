@@ -236,23 +236,19 @@ class FolderComponent extends Object {
 		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
 			return false;
 		
-		$file_system_date_time_stamp = strtotime( filemtime( FILE_REPOSITORY.$path.$filename ) );
-		
 		// We only want to delete files if they were created prior to the date_time stamp on the current API
 		// call else we may delete files that have been refreshed since this API call was made and a.n.other
 		// more recent API call may still be waiting in the queue.
-		if( ( $date_time_stamp = false ) || ( $file_system_date_time_stamp < $date_time_stamp ) ) {
 		
-			unlink( FILE_REPOSITORY.$path.$filename );
-				
-			if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
-				rmdir( FILE_REPOSITORY.$path );
-				
-			$folders = explode('/',$path );
-			$custom_id = $folders[0];
-			if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
-				return ( rmdir( FILE_REPOSITORY.$custom_id ) );
-		}
+		unlink( FILE_REPOSITORY.$path.$filename );
+			
+		if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
+			rmdir( FILE_REPOSITORY.$path );
+			
+		$folders = explode('/',$path );
+		$custom_id = $folders[0];
+		if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
+			return ( rmdir( FILE_REPOSITORY.$custom_id ) );
 		
 		return true;
 			

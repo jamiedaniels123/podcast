@@ -39,7 +39,7 @@ class PodcastItemsController extends AppController {
 
 		$this->PodcastItems->Podcast->recursive = -1;
 		$this->PodcastItems->recursive = -1;
-		$this->data = $this->PodcastItem->Podcast->findById( $id );		
+		$this->data = $this->PodcastItem->Podcast->permissionData( $id );		
         $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
 		$this->set('element', 'tracks' ); // Set the active element for the tab menu
 		// Set the tabs for the menu

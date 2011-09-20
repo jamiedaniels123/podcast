@@ -42,8 +42,8 @@
 		</div>
         <div class="action_buttons track_save_cancel" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
         	<ul>
-	            <li><button id="PodcastItemSubmitButton" type="button"  class="save auto_select">Update <?php echo MEDIA; ?></button></li>
-	            <li><a href="/" class="cancel" data-id="<?php echo $this->data['PodcastItem']['id']; ?>" id="PodcastItemCancelButton">Cancel</a></li>					
+	            <li><button id="PodcastItemSubmitButton" type="button"  class="save button auto_select">Update <?php echo MEDIA; ?></button></li>
+	            <li><a href="/" class="cancel button" data-id="<?php echo $this->data['PodcastItem']['id']; ?>" id="PodcastItemCancelButton"><span>Cancel</span></a></li>					
 			</ul>
 		</div>
 </form>

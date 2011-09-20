@@ -49,8 +49,8 @@
     
     <div class="action_buttons track_save_cancel" id="PodcastUpdateButtonContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>			
         <ul>
-            <li><button id="PodcastUpdateButton" type="submit" class="button approve auto_select_and_submit"><span>update</span></button></li>
-            <li><button id="PodcastCancelButton" type="button" class="button delete"><span>cancel</span></button></li>
+            <li><button id="PodcastUpdateButton" type="submit" class="button approve auto_select_and_submit"><span>Update</span></button></li>
+            <li><button id="PodcastCancelButton" type="button" class="button cancel"><span>Cancel</span></button></li>
         </ul>
     </div>
 </div>

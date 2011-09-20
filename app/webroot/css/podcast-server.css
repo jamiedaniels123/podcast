@@ -120,6 +120,20 @@ h3 a:hover {text-decoration: underline;}
 	padding: 2px 4px 2px 4px!important;
 	}
 	
+.cancel {
+	/*background:url(/img/icon-16-link-delete.png) no-repeat 2px center #ffffff;*/
+	color: #003d4c;
+	/*border: 1px solid #fff;*/
+	padding: 2px 4px 2px 4px!important;
+	}
+	
+.flavours.delete {
+	/*background:url(/img/icon-16-link-delete.png) no-repeat 2px center #ffffff;*/
+	color: #003d4c;
+	/*border: 1px solid #fff;*/
+	padding: 2px 4px 2px 4px!important;
+	}	
+	
 .setting {
 	background:url(/img/icon-16-settings.png) no-repeat 2px center #003d4c;
 	color: #ffffff;
@@ -196,7 +210,14 @@ h3 a:hover {text-decoration: underline;}
 	color: #003d4c;
 	border: 1px solid #fff;
 	padding: 2px 4px 2px 4px!important;	
-	}					
+	}
+	
+.generate-description	{
+	background-color: #f19300;
+	color: #003d4c;
+	border: 1px solid #f19300;
+	vertical-align:bottom;
+	}						
 
 /*Generic button decorations*/
 
@@ -232,7 +253,9 @@ h3 a:hover {text-decoration: underline;}
 	background-color: #f19300;
 	color: #003d4c;
 	border: 1px solid #f19300;
-	}	
+	}
+	
+		
 	
 .light-blue:hover {
 	color: #fff;
@@ -417,8 +440,8 @@ td.publish_itunes_u, td.publish_youtube, th.publish_itunes_u, th.publish_youtube
 	}
 
 textarea#PodcastSummary, textarea#PodcastItemSummary, textarea#PodcastItemYoutubeDescription, textarea#PodcastItemYoutubeRightsCleared, textarea#PodcastItemYoutubeNotes {
-	width: 50%;
-	height: 100px;	
+	/*width: 50%;*/
+	height: 100px;
 	}
 
 #embedsizes {

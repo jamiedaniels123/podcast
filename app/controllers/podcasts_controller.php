@@ -409,7 +409,7 @@ class PodcastsController extends AppController {
 	 */
 	function consider( $media, $id ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 			
@@ -452,7 +452,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_approve( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -484,7 +484,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_approve( $id = null ) {
 
-    	$this->data = $this->Podcast->statusUpdate( $id );
+    	$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -515,7 +515,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_reject( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -554,7 +554,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_reject( $id = null ) {
 
-    	$this->data = $this->Podcast->statusUpdate( $id );
+    	$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -594,7 +594,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_publish( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -625,7 +625,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_publish( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -656,7 +656,7 @@ class PodcastsController extends AppController {
 	 */
 	function itunes_unpublish( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 
@@ -685,7 +685,7 @@ class PodcastsController extends AppController {
 	 */
 	function youtube_unpublish( $id = null ) {
 		
-		$this->data = $this->Podcast->statusUpdate( $id );
+		$this->data = $this->Podcast->permissionData( $id );
 		
 		if( !empty( $this->data ) ) {
 

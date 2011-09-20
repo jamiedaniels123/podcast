@@ -1419,23 +1419,24 @@ class Podcast extends AppModel {
 	}
 
 	/*
-	 * @name : statusUpdate
+	 * @name : permissionData
 	 * @description : Exploits the "containable" behaviour to limit the data being retrieved. It is called from the
-	 * podcasts controller when updating the statuus value between "consider", "intended" and "published" for both
-	 * iTunes and Youtube
+	 * podcasts controller when updating the status value between "consider", "intended" and "published" for both
+	 * iTunes and Youtube and also the podcast_items controller / index method.
 	 * @updated : 6th September 2011
 	 * @by : Charles Jackson
 	 */
-	function statusUpdate( $id ) {
+	function permissionData( $id ) {
 
 		$this->Behaviors->attach('Containable');
 		
 		return $this->find('first', array(
 			'conditions' => array('Podcast.id' => $id ),
 			'fields' => array( 
-				'Podcast.id', 
-				'Podcast.title', 
-				'Podcast.summary', 
+				'Podcast.id',
+				'Podcast.title',
+				'Podcast.summary',
+				'Podcast.podcast_flag',
 				'Podcast.consider_for_itunesu', 
 				'Podcast.intended_itunesu_flag',
 				'Podcast.publish_itunes_u',

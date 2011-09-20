@@ -1,11 +1,13 @@
 <div id="outer-content">
     <h3><?php echo $podcast['title']; ?></h3>
     <p>
-    <?php echo nl2br( $podcast['summary'] ); ?>
+    	<?php echo nl2br( $podcast['summary'] ); ?>
     </p>
 </div>    
 <div id="tab-zone" class="tab-zone">
+
     <div class="tabs">
+    
 		 <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
 
              <div id="sharing"><a class="tab_link" href="/admin/podcasts/edit/<?php echo $podcast['id']; ?>/sharing#sharing"><span class="collection_tab_track-icon">Sharing &amp; Ownership</span></a>

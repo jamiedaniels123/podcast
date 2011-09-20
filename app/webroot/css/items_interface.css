@@ -122,13 +122,17 @@ a.cancel {
 	}
 /*--/Tab-Button additions for main style sheet*/
 
+	
 .code	{
 	float:left;
 	margin:0 0 0 0.6em;
 	}
 	
-.code-snippet	{
+.code-snip	{
 	font-family:"Courier New", Courier, monospace;
 	font-size: 1em;
-	background-color: none;
+	background-color: #1a1a1a;
+	color:#eee;
+	border:0;
+	padding:0.3em;
 	}
