@@ -11,7 +11,6 @@ class BespokeRssHelper extends RssHelper {
 	/*
 	 * @name : channel
 	 * @description : Extension of the base channel method.
-	 * @TODO : Not sure this extension is now needed. To be checked but doing no harm.
 	 * @updated : 19th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -283,7 +282,7 @@ class BespokeRssHelper extends RssHelper {
 	 * @name : elem
 	 * @description : An extension of the method found in the core xml.php helper. The ONLY difference
 	 * is on the very last line where a new line break has been appended to the end of the return value.
-	 * @updated : 21st September
+	 * @updated : 21st September 2011
 	 * @by : Charles Jackson
 	 */	
 	function elem($name, $attrib = array(), $content = null, $endTag = true) {

@@ -220,7 +220,7 @@ class Feed extends AppModel {
         $channelData['itunes:summary'] = $this->data['Podcast']['summary'];
         $channelData['itunes:keywords'] = $this->data['Podcast']['keywords'];
         $channelData['itunes:author'] = strlen( trim( $this->data['Podcast']['author'] ) ) ? $this->data['Podcast']['author'] : DEFAULT_AUTHOR;
-        $channelData['itunes:explicit'] = ucfirst( $this->data['Podcast']['explicit'] );
+
 
         if ( !empty( $this->podcast_path_and_image ) )
             $channelData['itunes:image']['attrib']['href'] = $this->podcast_path_and_image;
