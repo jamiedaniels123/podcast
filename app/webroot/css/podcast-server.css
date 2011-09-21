@@ -38,19 +38,18 @@ legend h3 {
 .leader	{
 	display:block;
 	position:absolute;
-	margin: 05px 0px 0 64px;
-	padding:20px 0 0 0px;
+	margin: 5px 0px 0 64px;
+	padding:20px 5px 0 0px;
 	}
 	
 @-moz-document url-prefix() {
     .leader { margin-left: 68px; } /*Corrects an error in FF placement of page leader*/
 	}
 
-.collection-top {margin: 30px 0 0 0; width: 100%;}
+.collection-top {margin: 3em 0 0 0; width: 100%; background: red;}
 
 .collection-top .left {float:left;}
-
-.collection-top .right {float:right; text-align:right}
+.collection-top .right {float:right; text-align:right;}
 
 .clear {clear:both;}
 

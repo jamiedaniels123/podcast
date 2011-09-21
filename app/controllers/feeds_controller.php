@@ -163,8 +163,18 @@ class FeedsController extends AppController {
 				// Has the item been soft deleted.
 				if( (int)$podcast_item['deleted'] )
 					continue;
+				
+				// if we are interlacing the transcripts increase by 2 each time around because the transcript will take the
+				// second value else, increase by one each time through.
+				if( $interlace ) {
 					
-                $track_number++;
+	                $track_number = $track_number + 1;
+					
+				} else {
+					
+					$track_number = $track_number + 2;
+				}
+					
 
                 $this->Feed->setMediaType( $media_type ); // We must reset the media type in every loop incase the RSS is interlaced and has been changed to TRANSCRIPT
                 $this->Feed->setPodcastItem( $podcast_item );

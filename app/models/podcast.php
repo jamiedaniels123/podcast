@@ -142,7 +142,7 @@ class Podcast extends AppModel {
         'PreferredNode' => array(
             'className' => 'Nodes',
             'foreignKey' => 'preferred_node',
-            'fields' => 'PreferredNode.id,PreferredNode.title'
+            'fields' => 'PreferredNode.id,PreferredNode.title, PreferredNode.subject_code'
 		)		
     );
 
@@ -1634,6 +1634,11 @@ class Podcast extends AppModel {
 				'iTuneCategories' => array(
 					'fields' => array(
 						'iTuneCategories.*'
+					)
+				),
+				'PreferredNode' => array(
+					'fields' => array(
+						'PreferredNode.*'
 					)
 				),
 				'Categories' => array(

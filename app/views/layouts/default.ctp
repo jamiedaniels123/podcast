@@ -34,7 +34,7 @@
     
 </head>
 <?php flush(); ?>
-<body>
+<body OnLoad="document.searchandfilter.data[Podcast][search].focus();">
 
     <!--display OU Header-->
 	<?php echo $this->element('header'); ?>

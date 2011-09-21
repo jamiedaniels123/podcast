@@ -164,8 +164,8 @@ class BespokeRssHelper extends RssHelper {
                     $attrib = $val;
                     $val = null;
                     break;
-                case 'itunes:category':
-                    $attrib = $val;
+                case 'itunesu:category':
+                    $attrib = $val['attrib'];
                     $val = null;
                     break;
 				case 'atom:link' :
@@ -306,15 +306,25 @@ class BespokeRssHelper extends RssHelper {
 			$content = null;
 		}
 
+		
 		$elem =& $this->Xml->createElement($name, $content, $attrib, $namespace);
 		foreach ($children as $child) {
 			$elem->createElement($child);
 		}
+
 		$out = $elem->toString(array('cdata' => $cdata, 'leaveOpen' => !$endTag));
 
 		if (!$endTag) {
 			$this->Xml =& $elem;
 		}
-		return $out."\n"; // The only change to the existing helper is the new line "\n" append to the end of the retuern 
+
+		// Because we use the element name as the key we have a problem where two elements
+		// have exactly the same name in the channel data. This bit of "logic by exception" does a
+		// preg_replace on any alias of the atom:category that can be identified by atom:category_*
+		if( preg_match( '/atom:category_./',  $out ) ) {
+			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
+		}
+
+		return $out."\n"; // Append a new line "\n" append to the end of the retuern 
 	}	
 }
