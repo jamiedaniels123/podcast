@@ -112,7 +112,7 @@ ul, li {
 	}
 	
 #content h3	{
-	font-size: 1.6em;	
+	/*font-size: 1.6em;	*/
 }
 
 #footer {
@@ -142,6 +142,15 @@ div.actions h3 {
 
 
 /** Tables **/
+
+.collection_table th	{
+	margin-top:10px 0 0 0;
+	}
+
+.collection_table th	{
+	background: #fff;
+	}
+	
 table {
 	background: #fff;
 	border-right:0;
@@ -960,7 +969,8 @@ div.track_float_left dl dd {
 	}
 
 .images_container img {
-	margin: 10px;	
+	margin: 10px;
+	width:100px;	
 	}
 
 #images_container h2 {
@@ -1057,4 +1067,8 @@ div.action_buttons ul li {
 
 .icon-col {	
 	text-align: center;	
-}
+	}
+
+.image img	{
+	width: 150px;	
+	}

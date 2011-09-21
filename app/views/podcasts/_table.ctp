@@ -1,6 +1,6 @@
 <form method="post" action="">
     
-<table cellpadding="0" cellspacing="0">
+<table class="collection_table" cellpadding="0" cellspacing="0">
     <tr>
         <th class="checkbox">Select</th>
         <th class="thumbnail" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'thumbnail'); ?>>Image</th>

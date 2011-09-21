@@ -1,15 +1,18 @@
 <div id="FormPodcastYoutubeContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
-    <div class="input text">
+    
+    <div class="collection_input">
+    
+    <div class="text">
         <label for="PodcastYoutubeSeriesPlaylistText">Series Playlist</label>
         <input type="text" size="60" id="PodcastYoutubeSeriesPlaylistText" value="<?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>" name="data[Podcast][youtube_series_playlist_text]">
         <?php echo $this->Form->error('Podcast.youtube_series_playlist_text'); ?>
     </div>
-    <div class="input text">
+    <div class="text">
         <label for="PodcastYoutubeSeriesPlaylistLink">Series Playlist Link</label>
         <input type="text" size="60" id="PodcastYoutubeSeriesPlaylistLink" value="<?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>" name="data[Podcast][youtube_series_playlist_link]">
         <?php echo $this->Form->error('Podcast.youtube_series_playlist_link'); ?>
     </div>
-    <div class="input select">
+    <div class="select">
         <label for="PodcastYoutubeChannel">Youtube Channel</label>
         <select name="data[Podcast][youtube_channel]" id="PodcastYoutubeChannel">
             <option value="">Please select</option>
@@ -19,9 +22,12 @@
         </select>
         <?php echo $this->Form->error('Podcast.youtube_channel'); ?>
     </div>
-    <div class="input text">
+    <div class="text">
         <label for="PodcastCourseCode">Course Code</label>
         <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
         <?php echo $this->Form->error('Podcast.course_code'); ?>
     </div>
+    
+    </div><!--/end of input-->
+    
 </div>

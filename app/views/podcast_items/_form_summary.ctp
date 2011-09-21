@@ -33,7 +33,7 @@
                         <img size="50" src="<?php echo $this->Attachment->getMediaImage( $this->data['PodcastItem']['image_filename'].'.jpg', $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" />
                         <?php if( !empty( $this->data['PodcastItem']['image_filename'] ) ) : ?>
                             <div class="clear"></div>
-                            <a href="/podcast_items/delete_attachment/image/<?php echo $this->data['PodcastItem']['id']; ?>" class="button delete ajax_link" title="delete image">delete image</a>
+                            <a href="/podcast_items/delete_attachment/image/<?php echo $this->data['PodcastItem']['id']; ?>" class="button orange ajax_link" title="delete image"><span>Delete image</span></a>
                         <?php endif; ?>
                     </div>
                     <div class="text">

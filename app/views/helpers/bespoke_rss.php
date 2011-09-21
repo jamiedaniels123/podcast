@@ -278,4 +278,44 @@ class BespokeRssHelper extends RssHelper {
 		
 		return $this->elem($elem, $attributes, $data);
     }	
+	
+	/*
+	 * @name : elem
+	 * @description : An extension of the method found in the core xml.php helper. The ONLY difference
+	 * is on the very last line where a new line break has been appended to the end of the return value.
+	 * @updated : 21st September
+	 * @by : Charles Jackson
+	 */	
+	function elem($name, $attrib = array(), $content = null, $endTag = true) {
+
+		$namespace = null;
+		if (isset($attrib['namespace'])) {
+			$namespace = $attrib['namespace'];
+			unset($attrib['namespace']);
+		}
+		$cdata = false;
+		if (is_array($content) && isset($content['cdata'])) {
+			$cdata = true;
+			unset($content['cdata']);
+		}
+		if (is_array($content) && array_key_exists('value', $content)) {
+			$content = $content['value'];
+		}
+		$children = array();
+		if (is_array($content)) {
+			$children = $content;
+			$content = null;
+		}
+
+		$elem =& $this->Xml->createElement($name, $content, $attrib, $namespace);
+		foreach ($children as $child) {
+			$elem->createElement($child);
+		}
+		$out = $elem->toString(array('cdata' => $cdata, 'leaveOpen' => !$endTag));
+
+		if (!$endTag) {
+			$this->Xml =& $elem;
+		}
+		return $out."\n"; // The only change to the existing helper is the new line "\n" append to the end of the retuern 
+	}	
 }

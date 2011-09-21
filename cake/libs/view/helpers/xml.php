@@ -139,6 +139,7 @@ class XmlHelper extends AppHelper {
 		if (!$endTag) {
 			$this->Xml =& $elem;
 		}
+
 		return $out;
 	}
 

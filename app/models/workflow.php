@@ -67,7 +67,8 @@ class Workflow extends AppModel {
 			$this->setWorkflow( $this->__select() );
 			
 			
-			$this->setWorkflow( 'video' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			//$this->setWorkflow( 'video' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			$this->setWorkflow( 'video-wide-360-watermark' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
