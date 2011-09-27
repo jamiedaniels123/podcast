@@ -145,8 +145,10 @@ class AttachmentHelper extends AppHelper {
      */
     function getMediaLink( $custom_id = null, $media = array() ) {
 		
-		if( $media['media_type'] == 'default' ) {
+		if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080' ) ) ) {
 			$media['media_type'] = null;
+		} elseif( $media['media_type'] == 'iphonecellular' ) {
+			$media['media_type'] = 'iphone';
 		} else {
 			$media['media_type'] .= '/';
 		}

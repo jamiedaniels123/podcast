@@ -25,7 +25,7 @@ class Workflow extends AppModel {
 	public $workflow = null; // Holds the determined workflow.
 
 	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3', 'mp3' );
-	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv');
+	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv','dv');
 	var $audio_transcoding = array('wav','ogg','amr','aif','aiff');
 
 	/*
@@ -57,9 +57,10 @@ class Workflow extends AppModel {
 		} elseif( in_array( $this->file_extension, $this->video_transcoding ) ) {
 
 			$this->setScreencast( strtoupper( $this->params['url']['ff02v'] ) == 'YES' ? true : false );
-			$this->setVideoWidth( isSet( $this->params['video']['resolution_x'] ) ? $this->params['video']['resolution_x'] : 0 );
-			$this->setVideoHeight( isSet( $this->params['video']['resolution_y'] ) ? $this->params['video']['resolution_y'] : 0 );
+			$this->setVideoWidth( isSet( $this->id3_data['video']['resolution_x'] ) ? $this->id3_data['video']['resolution_x'] : 0 );
+			$this->setVideoHeight( isSet( $this->id3_data['video']['resolution_y'] ) ? $this->id3_data['video']['resolution_y'] : 0 );
 			$this->setWatermarkBumperTrailer( isSet( $this->params['url']['ff03v'] ) ? $this->params['url']['ff03v'] : null );
+
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setMediaType( 'video' );
 
@@ -68,7 +69,7 @@ class Workflow extends AppModel {
 			
 			
 			//$this->setWorkflow( 'video' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
-			$this->setWorkflow( 'video-wide-360-watermark' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			//$this->setWorkflow( 'video-wide-360-watermark' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
@@ -400,7 +401,6 @@ class Workflow extends AppModel {
 	function __select() {
 		
 		$this->recursive = -1;
-		
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
 		
 		if( empty( $workflow ) )

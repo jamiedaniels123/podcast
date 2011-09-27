@@ -9,7 +9,7 @@
     <!--This css adds some order to the top of the 'Your collections' page by placing the Add a new collection button to the left and the view filter to the right of the screen-->
     
         <div class="collection-top">
-            <div class="left"><h3><a class="button white" href="/podcasts/add"><img src="/img/add-new.png" alt="Add a new collection" width="16" height="16" class="icon" />Add a new <?php echo PODCAST; ?></a></h3></div>
+            <h3><a class="button white" href="/podcasts/add"><img src="/img/add-new.png" alt="Add a new collection" width="16" height="16" class="icon" />Add a new <?php echo PODCAST; ?></a></h3>
             <div class="right"><?php echo $this->element('../podcasts/_filter'); ?></div>
         </div>
     

@@ -127,11 +127,12 @@ class PodcastItem extends AppModel {
         $this->data['PodcastItem']['processed_state'] = 2;
 		
         if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
-            $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN;
+            $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN_FLOAT;
         if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
-            $this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN;
-        if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
+            $this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN_FLOAT;
+		if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
             $this->data['PodcastItem']['aspect_ratio'] = null;
+
 
         return $this->data;
     }

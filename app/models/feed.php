@@ -78,6 +78,7 @@ class Feed extends AppModel {
         'm4b' => 'audio/x-m4b',
         '3gp' => 'video/x-m4v',
         'mp4' => 'video/mp4',
+    	'dv' => 'video/x-dv',
         'm4v' => 'video/x-m4v',
         'mov' => 'video/quicktime',
         'pdf' => 'application/pdf',
@@ -394,7 +395,7 @@ class Feed extends AppModel {
         $item['itunes:keywords'] = $this->data['Podcast']['keywords'];
         
         if( $this->itunes_complete )
-            $item['itunes:order'] = $track_number + 1;
+            $item['itunes:order'] = $track_number;
 
         $item = $this->__setItunesItemCode( $item );
 

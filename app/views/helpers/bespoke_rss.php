@@ -1,5 +1,4 @@
 <?php
-App::import('Helper', 'Xml');
 
 /*
  * @name : BespokseRssHelper
@@ -280,8 +279,7 @@ class BespokeRssHelper extends RssHelper {
 	
 	/*
 	 * @name : elem
-	 * @description : An extension of the method found in the core xml.php helper. The ONLY difference
-	 * is on the very last line where a new line break has been appended to the end of the return value.
+	 * @description : An extension of the method found in the core xml.php helper.
 	 * @updated : 21st September 2011
 	 * @by : Charles Jackson
 	 */	
@@ -320,11 +318,13 @@ class BespokeRssHelper extends RssHelper {
 
 		// Because we use the element name as the key we have a problem where two elements
 		// have exactly the same name in the channel data. This bit of "logic by exception" does a
-		// preg_replace on any alias of the atom:category that can be identified by atom:category_*
+		// preg_replace on any alias of the atom:category that can be identified by atom:category_.
 		if( preg_match( '/atom:category_./',  $out ) ) {
 			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
 		}
 
-		return $out."\n"; // Append a new line "\n" append to the end of the retuern 
+		// Append a new line "\n" to the end of the return value to aid formatting when viewing the 
+		// soure code of an XML feed.
+		return $out."\n"; 
 	}	
 }

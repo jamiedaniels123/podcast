@@ -46,10 +46,10 @@ legend h3 {
     .leader { margin-left: 68px; } /*Corrects an error in FF placement of page leader*/
 	}
 
-.collection-top {margin: 3em 0 0 0; width: 100%; background: red;}
+.collection-top {margin: 3em 0 0 0; width: 100%; padding:0;}
 
-.collection-top .left {float:left;}
-.collection-top .right {float:right; text-align:right;}
+.left {float:left;}
+.right {float:right;padding:0;margin:0;}
 
 .clear {clear:both;}
 

@@ -2,7 +2,6 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_local_deletion = array('transcode-media','transfer-file-to-media-server', 'transfer-folder-to-media-server');
 	var $requires_meta_injection = array('deliver-without-transcoding');
 	var $process_transcode = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
@@ -33,7 +32,10 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
+		if( $this->Callback->data['command'] == 'transcode-media-and-deliver' ) {
 		$this->emailTemplates->__sendCallbackErrorEmail( array(), $this->Callback->data, 'Callback Alert' );
+		}
+		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
 			
@@ -54,17 +56,6 @@ class CallbacksController extends AppController {
 						
 						$notification->unableSaveFlavour( $podcastItemMedia->data, $row );
 					}
-					
-					// There will only be 1 copy of the transcoded file sitting in the root folder. Wait for a response
-					// from the API regarding the 'default' flavour and delete. We could delete at anytime but 
-					// if we try to delete the same file more than once it will create an error in the notifications
-					// panel.
-					if( strtolower( $row['flavour'] ) == 'default' ) {
-						
-						$this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] );
-						/*if( $this->Folder->cleanUp( $row['source_path'], $row['original_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );*/
-					}
 				}
 			}
 			
@@ -72,26 +63,6 @@ class CallbacksController extends AppController {
 			if( in_array( $this->Callback->data['command'], $this->deletion_request ) )
 				$this->Callback->processDeletions();
 				
-			// Does the API command signify a need to delete a local file structure?
-			if( in_array( $this->Callback->data['command'], $this->requires_local_deletion ) ) {
-
-				foreach( $this->Callback->data['data'] as $row ) {
-
-					if ( isSet( $row['source_filename'] ) && !empty( $row['original_filename'] ) ) {
-						
-						$this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] );
-						/*if( $this->Folder->cleanUp( $row['source_path'],$row['original_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['original_filename'] );*/
-							
-					} else {
-						
-						$this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] );
-						/*if( $this->Folder->cleanUp( $row['source_path'],$row['source_filename'], $row['created'] ) == false )
-							$notification->unableToCleanFolder( $row, $row['source_path'].$row['source_filename'] );*/
-					}
-				}
-			}
-			
 			// If we need to kick-off some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
 				
@@ -150,7 +121,6 @@ class CallbacksController extends AppController {
 				
 				foreach( $this->Callback->data['data'] as $row ) {
 
-					
 					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
 					if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
 
@@ -168,6 +138,21 @@ class CallbacksController extends AppController {
 			$notification->malformedData( $this->Callback->json );
 			$this->set('status', json_encode( array( 'status'=>'NACK', 'data'=>'Message received but I dont understand what it means', 'timestamp'=>time() ) ) );
 		}
+	}
+	
+	/*
+	 * @name : delete_folders
+	 * @description : Will delete any folders older than 1 hour
+	 * @updated : 22nd September 2011
+	 * @name : Charles Jackson
+	 */
+	function delete_folders( $path = FILE_REPOSITORY, $level = 0 ) { 
+	
+		$this->autoRender = false;
+		$this->Folder->cleanUp( $path, $level );
+        $this->Session->setFlash('Folder has been successfully cleaned.', 'default', array( 'class' => 'success' ) );
+		
+		$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
 	}
 }
 ?>

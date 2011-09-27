@@ -1,5 +1,5 @@
 
-<form action="" method="post" id="PodcastFilter" name="searchandfilter">
+<form action="" method="post" id="PodcastFilter">
     
     <div class="input-filter select"><h3>Filter: </h3> 
         <select id="PodcastFilter" name="data[Podcast][filter]">

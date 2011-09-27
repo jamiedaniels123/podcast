@@ -6,6 +6,12 @@ jQuery(document).ready(function($) {
 		cache: false
 	});
 
+	if( jQuery('#PodcastSearch').length ) {
+		
+		jQuery('#PodcastSearch').val(' ');
+		jQuery('#PodcastSearch').focus();
+	}
+ 
 	// Creates the animated 'flash' that occurs when displaying a success message (green banner)
 	if( jQuery('#flashMessage.success').length ) {
 		jQuery('#flashMessage.success').effect('highlight', { color: '#00c500' }, 2000 );

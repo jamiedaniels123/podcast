@@ -445,10 +445,11 @@ class PodcastItemsController extends AppController {
             $this->PodcastItem->create();
 			// Capture various bits and pieces including information needed to determine the workflow.
             $this->data = $this->PodcastItem->createFromUrlVariables( $this->params, $this->Session->read('Podcast.podcast_id') );
+			
             $this->PodcastItem->set( $this->data );
 
             $this->PodcastItem->begin(); // Start a transaction
-
+			
             if( $this->PodcastItem->save() ) { // Save the data here so we can use the unique ID created as part of the media filename.
 
                 $this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
@@ -463,7 +464,7 @@ class PodcastItemsController extends AppController {
 				
 					// Capture the ID3 information
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
-					
+
 					// Capture aspects of the $getId3_information in the PodcastItem array
 					$this->data = $this->PodcastItem->captureId3Information( $this->data, $getId3_information );
 					$this->PodcastItem->set( $this->data );
@@ -471,10 +472,12 @@ class PodcastItemsController extends AppController {
 					
 					// Instaniate the object and determine the workflow.
 					$this->Workflow = ClassRegistry::init('Workflow');
+
 					$this->Workflow->setData( $this->data );
 					$this->Workflow->setId3Data( $getId3_information );
 
 					$this->Workflow->setParams( $this->params ); // Parameters passed in the URL from the filechucker upload script.
+
 					$this->Workflow->determine();
 
 					// Do we have errors? If true, probably an invalid file type.
