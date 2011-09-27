@@ -467,6 +467,7 @@ class PodcastItemsController extends AppController {
 
 					// Capture aspects of the $getId3_information in the PodcastItem array
 					$this->data = $this->PodcastItem->captureId3Information( $this->data, $getId3_information );
+				
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
 					

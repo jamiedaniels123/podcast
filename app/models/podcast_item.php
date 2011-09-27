@@ -170,7 +170,7 @@ class PodcastItem extends AppModel {
 	
 		if( !empty( $filename ) ) {
 		
-			$filename_less_extension = substr( $filename, 0, strrpos( $filename,'.' ) );
+			$filename_less_extension = substr( $filename, 0, strrchr( $filename,'.' ) );
 			return substr( md5( $filename_less_extension ), 0, 10 );
 		}
 		

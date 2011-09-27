@@ -83,7 +83,7 @@ class Workflow extends AppModel {
 			$this->setWorkflow( $this->__select() );
 			
 			
-			$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			//$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} else {
 
@@ -233,7 +233,7 @@ class Workflow extends AppModel {
 
 		// If the user chose an aspect ratio on upload, use it.
 		if( $aspect_ratio_float ) {
-			
+
 			$this->aspect_ratio_float = $aspect_ratio_float;
 			
 			if( $this->aspect_ratio_float == STANDARD_SCREEN_FLOAT ) {
@@ -247,8 +247,8 @@ class Workflow extends AppModel {
 		
 		// The user did not specify an aspect ratio on upload, figure it out.
 		} else {
-			
-			if( $this->video_width == 0 ) {
+
+			if( (int)$this->video_width == false ) {
 				
 				$this->aspect_ratio = STANDARD_SCREEN;
 				$this->aspect_ratio_float = STANDARD_SCREEN_FLOAT;
@@ -399,13 +399,13 @@ class Workflow extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function __select() {
-		
+							
 		$this->recursive = -1;
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
 		
 		if( empty( $workflow ) )
 			return false;
-			
+
 		return $workflow['Workflow']['workflow'];
 	}
 	
