@@ -1656,4 +1656,23 @@ class Podcast extends AppModel {
 		);
 	}
 
+	/*
+	 * @name : isDeleted
+	 * @description : CVhecks to see if a podcast has been deleted and returns a bool. At time of writing is was used
+	 * by the callbacks controller to ensure any newly transcoded media has not been orphaned whilst being transferred 
+	 * to the media box.
+	 * @updated : 27th September 2011
+	 * @by : Charles Jackson
+	 */
+	function isDeleted( $id ) {
+	
+		$this->recursive = -1;
+		
+		$thia->data = $this->findById( $id );	
+		
+		if( empty( $this->data ) || (int)$this->data['Podcast']['deleted'] != false )
+			return true	;
+
+		return false;
+	}
 }

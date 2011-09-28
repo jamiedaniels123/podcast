@@ -32,9 +32,7 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
-		if( $this->Callback->data['command'] == 'transcode-media-and-deliver' ) {
 		$this->emailTemplates->__sendCallbackErrorEmail( array(), $this->Callback->data, 'Callback Alert' );
-		}
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
@@ -119,16 +117,35 @@ class CallbacksController extends AppController {
 			
 			if( in_array( $this->Callback->data['command'], $this->rss_refresh ) ) {
 				
+				$podcast = ClassRegistry::init( 'Podcast' );
+				
 				foreach( $this->Callback->data['data'] as $row ) {
-
-					// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
-					if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
-
-						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id'].'/'.$row['flavour']." > /dev/null &");
-
+					
+					// Check it has not been (soft)deleted since it was transcoded
+					if( $podcast->isDeleted( $row['podcast_id'] ) ) {
+						
+						// It have been deleted, hard delete the new media regardless of whether the parent
+						// has been soft or hard deleted. It has been deleted!
+						$this->Api->deleteFileOnMediaServer( 
+							array(
+								'source_path' => $row['destination_path'],
+								'source_filename' => $row['destination_filename'],  
+								'destination_path' => $row['destination_path'],
+								'destination_filename' => $row['destination_filename']
+							)
+						);
+					
 					} else {
 
-						shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
+						// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
+						if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
+	
+							shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id'].'/'.$row['flavour']." > /dev/null &");
+	
+						} else {
+	
+							shell_exec("curl ".APPLICATION_URL.'/feeds/add/'.$row['podcast_id']." > /dev/null &");
+						}
 					}
 				}
 			}

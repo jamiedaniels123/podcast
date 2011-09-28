@@ -15,8 +15,8 @@ class PodcastItemsController extends AppController {
         
     /*
      * @name : beforeRender
-     * @description : The beforeRender action is automatically called after the controller action has been executed and before the screen
-     * is rendered.
+     * @description : The beforeRender action is automatically called after the controller 
+	 * action has been executed and before the screen is rendered.
      * @updated : 5th May 2011
      * @by : Charles Jackson
      */
@@ -73,7 +73,6 @@ class PodcastItemsController extends AppController {
 
             $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
             $this->cakeError('error404');
-
         }
     }
 	
@@ -149,7 +148,7 @@ class PodcastItemsController extends AppController {
 	 */
 	function publish( $id = null ) {
 		
-		$this->PodcastItem->recursive = 0;
+		$this->PodcastItem->recursive = 1;
 		$status = true;
 				
         if( $id )
@@ -197,7 +196,7 @@ class PodcastItemsController extends AppController {
 	 */
 	function unpublish( $id = null ) {
 		
-		$this->PodcastItem->recursive = 0;
+		$this->PodcastItem->recursive = 1;
 		$status = true;
 				
         if( $id )
@@ -484,8 +483,7 @@ class PodcastItemsController extends AppController {
 					// Do we have errors? If true, probably an invalid file type.
 					if( $this->Workflow->hasErrors() ) {
 						
-						$this->errors = $this->Workflow->getErrors();
-						$this->Session->setFlash('We were unable to determine a transcoding workflow for your media file.', 'default', array( 'class' => 'error' ) );
+						$this->Session->setFlash($this->Workflow->getErrors(), 'default', array( 'class' => 'error' ) );
 						
 					// The media is not transcoded and we can transfer direct to the media box. We include an additional element
 					// entitled "media" that we can recognise in the callback.
@@ -644,16 +642,15 @@ class PodcastItemsController extends AppController {
     	    // If we did not find the podcast media then redirect to the referer.
 	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 				
-				if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false && $this->Object->isAvailable( $this->data['PodcastItem'] ) ) {
+				if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) {
 
-					if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+					if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data, null, '.' ) ) ) {
 	
 						// Soft delete the podcast
 						$this->data['PodcastItem']['deleted'] = true;
 						$this->PodcastItem->set( $this->data );
 						$this->PodcastItem->save();
 		
-
 						if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
 							
 							$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been deleted but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
@@ -670,7 +667,7 @@ class PodcastItemsController extends AppController {
 					
 		        } else {
 				
-					$this->Session->setFlash('Cannot delete '.MEDIA.' that is published or not yet available.', 'default', array( 'class' => 'error' ) );
+					$this->Session->setFlash('Cannot delete '.MEDIA.' that is published.', 'default', array( 'class' => 'error' ) );
 					break;
 				}
 			}
@@ -821,7 +818,7 @@ class PodcastItemsController extends AppController {
 	
 			} else {
 	
-				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data ) ) ) {
+				if( $this->Api->renameFileMediaServer( $this->PodcastItem->listAssociatedMedia( $this->data, '.' ) ) ) {
 	
 					// Soft delete the podcast
 					$this->data['PodcastItem']['deleted'] = false;
