@@ -55,7 +55,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author', 'Podcast.shortcode',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, Podcast.youtube_series_playlist_link, Podcast.youtube_series_playlist_text, Podcast.author',
             'dependent' => true
         )
     );
@@ -200,8 +200,8 @@ class PodcastItem extends AppModel {
 	 * @updated : 21st June 2011
 	 * @by : Charles Jackson
 	 */
-	function listAssociatedMedia( $data = array() ) {
-		
+	function listAssociatedMedia( $data = array(), $source_prefix = null, $destination_prefix = null ) {
+	
 		$media_files = array();
 		
 		// Loop through the media and append to an array
@@ -219,11 +219,11 @@ class PodcastItem extends AppModel {
         	$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
-				'source_filename' => $media['filename'],
-				'destination_filename' => '.'.$media['filename'],
-        		'podcast_item_id' => '.'.$media['podcast_item'],
-        		'podcast_item_media_id' => '.'.$media['id']
-				);
+				'source_filename' => $source_prefix.$media['filename'],
+				'destination_filename' => $destination_prefix.$media['filename'],
+        		'podcast_item_id' => $media['podcast_item'],
+        		'podcast_item_media_id' => $media['id']
+			);
         }
 			
 		// Grab the transcript if it exists and append to array
@@ -232,12 +232,12 @@ class PodcastItem extends AppModel {
 			$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'source_filename' => $data['Transcript']['filename'],
-				'destination_filename' => '.'.$data['PodcastMedia']['filename'],
-        		'podcast_item_id' => '.'.$media['podcast_item'],
-        		'podcast_item_media_id' => '.'.$media['id'],
+				'source_filename' => $source_prefix.$data['Transcript']['filename'],
+				'destination_filename' => $destination_prefix.$data['PodcastMedia']['filename'],
+        		'podcast_item_id' => $media['podcast_item'],
+        		'podcast_item_media_id' => $media['id'],
 				'podcast_item_deletion' => 1
-				);
+			);
 		}
 		
 		if( count( $media_files ) )
@@ -291,7 +291,7 @@ class PodcastItem extends AppModel {
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
 			'meta_data' => $this->encode_meta_data(
 				array(
-					'title' => $this->data['PodcastItem']['youtube_title'],
+					'title' => $this->data['PodcastItem']['youtube_title'].' - '.$this->data['Podcast']['youtube_series_playlist_text'],
 					'description' => $this->data['PodcastItem']['youtube_description'],
 					'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
 					'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
@@ -305,7 +305,7 @@ class PodcastItem extends AppModel {
 					'ratings' => $this->data['PodcastItem']['youtube_ratings'],
 					'embedding' => $this->data['PodcastItem']['youtube_embedding'],
 					'syndication' => $this->data['PodcastItem']['youtube_syndication'],
-					'shortcode' => $this->data['Podcast']['shortcode']
+					'shortcode' => $this->data['PodcastItem']['shortcode']
 				)
 			)
 		);

@@ -3,7 +3,7 @@ class Workflow extends AppModel {
 
     var $name = 'Workflow';
     var $useTable = 'workflows';
-	var $errors = array();
+	var $error = null;
 	
 	var $data = array();
 	var $id3_data = array();
@@ -36,7 +36,7 @@ class Workflow extends AppModel {
 	 */
 	function determine() {
 		
-
+		$this->error = null;
 		$this->setFileFormat( $this->id3_data['fileformat'] );
 		$this->setFileExtension( strtolower( $this->getExtension( $this->id3_data['filename'] ) ) );
 		
@@ -83,18 +83,21 @@ class Workflow extends AppModel {
 			$this->setWorkflow( $this->__select() );
 			
 			
-			$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			//$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} else {
 
 			// If we reached this point the user has uploaded an unsupported file type. Should never happen because validation
 			// also exists in the file chucker upload.
-			$this->errors[] = 'We cannot recognise this media file. It cannot be transcoded.';
+			$this->error = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
 		
 		//$this->setWorkflow('video');
 
-		return count( $this->errors );
+		if( !empty( $this->error ) )
+			return true;
+		
+		return false;
 	}
 
 	/*
@@ -233,7 +236,7 @@ class Workflow extends AppModel {
 
 		// If the user chose an aspect ratio on upload, use it.
 		if( $aspect_ratio_float ) {
-			
+
 			$this->aspect_ratio_float = $aspect_ratio_float;
 			
 			if( $this->aspect_ratio_float == STANDARD_SCREEN_FLOAT ) {
@@ -247,8 +250,8 @@ class Workflow extends AppModel {
 		
 		// The user did not specify an aspect ratio on upload, figure it out.
 		} else {
-			
-			if( $this->video_width == 0 ) {
+
+			if( $this->video_width == false ) {
 				
 				$this->aspect_ratio = STANDARD_SCREEN;
 				$this->aspect_ratio_float = STANDARD_SCREEN_FLOAT;
@@ -264,6 +267,7 @@ class Workflow extends AppModel {
 					
 				} else {
 					
+					$this->aspect_ratio = STANDARD_SCREEN;
 					$this->aspect_ratio_float = STANDARD_SCREEN_FLOAT;
 				}
 			}
@@ -399,13 +403,21 @@ class Workflow extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function __select() {
-		
+							
 		$this->recursive = -1;
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
 		
-		if( empty( $workflow ) )
+
+		if( empty( $workflow ) ) {
+			$this->error = 'We cannot determine a workflow for this media.';
 			return false;
-			
+		}
+	
+		if( $workflow['Workflow']['active'] == false ) {
+			$this->error = 'The workflow you have chosen <i>'.$workflow['Workflow']['workflow'].'</i> has not yet been enabled.';
+			return false;
+		}		
+		
 		return $workflow['Workflow']['workflow'];
 	}
 	
@@ -417,7 +429,7 @@ class Workflow extends AppModel {
 	 */	
 	function hasErrors() {
 	
-		if( empty( $this->errors ) )	
+		if( empty( $this->error ) )	
 			return false;
 		
 		return true;
@@ -425,13 +437,13 @@ class Workflow extends AppModel {
 
 	/*
 	 * @name : getErrors
-	 * @description : Returns the "errors" array.
+	 * @description : Returns the "error" string.
 	 * @updated : 29th June 2011
 	 * @by : Charles Jackson
 	 */		
 	function getErrors() {
 		
-		return $this->errors;	
+		return $this->error;	
 	}
 	
 	/*

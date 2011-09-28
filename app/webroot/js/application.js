@@ -290,7 +290,7 @@ jQuery(document).ready(function($) {
 	// This routine will make an ajax call to determine if the current user is an 
 	// iTunes user. If they are not an itunes user it will hide various filechucker form elements.
 	// The routine it calls is within the app_controller.
-	if( jQuery('.formfield_03').length > 0 ) {
+	/*if( jQuery('.formfield_03').length > 0 ) {
 
 
 		jQuery.ajax(
@@ -307,7 +307,7 @@ jQuery(document).ready(function($) {
 					}
 				}
 		});		
-	}
+	}*/
 	
 	// Enables peeps to jump from the preview to the input screen of any tabbed menu	
 	jQuery('.jquery_display').live('click',function(e) {
