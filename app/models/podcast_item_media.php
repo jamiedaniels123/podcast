@@ -64,10 +64,39 @@ class PodcastItemMedia extends AppModel {
 			$this->create();
 			$this->hydrate( $row );
 			$this->set( $this->data );
-			return $this->saveAll();
+			$this->saveAll();
+
 		}
 	}	
 
+
+	/*
+	 * @name : createDefaultFlavour
+	 * @description :
+	 * @updated : 27th September 2011
+	 * @by : Charles Jackson
+	 */
+	 function createDefaultFlavour( $row = array() ) {
+		 
+		$this->data = $this->PodcastItemMedia->find('first', array( 'conditions' => array(
+		
+			'PodcastItemMedia.media_type' => 'default',
+			'PodcastItemMedia.podcast_item_id' => $row['podcast_item_id'],
+				)
+			)
+		);
+		
+		if( ( $row['flavour'] == DEFAULT_FLAVOUR ) || empty( $this->data ) ) {
+			
+			$this->data['PodcastItemMedia']['podcast_item_id'] = $row['podcast_item_id'];
+			$this->data['PodcastItemMedia']['media_type'] = $row['flavour'];
+			$this->data['PodcastItemMedia']['original_filename'] = $row['original_filename'];
+			$this->data['PodcastItemMedia']['filename'] = $row['destination_filename'];			
+			$this->data['PodcastItemMedia']['processed_state'] = 9; // Where 9 equals available.
+		}
+		 
+	 }
+	 
 	/*
 	 * @name : hydrate
 	 * @description : When updating an existing row or creating a new row this common routine

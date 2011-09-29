@@ -1,6 +1,8 @@
 <?php
 class FolderComponent extends Object {
 
+	var $components = array( 'emailTemplates' );
+
     
 	
 	/*
@@ -191,20 +193,6 @@ class FolderComponent extends Object {
     }
 
     /*
-     * @name : is_empty_dir
-     * @description : Checks to see if a folder is empty.
-     * @updated : 7th July 2001
-     * @by : Charles Jackson
-     */
-	function is_empty_dir( $dir ) {
-	
-		if ( ( $files = @scandir( $dir ) ) && count( $files ) <= 2 )
-			return true;
-
-		return false;
-	}
-	
-    /*
      * @name : writeFile
      * @description :
      * @updated : 1st June 2001
@@ -227,29 +215,56 @@ class FolderComponent extends Object {
      * @updated : 1st June 2001
      * @by : Charles Jackson
      */
-	function cleanUp( $path, $filename, $date_time_stamp = null ) {
+	function cleanUp( $path = FILE_REPOSITORY, $level = 0 ){ 
+	
+	    $ignore = array( 'cgi-bin', '.', '..' ); 
+		// Directories to ignore when listing output. Many hosts 
+		// will deny PHP access to the cgi-bin. 
 
-		$folders = array();
-		$path = str_replace('//','/',$path); // Quick fudge to fix minor API issue
-		if( file_exists( FILE_REPOSITORY.$path.$filename ) == false )
-			return false;
+		$dh = @opendir( $path ); 
+		// Open the directory to the handle $dh 
+     
+	    while( false !== ( $file = readdir( $dh ) ) ) { 
+    	// Loop through the directory 
+
+			if( !in_array( $file, $ignore ) ){ 
+			// Check that this file is not to be ignored 
+
+				if( is_dir( $path.$file ) ) { 
+
+					// Its a directory, so we need to keep reading down... 
+					$this->cleanUp( $path.$file.'/', ( $level + 1 ) ); 
+				
+				} else { 
+					// Delete the file if it is over 1 hour old
+					if ( filemtime($path.$file) <= time()-60*60 ) {
+					   unlink(FILE_REPOSITORY.$file);             
+					}
+				} 
+			}
+        }
 		
-		// We only want to delete files if they were created prior to the date_time stamp on the current API
-		// call else we may delete files that have been refreshed since this API call was made and a.n.other
-		// more recent API call may still be waiting in the queue.
-		
-		unlink( FILE_REPOSITORY.$path.$filename );
-			
-		if( $this->is_empty_dir( FILE_REPOSITORY.$path ) )
-			rmdir( FILE_REPOSITORY.$path );
-			
-		$folders = explode('/',$path );
-		$custom_id = $folders[0];
-		if( !empty( $custom_id ) && $this->is_empty_dir( FILE_REPOSITORY . $custom_id ) )
-			return ( rmdir( FILE_REPOSITORY.$custom_id ) );
-		
-		return true;
-			
+		// If the folder is now empty, delete it.
+		if( ( $path != FILE_REPOSITORY ) && $this->is_empty_dir( $path ) ) {
+			rmdir( $path );
+		}
+     
+	    closedir( $dh ); 
+    	// Close the directory handle 
+	}
+	
+    /*
+     * @name : is_empty_dir
+     * @description : Checks to see if a folder is empty.
+     * @updated : 7th July 2001
+     * @by : Charles Jackson
+     */
+	function is_empty_dir( $dir ) {
+	
+		if ( ( $files = @scandir( $dir ) ) && count( $files ) <= 2 )
+			return true;
+
+		return false;
 	}
     
 }

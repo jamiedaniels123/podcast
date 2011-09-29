@@ -61,7 +61,7 @@ ul#breadcrumb li {
 }
 
 ul#breadcrumb li a	{
-	background: #ccc url(/img/icon-16-link.png) no-repeat 2px center;
+	background: #fff url(/img/icon-16-link.png) no-repeat 2px center;
 	color: #003d4c;
 	border: 0px solid #003d4c;
 	border-radius: 4px;
@@ -141,4 +141,8 @@ form .input-filter {
 	width: 100%;
 	padding-bottom: 1.2em;
 }
+
+.collection-top h3	{
+	font-size:1.2em;
+	}
 

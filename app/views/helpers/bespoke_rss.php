@@ -1,5 +1,4 @@
 <?php
-App::import('Helper', 'Xml');
 
 /*
  * @name : BespokseRssHelper
@@ -11,7 +10,6 @@ class BespokeRssHelper extends RssHelper {
 	/*
 	 * @name : channel
 	 * @description : Extension of the base channel method.
-	 * @TODO : Not sure this extension is now needed. To be checked but doing no harm.
 	 * @updated : 19th August 2011
 	 * @by : Charles Jackson
 	 */
@@ -165,8 +163,8 @@ class BespokeRssHelper extends RssHelper {
                     $attrib = $val;
                     $val = null;
                     break;
-                case 'itunes:category':
-                    $attrib = $val;
+                case 'itunesu:category':
+                    $attrib = $val['attrib'];
                     $val = null;
                     break;
 				case 'atom:link' :
@@ -278,4 +276,55 @@ class BespokeRssHelper extends RssHelper {
 		
 		return $this->elem($elem, $attributes, $data);
     }	
+	
+	/*
+	 * @name : elem
+	 * @description : An extension of the method found in the core xml.php helper.
+	 * @updated : 21st September 2011
+	 * @by : Charles Jackson
+	 */	
+	function elem($name, $attrib = array(), $content = null, $endTag = true) {
+
+		$namespace = null;
+		if (isset($attrib['namespace'])) {
+			$namespace = $attrib['namespace'];
+			unset($attrib['namespace']);
+		}
+		$cdata = false;
+		if (is_array($content) && isset($content['cdata'])) {
+			$cdata = true;
+			unset($content['cdata']);
+		}
+		if (is_array($content) && array_key_exists('value', $content)) {
+			$content = $content['value'];
+		}
+		$children = array();
+		if (is_array($content)) {
+			$children = $content;
+			$content = null;
+		}
+
+		
+		$elem =& $this->Xml->createElement($name, $content, $attrib, $namespace);
+		foreach ($children as $child) {
+			$elem->createElement($child);
+		}
+
+		$out = $elem->toString(array('cdata' => $cdata, 'leaveOpen' => !$endTag));
+
+		if (!$endTag) {
+			$this->Xml =& $elem;
+		}
+
+		// Because we use the element name as the key we have a problem where two elements
+		// have exactly the same name in the channel data. This bit of "logic by exception" does a
+		// preg_replace on any alias of the atom:category that can be identified by atom:category_.
+		if( preg_match( '/atom:category_./',  $out ) ) {
+			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
+		}
+
+		// Append a new line "\n" to the end of the return value to aid formatting when viewing the 
+		// soure code of an XML feed.
+		return $out."\n"; 
+	}	
 }

@@ -1,6 +1,6 @@
 <form method="post" action="">
     
-<table cellpadding="0" cellspacing="0">
+<table class="collection_table" cellpadding="0" cellspacing="0">
     <tr>
         <th class="checkbox">Select</th>
         <th class="thumbnail" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'thumbnail'); ?>>Image</th>
@@ -148,7 +148,7 @@ endif; ?>
 <?php echo $this->element('pagination'); ?>    
 
     <div class="left">
-    <a href="/" class="toggler button setting" data-status="unticked">Select/Unselect all</a>
+    <a href="/" class="toggler button select_all" data-status="unticked">Select/Unselect all</a>
 	<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
 		<a class="button rss multiple_action_button" type="button" href="/feeds/add" id="generate_rss_multiple_podcasts">Refresh RSS</a>
 		<a class="button delete multiple_action_button" type="button" href="/admin/podcasts/delete" id="delete_multiple_podcasts">Delete</a>    	

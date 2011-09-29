@@ -50,6 +50,7 @@ class Getid3Component extends Object {
                     $this->result['filename'] = basename($getid3->filename);
                     $this->result['filesize'] = @$getid3->info['filesize'];
                     $this->result['fileformat'] = @$getid3->info['fileformat'];
+                    $this->result['duration'] = @$getid3->info['playtime_seconds'];
 
 					if( isSet( $getid3->info['audio'] ) ) 
 						$this->result['audio'] = $getid3->info['audio'];

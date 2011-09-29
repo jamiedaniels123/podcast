@@ -1,5 +1,6 @@
-<div class="content" id="FormPodcastSharingContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
-	
+
+<div id="FormPodcastSharingContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
+	<div class="content">
     
    <div class="collection_input"><!--Moderator groups-->
         <div id="user_groups_container">
@@ -161,3 +162,5 @@
         </div><!--/End of permissions-->
 	</div><!--/end of text single_row_item-->
  </div><!--/end of FormPodcastSharingContainer-->
+ 
+ </div><!--content-->

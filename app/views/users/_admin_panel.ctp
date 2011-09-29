@@ -27,6 +27,8 @@
 
 				<ul style="list-style:none;">
 
+					<li style="line-height: 22px; background-image: url(/img/icon-16-link-usergroups.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a onclick="return confirm('You are about to delete all media and empty folders last modified over 1 hour ago. Are you sure?');" href="/callbacks/delete_folders">Folder Cleanup</a></li>
+
 					<li style="line-height: 22px; background-image: url(/img/icon-16-rss.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a  href="/admin/feeds/preview">RSS Preview Tool</a></li>
 	
 					<li style="line-height: 22px; background-image: url(/img/icon-16-link-podcast.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;" ><a href="/admin/users/reset" onclick="return confirm('Are you sure you wish to force all users to agree to the terms and conditions?');">Reset Terms &amp; Conditions</a></li>

@@ -2,12 +2,14 @@
     <div class="float_left one_column"><dl>
         <dt>Series Playlist:&nbsp;</dt>
         <dd><?php echo $this->data['Podcast']['youtube_series_playlist_text']; ?>&nbsp;</dd>
+        <dt>Series Playlist Description:&nbsp;</dt>
+        <dd><?php echo nl2br( $this->data['Podcast']['youtube_description'] ); ?>&nbsp;</dd>
         <dt>Series Playlist Link:&nbsp;</dt>
         <dd><?php echo $this->data['Podcast']['youtube_series_playlist_link']; ?>&nbsp;</dd>
+        <dt>Series Playlist Tags:&nbsp;</dt>
+        <dd><?php echo $this->data['Podcast']['youtube_tags']; ?>&nbsp;</dd>
         <dt>Channel:&nbsp;</dt>
         <dd><?php echo $this->data['Podcast']['youtube_channel']; ?>&nbsp;</dd>
-        <dt>Course Code:&nbsp;</dt>
-        <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
     </dl>
     </div>    
 

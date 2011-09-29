@@ -78,6 +78,7 @@ class Feed extends AppModel {
         'm4b' => 'audio/x-m4b',
         '3gp' => 'video/x-m4v',
         'mp4' => 'video/mp4',
+    	'dv' => 'video/x-dv',
         'm4v' => 'video/x-m4v',
         'mov' => 'video/quicktime',
         'pdf' => 'application/pdf',
@@ -220,7 +221,7 @@ class Feed extends AppModel {
         $channelData['itunes:summary'] = $this->data['Podcast']['summary'];
         $channelData['itunes:keywords'] = $this->data['Podcast']['keywords'];
         $channelData['itunes:author'] = strlen( trim( $this->data['Podcast']['author'] ) ) ? $this->data['Podcast']['author'] : DEFAULT_AUTHOR;
-        $channelData['itunes:explicit'] = ucfirst( $this->data['Podcast']['explicit'] );
+
 
         if ( !empty( $this->podcast_path_and_image ) )
             $channelData['itunes:image']['attrib']['href'] = $this->podcast_path_and_image;
@@ -246,18 +247,23 @@ class Feed extends AppModel {
         }
         // END - iTunes specific elements
 
-        if ( !empty($this->data['Nodes']['subject_code']) && !empty( $this->data['Nodes']['title'] ) ) {
 
-            $channelData['atom:category']['attrib']['scheme'] = 'http://purl.org/ou/blue#';
-            $channelData['atom:category']['attrib']['term'] = $this->data['Nodes']['subject_code'];
-            $channelData['atom:category']['attrib']['label'] = $this->data['Nodes']['subject_title'];
+		// We name the element "atom:category" by an alias identified the regular expression "atom:category_."
+		// We use an alias because the element name is used as the key in the array therefore we cannot have 
+		// the same element twice.
+		// All occurences of the alias are replaced in bespoke_rss.php in the "elem" method using
+		// preg_replace
+        if ( !empty( $this->data['Podcast']['course_code'] ) ) {
+            $channelData['atom:category_1']['attrib']['scheme'] = 'http://purl.org/steeple/course';
+            $channelData['atom:category_1']['attrib']['term'] = $this->data['Podcast']['course_code'];
+            $channelData['atom:category_1']['attrib']['label'] = null;
         }
 
-        if ( !empty( $this->data['Podcast']['course_code'] ) ) {
-            
-            $channelData['atom:category']['attrib']['scheme'] = 'http://purl.org/steeple/course';
-            $channelData['atom:category']['attrib']['term'] = $this->data['Podcast']['course_code'];
-            $channelData['atom:category']['attrib']['label'] = null;
+        if ( !empty($this->data['PreferredNode']['subject_code']) && !empty( $this->data['PreferredNode']['title'] ) ) {
+
+            $channelData['atom:category_2']['attrib']['scheme'] = 'http://purl.org/ou/blue#';
+            $channelData['atom:category_2']['attrib']['term'] = $this->data['PreferredNode']['subject_code'];
+            $channelData['atom:category_2']['attrib']['label'] = $this->data['PreferredNode']['title'];
         }
 
         return $channelData;
@@ -398,7 +404,7 @@ class Feed extends AppModel {
 
         $item['guid'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
         // Remove 1 second from datestamp so as not to conflict with actual media.
-        $item['pubDate'] = ($this->podcast_item['publication_date'] - 1 );
+        $item['pubDate'] = date("Y-m-d H:i:s", strtotime( $this->podcast_item['publication_date'] ) - 1 );
         $item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
 
         $this->podcast_items[] = $item;
@@ -705,11 +711,11 @@ class Feed extends AppModel {
         if ( ( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) &&
                 ( in_array($this->media_type, array( 'ipod', 'ipod-all', 'audio', 'epub', '' ) ) ) ) {
 
-            $item['itunes:category']['attrib']['itunes:code'] = $this->data['iTuneCategories'][0]['code'] = null;
+            $item['itunesu:category']['attrib']['itunesu:code'] = $this->data['iTuneCategories'][0]['code'];
 
         } else {
 
-            $item['itunes:category']['attrib']['itunes:code'] = null;
+            $item['itunesu:category']['attrib']['itunesu:code'] = null;
         }
 
         return $item;

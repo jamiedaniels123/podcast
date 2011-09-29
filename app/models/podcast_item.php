@@ -55,7 +55,7 @@ class PodcastItem extends AppModel {
         'Podcast' => array(
             'className' => 'Podcast',
             'foreignKey' => 'podcast_id',
-            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, youtube_series_playlist_link, youtube_series_playlist_text, Podcast.author', 'Podcast.shortcode',
+            'fields' => 'Podcast.id, Podcast.title, Podcast.summary, Podcast.custom_id, Podcast.private, Podcast.owner_id, Podcast.publish_itunes_u, Podcast.publish_youtube, Podcast.podcast_flag, Podcast.course_code, Podcast.intended_youtube_flag, Podcast.intended_itunesu_flag, Podcast.youtube_series_playlist_link, Podcast.youtube_series_playlist_text, Podcast.author',
             'dependent' => true
         )
     );
@@ -127,11 +127,12 @@ class PodcastItem extends AppModel {
         $this->data['PodcastItem']['processed_state'] = 2;
 		
         if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
-            $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN;
+            $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN_FLOAT;
         if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
-            $this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN;
-        if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
+            $this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN_FLOAT;
+		if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
             $this->data['PodcastItem']['aspect_ratio'] = null;
+
 
         return $this->data;
     }
@@ -199,8 +200,8 @@ class PodcastItem extends AppModel {
 	 * @updated : 21st June 2011
 	 * @by : Charles Jackson
 	 */
-	function listAssociatedMedia( $data = array() ) {
-		
+	function listAssociatedMedia( $data = array(), $source_prefix = null, $destination_prefix = null ) {
+	
 		$media_files = array();
 		
 		// Loop through the media and append to an array
@@ -218,11 +219,11 @@ class PodcastItem extends AppModel {
         	$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
-				'source_filename' => $media['filename'],
-				'destination_filename' => '.'.$media['filename'],
-        		'podcast_item_id' => '.'.$media['podcast_item'],
-        		'podcast_item_media_id' => '.'.$media['id']
-				);
+				'source_filename' => $source_prefix.$media['filename'],
+				'destination_filename' => $destination_prefix.$media['filename'],
+        		'podcast_item_id' => $media['podcast_item'],
+        		'podcast_item_media_id' => $media['id']
+			);
         }
 			
 		// Grab the transcript if it exists and append to array
@@ -231,12 +232,12 @@ class PodcastItem extends AppModel {
 			$media_files[] = array( 
 				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
 				'destination_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'source_filename' => $data['Transcript']['filename'],
-				'destination_filename' => '.'.$data['PodcastMedia']['filename'],
-        		'podcast_item_id' => '.'.$media['podcast_item'],
-        		'podcast_item_media_id' => '.'.$media['id'],
+				'source_filename' => $source_prefix.$data['Transcript']['filename'],
+				'destination_filename' => $destination_prefix.$data['PodcastMedia']['filename'],
+        		'podcast_item_id' => $media['podcast_item'],
+        		'podcast_item_media_id' => $media['id'],
 				'podcast_item_deletion' => 1
-				);
+			);
 		}
 		
 		if( count( $media_files ) )
@@ -290,31 +291,31 @@ class PodcastItem extends AppModel {
 			'source_filename' => $this->data['YoutubeVideo']['filename'],			
 			'meta_data' => $this->encode_meta_data(
 				array(
-				'title' => $this->data['PodcastItem']['youtube_title'],
-				'description' => $this->data['PodcastItem']['youtube_description'],
-				'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
-				'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
-				'channel' => $this->data['PodcastItem']['youtube_channel'],
-				'tags' => $this->data['PodcastItem']['youtube_tags'],
-				'privacy' => $this->data['PodcastItem']['youtube_privacy'],
-				'license' => $this->data['PodcastItem']['youtube_license'],
-				'comments' => $this->data['PodcastItem']['youtube_comments'],
-				'voting' => $this->data['PodcastItem']['youtube_voting'],
-				'video_response' => $this->data['PodcastItem']['youtube_video_response'],
-				'ratings' => $this->data['PodcastItem']['youtube_ratings'],
-				'embedding' => $this->data['PodcastItem']['youtube_embedding'],
-				'syndication' => $this->data['PodcastItem']['youtube_syndication'],
-				'shortcode' => $this->data['Podcast']['shortcode']
+					'title' => $this->data['PodcastItem']['youtube_title'].' - '.$this->data['Podcast']['youtube_series_playlist_text'],
+					'description' => $this->data['PodcastItem']['youtube_description'],
+					'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
+					'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
+					'channel' => $this->data['Podcast']['youtube_channel'],
+					'youtube_tags' => $this->data['PodcastItem']['youtube_tags'],
+					'privacy' => $this->data['PodcastItem']['youtube_privacy'],
+					'license' => $this->data['PodcastItem']['youtube_license'],
+					'comments' => $this->data['PodcastItem']['youtube_comments'],
+					'voting' => $this->data['PodcastItem']['youtube_voting'],
+					'video_response' => $this->data['PodcastItem']['youtube_video_response'],
+					'ratings' => $this->data['PodcastItem']['youtube_ratings'],
+					'embedding' => $this->data['PodcastItem']['youtube_embedding'],
+					'syndication' => $this->data['PodcastItem']['youtube_syndication'],
+					'shortcode' => $this->data['PodcastItem']['shortcode']
 				)
 			)
 		);
-		
+	
 		return $youtube_data;
 	}
 
 	/*
 	 * @name : encode_meta_data
-	 * @description : Due to the ftreeform nature of the description field we use a 'heavier' encoding method
+	 * @description : Due to the freeform nature of the description field we use a 'heavier' encoding method
 	 * than the normal json encode.
 	 * @updated : 25th August 2011
 	 * @by : Charles Jackson
@@ -346,7 +347,7 @@ class PodcastItem extends AppModel {
 	 */
 	function youtubeValidates( $data = array() ) {
 		
-		if( empty( $data['PodcastItem']['youtube_title'] ) || empty( $data['PodcastItem']['youtube_description'] ) )
+		if( empty( $data['PodcastItem']['youtube_title'] ) || empty( $data['PodcastItem']['youtube_description'] ) || empty( $data['PodcastItem']['youtube_tags'] ) )
 			return false;
 			
 		return true;

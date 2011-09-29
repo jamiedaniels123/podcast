@@ -7,7 +7,7 @@
  * Lastly, for all commands received it will echo an ACK or a NACK. A NACK will only be posted if we are unable to match 
  * the command sent against the array held in the vle.php model.
  *
- * There are 'X' basic VLE commands, all lowercase, understood by the admin box as follows :
+ * There are 6 basic VLE commands, all lowercase, understood by the admin box as follows :
  * 
  * "CREATE-CONTAINER" : Upon receipt of this command we create a new row on the podcasts database table then
  * send the original commmand back to the API using a seperate http request with two new elements entitled "status" that equals "Y" or
