@@ -170,7 +170,7 @@ class PodcastItem extends AppModel {
 	
 		if( !empty( $filename ) ) {
 		
-			$filename_less_extension = substr( $filename, 0, strrchr( $filename,'.' ) );
+			$filename_less_extension = substr( $filename, 0, strrpos( $filename,'.' ) );
 			return substr( md5( $filename_less_extension ), 0, 10 );
 		}
 		
@@ -295,8 +295,8 @@ class PodcastItem extends AppModel {
 					'description' => $this->data['PodcastItem']['youtube_description'],
 					'series_playlist_link' => $this->data['Podcast']['youtube_series_playlist_link'],
 					'series_playlist_text' => $this->data['Podcast']['youtube_series_playlist_text'],
-					'channel' => $this->data['PodcastItem']['youtube_channel'],
-					'tags' => $this->data['PodcastItem']['youtube_tags'],
+					'channel' => $this->data['Podcast']['youtube_channel'],
+					'youtube_tags' => $this->data['PodcastItem']['youtube_tags'],
 					'privacy' => $this->data['PodcastItem']['youtube_privacy'],
 					'license' => $this->data['PodcastItem']['youtube_license'],
 					'comments' => $this->data['PodcastItem']['youtube_comments'],
@@ -347,7 +347,7 @@ class PodcastItem extends AppModel {
 	 */
 	function youtubeValidates( $data = array() ) {
 		
-		if( empty( $data['PodcastItem']['youtube_title'] ) || empty( $data['PodcastItem']['youtube_description'] ) )
+		if( empty( $data['PodcastItem']['youtube_title'] ) || empty( $data['PodcastItem']['youtube_description'] ) || empty( $data['PodcastItem']['youtube_tags'] ) )
 			return false;
 			
 		return true;
