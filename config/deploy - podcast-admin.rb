@@ -25,6 +25,7 @@ namespace :deploy do
 		run "ln -s #{deploy_to}/#{shared_dir}/config/database.php #{current_release}/app/config/database.php"
 		run "ln -s #{deploy_to}/#{shared_dir}/config/call_fc.php #{current_release}/app/webroot/upload/call_fc.php"
 		run "ln -s #{deploy_to}/#{shared_dir}/files #{current_release}/app/webroot/upload/files"
+		run "ln -s #{deploy_to}/#{shared_dir}/files #{current_release}/app/webroot/rss"
 		run "mkdir #{current_release}/app/tmp"
 		run "ln -s #{deploy_to}/#{shared_dir}/tmp #{current_release}/app/tmp/cache"
 		run "ln -s #{deploy_to}/#{shared_dir}/config/.htaccess_root #{current_release}/.htaccess"
@@ -34,6 +35,7 @@ namespace :deploy do
    	     # Build a cakePHP shared folder structure 
    	     run "mkdir #{deploy_to}/#{shared_dir}/config"
    	     run "mkdir #{deploy_to}/#{shared_dir}/files"
+   	     run "mkdir #{deploy_to}/#{shared_dir}/rss"
    	     run "mkdir #{deploy_to}/#{shared_dir}/tmp"
    	     run "chmod -R 777 #{deploy_to}/#{shared_dir}/tmp"
    	     run "rm -r #{deploy_to}/#{shared_dir}/system"
