@@ -307,7 +307,7 @@ class PodcastItemsController extends AppController {
 
 			if( $this->Object->youtubePublished( $this->data['PodcastItem'] ) ) {
 			
-				if( $this->PodcastItem->youtubeValidates( $this->data ) ) {
+				if( $this->PodcastItem->youtubeValidates( $this->data ) && $this->data['PodcastItem']['youtube_id'] != NULL && $this->data['PodcastItem']['youtube_id'] != '1') {
 
 					if( $this->Api->youtubeRefresh( $this->PodcastItem->buildYoutubeData( $this->data ) ) ) {
 						$this->data['PodcastItem']['youtube_flag'] = 'Y';
@@ -323,7 +323,7 @@ class PodcastItemsController extends AppController {
 					
 				} else {
 					
-						$this->Session->setFlash('Unable to refresh '.MEDIA.' to youtube. Please ensure the '.MEDIA.' has a youtube title & description.', 'default', array( 'class' => 'error' ) );
+						$this->Session->setFlash('Unable to refresh '.MEDIA.' to youtube. Please ensure the '.MEDIA.' has a youtube title, description, tags and has been fully uploaded to YouTube.', 'default', array( 'class' => 'error' ) );
 						break;
 				}
 

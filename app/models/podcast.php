@@ -6,7 +6,13 @@ class Podcast extends AppModel {
     
     var $name = 'Podcast';
 	var $order = 'Podcast.id DESC';
-    
+	
+	// Possible fix to the bug whereas you are unable to sort by media count.
+	// Research "VirtualFields" and add the column to the pagination array ( top of the controller)
+	/*var $virtualFields = array(
+     'media_count' => 'count(PodcastItems.id)'
+     ); */
+     
     var $validate = array(
 
         'title' => array(
@@ -1668,9 +1674,9 @@ class Podcast extends AppModel {
 	
 		$this->recursive = -1;
 		
-		$thia->data = $this->findById( $id );	
+		$this->data = $this->findById( $id );	
 		
-		if( empty( $this->data ) || (int)$this->data['Podcast']['deleted'] != false )
+		if( empty( $this->data ) || (int)$this->data['Podcast']['deleted'])
 			return true	;
 
 		return false;
