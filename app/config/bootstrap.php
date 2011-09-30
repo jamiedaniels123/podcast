@@ -56,6 +56,7 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+		DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-dev.open.ac.uk/');
 		break;
 	case 'podcast-admin-acc.open.ac.uk':	// Currently doesn't exist, using live for acct.
 		DEFINE('SERVER_ENV', 'ACCT');
@@ -67,7 +68,8 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('SERVER_ENV', 'LIVE');
 		DEFINE('DOMAIN_NAME', 'podcast-api-acc.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
-		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-acc.open.ac.uk/');
+		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
+		DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-acc.open.ac.uk/');
 		break;
 	case 'local.podcast.com':
 		DEFINE('SERVER_ENV', 'DEV');

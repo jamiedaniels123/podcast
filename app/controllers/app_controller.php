@@ -60,10 +60,10 @@ class AppController extends Controller {
 	 * @description : Return the extension of parameter passed	
 	 * @updated : 28th June 2011
 	 * @by : Charles Jackson
+	 * @updated by Jamie Daniels 30/09/11
 	 */
     function getExtension( $filename = null ) {
-
-        return substr( $filename, ( strpos( $filename, '.' ) + 1 ), strlen( $filename ) );
+		return end(explode('.', $filename));
     }
 
     /*

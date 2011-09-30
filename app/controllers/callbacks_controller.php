@@ -2,7 +2,7 @@
 class CallbacksController extends AppController {
 
 	var $name = 'Callbacks';
-	var $requires_meta_injection = array('deliver-without-transcoding');
+	var $requires_meta_injection = array('deliver-without-transcoding','transcode-media-and-deliver');
 	var $process_transcode = array('transcode-media-and-deliver','deliver-without-transcoding');
 	var $deletion_request = array('delete-folder-on-media-server','delete-file-on-media-server');
 	var $rss_refresh = array('transcode-media-and-deliver','deliver-without-transcoding');
@@ -63,7 +63,6 @@ class CallbacksController extends AppController {
 				
 			// If we need to kick-off some meta injection do it here.
 			if( in_array( $this->Callback->data['command'], $this->requires_meta_injection ) ) {
-				
 				// Needed to retrieve the meta data.
 				if( is_object( $podcastItem ) == false )
 					$podcastItem = ClassRegistry::init('PodcastItem');
@@ -73,15 +72,14 @@ class CallbacksController extends AppController {
 					$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
 				
 				foreach( $this->Callback->data['data'] as $row ) {
-					
-					if( ( $row['status'] == YES ) ) {
-
+					$this->emailTemplates->__sendCallbackErrorEmail( array(), strtolower($this->getExtension($row['destination_filename'])), 'MP3 injection' );
+					if( ( $row['status'] == YES ) && strtolower($this->getExtension($row['destination_filename'])) == 'mp3') {
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
-						if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
+					//	if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
 							
 							$this->Api->metaInject( $podcastItemMedia->buildMetaData( array( 'PodcastItemMedia.podcast_item' => $row['podcast_item_id'], 'PodcastItemMedia.media_type' => $row['flavour'] ) ) );
 							
-						}
+					//	}
  					}
 				}
 			}
@@ -116,7 +114,6 @@ class CallbacksController extends AppController {
 			}
 			
 			if( in_array( $this->Callback->data['command'], $this->rss_refresh ) ) {
-				
 				$podcast = ClassRegistry::init( 'Podcast' );
 				
 				foreach( $this->Callback->data['data'] as $row ) {
@@ -136,7 +133,6 @@ class CallbacksController extends AppController {
 						);
 					
 					} else {
-
 						// We generate new RSS feeds by calling the URL in background ( redirecting all output to "/dev/null 2>&1" ).
 						if( isSet( $row['flavour'] ) && !empty( $row['flavour'] ) ) {
 	

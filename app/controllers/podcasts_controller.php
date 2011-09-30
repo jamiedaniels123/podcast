@@ -11,7 +11,7 @@ class PodcastsController extends AppController {
 		'limit' => 20, 
 		'page' => 1, 
 		'order' => 'Podcast.id DESC',
-		'fields' => 'Podcast.id, Podcast.custom_id, Podcast.deleted, Podcast.preferred_url, Podcast.created, Podcast.copyright, Podcast.title, Podcast.node_id, Podcast.preferred_node, Podcast.image, Podcast.image_copyright, Podcast.image_logoless, Podcast.image_ll_copyright, Podcast.image_wide, Podcast.image_wide_copyright, Podcast.author, Podcast.itunes_u_url, Podcast.language, Podcast.explicit, Podcast.owner_id, Podcast.contact_name, Podcast.contact_email, Podcast.course_code, Podcast.publish_itunes_u, Podcast.intended_itunesu_flag, Podcast.openlearn_epub, Podcast.openlearn_epub, Podcast.consider_for_itunesu, Podcast.consider_for_youtube, Podcast.intended_youtube_flag, Podcast.podcast_flag, Owner.id, Owner.firstname, Owner.lastname, PreferredNode.title' 
+		'fields' => 'Podcast.id, Podcast.custom_id, Podcast.deleted, Podcast.preferred_url, Podcast.created, Podcast.copyright, Podcast.title, Podcast.node_id, Podcast.preferred_node, Podcast.image, Podcast.image_copyright, Podcast.image_logoless, Podcast.image_ll_copyright, Podcast.image_wide, Podcast.image_wide_copyright, Podcast.author, Podcast.itunes_u_url, Podcast.language, Podcast.explicit, Podcast.owner_id, Podcast.contact_name, Podcast.contact_email, Podcast.course_code, Podcast.publish_itunes_u, Podcast.intended_itunesu_flag, Podcast.openlearn_epub, Podcast.openlearn_epub, Podcast.consider_for_itunesu, Podcast.consider_for_youtube, Podcast.intended_youtube_flag, Podcast.podcast_flag, Owner.id, Owner.firstname, Owner.lastname, PreferredNode.title'  
 		);
 
     function beforeFilter() {

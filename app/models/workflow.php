@@ -65,10 +65,8 @@ class Workflow extends AppModel {
 			$this->setMediaType( 'video' );
 
 			$this->setConditions();
+			
 			//$this->setWorkflow( $this->__select() );
-			
-			
-			//$this->setWorkflow( 'video' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			$this->setWorkflow( 'video-wide-360-watermark-trailers' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
@@ -80,10 +78,8 @@ class Workflow extends AppModel {
 			$this->aspect_ratio = null;
 			$this->aspect_ratio_float = null;
 			$this->setConditions();
+			
 			$this->setWorkflow( $this->__select() );
-			
-			
-			//$this->setWorkflow( 'audio' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} else {
 
@@ -92,8 +88,6 @@ class Workflow extends AppModel {
 			$this->error = 'We cannot recognise this media file. It cannot be transcoded.';
 		}
 		
-		//$this->setWorkflow('video');
-
 		if( !empty( $this->error ) )
 			return true;
 		

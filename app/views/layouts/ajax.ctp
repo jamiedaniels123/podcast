@@ -12,9 +12,12 @@
         <li <?php echo $element == 'embed' ? 'class="active"' : '';?> data-element="embed" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">Embed</a>
         </li>
+        
+        <?php if($this->Permission->isItunesUser() ||  $this->Permission->isYouTubeUser() || $this->Permission->isAdministrator()):?>
         <li <?php echo $element == 'flavours' ? 'class="active"' : '';?> data-element="flavours" data-id="<?php echo $this->data['PodcastItem']['id']; ?>">
              <a href="/" class="PodcastItemPreviewLink">Flavours</a>
         </li>
+        <?php endif;?>
 
     </ul>
 	<?php echo $this->Session->flash(); ?>
