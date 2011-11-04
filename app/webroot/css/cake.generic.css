@@ -100,6 +100,7 @@ ul, li {
 .content	{
 	padding: 0 20px 0 20px!important;
 	margin:0;
+
 	}
 
 #content{
@@ -108,7 +109,7 @@ ul, li {
 	clear: both;
 	color: #333;
 	padding: 0px 20px 20px 20px;  
-	overflow: auto;
+	border-radius: 0px 0px 14px 14px;	
 	}
 	
 #content h3	{
@@ -415,6 +416,7 @@ form div {
 	margin-bottom: 0.6em;
 	/*padding: 0 .5em;*/
 	vertical-align:middle;
+	width: auto;
 }
 
 /*form .input {
@@ -529,8 +531,12 @@ label	{
 	color: #333;	
 }
 
+#top-textboxes	{
+	background: none repeat scroll 0 0 #eff8fc;
+	}
+
 .dropdown	{
-	background: none repeat scroll 0 0 #E5F3FA;
+	
     border-radius: 4px 4px 4px 4px;
     margin: 0.5em 0 0 24px;
     padding: 0.5em;	
@@ -550,6 +556,10 @@ label	{
 
 .input	{
 	background: #666!important;
+}
+
+.user_input	{
+	background: #fff;
 }
 
 form br {
@@ -572,9 +582,7 @@ option {
 }
 
 input[type=checkbox] {
-	clear: left;
-
-
+	/*clear: left;*/
 	width: auto;
 	border:1px solid #999;
 }
@@ -854,6 +862,7 @@ div#dashboard {
 
 div#dashboard ul {
     margin-top: 20px;
+	padding-left:10px;
 	}
 
 fieldset#admin_panel ul, div#dashboard ul {
@@ -873,15 +882,24 @@ div.wrapper {
 div.float_right {
 	float: right;
 	}
+	
+div.float_right_dash {
+	float: right;
+	}
 
 div.float_left {
-	float: left;
-	background-color:rgb(245,250,252);
+	/*float: left; Removed as a test - Peter: 121011*/
+	background-color:rgb(239,248,252);
 	}
 	
 div.float_left_list {
 	float: left;
+	margin-right: 60px;
 	}	
+	
+div.float_left_list h4 {
+	font-weight: bold;
+	}
 	
 div.track_float_left {
 	float: left;
@@ -924,6 +942,11 @@ form#theuploadform input[type="button"] {
 	border-radius: 4px;
 	padding: 2px 4px 2px 20px;
 	behavior: url(/css/PIE.htc); /*IE rounded corner*/
+	}
+	
+input[type="submit"] {
+	border: 0px;
+	outline:none;
 	}
 
 form#theuploadform input[type="file"] {
@@ -971,7 +994,7 @@ tr.deleted td {
 	width: 25%;		
 	}
 
-#user_groups_container label, #moderator_container label	{
+#user_groups_container label, #moderator_container label, #applications_users_moderators	{
 	font-weight:bold;
 	margin-left:10px;
 	}
@@ -1017,7 +1040,7 @@ div.track_two_column {
 	}	
 
 div.one_column {
-	padding: 5px;
+	padding: 5px 0px 5px 5px;
 	width: 100%;	
 	}
 

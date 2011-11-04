@@ -1,3 +1,4 @@
+<!-- 
 <div id="ou-org-footer">
 <div class="ou-grid">
   <div class="ou-c1of4">
@@ -45,7 +46,7 @@
 
     </ul>
   </div>
-  <div class="ou-c4of4"><!-- reserved --></div>
+  <div class="ou-c4of4"></div>
   </div>
   <div class="ou-charter">
   <p>The Open University is incorporated by Royal Charter (RC 000391), an exempt charity in England &amp; Wales and a charity registered in Scotland (SC 038302).</p>
@@ -54,3 +55,9 @@
 </div>
 
 <script type="text/javascript">ou_init();</script>
+-->
+
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/headers-footers/ou-footer.html'; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/ouice/3/ou-foot.html'; ?>

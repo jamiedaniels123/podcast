@@ -1,6 +1,22 @@
 @charset "utf-8";
 /* CSS Document */
 
+.footer-panel	{
+	background: #fff; 
+	margin: 10px -20px 20px -20px;
+		
+	}	
+
+div.one_column {
+	padding: 5px 0px 5px 0px;
+	width: 100%;	
+	}
+	
+	div.two_column {
+	padding: 5px 0 5px 0;	
+	}
+	
+
 legend h3 {
 	margin: -5px 0px 0 64px;
 	}
@@ -97,21 +113,45 @@ div.actions li {
 table tr:nth-child(2n) td {
 	/*background: #f5f5f5;*/
 	background: #fff;
-}
+	}
+	
 table .altrow td {
 	/*background: #f5f5f5;*/
 	background: #e5f3fa;
-}
+	}
+	
+table	{
+	border-collapse:collapse;
+	}
 
 /*Filechucker Buttons*/
 
 form#theuploadform input[type="button"] {
-    background: #003d4c url(/img/icon-16-upload.png) no-repeat 2px center ;
+    background-image:url(/img/icon-16-upload.png) no-repeat 2px center;
+	background-color:#003d4c!important;
+	color:#fff; 
+	padding: 2px 4px 2px 4px;
+	}
+	
+#uploadbutton	{
+	background-color:none;
+	}
+
+.blue {
+	background-color: none;
 	color: #fff;
-	border: 1px solid #003d4c;
-	padding: 2px 4px 2px 20px;
-	behavior: url(/css/PIE.htc); /*IE rounded corner*/
-}
+	}
+	
+.blue:hover {
+	color: #fff;
+	}
+	
+.button {
+	background-color: none;  
+	vertical-align:middle;
+	margin-right:10px;
+	padding: 2px;
+	}
 
 .dropdown	{
 	margin-bottom: 0.5em;	
@@ -132,13 +172,12 @@ form .input-filter {
 	margin:0 0 0 10px;
 }
 
-.content {
-	
+.content {	
 	margin: 0px;
     background: rgb(222,240,249) url(/img/collection-background.png) top left repeat-x;
-    /*border: 0em outset #BBBBBB;*/
-	float: left;
-	width: 100%;
+    /*border: 0em outset #BBBBBB;
+	float: left;*/
+	width: auto;
 	padding-bottom: 1.2em;
 }
 
@@ -146,3 +185,17 @@ form .input-filter {
 	font-size:1.2em;
 	}
 
+.input_greeting	{
+	outline:none;
+	border:0px;
+	}
+	
+div.float_right	{
+	float:none;
+	text-align:right;
+	}
+	
+div.float_right_dash	{
+	float:right;
+	text-align:left;
+	}

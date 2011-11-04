@@ -8,7 +8,7 @@
         <img src="/img/create-usergroups-large.png" width="45" height="33" />
         
         
-        <div id="content" class="input text form_title">
+        <div id="content" class="text form_title">
             <label for="title">Title</label>
             <input type="text" size="60" id="UserGroupTitle" name="data[UserGroup][group_title]" value="<?php echo $this->data['UserGroup']['group_title']; ?>">
         </div>

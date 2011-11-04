@@ -64,8 +64,8 @@ class PodcastItemMedia extends AppModel {
 			$this->create();
 			$this->hydrate( $row );
 			$this->set( $this->data );
-			$this->saveAll();
-
+			//$this->saveAll();
+			return $this->saveAll();
 		}
 	}	
 
