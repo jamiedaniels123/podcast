@@ -7,7 +7,7 @@
     <?php require(WWW_ROOT."upload/call_fc.php"); ?>
     <div class="footer-panel">
         <fieldset id="admin_panel">
-            <div class="float_right">
+            <div class="float_left_list">
                 <h4>Video Files</h4>
                 <ul style="list-style:none;">
                     <li class="admin_panel_list" style="background: url(/img/icon-16-avi.png) no-repeat;background-position: 0px 4px;">AVI (.avi) <span class="tip">Limited codec support</span></li>
@@ -19,7 +19,7 @@
                     <li class="admin_panel_list">Flash (.flv)</li>
                 </ul>
             </div>
-            <div class="float_left">
+            <div class="float_left_list">
                 
                 <h4>Audio Files</h4>
                 <ul style="list-style:none;">
@@ -30,12 +30,14 @@
                     <li class="admin_panel_list" style="background: url(/img/icon-16-amr.png) no-repeat;background-position: 0px 4px;">AMR (.amr) <span class="tip">Narrow Band Only (AMR-NB)</span></li>
                 </ul>
             </div>
-            <div class="float_left">
+            <div class="float_left_list">
                 <h4>Documents</h4>
                 <ul style="list-style:none;">
                     <li class="admin_panel_list" style="background: url(/img/icon-16-pdf.png) no-repeat;background-position: 0px 4px;">PDF (.pdf)</li>
                 </ul>
-            </div> 
+            </div>
+            <div style="clear:both;"></div>
+             
         </fieldset>
     </div>
 </div>

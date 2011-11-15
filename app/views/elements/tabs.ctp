@@ -9,18 +9,20 @@
     <div class="tabs">
     
 		 <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+         
 
              <div id="sharing"><a class="tab_link" href="/admin/podcasts/edit/<?php echo $podcast['id']; ?>/sharing#sharing"><span class="collection_tab_track-icon">Sharing &amp; Ownership</span></a>
              </div><!--YouTube-->
              
-             <div id="tracks"><a class="tab_link" href="/admin/podcast_items/index/<?php echo $podcast['id']; ?>#tracks"><span class="collection_tab_track-icon">Tracks</span></a>
+             <div id="tracks"><a class="tab_link" href="/admin/podcast_items/index/<?php echo $podcast['id']; ?>/tracks#tracks"><span class="collection_tab_track-icon">Tracks</span></a>
              </div><!--Tracks-->
              
 		<?php else : ?>
         
+
              <div id="summary"><a class="tab_link" href="/podcasts/edit/<?php echo $podcast['id']; ?>/summary#summary"><span class="collection_tab_summary-icon">Summary</span></a>
              </div><!--/summary-->
-             <div id="tracks"><a class="tab_link" href="/podcast_items/index/<?php echo $podcast['id']; ?>#tracks"><span class="collection_tab_track-icon">Tracks</span></a>
+             <div id="tracks"><a class="tab_link" href="/podcast_items/index/<?php echo $podcast['id']; ?>/tracks#tracks"><span class="collection_tab_track-icon">Tracks</span></a>
              </div><!--Tracks-->
              
 			 <?php if( $this->Permission->isAdminRouting( $this->params ) == false ) : ?>
@@ -40,7 +42,7 @@
              
 				 <?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
                  
-                      <div id="media"><a class="tab_link" href="/podcast_items/add/<?php echo $podcast['id']; ?>#media"><span class="collection_tab_media-icon">Add Media</span></a>
+                      <div id="media"><a class="tab_link" href="/podcast_items/add/<?php echo $podcast['id']; ?>"><span class="collection_tab_media-icon">Add Media</span></a>
                      </div><!--Preview-embed-->                     
                      
 				<?php endif ;?>

@@ -22,11 +22,18 @@ jQuery(document).ready(function($) {
 		jQuery('#flashMessage.error .error_message').effect('highlight', { color: '#ff0000' }, 2000 );
 	}
 
-
+	// PETER DEVINE - THIS BIT
 	// This is a fix for internet explorer. 
 	// If the user is viewing a tabbed page this will remove the background image from the
 	// currently active tab. In all other browsers this is taken care of by CSS.
 	// Bl**dy silly IE.
+	
+	//PeterD comented out the following code as part of a fact-finding exercise onto the tabbing problems with Podcast: 11.10.11 - 14.45
+	
+	
+	
+	
+	
 	if ( jQuery('#tab-zone').length > 0 ) { 
 
 		var element = jQuery('#PodcastElement').val();
@@ -37,6 +44,10 @@ jQuery(document).ready(function($) {
 			//alert( jQuery( '#' + element + ':first-child' ).attr('href') );
 		}
 	};
+	
+	
+	
+	
 	
 	// The following optional method is called on page load and sets the initial status if the DOM element
     // actually exist. It shows/hides podcast specific elements.
@@ -327,7 +338,9 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var id = jQuery(this).attr('data-id');
 		var podcast_item_title = jQuery(this).html();
-		jQuery('#modal').dialog({ width: 1000, autoOpen: false, modal: true, title : podcast_item_title });
+		
+		// PETER DEVINE - You need to add an attribute to the dialog call to change it's position. "jquery dialog" - Done: 011011
+		jQuery('#modal').dialog({ width: 1000, autoOpen: false, position: 'center', modal: true, title : podcast_item_title });
 		jQuery('#modal').dialog('open');
 		jQuery('#ui-dialog-title-modal').html(podcast_item_title);
 		jQuery('.ui-widget-overlay').click(function() { $("#modal").dialog("close"); });
@@ -552,3 +565,60 @@ function ajaxCall( url ) {
 	});		
 }
 	
+function changesize(embedelement,height,width,buttonid){
+	textarea = document.getElementById(embedelement);
+	s=textarea.innerHTML;
+	// replace width and height from current embed code
+	var rx=new RegExp("width=\"[0-9]*\"","i");
+	s=s.replace(rx,'width="'+width+'"');
+	var rx=new RegExp("height=\"[0-9]*\"","i");
+	s=s.replace(rx,'height="'+height+'"');
+
+	textarea.innerHTML=s;
+	
+	
+	embedvidvsmall = document.getElementById('embedvidvsmall');
+	embedvidvsmall.style.border="1px solid black";
+	
+	embedvidsmall = document.getElementById('embedvidsmall');
+	embedvidsmall.style.border="1px solid black";
+	
+	embedvidmed = document.getElementById('embedvidmed');
+	embedvidmed.style.border="1px solid black";
+	
+	embedvidvlargebtn = document.getElementById('embedvidlarge');
+	embedvidvlargebtn.style.border="1px solid black";
+	
+	buttonclicked = document.getElementById(buttonid);
+	buttonclicked.style.border="1px solid red";
+	
+	
+
+}
+
+function audiochangesize(embedelement,height,width){
+	useaposter = document.getElementById('useposter');
+	textarea = document.getElementById(embedelement);
+	s=textarea.innerHTML;
+
+	if(useaposter.checked == false){
+		var rx=new RegExp("width=\"[0-9]*\"","i");
+		s=s.replace(rx,'width="'+width+'"');
+		var rx=new RegExp("height=\"[0-9]*\"","i");
+		s=s.replace(rx,'height="30"');
+		textarea.innerHTML=s;
+
+	}
+	else{
+		var rx=new RegExp("width=\"[0-9]*\"","i");
+		s=s.replace(rx,'width="'+width+'"');
+		var rx=new RegExp("height=\"[0-9]*\"","i");
+		s=s.replace(rx,'height="'+height+'"');
+		useaposter.checked=true;
+		textarea.innerHTML=s;
+
+	}
+
+}
+
+

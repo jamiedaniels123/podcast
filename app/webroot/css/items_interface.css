@@ -8,6 +8,7 @@
 ul, li {	
 	margin: 0px;	
 	}
+	
 
 ul.item-tab-zone {	
 	float: left;
@@ -135,4 +136,19 @@ a.cancel {
 	color:#eee;
 	border:0;
 	padding:0.3em;
+	}
+	
+.update_user_group_list	{
+	list-style:none;
+	}
+	
+div.update_user_group_block label	{
+	font-weight:bold;
+	}
+	
+.update_user_group_block	{
+	background: #f2f2f2;
+	padding: 10px;
+	border-radius: 4px;
+	margin-left:20px;
 	}

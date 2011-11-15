@@ -11,7 +11,7 @@
         
         <!--<?php echo $this->element('../users/_terms'); ?>-->
         
-        <div id="content" class="input checkbox" style="margin: 30px 0px 15px 50px;">
+        <div id="content" class="checkbox" style="margin: 30px 0px 15px 50px;">
             <label for="UserTerms">I agree terms &amp; conditions</label>
             <input name="data[User][terms]" type="checkbox" id="UserTerms" />
             <!-- This element exists only to ensure some data is present if they submit the form without agreeing to T&Cs. -->

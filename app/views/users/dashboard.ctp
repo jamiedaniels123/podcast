@@ -6,7 +6,7 @@
     <!--<p>Hello <?php echo $this->Session->read('Auth.User.firstname'); ?>,</p>
     <p>And welcome to your dashboard. On this page you will find ...</p>-->
     
-	<div class="float_right dashboard-user-panel">
+	<div class="float_right_dash dashboard-user-panel">
     
    		<div>
    			
@@ -49,7 +49,7 @@
 
     
     
-    <div class="float_left">
+    <div class="float_left_list">
         <ul class="dashboard">
             <li><a href="/podcasts"><img src="/img/your-collections.png" alt="Your Podcasts" /></a></li>
             <li><a href="/podcasts/add"><img src="/img/create-new-collections.png" alt="Create New Podcast" /></a></li>

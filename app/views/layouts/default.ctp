@@ -2,12 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-
     <?php echo $this->Html->charset(); ?>
     <title>
         <?php echo $title_for_layout; ?>
     </title>
 	<meta http-equiv="Accept-Encoding" content="gzip, deflate" />
+
+<link rel="stylesheet" type="text/css" href="/includes/headers-footers/ou-header.css" />
+<script type="text/javascript" src="/includes/headers-footers/ou-header.js"></script>
+ 
+<meta name="viewport" content="width=device-width; initial-scale=1" />
+  
+<link rel="stylesheet" type="text/css" href="/includes/ouice/3/mobile.css" media="only screen and (max-device-width:640px)" />
+<link rel="stylesheet" type="text/css" href="/includes/ouice/3/mobile.css" media="only screen and (max-width:640px)" />
+  
+<!-- <link rel="alternate stylesheet" href="/includes/ouice/3/mobile.css" title="ou-mobile" /> -->
+ 
+<script type="text/javascript" src="/includes/headers-footers/ou-header.js"></script>
+		
     <?php
 	    echo $this->Javascript->link('jquery.js');
         echo $this->Javascript->link('jquery-ui.js');
@@ -31,14 +43,19 @@
         <link rel="stylesheet" type="text/css" href="/css/all-ie-only.css" />
         <link rel="stylesheet" type="text/css" href="/css/interface_ie.css" />
 	<![endif]-->
+
+
     
 </head>
 <?php flush(); ?>
-<body>
+<body class="ou-ia-community">
+
 
     <!--display OU Header-->
 	<?php echo $this->element('header'); ?>
     <!--/display OU Header-->
+    
+
     
     <div id="container">
     

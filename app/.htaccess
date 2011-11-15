@@ -5,6 +5,8 @@
    RewriteRule    ^$ webroot/    [L]
 
    RewriteRule    (.*) webroot/$1 [L]
+   
+
 
 </IfModule>
 DISABLE_SAMS

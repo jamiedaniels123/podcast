@@ -2,7 +2,7 @@
 	<fieldset id="admin_panel">
 		<legend>Administration Panel</legend>
 		<div class="wrapper">
-			<div class="float_left">
+			<div class="float_left_list">
 
 				<ul style="list-style:none;">
 					<li  style="line-height: 22px; background-image: url(/img/icon-16-link.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/admin/users">User Administration</a></li>
@@ -13,7 +13,7 @@
 				</ul>
 				
 			</div>
-			<div class="float_left">
+			<div class="float_left_list">
 
 				<ul style="list-style:none;">
 
@@ -23,7 +23,7 @@
 
 				</ul>
 			</div>
-			<div class="float_left">
+			<div class="float_left_list">
 
 				<ul style="list-style:none;">
 

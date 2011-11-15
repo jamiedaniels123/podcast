@@ -1,5 +1,5 @@
 
-<div class="input text form_title" id="content">
+<div class="text form_title" id="content">
     <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
     <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
