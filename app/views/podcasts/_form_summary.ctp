@@ -167,9 +167,20 @@
                             <label for="PodcastAllNodes">All Nodes</label>
                             <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
                             <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">
-                                <?php foreach( $nodes as $id => $value ) : ?>
-                                    <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
+                                <?php foreach( $nodes as $nodegroup) : ?>                             
+                                   	<?php foreach( $nodegroup as $thisnode) : ?>
+                                	<?php if(isset($thisnode['title'])){
+                                		echo "<option value=\"".$thisnode['id']."\">-".$thisnode['title']."</option>";
+                                	}
+                                	else{
+	                                	echo "<option value=\"".$thisnode['nodes']['id']."\">--".$thisnode['nodes']['title']."</option>";
+                                	}
+                                	?>
+                                	
+                                    
+                                    <?php endforeach; ?>
                                 <?php endforeach; ?>
+
                             </select>
                             
                             <div class="multiple-button">

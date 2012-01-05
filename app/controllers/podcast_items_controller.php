@@ -161,6 +161,7 @@ class PodcastItemsController extends AppController {
 			if( $this->Object->readyForPublication( $this->data['PodcastItem'] ) ) {
 				
 				$this->data['PodcastItem']['published_flag'] = 'Y';
+				$this->data['PodcastItem']['publication_date'] = date("y-m-d H:i:s");
 				$this->PodcastItem->set( $this->data );
 				$this->PodcastItem->save();
 				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been successfully published.', 'default', array( 'class' => 'success' ) );

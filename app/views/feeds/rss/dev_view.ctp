@@ -64,5 +64,6 @@ foreach( $this->data['PodcastItems'] as $podcast_item ) {
             'guid' => 'lllllllllllllllllll',
             'pubDate' => $podcast_item['created']
         )
+        
     );
 }

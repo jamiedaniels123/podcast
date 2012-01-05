@@ -418,7 +418,7 @@ class PodcastsController extends AppController {
     			$this->data['Podcast']['consider_for_itunesu'] = true;
     			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
     			$this->data['Podcast']['publish_itunes_u'] = 'N';
-				$this->data['Podcast']['publish_itunes_date'] = null;
+				//$this->data['Podcast']['publish_itunes_date'] = date('r',$this->data['Podcast']['publish_itunes_date']);
 				$this->emailTemplates->_sendItunesConsiderEmail( $this->data, $this->Podcast->getItunesUsers() );
 				
 			} elseif( strtoupper( $media ) == 'YOUTUBE' ) {
@@ -460,9 +460,9 @@ class PodcastsController extends AppController {
 			$this->data['Podcast']['consider_for_itunesu'] = true;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
-			$this->data['Podcast']['publish_itunes_date'] = null;
-
+			//$this->data['Podcast']['publish_itunes_date'] = null;
 			$this->Podcast->set( $this->data );
+
 			$this->Podcast->save();
 			
 			$this->Session->setFlash('You have successfully approved this podcast for publication on itunes.', 'default', array( 'class' => 'success' ) );
@@ -523,7 +523,7 @@ class PodcastsController extends AppController {
 			$this->data['Podcast']['consider_for_itunesu'] = false;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'N';
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
-			$this->data['Podcast']['publish_itunes_date'] = null;
+			//$this->data['Podcast']['publish_itunes_date'] = date('r',$this->data['Podcast']['publish_itunes_date']);
 
 			$this->Podcast->set( $this->data );
 			$this->Podcast->save();
@@ -602,8 +602,10 @@ class PodcastsController extends AppController {
 			$this->data['Podcast']['consider_for_itunesu'] = true;
 			$this->data['Podcast']['intended_itunesu_flag'] = 'Y';
 			$this->data['Podcast']['publish_itunes_u'] = 'Y';
-			$this->data['Podcast']['publish_itunes_date'] = date('Y-m-d');
-
+			if(!$this->data['Podcast']['publish_itunes_date']){
+				$this->data['Podcast']['publish_itunes_date'] = date('d-m-y');
+			}
+		
 			$this->Podcast->set( $this->data );
 			$this->Podcast->save();
 			
@@ -662,8 +664,9 @@ class PodcastsController extends AppController {
 
 			// We explicitly set the status of all associated flags to help clear legacy data moving forward
 			$this->data['Podcast']['publish_itunes_u'] = 'N';
-			$this->data['Podcast']['publish_itunes_date'] = null;
-
+			if (!$this->data['Podcast']['publish_itunes_date']){
+				//$this->data['Podcast']['publish_itunes_date'] = date('r');
+			}
 			$this->Podcast->set( $this->data );
 			$this->Podcast->save();
 			
@@ -1174,7 +1177,22 @@ class PodcastsController extends AppController {
         // Get all the nodes
         $Node = ClassRegistry::init('Node');
 		$Node->recursive = -1;
-        $nodes = $Node->find('list', array( 'order' => 'Node.title' ) );
+        //$nodes = $Node->find('list', array('fields' => array('Node.id', 'Node.title', 'Node.level')), array( 'order' => 'Node.title' ) );
+        $level0nodes = $Node->query("SELECT * FROM nodes WHERE level=0");
+		$level1nodes = $Node->query("SELECT * FROM nodes WHERE level=1");
+        $nodes = array();
+		foreach($level0nodes as $level0node){
+			array_push($nodes, $level0node);
+		}
+
+        foreach($level1nodes as $level1node){
+        	$thisparentnode=$level1node['nodes']['id'];
+        	$thisparentnodetitle=$level1node['nodes']['title'];
+        	$nodessection = $Node->query("SELECT * FROM nodes INNER JOIN node_links ON nodes.id=node_links.child_id where node_links.parent_id=$thisparentnode");
+        	array_push($nodes, $level1node);
+        	array_push($nodes, $nodessection);
+
+        }
         $nodes = $Node->removeDuplicates( $nodes, $this->data, 'Nodes' );
         $this->set('nodes', $nodes );
 

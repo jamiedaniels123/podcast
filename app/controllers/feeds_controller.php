@@ -132,7 +132,6 @@ class FeedsController extends AppController {
 				)
 			)
 		);
-		
 		// Make sure the podcast has not been soft-deleted.
         $this->data = $Podcast->rss( array(
 				'Podcast.id' => $id,

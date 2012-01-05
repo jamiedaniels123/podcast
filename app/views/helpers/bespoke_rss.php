@@ -64,7 +64,6 @@ class BespokeRssHelper extends RssHelper {
 
         if ( isSet( $elements['link'] ) && !isset( $elements['guid'] ) )
             $elements['guid'] = $elements['link'];
-
         foreach ($elements as $key => $val) {
 
             $attrib = array();
@@ -94,7 +93,7 @@ class BespokeRssHelper extends RssHelper {
                     $val = ucfirst( $val );
                     break;
                 case 'pubDate' :
-                    $val = date('r', strtotime( $val ) );
+                	$val = date('r', strtotime( $val ) );
                     break;
                 case 'category' :
                     if ( is_array( $val ) && !empty( $val[0] ) ) {

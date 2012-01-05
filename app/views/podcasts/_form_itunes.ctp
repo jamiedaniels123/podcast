@@ -140,7 +140,7 @@
     <div class="text">
         <label for="PodcastMetadataDate">Metadata Date</label>
         <input type="hidden" value="" id="PodcastMetadataDate_" name="data[Podcast][metadata_date]">
-        <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="datepicker" name="data[Podcast][metadata_date]">
+        <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="dateField" name="data[Podcast][metadata_date]">
         <?php echo $this->Form->error('Podcast.metadata_date'); ?>
     </div>
     <div class="clear"></div>
@@ -154,7 +154,7 @@
             <div class="float_left_list">
                     <div class="select">
                         
-                            <label for="Categories">Podcast iTune Categories</label>
+                            <label for="Categories">Podcast iTunes Categories</label>
                             <input type="hidden" name="data[Categories]" value="" id="Categories_" />
                             <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
                                 <?php if( isSet( $this->data['Categories'] ) && is_array( $this->data['Categories'] ) ) : ?>
@@ -176,7 +176,7 @@
             <div class="float_left_list">
                 <div class="select">
                    
-                    <label for="PodcastAllCategories">All iTune Categories</label>
+                    <label for="PodcastAllCategories">All iTunes Categories</label>
                     <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
                     <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
                         <?php foreach( $categories as $id => $value ) : ?>
@@ -204,7 +204,7 @@
         	<div class="float_left_list">
            		<div class="select">
                 
-                        <label for="iTuneCategories">Podcast iTune U Categories</label>
+                        <label for="iTuneCategories">Podcast iTunes U Categories</label>
                         <input type="hidden" name="data[iTuneCategories]" value="" id="iTuneCategories_" />
                         <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="iTuneCategories">
                             <?php if( isSet( $this->data['iTuneCategories'] ) && is_array( $this->data['iTuneCategories'] ) ) : ?>
@@ -229,7 +229,7 @@
             <div class="float_left_list">
                 <div class="select">
     
-                        <label for="PodcastAlliTuneCategories">All iTune U Categories</label>
+                        <label for="PodcastAlliTuneCategories">All iTunes U Categories</label>
                         <input type="hidden" name="data[Podcast][PodcastAlliTuneCategories]" value="" id="PodcastAlliTuneCategories_" />
                         <select name="data[Podcast][PodcastAlliTuneCategories][]" multiple="multiple" id="PodcastAlliTuneCategories">
                             <?php foreach( $itunes_categories as $id => $value ) : ?>

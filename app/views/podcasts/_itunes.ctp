@@ -62,13 +62,13 @@
             <dt>Metadata Date: </dt>
             <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['metadata_date'] ); ?>&nbsp;</dd>
             <dt>Link: </dt>
-            <dd><?php echo !$this->Object->intendedForItunes( $this->data['Podcast'] ) ? DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'' : ''; ?>&nbsp;</dd>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id']; ?>&nbsp;</dd>
             <dt>Desktop Link: </dt>
-            <dd><?php echo !$this->Object->intendedForItunes( $this->data['Podcast'] ) ? DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all' : ''; ?>&nbsp;</dd>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all'; ?>&nbsp;</dd>
             <dt>Audio Link:</dt>
-            <dd><?php echo !$this->Object->intendedForItunes( $this->data['Podcast'] ) ? DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/audio' : ''; ?>&nbsp;</dd>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/audio'; ?>&nbsp;</dd>
             <dt>iPod Link: </dt>
-            <dd><?php echo !$this->Object->intendedForItunes( $this->data['Podcast'] ) ? DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all' : ''; ?>&nbsp;</dd>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all'; ?>&nbsp;</dd>
             <dt>iTunesU URL: </dt>
             <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
         </dl>    
