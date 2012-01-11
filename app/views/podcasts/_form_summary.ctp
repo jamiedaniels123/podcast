@@ -139,7 +139,7 @@
                 <div class="collection_input"><!--sharing-->
                           
                 <div id="nodes_container">
-                    <div class="float_left">
+                    <div style="float:left;">
                         <div class="select">
                             
                             <label for="Nodes">Nodes <span class="required">(Required)</span></label>
@@ -161,7 +161,7 @@
          
                         </div>
                     </div>
-                    <div class="float_left">
+                    <div style="float:right;">
                         <div class="select">
                             
                             <label for="PodcastAllNodes">All Nodes</label>

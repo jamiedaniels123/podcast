@@ -45,6 +45,8 @@
 	<![endif]-->
 
 
+
+
     
 </head>
 <?php flush(); ?>
@@ -89,5 +91,6 @@
     
 	<?php echo $this->element('sql_dump'); ?>
     <div id="modal"></div>
+    
 </body>
 </html>

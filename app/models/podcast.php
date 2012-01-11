@@ -1636,6 +1636,7 @@ class Podcast extends AppModel {
 							'Transcript.*'
 						)
 					)
+					,'order' => 'PublishedPodcastItems.publication_date DESC',
 				),
 				'iTuneCategories' => array(
 					'fields' => array(
@@ -1659,6 +1660,7 @@ class Podcast extends AppModel {
 					)
 				)
 			)
+			
 		);
 	}
 
