@@ -1,5 +1,4 @@
 <?php
-
 class PodcastsController extends AppController {
 
 	var $name = 'Podcasts';

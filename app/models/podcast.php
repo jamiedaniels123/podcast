@@ -12,7 +12,8 @@ class Podcast extends AppModel {
 	/*var $virtualFields = array(
      'media_count' => 'count(PodcastItems.id)'
      ); */
-     
+
+	
     var $validate = array(
 
         'title' => array(
@@ -374,6 +375,10 @@ class Podcast extends AppModel {
             }
 
         }
+        
+        // Trim URL field in case users enter whitespace from a pasted in url.
+        $this->data['Podcast']['link']=trim($this->data['Podcast']['link']);
+        
         return true;
     }
 
