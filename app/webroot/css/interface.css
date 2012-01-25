@@ -134,5 +134,9 @@ div.tabs *:target {
 }
 
 .collection_input {
-	max-width:900px;
+	max-width:1000px;
 	}
+	
+.fieldrequired {
+	border:red 1px solid!important;	
+}

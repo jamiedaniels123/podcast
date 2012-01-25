@@ -5,7 +5,7 @@
         <div class="text">
             <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
             <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
-            <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
+            <input type="text" size="60"  class="fieldrequired" id="PodcastTitle"  class="fieldrequired" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
             <?php echo $this->Form->error('Podcast.title'); ?>
         </div>
     
@@ -24,7 +24,7 @@
             <div class="textarea">
                 <label for="summary">Summary <span class="required">(Required)</span></label>
                 <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
-                <textarea id="PodcastSummary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
+                <textarea id="PodcastSummary" rows="6" cols="60" name="data[Podcast][summary]" class="fieldrequired"><?php echo $this->data['Podcast']['summary']; ?></textarea>
                 
                 <span class="tip-text">4000 characters max. No HTML allowed</span>
                 
@@ -75,7 +75,7 @@
                     <?php echo $this->Form->error('Podcast.keywords'); ?>
                 </div>
                 <div class="text">
-                    <label for="PodcastContactName">Contact Name <img src="/img/icon-16-rss.png" alt="RSS Feed" /></label>
+                    <label for="PodcastContactName">Contact Name </label>
                     <input type="text" size="60" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">
                     
                     <span class="tip-text">Enter a contact name</span>
@@ -83,7 +83,7 @@
                     <?php echo $this->Form->error('Podcast.contact_name'); ?>
                 </div>
                 <div class="text">
-                    <label for="PodcastContactEmail">Contact Email <img src="/img/icon-16-rss.png" alt="RSS Feed" /></label>
+                    <label for="PodcastContactEmail">Contact Email </label>
                     <input type="text" size="60" id="PodcastContactEmail" value="<?php echo $this->data['Podcast']['contact_email']; ?>" name="data[Podcast][contact_email]">
                     
                     <span class="tip-text">Enter a contact email</span>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="text">
                     <label for="PodcastLink">Web URL <span class="required">(Required)</span></label>
-                    <input type="text" size="60" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
+                    <input type="text" size="60" id="PodcastLink"  class="fieldrequired" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
                     
                     <span class="tip-text">URL of a web page you want linked to this particular track</span>
                     
@@ -143,8 +143,8 @@
                         <div class="select">
                             
                             <label for="Nodes">Nodes <span class="required">(Required)</span></label>
-                            <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
-                            <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
+                            <input type="hidden" name="data[Nodes]" value="" id="Nodes_"/>
+                            <select name="data[Nodes][]" class="selected fieldrequired" multiple="multiple" id="Nodes">
                                 <?php if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) ) : ?>
                                     <?php foreach( $this->data['Nodes'] as $node ) : ?>
                                         <option value="<?php echo $node['id']; ?>"><?php echo $node['title']; ?></option>
@@ -166,7 +166,7 @@
                             
                             <label for="PodcastAllNodes">All Nodes</label>
                             <input type="hidden" name="data[Podcast][AllNodes]" value="" id="PodcastAllNodes_" />
-                            <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes">
+                            <select name="data[Podcast][AllNodes][]" multiple="multiple" id="PodcastAllNodes"  class="fieldrequired">
                                 <?php foreach( $nodes as $nodegroup) : ?>                             
                                    	<?php foreach( $nodegroup as $thisnode) : ?>
                                 	<?php if(isset($thisnode['title'])){

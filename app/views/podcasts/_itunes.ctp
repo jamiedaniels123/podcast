@@ -17,8 +17,6 @@
         <dl>
             <dt>Author: </dt>
             <dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
-            <dt>Explicit: </dt>
-            <dd><?php echo ucfirst( $this->data['Podcast']['explicit'] ); ?>&nbsp;</dd>
             <dt>iTunes URL: </dt>
             <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
             <dt>Course Code: </dt>
@@ -53,14 +51,7 @@
             <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['publish_itunes_date'] ); ?>&nbsp;</dd>
             <dt>iTunes U Updated Date: </dt>
             <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['update_itunes_date'] ); ?>&nbsp;</dd>
-            <dt>iTunes U Target Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['target_itunesu_date'] ); ?>&nbsp;</dd>
-            <dt>Production Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['production_date'] ); ?>&nbsp;</dd>
-            <dt>Rights Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['rights_date'] ); ?>&nbsp;</dd>
-            <dt>Metadata Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['metadata_date'] ); ?>&nbsp;</dd>
+
             <dt>Link: </dt>
             <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id']; ?>&nbsp;</dd>
             <dt>Desktop Link: </dt>

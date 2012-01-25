@@ -2,7 +2,7 @@
 <div class="text form_title" id="content">
     <label for="PodcastTitle">Title <span class="required">(Required)</span></label>
     <input type="hidden" value="" id="PodcastTitle_" name="data[Podcast][title]">
-    <input type="text" size="60" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
+    <input type="text" size="60" class="fieldrequired" id="PodcastTitle" value="<?php echo $this->data['Podcast']['title']; ?>" name="data[Podcast][title]">
     <?php echo $this->Form->error('Podcast.title'); ?>
 </div>
 
@@ -21,7 +21,7 @@
         <div class="input textarea">
             <label for="summary">Summary <span class="required">(Required)</span></label>
             <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
-            <textarea id="PodcastSummary" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
+            <textarea id="PodcastSummary" class="fieldrequired" rows="6" cols="60" name="data[Podcast][summary]"><?php echo $this->data['Podcast']['summary']; ?></textarea>
             
             <span class="tip-text">4000 characters max. No HTML allowed</span>
             
@@ -88,7 +88,7 @@
         </div>
         <div class="input text">
             <label for="PodcastLink">Web URL <span class="required">(Required)</span></label>
-            <input type="text" size="60" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
+            <input type="text" size="60" class="fieldrequired" id="PodcastLink" value="<?php echo $this->data['Podcast']['link']; ?>" name="data[Podcast][link]">
             
             <span class="tip-text">Optional URL of a web page you want linked to this particular track</span>
             
@@ -130,7 +130,7 @@
                     
                     <label for="Nodes">Nodes <span class="required">(Required)</span></label>
                     <input type="hidden" name="data[Nodes]" value="" id="Nodes_" />
-                    <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes">
+                    <select name="data[Nodes][]" class="selected" multiple="multiple" id="Nodes"  class="fieldrequired">
                         <?php if( isSet( $this->data['Nodes'] ) && is_array( $this->data['Nodes'] ) ) : ?>
                             <?php foreach( $this->data['Nodes'] as $node ) : ?>
                                 <option value="<?php echo $node['id']; ?>"><?php echo $node['title']; ?></option>

@@ -91,6 +91,11 @@
     
 	<?php echo $this->element('sql_dump'); ?>
     <div id="modal"></div>
-    
+    <script>window.onload = function() {
+        // short timeout
+        setTimeout(function() {
+            $(document.body).scrollTop(0);
+        }, 15);
+    };</script>
 </body>
 </html>

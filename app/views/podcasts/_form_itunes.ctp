@@ -61,13 +61,7 @@
         <input type="text" size="60" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
         <?php echo $this->Form->error('Podcast.author'); ?>
     </div>
-    <div class="select">
-        <label for="PodcastExplicit">Explicit</label>
-        <select name="data[Podcast][explicit]" id="PodcastExplicit">
-            <option value="clean">Clean</option>
-        </select>
-        <?php echo $this->Form->error('Podcast.explicit'); ?>
-    </div>
+
     <div class="text">
         <label for="PodcastItunesUUrl">iTunes U URL</label>
         <input type="hidden" value="" id="PodcastItunesUUrl_" name="data[Podcast][itunes_u_url]">
@@ -117,35 +111,7 @@
     
     </div><!--/end of meta-->
     
-    <div class="collection_input"><!--Dates-->
-    
-    <div class="text">
-        <label for="PodcastTargetItunesuDate">Target iTunes U Date</label>
-        <input type="hidden" value="" id="PodcastTargetItunesuDate_" name="data[Podcast][target_itunesu_date]">
-        <input type="text" size="60" id="PodcastTargetItunesuDate" value="<?php echo (int)$this->data['Podcast']['target_itunesu_date'] ? $this->data['Podcast']['target_itunesu_date'] : ''; ?>" class="datepicker" name="data[Podcast][target_itunesu_date]">
-        <?php echo $this->Form->error('Podcast.target_itunesu_date'); ?>
-    </div>
-    <div class="text">
-        <label for="PodcastProductionDate">Production Date</label>
-        <input type="hidden" value="" id="PodcastProductionDate_" name="data[Podcast][production_date]">
-        <input type="text" size="60" id="PodcastProductionDate" value="<?php echo (int)$this->data['Podcast']['production_date'] ? $this->data['Podcast']['production_date'] : ''; ?>" class="datepicker" name="data[Podcast][production_date]">
-        <?php echo $this->Form->error('Podcast.production_date'); ?>
-    </div>
-    <div class="text">
-        <label for="PodcastRightsDate">Rights Date</label>
-        <input type="hidden" value="" id="PodcastRightsDate_" name="data[Podcast][rights_date]">
-        <input type="text" size="60" class="datepicker" id="PodcastRightsDate" value="<?php echo (int)$this->data['Podcast']['rights_date'] ? $this->data['Podcast']['rights_date'] : ''; ?>" class="datepicker hasDatepicker" name="data[Podcast][rights_date]">
-        <?php echo $this->Form->error('Podcast.rights_date'); ?>
-    </div>
-    <div class="text">
-        <label for="PodcastMetadataDate">Metadata Date</label>
-        <input type="hidden" value="" id="PodcastMetadataDate_" name="data[Podcast][metadata_date]">
-        <input type="text" size="60" id="PodcastMetadataDate" value="<?php echo (int)$this->data['Podcast']['metadata_date'] ? $this->data['Podcast']['metadata_date'] : ''; ?>" class="dateField" name="data[Podcast][metadata_date]">
-        <?php echo $this->Form->error('Podcast.metadata_date'); ?>
-    </div>
-    <div class="clear"></div>
-    
-    </div><!--/end of dates-->
+
     
     <div class="collection_input"><!--option transfers itunes-->
     
