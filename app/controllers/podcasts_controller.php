@@ -142,7 +142,7 @@ class PodcastsController extends AppController {
 				// Assign the podcast to the current user is they have not chosen one.
 				if( empty( $this->data['Podcast']['owner_id'] ) )
 				$this->data['Podcast']['owner_id'] = $this->Session->read('Auth.User.id');
-
+								
 				$this->data['Podcast']['private'] = YES;
 					
 				$this->Podcast->set( $this->data['Podcast'] );

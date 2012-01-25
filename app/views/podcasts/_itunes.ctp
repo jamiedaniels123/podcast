@@ -15,8 +15,6 @@
     </div>
     <div class="float_left two_column" >    
         <dl>
-            <dt>Author: </dt>
-            <dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
             <dt>iTunes URL: </dt>
             <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
             <dt>Course Code: </dt>

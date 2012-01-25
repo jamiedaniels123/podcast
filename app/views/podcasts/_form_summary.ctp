@@ -74,6 +74,13 @@
                     
                     <?php echo $this->Form->error('Podcast.keywords'); ?>
                 </div>
+                
+                <div class="text">
+        			<label for="PodcastAuthor">Author</label>
+        			<input type="text" size="60" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
+        			<?php echo $this->Form->error('Podcast.author'); ?>
+    			</div>
+                
                 <div class="text">
                     <label for="PodcastContactName">Contact Name </label>
                     <input type="text" size="60" id="PodcastContactName" value="<?php echo $this->data['Podcast']['contact_name']; ?>" name="data[Podcast][contact_name]">

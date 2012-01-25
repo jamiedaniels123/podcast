@@ -23,6 +23,8 @@
                 <dd><?php echo $this->data['Podcast']['copyright']; ?>&nbsp;</dd>
                 <dt>Language: </dt>
                 <dd><?php echo $this->data['Podcast']['language']; ?>&nbsp;</dd>
+                <dt>Author: </dt>
+            	<dd><?php echo $this->data['Podcast']['author']; ?>&nbsp;</dd>
                 <dt>Keywords: </dt>
                 <dd><?php echo $this->data['Podcast']['keywords']; ?>&nbsp;</dd>
                 <dt>Contact Name (RSS): </dt>

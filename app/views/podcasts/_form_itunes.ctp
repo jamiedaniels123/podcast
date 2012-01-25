@@ -57,12 +57,6 @@
     <div class="collection_input"><!--meta-->
     
     <div class="text">
-        <label for="PodcastAuthor">Author</label>
-        <input type="text" size="60" id="PodcastAuthor" value="<?php echo $this->data['Podcast']['author']; ?>" name="data[Podcast][author]">
-        <?php echo $this->Form->error('Podcast.author'); ?>
-    </div>
-
-    <div class="text">
         <label for="PodcastItunesUUrl">iTunes U URL</label>
         <input type="hidden" value="" id="PodcastItunesUUrl_" name="data[Podcast][itunes_u_url]">
         <input type="text" size="60" id="PodcastItunesUUrl" name="data[Podcast][itunes_u_url]" value="<?php echo $this->data['Podcast']['itunes_u_url']; ?>">

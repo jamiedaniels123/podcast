@@ -85,6 +85,12 @@
             <?php endif; ?>
             <div class="clear"></div>
         </div>
+      
+          <div class="text">
+        <label for="PodcastItemItunesTags">Keywords</label>
+        <input size="60" type="text" id="PodcastItemItunesTags" name="data[PodcastItem][itunes_tags]" value="<?php echo $this->data['PodcastItem']['itunes_tags']; ?>">
+        <?php echo $this->Form->error('PodcastItem.itunes_tags'); ?>
+    </div>  
         
      </div><!--/input-->
      
