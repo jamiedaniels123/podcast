@@ -91,11 +91,14 @@
     
 	<?php echo $this->element('sql_dump'); ?>
     <div id="modal"></div>
-    <script>window.onload = function() {
-        // short timeout
-        setTimeout(function() {
-            $(document.body).scrollTop(0);
-        }, 15);
-    };</script>
+    <script>
+    // Hack to make the screen scroll back to the top after it has jumped down to the tabs.  It works but interferes with filechucker as it doesn't like onloads
+    //window.onload = function() {
+    //    // short timeout
+    //    setTimeout(function() {
+    //        $(document.body).scrollTop(0);
+    //   }, 15);
+    //};
+    </script>
 </body>
 </html>

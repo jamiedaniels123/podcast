@@ -125,6 +125,7 @@ class PodcastItem extends AppModel {
         $this->data['PodcastItem']['title'] = substr( $params['url']['f1name'], 0, strpos( $params['url']['f1name'], '.' ) );		
         $this->data['PodcastItem']['published_flag'] = 'N';
         $this->data['PodcastItem']['processed_state'] = 2;
+        //$this->data['PodcastItem']['publication_date'] = date();
 		
         if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
             $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN_FLOAT;

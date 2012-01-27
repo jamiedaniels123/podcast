@@ -18,10 +18,8 @@
         <dd><?php echo $this->Object->getProcessedState( $this->data['PodcastItem']['processed_state'] ); ?></dd>
         <dt>Published: </dt>
         <dd><?php echo $this->data['PodcastItem']['published_flag'] == YES ? 'Yes' : 'No'; ?>&nbsp;</dd>
-        <?php if( $this->data['PodcastItem']['published_flag'] == YES ) : ?>
-            <dt>Published Date: </dt>
-            <dd><?php echo (int)$this->data['PodcastItem']['publication_date'] ? $this->Time->getPrettyLongDateTime( $this->data['PodcastItem']['publication_date'] ) : 'Unknown'; ?>&nbsp;</dd>
-        <?php endif; ?>
+        <dt>Published Date: </dt>
+        <dd><?php echo (int)$this->data['PodcastItem']['publication_date'] ? $this->Time->getPrettyLongDateTime( $this->data['PodcastItem']['publication_date'] ) : 'Unknown'; ?>&nbsp;</dd>
         <dt>Unit Course</dt>
         <dd><?php echo $this->data['PodcastItem']['unit_course']; ?>&nbsp;</dd>
         <dt>Unit Course Title</dt>

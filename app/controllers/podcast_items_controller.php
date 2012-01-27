@@ -463,7 +463,7 @@ class PodcastItemsController extends AppController {
 					// Capture the new name by setting an updated filename appending the database ID number to the start of 
 					// the filename to ensure it is unique.
 					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['original_filename'];
-				
+									
 					// Capture the ID3 information
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 
@@ -500,7 +500,8 @@ class PodcastItemsController extends AppController {
 								'podcast_item_id' => $this->data['PodcastItem']['id'],
 								'podcast_id' => $this->data['PodcastItem']['podcast_id'],
 								'workflow' => $this->Workflow->getWorkflow(),
-								'created' => time()
+								'created' => time(),
+								'publication_date' => date('r')
 									)
 								)
 							)
