@@ -500,7 +500,6 @@ class PodcastItemsController extends AppController {
 								'podcast_id' => $this->data['PodcastItem']['podcast_id'],
 								'workflow' => $this->Workflow->getWorkflow(),
 								'created' => time(),
-								'publication_date' => date('r')
 									)
 								)
 							)

@@ -71,11 +71,15 @@ class FeedsController extends AppController {
 	
 						// SECOND TIME THROUGH : Top-secret RSS feed for media player, shhh don't tell anyone! :-)
 						//die( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
-						$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
-	
-						$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-						$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
-						$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+						
+						// Only generate player.xml for the default flavour as this is the only one that is ever used.
+						if ($flavour['media_type']=='default'){
+							$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+
+							$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+							$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
+							$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+						}
 					}
 				}
 
