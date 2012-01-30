@@ -107,6 +107,7 @@ class PodcastItem extends AppModel {
 			
 			$this->data['PodcastItem']['youtube_flag'] = 'N';
 			$this->data['PodcastItem']['itunes_flag'] = 'N';
+			$this->data['PodcastItem']['publication_date'] = date("y-m-d H:i:s");
 		}
 		
         return true;

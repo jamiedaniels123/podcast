@@ -770,7 +770,7 @@ class PodcastsController extends AppController {
 				 
 			} else {
 
-				$active_columns = array('title','owner','created','publication_date','thumbnail');
+				$active_columns = array('title','owner','created','thumbnail');
 				$this->set('active_columns', $active_columns );
 
 				$this->Cookie->write('Podcasts',$active_columns, false );
