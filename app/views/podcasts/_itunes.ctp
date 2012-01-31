@@ -27,15 +27,6 @@
             <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
             <dt>Open Learn ePub: </dt>
             <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" /></dd>
-            <dt>Categories</dt>
-            <dd>
-                <?php 
-                foreach( $this->data['Categories'] as $category ) :
-                    echo $category['category'].'. ';
-                endforeach; 
-                ?>
-                &nbsp;
-            </dd>   
             <dt>iTunes U Categories</dt>
             <dd>
                 <?php 

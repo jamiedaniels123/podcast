@@ -50,6 +50,15 @@
                     ?>
                     &nbsp;
                 </dd>
+                <dt>Categories</dt>
+            	<dd>
+                <?php 
+                foreach( $this->data['Categories'] as $category ) :
+                    echo $category['category'].'. ';
+                endforeach; 
+                ?>
+                &nbsp;
+            	</dd>    
 			<?php endif; ?>
         </dl>
     </div>

@@ -201,7 +201,61 @@
                         
                     </div>
                 </div>
+                
+
+                
+                
                 <?php echo $this->element('../podcasts/_form_admin'); ?>
+                
+                    <div class="collection_input"><!--option transfers itunes-->
+    
+    	<div id="itune_categories_container">
+            
+            <div class="float_left_list">
+                    <div class="select">
+                        
+                            <label for="Categories">Podcast iTunes Categories</label>
+                            <input type="hidden" name="data[Categories]" value="" id="Categories_" />
+                            <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
+                                <?php if( isSet( $this->data['Categories'] ) && is_array( $this->data['Categories'] ) ) : ?>
+                                    <?php foreach( $this->data['Categories'] as $category ) : ?>
+                                        <option value="<?php echo $category['id']; ?>"><?php echo $category['category']; ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                            <?php echo $this->Form->error('Podcast.Categories'); ?>
+                        
+                            <div class="multiple-button">
+                                <div class="move float_right" data-source="Categories" data-target="PodcastAllCategories"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                            </div>
+                            <div class="clear"></div>
+                                   
+                    </div><!--/select-->
+            </div><!--float_left-->
+            
+            <div class="float_left_list">
+                <div class="select">
+                   
+                    <label for="PodcastAllCategories">All iTunes Categories</label>
+                    <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
+                    <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
+                        <?php foreach( $categories as $id => $value ) : ?>
+                            <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    
+                 <div class="multiple-button">
+                <div class="move float_left_list" data-source="PodcastAllCategories" data-target="Categories"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                </div>
+                <div class="clear"></div>
+                
+                
+                </div><!--/select-->
+            </div><!--float_left-->
+            <div class="clear"></div>
+    </div>
+   </div><!--/end of option transfer itunes-->
+                
 		</div> <!-- end of syndication container -->
     </div><!--/end of sharing-->
         </div>
