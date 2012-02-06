@@ -80,9 +80,10 @@
             <input type="hidden" id="TranscriptId" name="data[Transcript][id]" value="<?php echo $this->data['Transcript']['id']; ?>" >
             <input type="file" size="60"  id="TranscriptFilename" name="data[Transcript][new_filename]">
             <?php echo $this->Form->error('PodcastItem.filename'); ?>
-            <?php if( !empty( $this->data['Transcript']['filename'] ) ) : ?>
+            <?php //if( !empty( $this->data['Transcript']['filename'] ) ) :
+            print_r($this->data['Transcript']); ?>
                 <a href="/podcast_item_medias/delete/<?php echo $this->data['Transcript']['id']; ?>" onclick="return confirm('Are you sure you wish to delete transcript?');" title="delete transcript">delete <i><?php echo $this->data['Transcript']['filename']; ?></i> transcript</a>
-            <?php endif; ?>
+            <?php //endif; ?>
             <div class="clear"></div>
         </div>
       
