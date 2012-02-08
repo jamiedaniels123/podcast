@@ -37,7 +37,6 @@
         </div><!--/end of explicit-->
         
     </fieldset>
-    
     <div class="input"><!--Rights-->
     
         <div class="text">

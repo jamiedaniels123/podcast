@@ -674,13 +674,14 @@ class PodcastItemsController extends AppController {
         $this->redirect( array('admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
     }
 
+    
     /*
      * @name : delete_attachment
      * @desscription : Enables a user to delete an associated image of a row on the podcast_items table.
      * @name : Charles Jackson
      * @by : 27th June 2011
      */
-	function delete_attachment( $attachment, $id ) {
+    	function delete_attachment( $attachment, $id ) {
 		
         $this->autoRender = false;
 
