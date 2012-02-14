@@ -72,7 +72,7 @@ class Workflow extends AppModel {
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
 			// An audio file cannot have a watermark, if watermark set to true assume it is a null value.
-			$this->setWatermarkBumperTrailer( strtolower( $this->params['url']['ff03v'] ) == 'watermark' ? null : $this->params['url']['ff03v'] );
+			$this->setWatermarkBumperTrailer();
 			$this->setMediaType( 'audio' );
 			$this->video_height = null;
 			$this->aspect_ratio = null;
@@ -400,9 +400,9 @@ class Workflow extends AppModel {
 							
 		$this->recursive = -1;
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
-		
 
 		if( empty( $workflow ) ) {
+			die('cant find a workflow');
 			$this->error = 'We cannot determine a workflow for this media.';
 			return false;
 		}
@@ -411,7 +411,6 @@ class Workflow extends AppModel {
 			$this->error = 'The workflow you have chosen <i>'.$workflow['Workflow']['workflow'].'</i> has not yet been enabled.';
 			return false;
 		}		
-		
 		return $workflow['Workflow']['workflow'];
 	}
 	
