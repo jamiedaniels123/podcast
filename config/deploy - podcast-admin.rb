@@ -1,6 +1,6 @@
 set :application, "podcast-admin.open.ac.uk"
 set :repository,  "git://github.com/jamiedaniesl123/podcast.git"
-set :branch, "11-08-11"
+set :branch, "master"
 set :scm, :git
 set :deploy_to, "/data/web/#{application}/www"
 set :cakephp_app_path, "/data/web/#{application}/www/app"
