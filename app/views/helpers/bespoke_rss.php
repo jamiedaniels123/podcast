@@ -41,7 +41,8 @@ class BespokeRssHelper extends RssHelper {
                 } else {
                     $innerElements = '';
                     foreach ($data as $subElement => $value) {
-                            $innerElements .= $this->elem($subElement, array(), $value);
+                    	$innerElements .= $this->elem($subElement, array(), $value);
+                            
                     }
                     $data = $innerElements;
                 }
@@ -151,13 +152,6 @@ class BespokeRssHelper extends RssHelper {
                     $val = null;
                     break;
                 case 'media:thumbnail':
-                    if ( is_string( $val['url'] ) ) {
-
-                        if ( !isSet( $val['height'] ) && !isSet( $val['width'] ) ) {
-                            $val['height'] = '400px';
-                            $val['width'] = '400px';
-                        }
-                    }
                     $val['url'] = $this->url($val['url'], true);
                     $attrib = $val;
                     $val = null;
@@ -283,7 +277,6 @@ class BespokeRssHelper extends RssHelper {
 	 * @by : Charles Jackson
 	 */	
 	function elem($name, $attrib = array(), $content = null, $endTag = true) {
-
 		$namespace = null;
 		if (isset($attrib['namespace'])) {
 			$namespace = $attrib['namespace'];
@@ -303,10 +296,10 @@ class BespokeRssHelper extends RssHelper {
 			$content = null;
 		}
 
-		
+//		print_r($attrib);
 		$elem =& $this->Xml->createElement($name, $content, $attrib, $namespace);
 		foreach ($children as $child) {
-			$elem->createElement($child);
+			$elem->createElement($name, Null, array('text'=>$child['attrib']['text']));
 		}
 
 		$out = $elem->toString(array('cdata' => $cdata, 'leaveOpen' => !$endTag));
@@ -321,6 +314,11 @@ class BespokeRssHelper extends RssHelper {
 		if( preg_match( '/atom:category_./',  $out ) ) {
 			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
 		}
+		
+		// Do the same for itunes:category which has the same problem
+		if( preg_match( '/itunes:category_./',  $out ) ) {
+			$out = preg_replace( '/itunes:category_./', 'itunes:category', $out );
+		}		
 
 		// Append a new line "\n" to the end of the return value to aid formatting when viewing the 
 		// soure code of an XML feed.

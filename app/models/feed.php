@@ -208,7 +208,6 @@ class Feed extends AppModel {
         $channelData['media:title'] = $this->data['Podcast']['title'].$this->title_suffix;
         $channelData['media:description'] = $this->data['Podcast']['summary'];
         $channelData['media:keywords'] = $this->data['Podcast']['keywords'];
-
         if ( !empty( $this->podcast_path_and_image ) ) {
             $channelData['media:thumbnail']['attrib']['url'] = $this->podcast_path_and_image;
 		} else {
@@ -235,16 +234,19 @@ class Feed extends AppModel {
 
 
         foreach ( $this->data['Categories'] as $category ) {
-
-            if ( (int)$category['parent_id'] ) {
-
-                $channelData['itunes:category']['attrib']['text'] = $category['ParentCategory']['category'];
-
-            } else {
-
-                $channelData['itunes:category']['attrib']['text'] = $category['category'];
-            }
+           // if ( (int)$category['parent_id'] ) {
+                
+           // } else {
+        		
+                
+                $channelData['itunes:category_1']['attrib']['text'] = $category['ParentCategory']['category'];
+                $channelData['itunes:category_1']['itunes:category_2']['attrib']['text'] = $category['category'];
+                //$channelData['itunes:category_1']['attrib']['text'] = $category['category'];
+           // }
         }
+        
+        //print_r($channelData);die('dead');
+
         // END - iTunes specific elements
 
 
@@ -255,14 +257,14 @@ class Feed extends AppModel {
 		// preg_replace
         if ( !empty( $this->data['Podcast']['course_code'] ) ) {
             $channelData['atom:category_1']['attrib']['scheme'] = 'http://purl.org/steeple/course';
-            $channelData['atom:category_1']['attrib']['term'] = $this->data['Podcast']['course_code'];
+            $channelData['atom:category_1']['attrib']['term'] = trim($this->data['Podcast']['course_code']);
             $channelData['atom:category_1']['attrib']['label'] = null;
         }
 
         if ( !empty($this->data['PreferredNode']['subject_code']) && !empty( $this->data['PreferredNode']['title'] ) ) {
 
             $channelData['atom:category_2']['attrib']['scheme'] = 'http://purl.org/ou/blue#';
-            $channelData['atom:category_2']['attrib']['term'] = $this->data['PreferredNode']['subject_code'];
+            $channelData['atom:category_2']['attrib']['term'] = trim($this->data['PreferredNode']['subject_code']);
             $channelData['atom:category_2']['attrib']['label'] = $this->data['PreferredNode']['title'];
         }
 
