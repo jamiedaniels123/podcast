@@ -141,11 +141,13 @@ class BespokeRssHelper extends RssHelper {
                     if ( is_string( $val['url'] ) ) {
 
                         $headers = get_headers( $val['url'], true );
+                        $contenttype=explode(';',$headers['Content-Type']);
+                        $contentlen=explode(';',$headers['Content-Length']);
                         if ( !isSet( $val['length'] ) && isSet( $headers['Content-Length'][1] ) )
-                            $val['length'] = sprintf("%u", $headers['Content-Length'][1] );
+                            $val['length'] = sprintf("%u", $contentlen[0] );
 
                         if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
-                            $val['type'] = $headers['Content-Type'][1];
+                            $val['type'] = $contenttype[0];
                     }
                     $val['url'] = $this->url($val['url'], true);
                     $attrib = $val;
