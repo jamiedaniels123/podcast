@@ -267,7 +267,7 @@ class Feed extends AppModel {
             $channelData['atom:category_2']['attrib']['term'] = trim($this->data['PreferredNode']['subject_code']);
             $channelData['atom:category_2']['attrib']['label'] = $this->data['PreferredNode']['title'];
         }
-
+//print_r($this->data);die('dead after showing this data');
         return $channelData;
     }
 
@@ -318,6 +318,7 @@ class Feed extends AppModel {
         if( $this->itunes_complete )
             $item['itunes:order'] = $track_number;
 
+        //print_r($this->podcast_item);die('dead after showing podcast item');
         $item = $this->__setItunesItemCode( $item );
         
         // End Itunes specific
@@ -408,6 +409,7 @@ class Feed extends AppModel {
         // Remove 1 second from datestamp so as not to conflict with actual media.
         $item['pubDate'] = date("Y-m-d H:i:s", strtotime( $this->podcast_item['publication_date'] ) - 1 );
         $item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
+        $item['media:content']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.strtolower( TRANSCRIPT ).'/'.$this->podcast_transcript['filename'];
 
         $this->podcast_items[] = $item;
     }
@@ -710,13 +712,11 @@ class Feed extends AppModel {
      */
     function __setItunesItemCode( $item = array() ) {
 
-        if ( ( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) ) &&
-                ( in_array($this->media_type, array( 'ipod', 'ipod-all', 'audio', 'epub', '' ) ) ) ) {
-
+        if ( ( is_array( $this->data['iTuneCategories'] ) && count( $this->data['iTuneCategories'] ) )) {
+        	
             $item['itunesu:category']['attrib']['itunesu:code'] = $this->data['iTuneCategories'][0]['code'];
-
         } else {
-
+        	
             $item['itunesu:category']['attrib']['itunesu:code'] = null;
         }
 
