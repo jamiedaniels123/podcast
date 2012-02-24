@@ -1,41 +1,41 @@
 <?php
 class PodcastItemsController extends AppController {
 
-    var $name = 'PodcastItems';
-    var $components = array( 'Upload' );
+	var $name = 'PodcastItems';
+	var $components = array( 'Upload' );
 
-    private $errors = array();
+	private $errors = array();
 
-    var $paginate = array( 'limit' => 50, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
+	var $paginate = array( 'limit' => 50, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
 
-    function beforeFilter() {
+	function beforeFilter() {
 
-    	parent::beforeFilter();
-    }
-        
-    /*
-     * @name : beforeRender
-     * @description : The beforeRender action is automatically called after the controller 
-	 * action has been executed and before the screen is rendered.
-     * @updated : 5th May 2011
-     * @by : Charles Jackson
-     */
-    function beforeRender() {
+		parent::beforeFilter();
+	}
 
-        // If there are any errors assign them to the view
-        if( count( $this->errors ) )
-            $this->set('errors', $this->errors );
-            
+	/*
+	 * @name : beforeRender
+	 * @description : The beforeRender action is automatically called after the controller 
+	* action has been executed and before the screen is rendered.
+	 * @updated : 5th May 2011
+	 * @by : Charles Jackson
+	 */
+	function beforeRender() {
+
+		// If there are any errors assign them to the view
+		if( count( $this->errors ) )
+			$this->set('errors', $this->errors );
+
 		parent::beforeRender();
-    }
+	}
 
-    /*
-     * @name : index
-     * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
-     * @name : Charles Jackson
-     * @by : 16th May 2011
-     */
-    function index( $id = null ) {
+	/*
+	 * @name : index
+	 * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
+	 * @name : Charles Jackson
+	 * @by : 16th May 2011
+	 */
+	function index( $id = null ) {
 
 		$this->PodcastItems->Podcast->recursive = -1;
 		$this->PodcastItems->recursive = -1;
@@ -44,37 +44,36 @@ class PodcastItemsController extends AppController {
 		$this->set('element', 'tracks' ); // Set the active element for the tab menu
 		// Set the tabs for the menu
 		$this->setTabs( $this->data['Podcast'] );
-    }
-	
-    /*
-     * @name : add
-     * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
-     * @todo : Move this code to the 'add' method. Change of functionality mid project.
-     * @updated : 13th May 2011
-     * @by : Charles Jackson
-     */
-    function add( $podcast_id ) {
+	}
 
-        if( (int)$podcast_id ) {
+	/*
+	 * @name : add
+	 * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
+	 * @todo : Move this code to the 'add' method. Change of functionality mid project.
+	 * @updated : 13th May 2011
+	 * @by : Charles Jackson
+	 */
+	function add( $podcast_id ) {
 
+		if( (int)$podcast_id ) {
 
 			$this->PodcastItem->Podcast->Behaviors->attach('Containable');
-            $this->data = $this->PodcastItem->Podcast->edit( $podcast_id );
+			$this->data = $this->PodcastItem->Podcast->edit( $podcast_id );
 
-            // We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
-            // in the session.
-            $this->Session->write('Podcast.podcast_id', $podcast_id);
-            $this->Session->write('Podcast.admin', false);
+			// We cannot easily passed parameters into the filechucker.cgi script hence we store some basic information
+			// in the session.
+			$this->Session->write('Podcast.podcast_id', $podcast_id);
+			$this->Session->write('Podcast.admin', false);
 			$this->setTabs( $this->data['Podcast'] );
 			$this->set('element', 'media');
-        }
+		}
 
-        if( empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
+		if( empty( $this->data ) && $this->Permission->toUpdate( $this->data ) ) {
 
-            $this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
-            $this->cakeError('error404');
-        }
-    }
+			$this->Session->setFlash('Could not identify the '.MEDIA.' you are trying to update. Please try again.', 'default', array( 'class' => 'error' ) );
+			$this->cakeError('error404');
+		}
+	}
 	
     /*
      * @name : edit
@@ -395,74 +394,77 @@ class PodcastItemsController extends AppController {
     	
         if( $id )
             $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
+
 		if( isSet( $this->data['PodcastItem']['Checkbox'] ) ) {
-			
+
 			foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
 				$this->data = $this->PodcastItem->findById( $key );
-			
+
 				// Make sure it has already been converted into a podcast if they want to publish it.
 				if( !empty( $this->data ) ) {
-					
+
 					$this->data['PodcastItem']['itunes_flag'] = 'N';
 					$this->data['PodcastItem']['consider_for_itunesu'] = false;
-					
+
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
 				}
 			}
 
 			if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
-				
+
 				$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been removed but we were unable to refresh to RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
 			} else {
-			
+
 				$this->Session->setFlash('Your '.MEDIA.' has been successfully scheduled for removal from iTunes.', 'default', array( 'class' => 'success' ) );
 			}
-			
+
 		} else {
-			
+
 			$this->Session->setFlash('You must select at least one '.MEDIA.' item.', 'default', array( 'class' => 'error' ) );
 		}
-		
+
 		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
-    }
-    
-    /*
-     * @name : filechucker
-     * @description : Called by the filechucker script directly after a successful upload. It is used by both
-     * users and administrators and will create a row on the podcast items table using parameters passed and session information.
-     * @updated : 26th May 2011
-     * @by : Charles Jackson
-     */
-    function filechucker() {
+	}
+
+		/*
+		 * @name : filechucker
+		 * @description : Called by the filechucker script directly after a successful upload. It is used by both
+		 * users and administrators and will create a row on the podcast items table using parameters passed and session information.
+		 * @updated : 26th May 2011
+		 * @by : Charles Jackson
+		 • @updated : 24th Feb 2012
+		 * @by : Ben Hawkridge
+		 * 
+		 */
+		function filechucker() {
 	
-        $this->autoRender = false; // We don't want to render a view
-		$getId3_information = array();
-		
-        if ( $this->Session->check('Podcast.podcast_id') && isSet( $this->params['url'] ) ) {
+			$this->autoRender = false; // We don't want to render a view
+			$getId3_information = array();
 
-            $this->PodcastItem->create();
-			// Capture various bits and pieces including information needed to determine the workflow.
-            $this->data = $this->PodcastItem->createFromUrlVariables( $this->params, $this->Session->read('Podcast.podcast_id') );
-			
-            $this->PodcastItem->set( $this->data );
+			if ( $this->Session->check('Podcast.podcast_id') && isSet( $this->params['url'] ) ) {
 
-            $this->PodcastItem->begin(); // Start a transaction
-			
-            if( $this->PodcastItem->save() ) { // Save the data here so we can use the unique ID created as part of the media filename.
+				$this->PodcastItem->create();
+				// Capture various bits and pieces including information needed to determine the workflow.
+				$this->data = $this->PodcastItem->createFromUrlVariables( $this->params, $this->Session->read('Podcast.podcast_id') );
 
-                $this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
+				$this->PodcastItem->set( $this->data );
 
-				// Move from the default file chucker upload folder into a specific custom_id folder and rename it
-				// appending the database ID number to the start of the filename to ensure it is unique.
-                if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
+				$this->PodcastItem->begin(); // Start a transaction
+
+				if( $this->PodcastItem->save() ) { // Save the data here so we can use the unique ID created as part of the media filename.
+
+					$this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
+
+					// Move from the default file chucker upload folder into a specific custom_id folder and rename it
+					// appending the database ID number to the start of the filename to ensure it is unique.
+					if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
 
 					// Capture the new name by setting an updated filename appending the database ID number to the start of 
 					// the filename to ensure it is unique.
 					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['original_filename'];
-									
+
 					// Capture the ID3 information
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );
 
@@ -470,7 +472,7 @@ class PodcastItemsController extends AppController {
 					$this->data = $this->PodcastItem->captureId3Information( $this->data, $getId3_information );
 					$this->PodcastItem->set( $this->data );
 					$this->PodcastItem->save();
-					
+
 					// Instaniate the object and determine the workflow.
 					$this->Workflow = ClassRegistry::init('Workflow');
 
@@ -483,13 +485,13 @@ class PodcastItemsController extends AppController {
 
 					// Do we have errors? If true, probably an invalid file type.
 					if( $this->Workflow->hasErrors() ) {
-						
+
 						$this->Session->setFlash($this->Workflow->getErrors(), 'default', array( 'class' => 'error' ) );
-						
-					// The media is not transcoded and we can transfer direct to the media box. We include an additional element
-					// entitled "media" that we can recognise in the callback.
+
+						// The media is not transcoded and we can transfer direct to the media box. We include an additional element
+						// entitled "media" that we can recognise in the callback.
 					} elseif( $this->Workflow->getTranscode() == false ) {
-						
+
 						if( $this->Api->deliverWithoutTranscoding( 
 							array( 
 								'source_path' => $this->data['Podcast']['custom_id'].'/',
@@ -506,58 +508,61 @@ class PodcastItemsController extends AppController {
 						{
 							$this->Session->setFlash( MEDIA.' has been scheduled for transfer.', 'default', array( 'class' => 'success' ) );
 							$this->PodcastItem->commit();
-							
+
 							$this->redirect( array( 'admin' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
-							
+
 						} else {
-							
+
 							$this->Session->setFlash('We were unable to transfer your '.MEDIA.' to the media server. Please try again', 'default', array( 'class' => 'error' ) );
 						}
-						
-					// This media needs to be transcoded.
+
+						// This media needs to be transcoded.
 					} else {
+						// BH 20120224 Need to set the permissions on the file to 664 so that it is easier to handle when it's SCP'd to remote transcoder
+						
+						chmod(FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'], 0664);  // changed permissions to be 664
 						
 						// Transcode the media
 						if( $this->Api->transcodeMediaAndDeliver( $this->data['Podcast']['custom_id'], $this->data['PodcastItem']['filename'], $this->Workflow->getWorkflow(), $this->data['PodcastItem']['id'], $this->data['PodcastItem']['podcast_id'] ) ) {
-	
+
 							// It's possible the workflow redefined the aspect ratio so update it here and resave the object before we commit.
 							$this->data['PodcastItem']['aspect_ratio'] = $this->Workflow->getAspectRatioFloat();
 							$this->PodcastItem->set( $this->data ); // Hydrate the object
 							$this->PodcastItem->save();
-							
+
 							// Witwoo! Everything worked.						
 							$this->PodcastItem->commit();
 							$this->Session->setFlash('Your '.MEDIA.' has been successfully uploaded and scheduled with the transcoder.', 'default', array( 'class' => 'success' ) );
 
 							$this->redirect( array( 'admin' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'] ) );
-							
+
 						} else {
-							
+
 							// Could not schedule for transcoding.
-							$this->Session->setFlash('Could not schedule your '.MEDIA.' for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+							$this->Session->setFlash('Could not schedule your '.MEDIA.' for transcoding, please try again. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );
 						}
 					}
-					
-                } else {
-					
-                    // Could not copy file from the default folder in the transcoding specific folder on the admin box.
-					$this->Session->setFlash('Could not copy your '.MEDIA.'. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+
+					} else {
+
+						// Could not copy file from the default folder in the transcoding specific folder on the admin box.
+						$this->Session->setFlash('Could not copy your '.MEDIA.'. If the problem persists contact an administrator.',  'default', array( 'class' => 'error' ) );						
+					}
 				}
-            }
-			
-        } else {
+
+			} else {
 
 			// The file did not upload capture the errors.
 			$this->errors = $this->PodcastItem->invalidFields( $this->data );
 			$this->Session->setFlash('Could not save your '.MEDIA.' information, please try again. If the problem persists please contact an administrator.',  'default', array( 'class' => 'error' ) );
-		}
-		
-		unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
-		$this->PodcastItem->rollback();
-		
-		$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
+			}
 
-    }
+			unlink( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['original_filename'] );		
+			$this->PodcastItem->rollback();
+
+			$this->redirect( array( 'youtube' => false,  'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
+
+		}
 
     /*
      * @name : __updateImage

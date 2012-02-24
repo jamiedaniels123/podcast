@@ -24,9 +24,11 @@ class Workflow extends AppModel {
 	
 	public $workflow = null; // Holds the determined workflow.
 
+  // BH 20111115 for info .m4a and .m4b are audio book formats and contain chapter track information that would be lost if transcoded
 	var $not_for_transcoding = array('pdf','m4a','m4b', 'mp3' );
-	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','mkv','dv');
-	var $audio_transcoding = array('wav','ogg','amr','aif','aiff');
+	// BH 20111115 - .mkv and .ogg files disabled as not supported by Episode for input
+	var $video_transcoding = array('mp4','m4v','mov','mpg','wmv','avi','flv','swf','3gp','3g2','dv');
+	var $audio_transcoding = array('wav','amr','aif','aiff');
 
 	/*
 	 * @name : get
