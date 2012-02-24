@@ -333,7 +333,9 @@ class Feed extends AppModel {
 
         // OK, we are not processing an eBook or PDF transcript, add duration
         if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false )
-            $item['itunes:duration'] = $this->podcast_media['duration'];
+        	$duration=$this->podcast_media['duration'];
+        	$duration = date('h:i:s',$duration);
+        	$item['itunes:duration'] =$duration;
 
         // If we are processing a transcript add appropriate atom element.
         $item = $this->setAtom( $item );
