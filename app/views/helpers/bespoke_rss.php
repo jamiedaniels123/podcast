@@ -143,8 +143,8 @@ class BespokeRssHelper extends RssHelper {
                         $headers = get_headers( $val['url'], true );
                         $contenttype=explode(';',$headers['Content-Type']);
                         $contentlen=explode(';',$headers['Content-Length']);
-                        if ( !isSet( $val['filesize'] ) && isSet( $headers['Content-Length'][1] ) )
-                            $val['filesize'] = sprintf("%u", $contentlen[0] );
+                        if ( !isSet( $val['length'] ) && isSet( $headers['Content-Length'][1] ) )
+                            $val['length'] = sprintf("%u", $contentlen[0] );
 
                         if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
                             $val['type'] = $contenttype[0];
@@ -159,8 +159,8 @@ class BespokeRssHelper extends RssHelper {
                         $headers = get_headers( $val['url'], true );
                         $contenttype=explode(';',$headers['Content-Type']);
                         $contentlen=explode(';',$headers['Content-Length']);
-                        if ( !isSet( $val['length'] ) && isSet( $headers['Content-Length'][1] ) )
-                            $val['length'] = sprintf("%u", $contentlen[0] );
+                        if ( !isSet( $val['filesize'] ) && isSet( $headers['Content-Length'][1] ) )
+                            $val['filesize'] = sprintf("%u", $contentlen[0] );
 
                         if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
                             $val['type'] = $contenttype[0];
