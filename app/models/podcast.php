@@ -309,7 +309,6 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function beforeSave() {
-
         $this->data['Podcast']['explicit'] = $this->__checkExplicitStatus();
         return true;
     }

@@ -239,6 +239,7 @@
                     <label for="PodcastAllCategories">All iTunes Categories</label>
                     <input type="hidden" name="data[Podcast][AllCategories]" value="" id="PodcastAllCategories_" />
                     <select name="data[Podcast][AllCategories][]" multiple="multiple" id="PodcastAllCategories">
+                        <?php print_r($categories); ?>
                         <?php foreach( $categories as $id => $value ) : ?>
                             <option value="<?php echo $id; ?>"><?php echo $value; ?></option>
                         <?php endforeach; ?>

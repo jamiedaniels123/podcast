@@ -495,7 +495,7 @@ class PodcastsController extends AppController {
 					
 				$this->Podcast->set( $this->data );
 				$this->Podcast->save();
-					
+				
 				$this->Session->setFlash('You have successfully approved this podcast for publication on youtube.', 'default', array( 'class' => 'success' ) );
 				$this->redirect( array( 'youtube' => false, 'action' => 'edit', $id, 'youtube#youtube' ) );
 					
