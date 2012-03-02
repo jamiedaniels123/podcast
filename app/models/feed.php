@@ -330,7 +330,7 @@ class Feed extends AppModel {
         $item['guid'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
         $item['pubDate'] = $this->podcast_item['publication_date'];
         $item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
-
+        $item['media:content']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
         // OK, we are not processing an eBook or PDF transcript, add duration
         if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false )
         	$duration=$this->podcast_media['duration'];
@@ -352,22 +352,6 @@ class Feed extends AppModel {
             $item['atom:link']['attrib']['type'] = 'text/html';
         }
 
-		// If we are creating a default flavour of RSS feed then we need to create atom links for all 'sister' default flavours 
-		// that exist such as 270, 720, 1080 etc...
-		// @TODO : Need to finish this routine when the API is back online.
-		if( empty( $this->media_type ) ) {
-			
-			$default_flavours = array();
-			$default_flavours = $this->getDefaultFlavours();
-			$x=0;
-			foreach( $default_flavours as $default_flavour ) {
-				$item['media:group'][$x]['media:content']['attrib']['height'] = $default_flavour['PodcastItemMedia']['media_type'];
-				$item['media:group'][$x]['media:content']['attrib']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].'/'.$default_flavour['PodcastItemMedia'][$x]['filename'];
-				$item['media:group'][$x]['media:content']['attrib']['type'] = 	'video/mp4';
-				$x++;
-			}
-		}
-		
         $this->podcast_items[] = $item;
     }
 

@@ -143,6 +143,22 @@ class BespokeRssHelper extends RssHelper {
                         $headers = get_headers( $val['url'], true );
                         $contenttype=explode(';',$headers['Content-Type']);
                         $contentlen=explode(';',$headers['Content-Length']);
+                        if ( !isSet( $val['filesize'] ) && isSet( $headers['Content-Length'][1] ) )
+                            $val['filesize'] = sprintf("%u", $contentlen[0] );
+
+                        if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
+                            $val['type'] = $contenttype[0];
+                    }
+                    $val['url'] = $this->url($val['url'], true);
+                    $attrib = $val;
+                    $val = null;
+                    break;
+                case 'media:content':
+                    if ( is_string( $val['url'] ) ) {
+
+                        $headers = get_headers( $val['url'], true );
+                        $contenttype=explode(';',$headers['Content-Type']);
+                        $contentlen=explode(';',$headers['Content-Length']);
                         if ( !isSet( $val['length'] ) && isSet( $headers['Content-Length'][1] ) )
                             $val['length'] = sprintf("%u", $contentlen[0] );
 
@@ -152,7 +168,7 @@ class BespokeRssHelper extends RssHelper {
                     $val['url'] = $this->url($val['url'], true);
                     $attrib = $val;
                     $val = null;
-                    break;
+                    break;                  
                 case 'media:thumbnail':
                     $val['url'] = $this->url($val['url'], true);
                     $attrib = $val;
