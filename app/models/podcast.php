@@ -309,6 +309,7 @@ class Podcast extends AppModel {
      * @by : Charles Jackson
      */
     function beforeSave() {
+
         $this->data['Podcast']['explicit'] = $this->__checkExplicitStatus();
         return true;
     }
@@ -376,7 +377,9 @@ class Podcast extends AppModel {
         }
         
         // Trim URL field in case users enter whitespace from a pasted in url.
-        $this->data['Podcast']['link']=trim($this->data['Podcast']['link']);
+        if (isset($this->data['Podcast']['link'])){
+        	$this->data['Podcast']['link']=trim($this->data['Podcast']['link']);
+        }
         
         return true;
     }
