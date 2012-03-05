@@ -216,6 +216,9 @@
                         
                             <label for="Categories">Podcast iTunes Categories</label>
                             <input type="hidden" name="data[Categories]" value="" id="Categories_" />
+ <?php                            
+ debug($this->data['Categories']);                           
+ ?>
                             <select name="data[Categories][]" class="selected" multiple="multiple" id="Categories">
                                 <?php if( isSet( $this->data['Categories'] ) && is_array( $this->data['Categories'] ) ) : ?>
                                     <?php foreach( $this->data['Categories'] as $category ) : ?>

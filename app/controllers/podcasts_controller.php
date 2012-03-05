@@ -1198,16 +1198,18 @@ class PodcastsController extends AppController {
 			// Get all the categories
 			$Category = ClassRegistry::init('Category');
 			$Category->recursive = -1;
-			//$categories = $Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
+			$oldcategories = $Category->find('list', array( 'fields' => array('Category.id', 'Category.category'), 'order' => array('Category.category') ) );
 
 			$level0itunesnodes = $Category->query("SELECT * FROM categories WHERE parent_id=0");
 			$categories = array();
 			foreach($level0itunesnodes as $parentcat){
-				array_push($categories, $parentcat['categories']['category']);
+				array_push($categories[$parentcat['categories']['id']], $parentcat['categories']['category']);
+				$categories[$parentcat['categories']['id']]=$parentcat['categories']['category'];
 				$level1itunesnodes = $Category->query("SELECT * FROM categories WHERE parent_id=".$parentcat['categories']['id']."");
 				array_push($nodes, $parentcat['categories']['category']);
 				foreach($level1itunesnodes as $childcat){
-					array_push($categories, '-'.$childcat['categories']['category']);
+					array_push($categories[$childcat['categories']['id']], '-'.$childcat['categories']['category']);
+					$categories[$childcat['categories']['id']]='-'.$childcat['categories']['category'];
 				}
 			}
 			$this->set('categories', $categories );
@@ -1220,16 +1222,16 @@ class PodcastsController extends AppController {
 			$level0itunesunodes = $ItunesuCategory->query("SELECT code_title, code, level FROM itunesu_categories");
 			$itunesu_categories = array();
 			foreach($level0itunesunodes as $category){
-
 				if($category['itunesu_categories']['level']==0){
-					array_push($itunesu_categories, $category['itunesu_categories']['code_title']);	
+					array_push($itunesu_categories[$category['itunesu_categories']['code']], $category['itunesu_categories']['code_title']);	
+					$itunesu_categories[$category['itunesu_categories']['code']] = $category['itunesu_categories']['code_title'];
 				}
 				else{
-					array_push($itunesu_categories, '-'.$category['itunesu_categories']['code_title']);
+					array_push($itunesu_categories[$category['itunesu_categories']['code']], '-'.$category['itunesu_categories']['code_title']);
+					$itunesu_categories[$category['itunesu_categories']['code']] = '-'.$category['itunesu_categories']['code_title'];
 				}
 				
 			}
-
 			//$itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
 
 			$this->set('itunes_categories', $itunesu_categories );
