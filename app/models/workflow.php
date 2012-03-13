@@ -68,8 +68,8 @@ class Workflow extends AppModel {
 
 			$this->setConditions();
 			
-			//$this->setWorkflow( $this->__select() );
-			$this->setWorkflow( 'video-wide-360-watermark-trailers' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
+			$this->setWorkflow( $this->__select() );
+			//$this->setWorkflow( 'video-wide-360-watermark-trailers' ); // NOTE : LINE TO BE REMOVED, FORCING A WORKFLOW
 			
 		} elseif( in_array( $this->file_extension, $this->audio_transcoding ) ) {
 
@@ -402,7 +402,6 @@ class Workflow extends AppModel {
 							
 		$this->recursive = -1;
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
-
 		if( empty( $workflow ) ) {
 			die('cant find a workflow');
 			$this->error = 'We cannot determine a workflow for this media.';
@@ -412,7 +411,7 @@ class Workflow extends AppModel {
 		if( $workflow['Workflow']['active'] == false ) {
 			$this->error = 'The workflow you have chosen <i>'.$workflow['Workflow']['workflow'].'</i> has not yet been enabled.';
 			return false;
-		}		
+		}	
 		return $workflow['Workflow']['workflow'];
 	}
 	
@@ -460,7 +459,8 @@ class Workflow extends AppModel {
 			'Workflow.media_type' => $this->media_type,
 			'Workflow.aspect_ratio' => $this->aspect_ratio,
 			'Workflow.height' => $this->video_height,
-			'Workflow.watermark_bumpers_trailers' => $this->watermark_bumper_trailer,
+			//'Workflow.watermark_bumpers_trailers' => $this->watermark_bumper_trailer,
+			'Workflow.watermark_bumpers_trailers' => 'None', // Now that we are making all flavours this choice is no longer needed so hardcoded to 'none'
 			'Workflow.vle' => $this->vle
 		);
 	}
