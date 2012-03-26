@@ -168,6 +168,7 @@ class Feed extends AppModel {
             'xmlns:media' => 'http://search.yahoo.com/mrss/',
             'xmlns:atom' => 'http://www.w3.org/2005/Atom',
             'xmlns:oupod' => 'http://purl.org/net/oupod/',
+        	'xmlns:oup' => 'http://podcast.open.ac.uk/2012',
             'xmlns:s' => 'http://purl.org/steeple'
         );
     }
@@ -267,7 +268,38 @@ class Feed extends AppModel {
             $channelData['atom:category_2']['attrib']['term'] = trim($this->data['PreferredNode']['subject_code']);
             $channelData['atom:category_2']['attrib']['label'] = $this->data['PreferredNode']['title'];
         }
-//print_r($this->data);die('dead after showing this data');
+        
+        // intranet only flag for OU media player
+        if ( !empty( $this->data['Podcast']['intranet_only'] ) ) {
+        	if($this->data['Podcast']['intranet_only'] =='Y'){
+        		$isintranet=1;
+        	}
+        	else{
+        		$isintranet=0;
+        	}
+        	$channelData['oup:intranet_only'] = $isintranet=0;
+        }
+        
+        // private flag for OU media player
+        if ( !empty( $this->data['Podcast']['private'] ) ) {
+        	if($this->data['Podcast']['private'] =='Y'){
+        		$isprivate=1;}
+        	else{
+        		$isprivate=0;}
+        	$channelData['oup:private'] = $isprivate=0;
+        }
+        
+        // deleted flag for OU media player
+       	$channelData['oup:deleted'] = $this->data['Podcast']['deleted'];
+       	
+       	// itunesU flag for OU media player  is called atom:linkxxx to avoid the issue with the rss helper not liking two elements with the same name.
+       	// at the end of views/helpers/bespoke_rss.php we remove the xxx to change it back to atom:link
+       	if ( !empty( $this->data['Podcast']['itunes_u_url'] ) ) {
+       		$channelData['atom:linkxxx']['attrib']['rel'] = "oup:rel-itunes-url";
+       		$channelData['atom:linkxxx']['attrib']['type'] = "";
+       		$channelData['atom:linkxxx']['attrib']['href'] = $this->data['Podcast']['itunes_u_url'];       		
+       	}
+      
         return $channelData;
     }
 
@@ -282,7 +314,10 @@ class Feed extends AppModel {
     function buildPodcastItem( $track_number = 0 ) {
 
         $item = array();
-
+//print_r($this->data['Podcast']);
+//print_r($this->podcast_item);
+//print_r($this->data['Podcast']['private']);
+//die('dead');
         $item['title'] = $this->podcast_item['title'];
         $item['description'] = $this->podcast_item['summary'];
 

@@ -1,8 +1,10 @@
 <fieldset class="logs index">
-   <legend><span><h3>Admin API</h3></span></legend>
-    <p class="leader">
+   <legend>Admin API</legend>
+    <div class="clear"></div>
+    <p>
         Below is a list of entries on the api_log table. The most recent commands are listed first.
     </p>
+    <div class="clear"></div>
     <table>
         <thead>
             <tr>

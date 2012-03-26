@@ -333,6 +333,11 @@ class BespokeRssHelper extends RssHelper {
 			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
 		}
 		
+		// We called atom:link atom:linkxxx ealier becuase it doesn't like two elements with the same name
+		if( preg_match( '/atom:linkxxx./',  $out ) ) {
+			$out = preg_replace( '/atom:linkxxx./', 'atom:link ', $out );
+		}		
+		
 		// Do the same for itunes:category which has the same problem
 		if( preg_match( '/itunes:category_./',  $out ) ) {
 			$out = preg_replace( '/itunes:category_./', 'itunes:category', $out );
