@@ -178,16 +178,28 @@ class BespokeRssHelper extends RssHelper {
                     $attrib = $val['attrib'];
                     $val = null;
                     break;
-				case 'atom:link' :
+				case 'atom:link':
 					$elements[$key] = $this->itemLevelAtom( $key, $val );	
+					break;	
+				case 'atom:link1':
+					$elements[$key] = $this->itemLevelAtom( $key, $val );
 					break;
+				case 'atom:link2':
+					$elements[$key] = $this->itemLevelAtom( $key, $val );
+					break;						
+				case 'atom:content':
+					$elements[$key] = $this->itemLevelAtom( $key, $val );
+					break;	
+				case 'atom:categorycourse':
+					$elements[$key] = $this->itemLevelAtom( $key, $val );
+					break;																
 				case 'media:group' :
 					$val = $this->itemLevelMedia( $key, $val );	
 					break;
             }
 
 			// Not an atom:link, process as normal.
-			if( $key != 'atom:link' ) {
+			if( $key != 'atom:link' && $key != 'atom:link1' &&  $key != 'atom:link2' && $key != 'atom:content' && $key != 'atom:categorycourse') {
 
 				if ( !is_null( $val ) && $escape )
 					$val = h($val);
@@ -260,34 +272,24 @@ class BespokeRssHelper extends RssHelper {
 	 * @by : Charles Jackson
 	 */
     function itemLevelAtom( $elem, $data = array() ) {
-
         $view =& ClassRegistry::getObject('view');
-
 		$attributes = array();
-		
 		if ( is_array( $data ) ) {
-			
 			if ( isSet( $data['attrib'] ) && is_array( $data['attrib'] ) ) {
-				
 				$attributes = $data['attrib'];
 				unset( $data['attrib'] );
-				
 			} else {
-				
 				$innerElements = '';
-				
 				foreach ( $data as $subElement => $value ) {
-					
 						$innerElements .= $this->elem( $subElement, array(), $value );
 				}
-				
 				$data = $innerElements;
 			}
 		}
-		
 		return $this->elem($elem, $attributes, $data);
     }	
-	
+    
+
 	/*
 	 * @name : elem
 	 * @description : An extension of the method found in the core xml.php helper.
@@ -332,11 +334,29 @@ class BespokeRssHelper extends RssHelper {
 		if( preg_match( '/atom:category_./',  $out ) ) {
 			$out = preg_replace( '/atom:category_./', 'atom:category', $out );
 		}
+		if( preg_match( '/atom:categorycourse./',  $out ) ) {
+			$out = preg_replace( '/atom:categorycourse./', 'atom:category ', $out );
+		}		
 		
 		// We called atom:link atom:linkxxx ealier becuase it doesn't like two elements with the same name
 		if( preg_match( '/atom:linkxxx./',  $out ) ) {
 			$out = preg_replace( '/atom:linkxxx./', 'atom:link ', $out );
+		}	
+		
+		if( preg_match( '/atom:link1./',  $out ) ) {
+			$out = preg_replace( '/atom:link1./', 'atom:link ', $out );
+		}
+		if( preg_match( '/atom:link2./',  $out ) ) {
+			$out = preg_replace( '/atom:link2./', 'atom:link ', $out );
 		}		
+				
+		if( preg_match( '/atom:linkrelated./',  $out ) ) {
+			$out = preg_replace( '/atom:linkrelated./', 'atom:link ', $out );
+		}
+		if( preg_match( '/atom:linkshortcode./',  $out ) ) {
+			$out = preg_replace( '/atom:linkshortcode./', 'atom:link ', $out );
+		}
+			
 		
 		// Do the same for itunes:category which has the same problem
 		if( preg_match( '/itunes:category_./',  $out ) ) {
