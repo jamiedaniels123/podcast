@@ -186,7 +186,10 @@ class BespokeRssHelper extends RssHelper {
 					break;
 				case 'atom:link2':
 					$elements[$key] = $this->itemLevelAtom( $key, $val );
-					break;						
+					break;	
+				case 'atom:link3':
+					$elements[$key] = $this->itemLevelAtom( $key, $val );
+					break;										
 				case 'atom:content':
 					$elements[$key] = $this->itemLevelAtom( $key, $val );
 					break;	
@@ -199,7 +202,7 @@ class BespokeRssHelper extends RssHelper {
             }
 
 			// Not an atom:link, process as normal.
-			if( $key != 'atom:link' && $key != 'atom:link1' &&  $key != 'atom:link2' && $key != 'atom:content' && $key != 'atom:categorycourse') {
+			if( $key != 'atom:link' && $key != 'atom:link1' &&  $key != 'atom:link2'  &&  $key != 'atom:link3' && $key != 'atom:content' && $key != 'atom:categorycourse') {
 
 				if ( !is_null( $val ) && $escape )
 					$val = h($val);
@@ -348,7 +351,10 @@ class BespokeRssHelper extends RssHelper {
 		}
 		if( preg_match( '/atom:link2./',  $out ) ) {
 			$out = preg_replace( '/atom:link2./', 'atom:link ', $out );
-		}		
+		}
+		if( preg_match( '/atom:link3./',  $out ) ) {
+			$out = preg_replace( '/atom:link3./', 'atom:link ', $out );
+		}				
 				
 		if( preg_match( '/atom:linkrelated./',  $out ) ) {
 			$out = preg_replace( '/atom:linkrelated./', 'atom:link ', $out );

@@ -431,13 +431,23 @@ class Feed extends AppModel {
 			$item['atom:link1']['attrib']['rel'] = 'related';
 			$item['atom:link1']['attrib']['type'] = 'text/html';
 		}
+
 		if ( !empty($this->podcast_item['shortcode'] ) ) {
 			$item['atom:link2']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#'.$this->podcast_item['shortcode'];
 			$item['atom:link2']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			$item['atom:link2']['attrib']['rel'] = 'oup:longlink';
 			$item['atom:link2']['attrib']['type'] = 'text/html';
 		}
-				
+	
+		// Closed captions
+		if ( !empty($this->podcast_item['closed_caption'] ) ) {
+			$item['atom:link3']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/closed-captions/'.$this->podcast_item['closed_caption'];
+			$item['atom:link3']['attrib']['title'] = 'Captions for '.$this->podcast_item['title'];
+			$item['atom:link3']['attrib']['rel'] = 'alternate';
+			$item['atom:link3']['attrib']['type'] = 'application/ttml+xml';
+		}		
+		
+		
 		if ( !empty($this->podcast_item['youtube_id'] ) ) {
 			$item['atom:content']['attrib']['src'] = $this->podcast_item['youtube_id'];
 			$item['atom:content']['attrib']['type'] = 'application/x-shockwave-flash';
