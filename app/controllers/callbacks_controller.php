@@ -163,7 +163,7 @@ class CallbacksController extends AppController {
 	
 		$this->autoRender = false;
 		$this->Folder->cleanUp( $path, $level );
-        $this->Session->setFlash('Folder has been successfully cleaned.', 'default', array( 'class' => 'success' ) );
+		$this->Session->setFlash('Folder has been successfully cleaned.', 'default', array( 'class' => 'success' ) );
 		
 		$this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
 	}

@@ -212,37 +212,38 @@ class FolderComponent extends Object {
     /*
      * @name : cleanUp
      * @description : Will delete the file specified and recursively delete the folder(s) if empty.
-     * @updated : 1st June 2001
+     * @updated : 1st June 2011
      * @by : Charles Jackson
      */
 	function cleanUp( $path = FILE_REPOSITORY, $level = 0 ){ 
 	
-	    $ignore = array( 'cgi-bin', '.', '..' ); 
+		$ignore = array( 'cgi-bin', '.', '..' ); 
 		// Directories to ignore when listing output. Many hosts 
 		// will deny PHP access to the cgi-bin. 
 
 		$dh = @opendir( $path ); 
 		// Open the directory to the handle $dh 
      
-	    while( false !== ( $file = readdir( $dh ) ) ) { 
-    	// Loop through the directory 
-
+		while( false !== ( $file = readdir( $dh ) ) ) { 
+		// Loop through the directory 
+		
 			if( !in_array( $file, $ignore ) ){ 
 			// Check that this file is not to be ignored 
-
+			
 				if( is_dir( $path.$file ) ) { 
-
+			
 					// Its a directory, so we need to keep reading down... 
 					$this->cleanUp( $path.$file.'/', ( $level + 1 ) ); 
 				
 				} else { 
 					// Delete the file if it is over 1 hour old
 					if ( filemtime($path.$file) <= time()-60*60 ) {
-					   unlink(FILE_REPOSITORY.$file);             
+					   unlink($path.$file);             
+					   // unlink(FILE_REPOSITORY.$file);  // BH 20120403 this line of code appears wrong and it is surprising it doesn't create errors.           
 					}
 				} 
 			}
-        }
+		}
 		
 		// If the folder is now empty, delete it.
 		if( ( $path != FILE_REPOSITORY ) && $this->is_empty_dir( $path ) ) {

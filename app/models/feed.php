@@ -277,19 +277,38 @@ class Feed extends AppModel {
 			$channelData['atom:category_2']['attrib']['label'] = $this->data['PreferredNode']['title'];
 		}
 
-		if($isplayerxml){
-			// intranet only flag for OU media player
-			if ( !empty( $this->data['Podcast']['intranet_only'] ) ) {
-				if($this->data['Podcast']['intranet_only'] =='Y'){
-					$isintranet=1;
-				}
-				else{
-					$isintranet=0;
-				}
-				$channelData['oup:intranet_only'] = $isintranet=0;
+    // PLAYER.XML - additions to CHANNEL level for player.xml specific output (JDD 20120328, BH 20120316)
+
+		if ($isplayerxml) {
+			
+    	// custom_ID
+    	// Example: <atom:link rel="alternate" type="text/html" title="Permalink for Student views of the OU" href="http://podcast.open.ac.uk/pod/student-experiences/" />    
+			$channelData['atom:linkalternative']['attrib']['rel'] = "alternative";
+			$channelData['atom:linkalternative']['attrib']['type'] = "text/html";
+			$channelData['atom:linkalternative']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->rss_filename;
+			$channelData['atom:linkalternative']['attrib']['title'] = "Permalink for " . $this->data['Podcast']['title'].$this->title_suffix;
+
+      // itunes_u_url
+      // Example: <atom:link rel="oup:rel-itunes-url" type=""  href="http://deimos.apple.com/WebObjects/Core.woa/Browse/itunes.open.ac.uk.1542410972" />
+			// iTunes U flag for OU media player is called atom:linkitunesu to avoid the issue with the rss helper not liking two elements with the same name.
+			// at the end of views/helpers/bespoke_rss.php we remove the 'itunesu' to change it back to atom:link
+			if ( !empty( $this->data['Podcast']['itunes_u_url'] ) ) {
+				$channelData['atom:linkitunesu']['attrib']['rel'] = "oup:rel-itunes-url";
+				$channelData['atom:linkitunesu']['attrib']['type'] = "";
+				$channelData['atom:linkitunesu']['attrib']['href'] = $this->data['Podcast']['itunes_u_url'];
 			}
 
-			// private flag for OU media player
+      // link and link_text
+      // Example: <atom:link rel="related" type="text/html" title="Study at .." href="http://www3.open.ac.uk/study/" />
+			if ( !empty( $this->data['Podcast']['link'] ) ) {
+				$channelData['atom:linkrelated']['attrib']['rel'] = "related";
+				$channelData['atom:linkrelated']['attrib']['type'] = "text/html";
+				$channelData['atom:linkrelated']['attrib']['href'] = $this->data['Podcast']['link'];
+				$channelData['atom:linkrelated']['attrib']['title'] = $this->data['Podcast']['link_text'];
+			}
+			
+      // private
+      // Example: <oup:private>0</oup:private>
 			if ( !empty( $this->data['Podcast']['private'] ) ) {
 				if($this->data['Podcast']['private'] =='Y'){
 					$isprivate=1;
@@ -297,27 +316,29 @@ class Feed extends AppModel {
 				else{
 					$isprivate=0;
 				}
-				$channelData['oup:private'] = $isprivate=0;
+				$channelData['oup:private'] = $isprivate;
 			}
 
-			// deleted flag for OU media player
+			// intranet_only
+			// Example: <oup:intranet_only>0</oup:intranet_only>
+			if ( !empty( $this->data['Podcast']['intranet_only'] ) ) {
+				if($this->data['Podcast']['intranet_only'] =='Y'){
+					$isintranet=1;
+				}
+				else{
+					$isintranet=0;
+				}
+				$channelData['oup:intranet_only'] = $isintranet;
+			}
+
+
+			// deleted
+			// Example: <oup:deleted>0</oup:deleted>
 			$channelData['oup:deleted'] = $this->data['Podcast']['deleted'];
 
-			// itunesU flag for OU media player  is called atom:linkxxx to avoid the issue with the rss helper not liking two elements with the same name.
-			// at the end of views/helpers/bespoke_rss.php we remove the xxx to change it back to atom:link
-			if ( !empty( $this->data['Podcast']['itunes_u_url'] ) ) {
-				$channelData['atom:linkxxx']['attrib']['rel'] = "oup:rel-itunes-url";
-				$channelData['atom:linkxxx']['attrib']['type'] = "";
-				$channelData['atom:linkxxx']['attrib']['href'] = $this->data['Podcast']['itunes_u_url'];
-			}
-
-			if ( !empty( $this->data['Podcast']['link'] ) ) {
-				$channelData['atom:linkrelated']['attrib']['rel'] = "related";
-				$channelData['atom:linkrelated']['attrib']['type'] = "text/html";
-				$channelData['atom:linkrelated']['attrib']['href'] = $this->data['Podcast']['link'];
-				$channelData['atom:linkrelated']['attrib']['title'] = $this->data['Podcast']['link_text'];
-			}
 		}
+    // (END) PLAYER.XML - additions to CHANNEL level
+		
 		return $channelData;
 	}
 
@@ -330,6 +351,7 @@ class Feed extends AppModel {
 	*/
 
 	function buildPodcastItem( $track_number = 0 ) {
+		
 		// set flag for the player.xml file because it contains certain elements that should not be in the defualt rss files.
 		if($this->rss_filename=='player.xml'){
 			$isplayerxml=true;
@@ -337,6 +359,7 @@ class Feed extends AppModel {
 		else{
 			$isplayerxml=false;
 		}
+		
 		$item = array();
 		//print_r($this->data['Podcast']);
 		//print_r($this->podcast_item);
@@ -349,20 +372,6 @@ class Feed extends AppModel {
 		$item['media:title'] = $this->podcast_item['title'];
 		$item['media:description'] = $this->podcast_item['summary'];
 		$item['media:keywords'] = $this->data['Podcast']['keywords'];
-
-		if($isplayerxml){
-			if (!empty($this->data['Podcast']['aspect_ratio'])){
-				$item['oup:aspect_ratio'] = $this->data['Podcast']['aspect_ratio'];
-			}
-
-			// for player.xml
-			if($this->podcast_item['published_flag'] == 'Y'){
-				$ispublished=1;
-			}
-			else{$ispublished=0;
-			}
-			$item['oup:published'] = $ispublished;
-		}
 
 		if( strtoupper( $this->podcast_item_image_extension ) == 'PDF' ) {
 
@@ -381,7 +390,7 @@ class Feed extends AppModel {
 
 		}
 
-		// BEGIN - iTunes specific
+		// BEGIN - iTunes (Podcast) specific
 		$item['itunes:summary'] = $this->podcast_item['summary'];
 		$item['itunes:keywords'] = $this->data['Podcast']['keywords'];
 		$item['itunes:author'] = strlen( trim( $this->podcast_item['author'] ) ) ? $this->podcast_item['Podcast']['author'] : DEFAULT_AUTHOR;
@@ -394,71 +403,115 @@ class Feed extends AppModel {
 		//print_r($this->podcast_item);die('dead after showing podcast item');
 		$item = $this->__setItunesItemCode( $item );
 
-		// End Itunes specific
+		// ENDS - iTunes (Podcast) specific
 
-
-		if (!empty( $this->podcast_item['item_link'] ) )
+		if (!empty( $this->podcast_item['item_link'] ) ) {
 			$item['link'] = $this->podcast_item['item_link'];
+		}
 
 		$item['guid'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
 		$item['pubDate'] = $this->podcast_item['publication_date'];
 		$item['enclosure']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
 		$item['media:content']['url'] = $this->media_server.FEEDS.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.$this->podcast_media['filename'];
+
 		// OK, we are not processing an eBook or PDF transcript, add duration
-		if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false )
+		if( in_array( strtolower( $this->podcast_item_image_extension ), array('epub','pdf') ) == false ) {
 			$duration=$this->podcast_media['duration'];
-		$duration = date('h:i:s',$duration);
+		}
+		$duration = date('H:i:s',$duration);
 		$item['itunes:duration'] =$duration;
 
 		// If we are processing a transcript add appropriate atom element.
 		$item = $this->setAtom( $item );
 
-		if ( ( strtoupper( $this->media_type ) == 'YOUTUBE' ) && ( strtoupper( $this->podcast_item['youtube_legacy_track'] ) == 'Y' ) )
+		if ( ( strtoupper( $this->media_type ) == 'YOUTUBE' ) && ( strtoupper( $this->podcast_item['youtube_legacy_track'] ) == 'Y' ) ) {
 			$item['oupod:legacy'] = 'true';
-
-		// We include this element for the media player, it reads the RSS feed and extracts the shortcode.
-		if ( !empty($this->podcast_item['shortcode'] ) ) {
-
-			$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#'.$this->podcast_item['shortcode'];
-			$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
-			$item['atom:link']['attrib']['rel'] = 'alternate';
-			$item['atom:link']['attrib']['type'] = 'text/html';
-		}
-		
-		if ( !empty($this->podcast_item['shortcode'] ) ) {
-			$item['atom:link1']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#'.$this->podcast_item['shortcode'];
-			$item['atom:link1']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
-			$item['atom:link1']['attrib']['rel'] = 'related';
-			$item['atom:link1']['attrib']['type'] = 'text/html';
 		}
 
-		if ( !empty($this->podcast_item['shortcode'] ) ) {
-			$item['atom:link2']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#'.$this->podcast_item['shortcode'];
-			$item['atom:link2']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
-			$item['atom:link2']['attrib']['rel'] = 'oup:longlink';
-			$item['atom:link2']['attrib']['type'] = 'text/html';
+    // PLAYER.XML - additions to ITEM level for player.xml specific output  (JDD 20120328, BH 20120316)
+    //
+
+		if ($isplayerxml) {
+
+			// shortcode
+			// Example: <atom:link rel="alternate" type="text/html" title="Permalink for Student views of OU" href="http://podcast.open.ac.uk/pod/student-experiences/#!db6cc60d6b" />
+			// NOTE: This link is /#!{shortcode}  - includes '/' - compared with 'oup:longlink' below
+			if ( !empty($this->podcast_item['shortcode'] ) ) {
+				$item['atom:link']['attrib']['rel'] = 'alternate';
+				$item['atom:link']['attrib']['type'] = 'text/html';
+				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/#!'.$this->podcast_item['shortcode'];
+				$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
+			}
+			
+			// shortcode (longlink)
+			// Example: <atom:link rel="oup:longlink" type="text/html" title="Permalink (2).." href="http://podcast.open.ac.uk/oulife/podcast-student-experiences#!db6cc60d6b" />
+			// NOTE: This link is #!{shortcode}  - EXCLUDES '/' - compared with 'alternate' above
+			if ( !empty($this->podcast_item['shortcode'] ) ) {
+				$item['atom:linklong']['attrib']['rel'] = 'oup:longlink';
+				$item['atom:linklong']['attrib']['type'] = 'text/html';
+				$item['atom:linklong']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#!'.$this->podcast_item['shortcode'];
+				$item['atom:linklong']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
+			}
+			
+			// target_url and target_url_text
+			// Example: <atom:link rel="related" type="text/html" title="A page" href="http://www3.open.ac.uk/a/path" />
+			if ( !empty($this->podcast_item['target_url'] ) ) {
+				$item['atom:link1']['attrib']['rel'] = 'related';
+				$item['atom:link1']['attrib']['type'] = 'text/html';
+				$item['atom:link1']['attrib']['href'] = $this->data['Podcast']['target_url'];
+				$item['atom:link1']['attrib']['title'] = $this->data['Podcast']['target_url_text'];
+			}
+			
+			// youtube_id
+			// Example: <atom:content type='application/x-shockwave-flash' src='https://www.youtube.com/v/iiZp4va0iHE?version=3&amp;f=videos&amp;app=podcast.open.ac.uk/feeds' />
+			if ( !empty($this->podcast_item['youtube_id'] ) ) {
+				$item['atom:content']['attrib']['type'] = 'application/x-shockwave-flash';
+				$item['atom:content']['attrib']['src'] = "http://www.youtube.com/v/".$this->podcast_item['youtube_id']."version=3&amp;f=videos&amp;app=podcast.open.ac.uk/feeds";
+			}
+			
+			// aspect_ratio
+			// Example: <oup:aspect_ratio>0.5625</oup:aspect_ratio>
+			if (!empty($this->data['Podcast']['aspect_ratio'])){
+				$item['oup:aspect_ratio'] = $this->data['Podcast']['aspect_ratio'];
+			} else {
+				$item['oup:aspect_ratio'] = 0;
+			}
+			
+			// unit_course and unit_course_title
+			// Example: <atom:category scheme="http://purl.org/steeple/course" term="A180_2" label="Aberdulais Falls: A case study.." />
+			if ( !empty($this->podcast_item['unit_course']) ) {
+				$item['atom:categorycourse']['attrib']['term'] = $this->podcast_item['unit_course'];
+				$item['atom:categorycourse']['attrib']['label'] = $this->podcast_item['unit_course_title'];
+				$item['atom:categorycourse']['attrib']['scheme'] = 'http://purl.org/steeple/course';
+			}
+			
+			// published_flag
+			// Example: <oup:published_flag>1</oup:published_flag>
+			if($this->podcast_item['published_flag'] == 'Y') {
+				$item['oup:published'] = 1;
+			} else {
+				$item['oup:published'] = 0;
+			}
+			
+			// closed Captions
+			// Example: <atom:link rel="alternate" type="application/ttml+xml" title="Captions for S.." href="http://podcast.open.ac.uk/feeds/student-experiences/closed-captions/openings-being-an-ou-student.xml" />
+			
+			// BH 20120331 - Don't think this is right, the podcast_item['closed_caption'] is a field not necessarily populated correctly, instead the
+			//               podcast_item_media table should be used with media_type = 'cc-dfxp'
+			// DISABLED FOR NOW
+			
+			/*
+			if ( !empty($this->podcast_item['closed_caption'] ) ) {
+				$item['atom:link3']['attrib']['rel'] = 'alternate';
+				$item['atom:link3']['attrib']['type'] = 'application/ttml+xml';
+				$item['atom:link3']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/closed-captions/'.$this->podcast_item['closed_caption'];
+				$item['atom:link3']['attrib']['title'] = 'Closed Captions for '.$this->podcast_item['title'];
+			}
+			*/
+					
 		}
-	
-		// Closed captions
-		if ( !empty($this->podcast_item['closed_caption'] ) ) {
-			$item['atom:link3']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/closed-captions/'.$this->podcast_item['closed_caption'];
-			$item['atom:link3']['attrib']['title'] = 'Captions for '.$this->podcast_item['title'];
-			$item['atom:link3']['attrib']['rel'] = 'alternate';
-			$item['atom:link3']['attrib']['type'] = 'application/ttml+xml';
-		}		
-		
-		
-		if ( !empty($this->podcast_item['youtube_id'] ) ) {
-			$item['atom:content']['attrib']['src'] = $this->podcast_item['youtube_id'];
-			$item['atom:content']['attrib']['type'] = 'application/x-shockwave-flash';
-		}
-				
-		if ( !empty($this->podcast_item['unit_course'] ) ) {
-			$item['atom:categorycourse']['attrib']['term'] = $this->podcast_item['unit_course'];
-			$item['atom:categorycourse']['attrib']['label'] = $this->podcast_item['unit_course_title'];
-			$item['atom:categorycourse']['attrib']['scheme'] = 'http://purl.org/steeple/course';
-		}
-		
+    // (END) PLAYER.XML - additions to ITEM level
+
 		$this->podcast_items[] = $item;
 	}
 

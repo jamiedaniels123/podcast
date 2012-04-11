@@ -25,90 +25,90 @@ class FeedsController extends AppController {
      * @updated : 16th June 2011
      * @by : Charles Jackson
      */
-    function add( $id = null, $passed_flavour = null ) {
-		
-		Configure::write('debug',0);
-        $this->autoRender = false;
-
-        $Podcast = ClassRegistry::init('Podcast');
-		$Podcast->recursive = -1;
-		
-        // If we are calling this method using "requestAction" as opposed to a redirect then we must take the
-        // ID from $this->params array. See model function for indepth explanation.
-        if( $this->Feed->beingCalledAsMethod( $this->params ) )
-            $id = $this->params['id'];
-
-        // This method is used for individual rss generation and via the form posted checkbox selection. Hence
-        // when somebody is generating an individual rss feed we pass into an array and loop through as is the data
-        // was posted.
-        if( $id )
-            $this->data['Podcast']['Checkbox'][$id] = true;
-
-        foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
-
-			// First lets try and retrieve the podcast we wish to create RSS feeds for.
-			$podcast = $Podcast->findById( $key );
-			$rss_array = array();
-			$player_rss_array = array();			
-
-			// If we found a podcast, create the RSS feeds.
-			if( !empty( $podcast ) ) {
-				
-				foreach( $this->Feed->rss_flavours as $flavour ) {
-
-					// If we have a specific flavour only generate the associated RSS feed else generate them all
-					if( $passed_flavour == null || $passed_flavour == $flavour['media_type'] ) {					
+		function add( $id = null, $passed_flavour = null ) {
+			
+			Configure::write('debug',0);
+			$this->autoRender = false;
+			
+			$Podcast = ClassRegistry::init('Podcast');
+			$Podcast->recursive = -1;
+			
+			// If we are calling this method using "requestAction" as opposed to a redirect then we must take the
+			// ID from $this->params array. See model function for indepth explanation.
+			if( $this->Feed->beingCalledAsMethod( $this->params ) )
+				$id = $this->params['id'];
+			
+			// This method is used for individual rss generation and via the form posted checkbox selection. Hence
+			// when somebody is generating an individual rss feed we pass into an array and loop through as is the data
+			// was posted.
+			if( $id )
+				$this->data['Podcast']['Checkbox'][$id] = true;
+			
+			foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
+	
+				// First lets try and retrieve the podcast we wish to create RSS feeds for.
+				$podcast = $Podcast->findById( $key );
+				$rss_array = array();
+				$player_rss_array = array();			
+	
+				// If we found a podcast, create the RSS feeds.
+				if( !empty( $podcast ) ) {
 					
-						// We do everything twice, first time through we create the genuine RSS feeds that only contains
-						// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the
-						// media player and contains all available podcast items regardless of whether they are published.
-	
-						// FIRST TIME THROUGH
-						$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour ) );
-						$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-						$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
-						$rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , $flavour['rss_filename'] );
-	
-						// SECOND TIME THROUGH : Top-secret RSS feed for media player, shhh don't tell anyone! :-)
-						//die( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+					foreach( $this->Feed->rss_flavours as $flavour ) {
+						// If we have a specific flavour only generate the associated RSS feed else generate them all
+						if( $passed_flavour == null || $passed_flavour == $flavour['media_type'] ) {					
 						
-						// Only generate player.xml for the default flavour as this is the only one that is ever used.
-						if ($flavour['media_type']=='default'){
-							$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
-
+							// We do everything twice, first time through we create the genuine RSS feeds that only contains
+							// published podcast items. Second time through we create a top-secret RSS feed that can only be read by the
+							// media player and contains all available podcast items regardless of whether they are published.
+							// BH 20120411 - note, the above is not quite right, we only create one player.xml file for the 'default' flavour
+							//               as noted below.
+		
+							// FIRST TIME THROUGH
+							$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour ) );
 							$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
-							$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
-							$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+							$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . $flavour['rss_filename'], $this->data );
+							$rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , $flavour['rss_filename'] );
+							//error_log("feeds_controller > add | RSS flavour is ".$flavour['media_type']);
+		
+							// SECOND TIME THROUGH : Top-secret RSS feed for media player, shhh don't tell anyone!
+							//die( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+							
+							// Only generate player.xml for the default flavour as this is the only one that is ever used.
+							if ($flavour['media_type']=='default'){
+								$this->data = file_get_contents( RSS_VIEW . $this->Feed->buildParameters( $key, $flavour, true ) );
+	
+								$this->Folder->create( $this->Feed->buildRssPath( $podcast, $flavour ) );
+								$this->Feed->writeRssFile( FILE_REPOSITORY . $this->Feed->buildRssPath( $podcast, $flavour ) . 'player.xml', $this->data );
+								$player_rss_array[] = $this->Feed->buildApiEntry( $podcast['Podcast']['custom_id'], $flavour['media_type'] , 'player.xml' );
+								//error_log("feeds_controller > add | RSS flavour is ".$flavour['media_type']." 'player.xml'");
+							}
 						}
 					}
-				}
-
-				if( $this->Api->transferFileMediaServer( $rss_array ) == false ) {
-
-					if( $this->Feed->beingCalledAsMethod( $this->params ) )
-						return false;
-
+	
+					if( $this->Api->transferFileMediaServer( $rss_array ) == false ) {
+						if( $this->Feed->beingCalledAsMethod( $this->params ) )
+							return false;
+								
 						$this->Session->setFlash('We were unable to generate one or more RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'error' ) );
-						break;
-						
-				} elseif( $this->Api->transferFileMediaServer( $player_rss_array ) == false ) {
-					
-					if( $this->Feed->beingCalledAsMethod( $this->params ) )
-						return false;
-
+						break;	
+					} elseif( $this->Api->transferFileMediaServer( $player_rss_array ) == false ) {
+						if( $this->Feed->beingCalledAsMethod( $this->params ) )
+							return false;
+	
 						$this->Session->setFlash('We were unable to generate one or more media player RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'error' ) );
 						break;
+					}
 				}
 			}
-		}
-		
-        if( $this->Feed->beingCalledAsMethod( $this->params ) )
-            return true;
-		
+			
+			if( $this->Feed->beingCalledAsMethod( $this->params ) )
+				return true;
+			
 			$this->Session->setFlash('Your RSS feeds have been successfully generated and scheduled for transfer to the media server.', 'default', array( 'class' => 'success' ) );
-
-        $this->redirect( $this->referer() );
-    }
+			
+			$this->redirect( $this->referer() );
+		}
     
     /*
      * @name : view

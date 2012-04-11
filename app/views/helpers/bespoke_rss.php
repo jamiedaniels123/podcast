@@ -159,8 +159,8 @@ class BespokeRssHelper extends RssHelper {
                         $headers = get_headers( $val['url'], true );
                         $contenttype=explode(';',$headers['Content-Type']);
                         $contentlen=explode(';',$headers['Content-Length']);
-                        if ( !isSet( $val['filesize'] ) && isSet( $headers['Content-Length'][1] ) )
-                            $val['filesize'] = sprintf("%u", $contentlen[0] );
+                        if ( !isSet( $val['fileSize'] ) && isSet( $headers['Content-Length'][1] ) )
+                            $val['fileSize'] = sprintf("%u", $contentlen[0] );
 
                         if ( !isSet( $val['type'] ) && isSet( $headers['Content-Type'][1] ) )
                             $val['type'] = $contenttype[0];
@@ -184,7 +184,7 @@ class BespokeRssHelper extends RssHelper {
 				case 'atom:link1':
 					$elements[$key] = $this->itemLevelAtom( $key, $val );
 					break;
-				case 'atom:link2':
+				case 'atom:linklong':
 					$elements[$key] = $this->itemLevelAtom( $key, $val );
 					break;	
 				case 'atom:link3':
@@ -202,7 +202,7 @@ class BespokeRssHelper extends RssHelper {
             }
 
 			// Not an atom:link, process as normal.
-			if( $key != 'atom:link' && $key != 'atom:link1' &&  $key != 'atom:link2'  &&  $key != 'atom:link3' && $key != 'atom:content' && $key != 'atom:categorycourse') {
+			if( $key != 'atom:link' && $key != 'atom:link1' &&  $key != 'atom:linklong'  &&  $key != 'atom:link3' && $key != 'atom:content' && $key != 'atom:categorycourse') {
 
 				if ( !is_null( $val ) && $escape )
 					$val = h($val);
@@ -341,21 +341,25 @@ class BespokeRssHelper extends RssHelper {
 			$out = preg_replace( '/atom:categorycourse./', 'atom:category ', $out );
 		}		
 		
-		// We called atom:link atom:linkxxx ealier becuase it doesn't like two elements with the same name
-		if( preg_match( '/atom:linkxxx./',  $out ) ) {
-			$out = preg_replace( '/atom:linkxxx./', 'atom:link ', $out );
+		// We called atom:link atom:linkitunesu ealier becuase it doesn't like two elements with the same name
+		if( preg_match( '/atom:linkitunesu./',  $out ) ) {
+			$out = preg_replace( '/atom:linkitunesu./', 'atom:link ', $out );
 		}	
 		
 		if( preg_match( '/atom:link1./',  $out ) ) {
 			$out = preg_replace( '/atom:link1./', 'atom:link ', $out );
 		}
-		if( preg_match( '/atom:link2./',  $out ) ) {
-			$out = preg_replace( '/atom:link2./', 'atom:link ', $out );
+		if( preg_match( '/atom:linklong./',  $out ) ) {
+			$out = preg_replace( '/atom:linklong./', 'atom:link ', $out );
 		}
 		if( preg_match( '/atom:link3./',  $out ) ) {
 			$out = preg_replace( '/atom:link3./', 'atom:link ', $out );
 		}				
 				
+		if( preg_match( '/atom:linkalternative./',  $out ) ) {
+			$out = preg_replace( '/atom:linkalternative./', 'atom:link ', $out );
+		}
+		
 		if( preg_match( '/atom:linkrelated./',  $out ) ) {
 			$out = preg_replace( '/atom:linkrelated./', 'atom:link ', $out );
 		}

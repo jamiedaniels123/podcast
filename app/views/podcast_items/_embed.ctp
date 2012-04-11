@@ -4,7 +4,7 @@
     
     <div class="code">
         <h4>Preview</h4>
-        <?php $embedstring="<iframe src=\"".DEFAULT_PLAYER_URL."player/embed/pod/".$this->data['Podcast']['custom_id']."/".$this->data['PodcastItem']['shortcode']."?theme=basic"."\" height=\"270\" width=\"480\" frameborder=\"0\" allowfullscreen></iframe>"; ?>
+        <?php $embedstring="<iframe src=\"".DEFAULT_PLAYER_URL."player/embed/pod/".$this->data['Podcast']['custom_id']."/".$this->data['PodcastItem']['shortcode']."\" height=\"270\" width=\"480\" frameborder=\"0\" allowfullscreen></iframe>"; ?>
         <?php print $embedstring; ?>
 	</div>
 
