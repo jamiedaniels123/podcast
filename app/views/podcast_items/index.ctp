@@ -11,9 +11,9 @@
 	            	<th class="collection-title">Name</th>
 	                <th class="">Uploaded</th>
 	                <th class="icon-col">Available</th>
-	                <th class="icon-col">Published</th>                                        
-	                <th class="icon-col">Podcast.open.ac.uk</th>                                                            
-	            	<th class="icon-col">iTunes</th>                
+	                <th class="icon-col">Published on podcast.open.ac.uk</th>                                        
+	                <!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED<th class="icon-col">Podcast.open.ac.uk</th> -->                                                     
+	            	<th class="icon-col">iTunesU public site</th>                
 	            	<th class="icon-col">YouTube</th>
 	            </tr>
 	        </thead>
@@ -42,7 +42,7 @@
 		            	<td><?php echo $this->Time->getPrettyLongDateTime( $podcast_item['PodcastItem']['created'] ); ?></td>
 		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['PodcastItem']['processed_state'] ); ?></td>	
                         <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
-                        <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
+                        <!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td> -->
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'itunes' ); ?>" class="icon"></td>
 		            	<td  class="icon-col">
                         

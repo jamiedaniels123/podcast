@@ -14,6 +14,7 @@
         <div class="link">
             <?php if( $this->Object->syndicated( $this->data['Podcast']['syndicated'] ) == false ) : ?>
                 <a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Syndicate this <?php echo PODCAST; ?></a>
+            	<p>(Syndication is only needed if you want to generate RSS feeds for your collection or publish to the iTunesU student site)</p>
             <?php endif; ?>
             <input type="hidden" id="PodcastPodcastFlag" value="<?php echo trim( $this->data['Podcast']['podcast_flag'] );?>" name="data[Podcast][podcast_flag]">
         </div>

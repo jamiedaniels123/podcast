@@ -15,7 +15,7 @@
     </div>
     <div class="float_left two_column" >    
         <dl>
-            <dt>iTunes URL: </dt>
+            <dt>iTunesU URL: </dt>
             <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
             <dt>Course Code: </dt>
             <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
@@ -49,8 +49,7 @@
             <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/audio'; ?>&nbsp;</dd>
             <dt>iPod Link: </dt>
             <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all'; ?>&nbsp;</dd>
-            <dt>iTunesU URL: </dt>
-            <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
+
         </dl>    
 	</div>
 	<div class="action_buttons track_save_cancel">

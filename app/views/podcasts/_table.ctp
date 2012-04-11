@@ -26,7 +26,7 @@
 		<th class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>><?php echo $this->Paginator->sort('Syndicated','podcast_flag');?></th>        
 		<th class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>><?php echo $this->Paginator->sort('Consider iTunesU','consider_for_itunes');?></th>        
 		<th class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>><?php echo $this->Paginator->sort('Intended iTunesU','intended_itunesu_flag');?></th>
-		<th class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>><?php echo $this->Paginator->sort('iTunesU Published','publish_itunes_u');?></th>
+		<th class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>><?php echo $this->Paginator->sort('iTunesU Public site Published','publish_itunes_u');?></th>
 		<th class="consider_for_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_youtube'); ?>><?php echo $this->Paginator->sort('Consider Youtube','consider_for_youtube');?></th>        
 		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('Intended Youtube','intended_youtube_flag');?></th>
 		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('Youtube Published','publish_youtube');?></th>

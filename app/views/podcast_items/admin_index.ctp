@@ -11,9 +11,9 @@
 	            	<th class="collection-title">Name</th>
 	                <th class="">Uploaded</th>
 	                <th class="icon-col">Available</th>
-	                <th class="icon-col">Published</th>                                        
+	                <th class="icon-col">Published on podcast.open.ac.uk</th>                                        
 	                <th class="icon-col">Podcast.open.ac.uk</th>                                                            
-	            	<th class="icon-col">iTunes</th>                
+	            	<th class="icon-col">iTunesU public site</th>                
 	            	<th class="icon-col">YouTube</th>
 	            </tr>
 	        </thead>
