@@ -148,6 +148,22 @@ class PermissionHelper extends AppHelper {
     }
 
     /*
+     * @name : isItunesPrivateUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 12th April 2012
+     * @by : Ben Hawkridge
+     */
+    
+    function isItunesPrivateUser() {
+		
+		$this->autoRender = false;
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
+            return true;
+
+        return false;
+    }
+     
+    /*
      * @name : isYouTubeUser
      * @description : Checks the value held in session and returns a bool
      * @updated : 25th May 2011

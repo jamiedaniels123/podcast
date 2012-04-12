@@ -15,19 +15,15 @@
     </div>
     <div class="float_left two_column" >    
         <dl>
-            <dt>iTunesU URL: </dt>
-            <dd><?php echo $this->data['Podcast']['itunes_u_url']; ?>&nbsp;</dd>
-            <dt>Course Code: </dt>
-            <dd><?php echo $this->data['Podcast']['course_code']; ?>&nbsp;</dd>
-            <dt>Course Type: </dt>
-            <dd><?php echo $this->data['Podcast']['course_type']; ?>&nbsp;</dd>
-            <dt>iTunes Site: </dt>
+            <dt>iTunes U Site: </dt>
             <dd><?php echo ucfirst( $this->data['Podcast']['itunesu_site'] ); ?>&nbsp;</dd>                
-            <dt>Artwork File: </dt>
-            <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
-            <dt>Open Learn ePub: </dt>
-            <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" /></dd>
-            <dt>iTunes U Categories</dt>
+            <dt>Course Code: </dt>
+            <dd><?php echo (!empty($this->data['Podcast']['course_code'])) ? $this->data['Podcast']['course_code'] : '-'; ?>&nbsp;</dd>
+            <dt>Course Level: </dt>
+            <dd><?php echo (!empty($this->data['Podcast']['course_type'])) ? $this->data['Podcast']['course_type'] : '-'; ?>&nbsp;</dd>
+            <dt>OpenLearn ePub: </dt>
+            <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" />&nbsp;(for specialized purpose only)</dd>
+            <dt>iTunes U (Public) Categories</dt>
             <dd>
                 <?php 
                 foreach( $this->data['iTuneCategories'] as $itunesu_category ) :
@@ -36,19 +32,22 @@
                 ?>
                 &nbsp;
             </dd>                                 
-            <dt>iTunes U Publish Date: </dt>
+            <dt>iTunes U (Public) Publish Date: </dt>
             <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['publish_itunes_date'] ); ?>&nbsp;</dd>
-            <dt>iTunes U Updated Date: </dt>
+            <dt>iTunes U (Public) Updated Date: </dt>
             <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['update_itunes_date'] ); ?>&nbsp;</dd>
-
-            <dt>Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id']; ?>&nbsp;</dd>
-            <dt>Desktop Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all'; ?>&nbsp;</dd>
-            <dt>Audio Link:</dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/audio'; ?>&nbsp;</dd>
-            <dt>iPod Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all'; ?>&nbsp;</dd>
+            <dt>iTunes U (Public) URL: </dt>
+            <dd><?php echo (!empty($this->data['Podcast']['itunes_u_url'])) ? $this->data['Podcast']['itunes_u_url'] : 'n/a' ; ?>&nbsp;</dd>
+            <dt>iTunes U (Public) Artwork File: </dt>
+            <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
+            <dt>iTunes U (Public)</dt>
+            <dt>&nbsp;&nbsp;&nbsp;SD RSS Link: </dt>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?>&nbsp;</dd>
+            <dt>&nbsp;&nbsp;&nbsp;HD RSS Link: </dt>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?>&nbsp;</dd>
+            <dt>iTunes U (Private)</dt>
+            <dt>&nbsp;&nbsp;&nbsp;Watermarked RSS Link: </dt>
+            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?>&nbsp;</dd>
 
         </dl>    
 	</div>
@@ -60,17 +59,17 @@
                                 
             <?php if( $this->Permission->toUpdate( $this->data ) && ( $this->Object->considerForItunes( $this->data['Podcast'] ) == false ) && $this->Permission->isItunesUser() == false ) : ?>
             
-                    <li><a href="/podcasts/consider/itunes/<?php echo $this->data['Podcast']['id']; ?>" class="button itunes-icon" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the iTunes team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
+                    <li><a href="/podcasts/consider/itunes/<?php echo $this->data['Podcast']['id']; ?>" class="button itunes-icon" id="PodcastItunesSubmit" onclick="return confirm('You are about to submit this collection to the iTunes U (Public) team for consideration. Do you wish to continue?');">Submit for Consideration</a></li>
                     
             <?php elseif( $this->Permission->isItunesUser() ) : ?>
     
                     <?php if( $this->Object->considerForItunes( $this->data['Podcast'] ) == false && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>		
     
-                        <li><a class="button approve" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
+                        <li><a class="button approve" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes U (Public). Are you sure?');">Approve</a></li>
                     
                     <?php elseif( $this->Object->considerForItunes( $this->data['Podcast'] ) && $this->Object->intendedForItunes( $this->data['Podcast'] ) == false ) : ?>			
                     
-                        <li><a class="button approve" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes. Are you sure?');">Approve</a></li>
+                        <li><a class="button approve" href="/itunes/podcasts/approve/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesIntended" onclick="return confirm('You are about to approve this collection for publication on iTunes U (Public). Are you sure?');">Approve</a></li>
     
                         <li><a class="button unapprove" href="/itunes/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to reject this collection. Are you sure?');">Reject</a></li>
                             
@@ -78,15 +77,15 @@
     
                     <?php if( $this->Object->intendedForItunes( $this->data['Podcast'] ) ) : ?>
                     
-                        <li><a class="button unapprove" href="/itunes/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to set this collection as being removed from iTunes and remove it\'s approved status. Are you sure?');">Unapprove</a></li>
+                        <li><a class="button unapprove" href="/itunes/podcasts/reject/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesReject" onclick="return confirm('You are about to set this collection as being removed from iTunes U (Public) and remove it\'s approved status. Are you sure?');">Unapprove</a></li>
                         
                         <?php if( $this->Object->itunesPublished( $this->data['Podcast'] ) == false ) : ?>			
                     
-                                <li><a class="button approve" href="/itunes/podcasts/publish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Published</a></li>
+                                <li><a class="button approve" href="/itunes/podcasts/publish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes U (Public). Are you sure?');">Set as Published</a></li>
                             
                         <?php elseif( $this->Object->itunesPublished( $this->data['Podcast'] ) ) : ?>				
                             
-                                <li><a class="button unapprove" href="/itunes/podcasts/unpublish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes. Are you sure?');">Set as Unpublished</a></li>
+                                <li><a class="button unapprove" href="/itunes/podcasts/unpublish/<?php echo $this->data['Podcast']['id']; ?>" id="PodcastItunesPublish" onclick="return confirm('You are about to set this collection as published on iTunes U (Public). Are you sure?');">Set as Unpublished</a></li>
                             
                         <?php endif; ?>
                         

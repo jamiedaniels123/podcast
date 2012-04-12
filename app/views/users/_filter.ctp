@@ -5,9 +5,10 @@
         <select id="UserFilter" name="data[User][filter]">
             <option value="Select">Select from the list</option>
             <option value="ADMINISTRATOR" <?php echo strtoupper( $filter ) == 'ADMINISTRATOR' ? 'selected="selected"' : ''; ?>>Administrators</option>
-            <option value="ITUNES" <?php echo strtoupper( $filter ) == 'ITUNES' ? 'selected="selected"' : ''; ?>>iTunes</option>
+            <option value="ITUNES" <?php echo strtoupper( $filter ) == 'ITUNES' ? 'selected="selected"' : ''; ?>>iTunes U (Public)</option>
+            <option value="ITUNES_PRIVATE" <?php echo strtoupper( $filter ) == 'ITUNES_PRIVATE' ? 'selected="selected"' : ''; ?>>iTunes U (Private)</option>
             <option value="YOUTUBE" <?php echo strtoupper( $filter ) == 'YOUTUBE' ? 'selected="selected"' : ''; ?>>YouTube</option>
-            <option value="OPEN_LEARN" <?php echo strtoupper( $filter ) == 'OPEN_LEARN' ? 'selected="selected"' : ''; ?>>OpenLearn</option>
+            <option value="OPEN_LEARN" <?php echo strtoupper( $filter ) == 'OPEN_LEARN' ? 'selected="selected"' : ''; ?>>OpenLearn (Explore)</option>
         </select>
     </div>
     

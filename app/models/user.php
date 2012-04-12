@@ -158,6 +158,9 @@ class User extends AppModel {
             case 'ITUNES':
                 $conditions[0]['User.iTunesU'] = 'Y';            	
                 break;
+            case 'ITUNES_PRIVATE':
+                $conditions[0]['User.iTunesU_private'] = 'Y';            	
+                break;
             case 'OPEN_LEARN':
                 $conditions[0]['User.openlearn_explore'] = 'Y';            	
                 break;

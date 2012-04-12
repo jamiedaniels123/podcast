@@ -1227,6 +1227,8 @@ class PodcastsController extends AppController {
 					$itunesu_categories[$category['itunesu_categories']['code']] = $category['itunesu_categories']['code_title'];
 				}
 				else{
+					error_log("controllers/podcasts_controller > _setPodcastFormOptions | category['itunesu_categories']['level'] =".$category['itunesu_categories']['level']);
+					
 					array_push($itunesu_categories[$category['itunesu_categories']['code']], '-'.$category['itunesu_categories']['code_title']);
 					$itunesu_categories[$category['itunesu_categories']['code']] = '-'.$category['itunesu_categories']['code_title'];
 				}

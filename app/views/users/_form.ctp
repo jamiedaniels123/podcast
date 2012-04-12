@@ -30,11 +30,18 @@
     
     <div class="user_input checkbox">
         <input type="hidden" value="N" id="UserITunesU_" name="data[User][iTunesU]">
-        <label for="UserITunesU">iTunes U</label>
+        <label for="UserITunesU">iTunes U (Public)</label>
         <input type="checkbox" id="UserITunesU" value="Y" <?php echo $this->data['User']['iTunesU'] == 'Y' ? 'checked="checked"' : '';?> name="data[User][iTunesU]">
         <?php echo $this->Form->error('User.iTunesU'); ?>
     </div>
-    
+
+    <div class="user_input checkbox">
+        <input type="hidden" value="N" id="UserITunesU_private_" name="data[User][iTunesU_private]">
+        <label for="UserITunesU_private">iTunes U (Private)</label>
+        <input type="checkbox" id="UserITunesU_private" value="Y" <?php echo $this->data['User']['iTunesU_private'] == 'Y' ? 'checked="checked"' : '';?> name="data[User][iTunesU_private]">
+        <?php echo $this->Form->error('User.iTunesU_private'); ?>
+    </div>
+
     <div class="user_input checkbox">
         <input type="hidden" value="N" id="UserYouTube_" name="data[User][YouTube]">
         <label for="UserYouTube">YouTube</label>

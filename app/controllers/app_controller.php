@@ -10,7 +10,7 @@ class AppController extends Controller {
 
     var $helpers = array('Html', 'Javascript','Form', 'Session', 'Attachment', 'Time', 'Permission', 'Text', 'Object', 'Breadcrumb', 'Miscellaneous' );
 
-    var $alert = false; // A flag used to determine if an alter has been set that overrides any defacto flash message.
+    var $alert = false; // A flag used to determine if an alert has been set that overrides any defacto flash message.
     /*
      * @name : beforeFilter
      * @description : Called before the controller is executed. Currently using this to ensure only administrators 
@@ -123,6 +123,23 @@ class AppController extends Controller {
         return false;
     }
 	
+    /*
+     * @name : isItunesPrivateUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 12th April 2012
+     * @by : Ben Hawkridge
+     */
+    
+    function isItunesPrivateUser() {
+		
+		$this->autoRender = false;
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
+            return true;
+
+        return false;
+    }
+     
+
     /*
      * @name : isYoutubeUser
      * @description : Returns a bool depending upon whether the user is a youtube user.

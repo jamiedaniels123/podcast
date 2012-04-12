@@ -144,23 +144,30 @@ class AttachmentHelper extends AppHelper {
      * @by : Charles Jackson
      */
     function getMediaLink( $custom_id = null, $media = array() ) {
-		
-		if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080' ) ) ) {
-			$media['media_type'] = null;
-		} elseif( $media['media_type'] == 'iphonecellular' ) {
-			$media['media_type'] = 'iphone/';
-		} else {
-			$media['media_type'] .= '/';
-		}
-		// Check to see if there is a local image on the admin box first as that will be more topical.
-		if(	file_exists( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].$media['filename'] ) && is_file( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].'/'.$media['filename'] ) )
-			return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
-		
-		if ( @fopen( DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'], 'r' ) )
-			return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
 			
-		// No image, return a default.
-		return ucfirst( $media['media_type'] ).' flavour missing from media server.';
+			// BH 20120412 - trying to pull in the model 'feed' to use the media_folder lookup array for directories, but doesn't seem to work!
+			//$this->loadModel('feed');
+			//$media_folder=$this->feed->find('media_folder');
+			//error_log("views/helpers/attachment > getMediaLink | this->feed->media_folder = ".$media_folder);
+			
+			if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080' ) ) ) {
+				$media['media_type'] = null;
+			} elseif( in_array( $media['media_type'], array('wm-default','wm-240','wm-270','wm-360','wm-480','wm-540','wm-720','wm-1080' ) ) ) {
+				$media['media_type'] = 'wm/';
+			} elseif( $media['media_type'] == 'iphonecellular' ) {
+				$media['media_type'] = 'iphone/';
+			} else {
+				$media['media_type'] .= '/';
+			}
+			// Check to see if there is a local image on the admin box first as that will be more topical.
+			if(	file_exists( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].$media['filename'] ) && is_file( FILE_REPOSITORY.$custom_id.'/'.$media['media_type'].'/'.$media['filename'] ) )
+				return '<a href="'.LOCAL_FILE_REPOSITORY_URL.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
+			
+			if ( @fopen( DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'], 'r' ) )
+				return '<a href="'.DEFAULT_MEDIA_URL.FEEDS.$custom_id.'/'.$media['media_type'].$media['filename'].'" target="_blank" title="link to media">'.$media['filename'].'</a>';
+				
+			// No image, return a default.
+			return $media['media_type'].' flavour missing from media server.';
     }
 }
 ?>

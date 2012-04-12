@@ -293,14 +293,14 @@ class PermissionComponent extends Object {
      * @updated : 20th May 2011
      * @by : Charles Jackson
      */
-    /*function isItunesUser() {
+    function isItunesUser() {
 
         if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
             return true;
 
         return false;
 
-    }*/
+    }
 
     /*
      * @name : isYoutubeUser

@@ -106,11 +106,11 @@ class UsersController extends AppController {
 	 */    
     function dashboard() {
 
-        $notification = ClassRegistry::init('Notification');	
-		if( $this->Session->read('Auth.User.administrator' ) && $notification->unreadSystemNotifications() ) {
-	
-			$this->Session->setFlash('There are unread system notifications.', 'default', array( 'class' => 'alert' ) );
-		}
+			$notification = ClassRegistry::init('Notification');	
+			if( $this->Session->read('Auth.User.administrator' ) && $notification->unreadSystemNotifications() ) {
+		
+				$this->Session->setFlash('There are unread system notifications.', 'default', array( 'class' => 'alert' ) );
+			}
 		
     }
 
@@ -434,5 +434,23 @@ class UsersController extends AppController {
 
         return false;
     }	 
+
+    /*
+     * @name : isItunesPrivateUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 12th April 2012
+     * @by : Ben Hawkridge
+     */
+    
+    function isItunesPrivateUser() {
+		
+		$this->autoRender = false;
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
+            return true;
+
+        return false;
+    }	 
+		
+
 }
 ?>

@@ -10,7 +10,7 @@
         </thead>
         <?php foreach( $this->data['PodcastMedia'] as $media ) : ?>
         	<tr>
-        		<td><?php echo ucfirst( $media['media_type'] ); ?></td>
+        		<td><?php echo $media['media_type']; ?></td>
                 <?php if( strtoupper( $media['media_type'] ) == TRANSCRIPT ) : ?>
     	            <td><?php echo $this->Attachment->getTranscriptLink( $this->data['Podcast']['custom_id'], $media['filename'] ); ?></td>
                 <?php else : ?>

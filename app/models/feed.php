@@ -13,63 +13,79 @@ class Feed extends AppModel {
 			'audio' => array('media_type' => 'audio', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
 			'desktop' => array('media_type' => 'desktop', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
 			'hd' => array('media_type' => 'hd', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
+			'hd-1080' => array('media_type' => 'hd-1080', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
 			'iphone' => array('media_type' => 'iphone', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
 			'ipod' => array('media_type' => 'ipod', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
 			'large' => array('media_type' => 'large', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1  ),
-			'transcript' => array('media_type' => 'transcript', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
-			'youtube' => array('media_type' => 'youtube', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
-			'extra' => array('media_type' => 'extra', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
-			'default' => array('media_type' => 'default', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
-			'high' => array('media_type' => 'high', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 1 ),
+			'transcript' => array('media_type' => 'transcript', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 0 ),
 			'ipod-all' => array('media_type' => 'ipod-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
 			'desktop-all' => array('media_type' => 'desktop-all', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 ),
-			'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 1 )
+			'youtube' => array('media_type' => 'youtube', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 0 ),
+			'extra' => array('media_type' => 'extra', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 0 ),
+			'epub' => array('media_type' => 'epub', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 1, 'interlace' => 0 ),
+			'default' => array('media_type' => 'default', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 0 ),
+			'wm' => array('media_type' => 'wm-default', 'rss_filename' => DEFAULT_RSS_FILENAME, 'itunes_complete' => 0, 'interlace' => 0 )
 	);
 
 	var $default_rss_flavours = array( '240','270','360','480','540','720','1080' );
 
 	var $itunes_title_suffix = array(
-			'3gp' => 'Mobile Video',
-			'audio-mp3' => 'Audio',
-			'audio' => 'Audio',
-			'audio-m4a' => 'Audio',
-			'audio-m4b' => 'Audio Book',
-			'desktop' => 'iPad/Mac/PC Video',
-			'hd' => 'HD Video',
-			'iphone' => 'iPhone Video',
-			'iphonecellular' => 'iPhone (Edge) Video',
-			'ipod' => 'iPod/iPhone Video',
-			'large' => 'HQ Video',
-			'transcript' => 'Transcript',
-			'youtube' => 'YouTube Video',
-			'extra' => 'Extras',
-			'high' => 'HQ Video',
-			'ipod-all' => 'iPod/iPhone',
-			'desktop-all' => 'iPod/Mac/PC',
-			'epub' => ''
+			'3gp' 						=> ' - Mobile Video',
+			'audio-mp3'				=> ' - Audio',
+			'audio'						=> ' - Audio',
+			'audio-m4a' 			=> ' - Audio',
+			'audio-m4b' 			=> ' - Audio Book',
+			'desktop' 				=> ' - iPad/Mac/PC Video',
+			'hd' 							=> ' - HD Video',
+			'iphone' 					=> ' - iPhone Video',
+			'iphonecellular'	=> ' - iPhone (Edge) Video',
+			'ipod' 						=> ' - iPod/iPhone Video',
+			'large'						=> ' - HQ Video',
+			'transcript'			=> ' - Transcript',
+			'youtube'					=> ' - YouTube Video',
+			'extra'						=> ' - Extras',
+			'high'						=> ' - HQ Video',
+			'ipod-all'				=> ' - for iPod/iPhone',
+			'desktop-all'			=> ' - for iPod/Mac/PC',
+			'wm' 							=> '',
+			'epub' 						=> ''
 	);
 	var $media_folder = array(
-			'3gp' => '3gp/', // iTunes U - 3gp video only
-			'audio-mp3' => 'audio/', // iTunes U - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
-			'audio-m4a' => 'audio/', // iTunes U - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
-			'audio-m4b' => 'audio/', // iTunes U - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
-			'desktop' => 'desktop/', // iTunes U - desktop quality (640 wide) video only
-			'desktop-all' => 'desktop-all/',
-			'hd' => 'hd/', // iTunes U - real HD video only
-			'iphone' => 'iphone/', // iTunes U - iPhone (wifi) video only (H264 baseline encoded)
-			'iphonecellular' => 'iphone/', // iTunes U - iPhone 3gp (Edge) video only (H264 encoding)
-			'ipod' => 'ipod/', // iTunes U - iPod video only (H264 baseline encoded)
-			'large' => 'large/', // iTunes U - video only (native video dimensions)
-			'transcript' => 'transcript/', // transcripts of corresponding track entry (for audio and video tracks only)
-			'youtube' => 'youtube/', // YouTube - encoded for uploading to YouTube, has different trailer
+			'3gp' => '3gp/', 									// iTunes U (Public) - 3gp video only
+			'audio-mp3' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'audio-m4a' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'audio-m4b' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'desktop' => 'desktop/',					// iTunes U (Public) - desktop quality (640 wide) video only
+			'desktop-all' => 'desktop-all/',  // iTunes U (Public) - desktop quality (640 wide) video AND audio
+			'hd' => 'hd/',										// iTunes U (Public) - 720p HD video only
+			'hd-1080' => 'hd-1080/',					// iTunes U (Public) - 1080p HD video only
+			'iphone' => 'iphone/',						// iTunes U (Public) - iPhone (wifi) video only (H264 baseline encoded)
+			'iphonecellular' => 'iphone/',		// iTunes U (Public) - iPhone 3gp (Edge) video only (H264 encoding)
+			'ipod' => 'ipod/',								// iTunes U (Public) - iPod video only (H264 baseline encoded)
+			'ipod-all' => 'ipod-all/',				// iTunes U (Public) - iPod video AND audio
+			'large' => 'large/',							// iTunes U (Public) - video only (native video dimensions)
+			'transcript' => 'transcript/',		// transcripts of corresponding track entry (for audio and video tracks only)
+			'youtube' => 'youtube/',					// YouTube - encoded for uploading to YouTube, has different trailer
 			'extra' => 'extra/',
+			'cc-scc' => 'closed-captions/',
+			'cc-dfxp' => 'closed-captions/',
+			'epub' => 'epub/',
 			'default' => null,
 			'240' => null,
 			'270' => null,
 			'360' => null,
 			'480' => null,
 			'540' => null,
-			'720' => null
+			'720' => null,
+			'1080' => null,
+			'wm-default' => 'wm/',
+			'wm-240' => 'wm/',
+			'wm-270' => 'wm/',
+			'wm-360' => 'wm/',
+			'wm-480' => 'wm/',
+			'wm-540' => 'wm/',
+			'wm-720' => 'wm/',
+			'wm-1080' => 'wm/'
 	);
 
 	var $mime_types = array(
@@ -82,7 +98,9 @@ class Feed extends AppModel {
 			'm4v' => 'video/x-m4v',
 			'mov' => 'video/quicktime',
 			'pdf' => 'application/pdf',
-			'epub' => 'application/epub+zip'
+			'epub' => 'application/epub+zip',
+			'scc' => 'application/x-rpt',
+			'xml' => 'application/ttml+xml'
 	);
 
 	var $data; // Passed as a parameter into the controller and set accordingly
@@ -130,7 +148,7 @@ class Feed extends AppModel {
 	function defineDataDefaults() {
 
 		// Append the suffix to the podcast title.
-		$this->data['Podcast']['title'] .= " " . $this->title_suffix;
+		$this->data['Podcast']['title'] .= $this->title_suffix;
 
 		if (!empty($this->data['Podcast']['image'])) {
 
@@ -190,7 +208,9 @@ class Feed extends AppModel {
 		else{
 			$isplayerxml=false;
 		}
-			
+		
+		error_log("models/feed > getChannelData | data['Podcast']['title'] =".$this->data['Podcast']['title']." | title_suffix =".$this->title_suffix);
+		
 		$channelData = array(
 				'title' => $this->data['Podcast']['title'].$this->title_suffix,
 				'link' => $this->data['Podcast']['link'],
@@ -201,7 +221,7 @@ class Feed extends AppModel {
 				'generator' => 'OU Podcast System by KMi',
 				'docs' => 'http://blogs.law.harvard.edu/tech/rss' );
 
-		$channelData['atom:link']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->rss_filename;
+		$channelData['atom:link']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item_media_folder . $this->rss_filename;
 		$channelData['atom:link']['attrib']['type'] = 'application/rss+xml';
 		$channelData['atom:link']['attrib']['rel'] = 'self';
 
@@ -285,7 +305,7 @@ class Feed extends AppModel {
     	// Example: <atom:link rel="alternate" type="text/html" title="Permalink for Student views of the OU" href="http://podcast.open.ac.uk/pod/student-experiences/" />    
 			$channelData['atom:linkalternative']['attrib']['rel'] = "alternative";
 			$channelData['atom:linkalternative']['attrib']['type'] = "text/html";
-			$channelData['atom:linkalternative']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->rss_filename;
+			$channelData['atom:linkalternative']['attrib']['href'] = $this->media_server . FEEDS . $this->data['Podcast']['custom_id'] . '/' . $this->podcast_item_media_folder . $this->rss_filename;
 			$channelData['atom:linkalternative']['attrib']['title'] = "Permalink for " . $this->data['Podcast']['title'].$this->title_suffix;
 
       // itunes_u_url
@@ -439,7 +459,7 @@ class Feed extends AppModel {
 			if ( !empty($this->podcast_item['shortcode'] ) ) {
 				$item['atom:link']['attrib']['rel'] = 'alternate';
 				$item['atom:link']['attrib']['type'] = 'text/html';
-				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/#!'.$this->podcast_item['shortcode'];
+				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/'.$this->podcast_item_media_folder.'/#!'.$this->podcast_item['shortcode'];
 				$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			}
 			
@@ -449,7 +469,7 @@ class Feed extends AppModel {
 			if ( !empty($this->podcast_item['shortcode'] ) ) {
 				$item['atom:linklong']['attrib']['rel'] = 'oup:longlink';
 				$item['atom:linklong']['attrib']['type'] = 'text/html';
-				$item['atom:linklong']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'#!'.$this->podcast_item['shortcode'];
+				$item['atom:linklong']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/'.$this->podcast_item_media_folder.'#!'.$this->podcast_item['shortcode'];
 				$item['atom:linklong']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			}
 			
@@ -684,12 +704,12 @@ class Feed extends AppModel {
 
 			} else {
 
-				$this->title_suffix = isSet( $this->itunes_title_suffix[$this->media_type] ) ? ' - '.$this->itunes_title_suffix[$this->media_type] : null;
+				$this->title_suffix = isSet( $this->itunes_title_suffix[$this->media_type] ) ? $this->itunes_title_suffix[$this->media_type] : null;
 			}
 
 		} else {
 
-			$this->title_suffix = ' - '.$title_suffix;
+			$this->title_suffix = $title_suffix;
 		}
 
 	}
@@ -923,6 +943,26 @@ class Feed extends AppModel {
 
 		if( $flavour['media_type'] == 'default' ) {
 
+			$media_folder = null;
+
+		} elseif( !empty( $flavour['media_type'] ) && $flavour['media_type'] != null ) {
+
+			$media_folder = (isSet($this->media_folder[$flavour['media_type']])) ? $this->media_folder[$flavour['media_type']] : null;
+			
+		} else {
+		
+			$media_folder = null;
+
+		}
+		error_log("models/feeds > buildRssPath | flavour['media_type'] = ".$flavour['media_type']." | media_folder =".$media_folder);
+
+		return $podcast['Podcast']['custom_id'].'/'.$media_folder;
+	}
+
+/*	function buildRssPath( $podcast = array(), $flavour = array() ) {
+
+		if( $flavour['media_type'] == 'default' ) {
+
 			$flavour['media_type'] = null;
 
 			// The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
@@ -933,6 +973,7 @@ class Feed extends AppModel {
 
 		return $podcast['Podcast']['custom_id'].'/'.$flavour['media_type'];
 	}
+*/
 
 	/*
 	 * @name : buildApiEntry
@@ -945,18 +986,25 @@ class Feed extends AppModel {
 		// The media_type can be empty but if not append a slash '/' for the purposes of creating the path line.
 		if( strtolower( $media_type ) == 'default' ) {
 
-			$media_type = null;
+			$media_folder = null;
 
-		} elseif( !empty( $media_type ) ) {
+		} elseif( !empty( $media_type ) && $media_type != null ) {
 
-			$media_type .= '/';
+			$media_folder = (isSet($this->media_folder[$media_type])) ? $this->media_folder[$media_type] : null;
+			
+		} else {
+		
+			$media_folder = null;
+
 		}
 
+		error_log("models/feeds > buildApiEntry | this->mediatype = ".$this->media_type." | media_type = ".$media_type." | media_folder =".$media_folder);
+		
 		return
 		array(
-				'source_path' => $custom_id.'/'.$media_type,
+				'source_path' => $custom_id.'/'.$media_folder,
 				'source_filename' => $file_name,
-				'destination_path' => $custom_id.'/'.$media_type,
+				'destination_path' => $custom_id.'/'.$media_folder,
 				'destination_filename' => $file_name
 		);
 	}

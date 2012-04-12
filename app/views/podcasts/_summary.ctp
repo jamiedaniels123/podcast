@@ -58,7 +58,9 @@
                 endforeach; 
                 ?>
                 &nbsp;
-            	</dd>    
+            	</dd>
+							<dt>RSS Link: </dt>
+							<dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/rss2.xml'; ?>&nbsp;</dd>
 			<?php endif; ?>
         </dl>
     </div>

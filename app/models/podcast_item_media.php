@@ -1,20 +1,20 @@
 <?php
 class PodcastItemMedia extends AppModel {
 
-    var $name = 'PodcastItemMedia';
-    var $useTable = 'podcast_item_media';
-    var $validate = array();
+	var $name = 'PodcastItemMedia';
+	var $useTable = 'podcast_item_media';
+	var $validate = array();
 	var $common_meta_injection = array('default' => '' ); 
 	var $itunes_meta_injection = array('ipod-all' => 'ipod-all/','desktop-all' => 'desktop-all/','hd' => 'hd/','hd-1080' => 'hd-1080/' );
 	var $meta_injection = array();
-    var $belongsTo = array(
-
-        'PodcastItem' => array(
-            'className' => 'PodcastItem',
-            'foreignKey' => 'podcast_item',
-            'dependent' => true
-         )
-    );
+	var $belongsTo = array(
+	
+	    'PodcastItem' => array(
+	        'className' => 'PodcastItem',
+	        'foreignKey' => 'podcast_item',
+	        'dependent' => true
+	     )
+	);
 	
 	/*
 	 * @name : updateExistingFlavour
