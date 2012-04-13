@@ -1,8 +1,8 @@
 <?php
 class Workflow extends AppModel {
 
-    var $name = 'Workflow';
-    var $useTable = 'workflows';
+  var $name = 'Workflow';
+  var $useTable = 'workflows';
 	var $error = null;
 	
 	var $data = array();
@@ -65,6 +65,7 @@ class Workflow extends AppModel {
 
 			$this->setAspectRatio( $this->data['PodcastItem']['aspect_ratio'] );
 			$this->setMediaType( 'video' );
+			$this->setVle(false);
 
 			$this->setConditions();
 			
@@ -188,8 +189,8 @@ class Workflow extends AppModel {
 	/* 
 	 * @name : setVideoHeight
 	 * @description : Standard setter
-	 * @updated : 29th June 2011
-	 * @by : Charles Jackson
+	 * @updated : 13th April 2012
+	 * @by : ben Hawkridge
 	 */		
 	function setVideoHeight( $video_height = 0 ) {
 		
@@ -197,10 +198,17 @@ class Workflow extends AppModel {
 			
 			$this->video_height	= 1080;
 			return true;
+		// BH 20120413 - added support for height 576 which is in DB but was missing from here
+		//               and was causing 576p (PAL) 4:3 uploads to fail as it upgraded them to 720p
+		
+		} elseif( (int)$video_height > 576 ) {
+			
+			$this->video_height	= 720;
+			return true;
 			
 		} elseif( (int)$video_height > 480 ) {
 			
-			$this->video_height	= 720;
+			$this->video_height	= 576;
 			return true;
 			
 		} elseif( (int)$video_height > 360 ) {
@@ -403,7 +411,7 @@ class Workflow extends AppModel {
 		$this->recursive = -1;
 		$workflow = $this->find('first', array( 'conditions' => $this->conditions ) );
 		if( empty( $workflow ) ) {
-			die('cant find a workflow');
+			//die('cant find a workflow');
 			$this->error = 'We cannot determine a workflow for this media.';
 			return false;
 		}
@@ -454,7 +462,9 @@ class Workflow extends AppModel {
 	 * @by : Charles Jackson
 	 */
 	function setConditions() {
-	
+
+		// error_log("models/workflow > setConditions | media_type=".$this->media_type." type=".$this->aspect_ratio." height=".$this->video_height." vle=".$this->vle);
+
 		$this->conditions = array(
 			'Workflow.media_type' => $this->media_type,
 			'Workflow.aspect_ratio' => $this->aspect_ratio,
