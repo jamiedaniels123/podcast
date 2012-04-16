@@ -7,13 +7,13 @@
 					<?php if( $this->Permission->toUpdate( $this->data ) ) : ?>
 	            		<th class="checkbox">Select</th>
             		<?php endif; ?>
-	            	<th class="thumbnail">Image</th>
-	            	<th class="collection-title">Name</th>
-	                <th class="">Uploaded</th>
-	                <th class="icon-col">Available</th>
-	                <th class="icon-col">Published on podcast.open.ac.uk</th>                                        
-	                <th class="icon-col">Podcast.open.ac.uk</th>                                                            
-	            	<th class="icon-col">iTunesU public site</th>                
+	            	<th class="thumbnail">Poster Image</th>
+	            	<th class="collection-title">Track Title</th>
+	                <th class="icon-col">Media Available</th>
+	                <th class="icon-col">Track Published (RSS)</th>                                        
+	                <th class="">Publish Date (RSS)</th>
+	                <!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED<th class="icon-col"><th class="icon-col">Podcast.open.ac.uk</th>-->                                                          
+	            	<th class="icon-col">iTunes U public site</th>                
 	            	<th class="icon-col">YouTube</th>
 	            </tr>
 	        </thead>
@@ -38,10 +38,10 @@
 			            	<img src="<?php echo $this->Attachment->getMediaImage( $podcast_item['PodcastItem']['image_filename'].'.jpg',$this->data['Podcast']['custom_id'] ,THUMBNAIL_EXTENSION ); ?>" class="thumbnail" />
 			            </td>
 		            	<td  class="collection-title"><a href="/podcast_items/edit/<?php echo $podcast_item['PodcastItem']['id']; ?>" class="podcast_item_update" data-id="<?php echo $podcast_item['PodcastItem']['id']; ?>"><?php echo strlen( $podcast_item['PodcastItem']['title'] ) ? $podcast_item['PodcastItem']['title'] : 'Untitled '.MEDIA; ?></a></td>
-		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['PodcastItem']['created'] ); ?></td>
 		                <td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['PodcastItem']['processed_state'] ); ?></td>	
                         <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
-                        <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
+		            	<td><?php echo $this->Time->getPrettyLongDate( $podcast_item['PodcastItem']['publication_date'] ); ?></td>
+                        <!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>-->
 		            	<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'itunes' ); ?>" class="icon"></td>
 		            	<td  class="icon-col">
                         

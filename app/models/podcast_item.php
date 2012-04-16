@@ -472,6 +472,7 @@ class PodcastItem extends AppModel {
 		
 		return $this->find('first', array(
 			'conditions' => array('PodcastItem.id' => $id ),
+			'order' => array('PodcastItem.publication_date DESC'),
 			'fields' => array(
 				'PodcastItem.*'
 			),

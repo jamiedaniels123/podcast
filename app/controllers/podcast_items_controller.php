@@ -6,7 +6,7 @@ class PodcastItemsController extends AppController {
 
 	private $errors = array();
 
-	var $paginate = array( 'limit' => 50, 'page' => 1, 'order' => array( 'PodcastItem.id' => 'desc' ) );
+	var $paginate = array( 'limit' => 50, 'page' => 1, 'order' => array( 'PodcastItem.publication_date' => 'desc' ) );
 
 	function beforeFilter() {
 
@@ -740,16 +740,16 @@ class PodcastItemsController extends AppController {
      */
     function admin_index( $id = null ) {
 
-		$this->PodcastItems->Podcast->recursive = -1;
-		$this->PodcastItems->recursive = -1;
-		$this->data = $this->PodcastItem->Podcast->findById( $id );		
-		// BH 20120416 - added addional condition to NOT include permanently deleted podcast_items (deleted = 2), although they
-		//                weren't showing the paginate code was not aware that we were skipping records and it would show
-		//								confusing page numbers etc
-		$this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id, 'PodcastItem.deleted <' => 2 ) );
-		$this->set('element', 'tracks' ); // Set the active element for the tab menu
-		// Set the tabs for the menu
-		$this->setTabs( $this->data['Podcast'] );
+			$this->PodcastItems->Podcast->recursive = -1;
+			$this->PodcastItems->recursive = -1;
+			$this->data = $this->PodcastItem->Podcast->findById( $id );		
+			// BH 20120416 - added addional condition to NOT include permanently deleted podcast_items (deleted = 2), although they
+			//                weren't showing the paginate code was not aware that we were skipping records and it would show
+			//								confusing page numbers etc
+			$this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id, 'PodcastItem.deleted <' => 2 ) );
+			$this->set('element', 'tracks' ); // Set the active element for the tab menu
+			// Set the tabs for the menu
+			$this->setTabs( $this->data['Podcast'] );
     }
 
     /*
