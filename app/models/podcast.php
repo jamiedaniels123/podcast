@@ -1447,6 +1447,7 @@ class Podcast extends AppModel {
 			'conditions' => array('Podcast.id' => $id ),
 			'fields' => array( 
 				'Podcast.id',
+				'Podcast.custom_id',
 				'Podcast.title',
 				'Podcast.summary',
 				'Podcast.podcast_flag',
