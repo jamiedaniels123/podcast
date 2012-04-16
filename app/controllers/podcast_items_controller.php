@@ -39,8 +39,10 @@ class PodcastItemsController extends AppController {
 
 		$this->PodcastItems->Podcast->recursive = -1;
 		$this->PodcastItems->recursive = -1;
-		$this->data = $this->PodcastItem->Podcast->permissionData( $id );		
-        $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
+		$this->data = $this->PodcastItem->Podcast->permissionData( $id );
+		// BH 20120416 - added addional condition to NOT include deleted podcast_items, although they weren't showing the
+		//               paginate code was not aware that we were skipping records and it would show confusing page numbers etc
+		$this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id, 'PodcastItem.deleted' => 0 ) );
 		$this->set('element', 'tracks' ); // Set the active element for the tab menu
 		// Set the tabs for the menu
 		$this->setTabs( $this->data['Podcast'] );
@@ -741,7 +743,10 @@ class PodcastItemsController extends AppController {
 		$this->PodcastItems->Podcast->recursive = -1;
 		$this->PodcastItems->recursive = -1;
 		$this->data = $this->PodcastItem->Podcast->findById( $id );		
-        $this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id ) );
+		// BH 20120416 - added addional condition to NOT include permanently deleted podcast_items (deleted = 2), although they
+		//                weren't showing the paginate code was not aware that we were skipping records and it would show
+		//								confusing page numbers etc
+		$this->data['PodcastItems'] = $this->paginate('PodcastItem', array( 'PodcastItem.podcast_id' => $id, 'PodcastItem.deleted <' => 2 ) );
 		$this->set('element', 'tracks' ); // Set the active element for the tab menu
 		// Set the tabs for the menu
 		$this->setTabs( $this->data['Podcast'] );
