@@ -81,7 +81,9 @@ class PodcastItemsController extends AppController {
      * @updated : 19th May 2011
      * @by : Charles Jackson
      */
-    function edit( $id = null, $element = 'summary' ) {
+	function edit( $id = null, $element = 'summary' ) {
+
+		error_log("podcast_items_controller > edit | id = ".$id." | element = ".$element);
 
 		$this->layout = 'ajax';
 		if ( !empty( $this->data ) ) {
@@ -89,16 +91,16 @@ class PodcastItemsController extends AppController {
 			$this->set('element',$this->data['PodcastItem']['element'] );
 			
 			$this->PodcastItem->set( $this->data );	
-            if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
+			if( $this->__updateImage() && $this->__updateTranscript() && $this->PodcastItem->validates( $this->data )  ) {
 				
 				$this->PodcastItem->set( $this->data );	
 				
-            	$this->PodcastItem->save();
+					$this->PodcastItem->save();
 
 				// May not need meta injection
 				if( $this->_metaInjectWhenNeeded() ) {
 					
-                    if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
+					if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) ) {
 						
 						$this->Session->setFlash('Your '.MEDIA.' has been successfully updated.', 'default', array( 'class' => 'success' ) );
 						
@@ -114,29 +116,29 @@ class PodcastItemsController extends AppController {
 					$this->Session->setFlash('Your '.MEDIA.' has been successfully updated but the meta injection failed. If the problem persists please alert an administrator.', 'default', array( 'class' => 'alert' ) );
 				}	
 				
-                $this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'edit', $this->data['PodcastItem']['id'], $element.'#'.$element ) );
+				$this->redirect( array( 'admin' => false, 'controller' => 'podcast_items', 'action' => 'edit', $this->data['PodcastItem']['id'], $element.'#'.$element ) );
 				exit;
-            }
+			}
 			
 			$this->set('edit_mode',true);
-            $this->errors = $this->PodcastItem->invalidFields( $this->data );
-            $this->Session->setFlash('Could not update your '.MEDIA.'. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
+			$this->errors = $this->PodcastItem->invalidFields( $this->data );
+			$this->Session->setFlash('Could not update your '.MEDIA.'. Please see issues listed below.', 'default', array( 'class' => 'error' ) );
 
-        } else {
-
-            $this->data = $this->PodcastItem->get( $id );
+		} else {
+		
+			$this->data = $this->PodcastItem->get( $id );
 			$this->set('element', $element);
-
-            // We did not find the podcast, redirect.
-            if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
-
-                $this->Session->setFlash('Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
-                $this->cakeError('error404');
+			
+			// We did not find the podcast, redirect.
+			if( empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
+			
+				$this->Session->setFlash('Could not find your '.MEDIA.'. Please try again.', 'default', array( 'class' => 'error' ) );
+				$this->cakeError('error404');
 			}
-        }
-
+		}
+		
 		$this->_setYoutubeOptions();        
-    }
+	}
 
 	/*
 	 * @name : publish
@@ -150,10 +152,10 @@ class PodcastItemsController extends AppController {
 		$this->PodcastItem->recursive = 1;
 		$status = true;
 				
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-		            
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
+		if( $id )
+			$this->data['PodcastItem']['Checkbox'][$id] = true;
+		
+		foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 
 			$this->data = $this->PodcastItem->findById( $key );			
 			

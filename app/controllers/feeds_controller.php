@@ -44,8 +44,10 @@ class FeedsController extends AppController {
 			if( $id )
 				$this->data['Podcast']['Checkbox'][$id] = true;
 			
+			error_log("feeds_controller > add | this->data['Podcast']['Checkbox'] = ".serialize($this->data['Podcast']['Checkbox']));
+			
 			foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
-	
+
 				// First lets try and retrieve the podcast we wish to create RSS feeds for.
 				$podcast = $Podcast->findById( $key );
 				$rss_array = array();

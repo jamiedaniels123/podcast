@@ -954,7 +954,7 @@ class Feed extends AppModel {
 			$media_folder = null;
 
 		}
-		error_log("models/feeds > buildRssPath | flavour['media_type'] = ".$flavour['media_type']." | media_folder =".$media_folder);
+		// error_log("models/feed > buildRssPath | flavour['media_type'] = ".$flavour['media_type']." | media_folder =".$media_folder);
 
 		return $podcast['Podcast']['custom_id'].'/'.$media_folder;
 	}
@@ -998,7 +998,7 @@ class Feed extends AppModel {
 
 		}
 
-		error_log("models/feeds > buildApiEntry | this->mediatype = ".$this->media_type." | media_type = ".$media_type." | media_folder =".$media_folder);
+		// error_log("models/feed > buildApiEntry | this->mediatype = ".$this->media_type." | media_type = ".$media_type." | media_folder =".$media_folder);
 		
 		return
 		array(

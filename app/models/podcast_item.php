@@ -93,75 +93,75 @@ class PodcastItem extends AppModel {
         )
 	);
 	
-    /*
-     * @name : beforeSave
-     * @description : Magic method automatically called after validation and before data is saved.
-     * At time of publication I am using it to check to ensure all channels are unpublished if the item itself is
-	 * unpublished.
-     * @updated : 9th September 2011
-     * @by : Charles Jackson
-     */
-    function beforeSave() {
+		/*
+		 * @name : beforeSave
+		 * @description : Magic method automatically called after validation and before data is saved.
+		 * At time of publication I am using it to check to ensure all channels are unpublished if the item itself is
+		 * unpublished.
+		 * @updated : 9th September 2011
+		 * @by : Charles Jackson
+		 */
+		function beforeSave() {
 
-        if( $this->data['PodcastItem']['published_flag'] == 'N' ) {
-			
-			$this->data['PodcastItem']['youtube_flag'] = 'N';
-			$this->data['PodcastItem']['itunes_flag'] = 'N';
-			if (!strtotime($this->data['PodcastItem']['publication_date'])){
-				$this->data['PodcastItem']['publication_date'] = date("y-m-d H:i:s");
-			}	
+			if( $this->data['PodcastItem']['published_flag'] == 'N' ) {
+				
+				$this->data['PodcastItem']['youtube_flag'] = 'N';
+				$this->data['PodcastItem']['itunes_flag'] = 'N';
+				if (!strtotime($this->data['PodcastItem']['publication_date'])){
+					$this->data['PodcastItem']['publication_date'] = date("y-m-d H:i:s");
+				}	
+			}
+		
+			return true;
 		}
 		
-        return true;
-    }
+		/*
+		 * @name : createFromUrlVariables
+		 * @description : Called from the ADD method directly after a successful filechucker upload
+		 * @updated : 25th May 2011
+		 * @by : Charles Jackson
+		 */
+		function createFromUrlVariables( $params = array(), $podcast_id = null ) {
 		
-    /*
-     * @name : createFromUrlVariables
-     * @description : Called from the ADD method directly after a successful filechucker upload
-     * @updated : 25th May 2011
-     * @by : Charles Jackson
-     */
-    function createFromUrlVariables( $params = array(), $podcast_id = null ) {
-
-        $this->data['PodcastItem']['podcast_id'] = $podcast_id;
-        $this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
-        $this->data['PodcastItem']['title'] = substr( $params['url']['f1name'], 0, strpos( $params['url']['f1name'], '.' ) );		
-        $this->data['PodcastItem']['published_flag'] = 'N';
-        $this->data['PodcastItem']['processed_state'] = 2;
-        //$this->data['PodcastItem']['publication_date'] = date();
-		
-        if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
-            $this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN_FLOAT;
-        if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
-            $this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN_FLOAT;
-		if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
-            $this->data['PodcastItem']['aspect_ratio'] = null;
+			$this->data['PodcastItem']['podcast_id'] = $podcast_id;
+			$this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
+			$this->data['PodcastItem']['title'] = substr( $params['url']['f1name'], 0, strpos( $params['url']['f1name'], '.' ) );		
+			$this->data['PodcastItem']['published_flag'] = 'N';
+			$this->data['PodcastItem']['processed_state'] = 2;
+			//$this->data['PodcastItem']['publication_date'] = date();
+			
+			if( strtoupper( $params['url']['ff01v'] ) == 'WIDE 16:9' )
+				$this->data['PodcastItem']['aspect_ratio'] = WIDE_SCREEN_FLOAT;
+			if( strtoupper( $params['url']['ff01v'] ) == 'STANDARD 4:3' )
+				$this->data['PodcastItem']['aspect_ratio'] = STANDARD_SCREEN_FLOAT;
+			if( strtoupper( $params['url']['ff01v'] ) == 'AUTO' )
+				$this->data['PodcastItem']['aspect_ratio'] = null;
+			
+			
+			return $this->data;
+		}
 
 
-        return $this->data;
-    }
-
-
-    /*
-     * @name : captureId3Information
-     * @description : We use the getID3 component to extract various bits and pieces from the uploaded file and save to the database.
-     * @updated : 21st June 2011
-     * @by : Charles Jackson
-     */
-    function captureId3Information( $data = array(), $media_info = array() ) {
-
-        if( is_array( $media_info ) ) {
-
-            $data['PodcastItem']['duration'] = $media_info['length'];
-            $data['PodcastItem']['fileformat'] = $media_info['fileformat']; 
-            $data['PodcastItem']['original_filename'] = $media_info['filename']; 
-			$data['PodcastItem']['shortcode'] = $this->buildShortcode( $media_info['filename'] );
-			$data['PodcastItem']['fullMD5code'] = $this->buildMd5Code( $data['Podcast']['custom_id'], $media_info['filename'] );			 
-			$data['PodcastItem']['processed_state'] = 2; // 2 signifies transcoding is in progress
-        }
-		
-		return $data;
-    }
+		/*
+		 * @name : captureId3Information
+		 * @description : We use the getID3 component to extract various bits and pieces from the uploaded file and save to the database.
+		 * @updated : 21st June 2011
+		 * @by : Charles Jackson
+		 */
+		function captureId3Information( $data = array(), $media_info = array() ) {
+			
+			if( is_array( $media_info ) ) {
+				
+				$data['PodcastItem']['duration'] = $media_info['length'];
+				$data['PodcastItem']['fileformat'] = $media_info['fileformat']; 
+				$data['PodcastItem']['original_filename'] = $media_info['filename']; 
+				$data['PodcastItem']['shortcode'] = $this->buildShortcode( $media_info['filename'] );
+				$data['PodcastItem']['fullMD5code'] = $this->buildMd5Code( $data['Podcast']['custom_id'], $media_info['filename'] );			 
+				$data['PodcastItem']['processed_state'] = 2; // 2 signifies transcoding is in progress
+			}
+			
+			return $data;
+		}
 
 	/*
 	 * @name : buildShortCode
