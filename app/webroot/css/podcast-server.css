@@ -1,6 +1,16 @@
 @charset "utf-8";
 /* CSS Document */
 
+/* BH 20120416 Added (td and a) to override cakephp css which colours deleted rows in light grey, this makes it standout somewhat more */
+tr.deleted td {
+    background-color: #fffbd3 !important;
+    color: #d10700;
+}
+
+tr.deleted a {
+    color: #d10700;
+}
+
 fieldset {
 	position:relative; 
 	display:block; 
