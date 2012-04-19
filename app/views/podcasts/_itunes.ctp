@@ -15,40 +15,44 @@
     </div>
     <div class="float_left two_column" >    
         <dl>
+        	<!-- Private site fields -->
             <dt>iTunes U Site: </dt>
             <dd><?php echo ucfirst( $this->data['Podcast']['itunesu_site'] ); ?>&nbsp;</dd>                
             <dt>Course Code: </dt>
             <dd><?php echo (!empty($this->data['Podcast']['course_code'])) ? $this->data['Podcast']['course_code'] : '-'; ?>&nbsp;</dd>
             <dt>Course Level: </dt>
             <dd><?php echo (!empty($this->data['Podcast']['course_type'])) ? $this->data['Podcast']['course_type'] : '-'; ?>&nbsp;</dd>
-            <dt>OpenLearn ePub: </dt>
-            <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" />&nbsp;(for specialized purpose only)</dd>
-            <dt>iTunes U (Public) Categories</dt>
-            <dd>
-                <?php 
-                foreach( $this->data['iTuneCategories'] as $itunesu_category ) :
-                    echo $itunesu_category['code_title'].'. ';
-                endforeach; 
-                ?>
-                &nbsp;
-            </dd>                                 
-            <dt>iTunes U (Public) Publish Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['publish_itunes_date'] ); ?>&nbsp;</dd>
-            <dt>iTunes U (Public) Updated Date: </dt>
-            <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['update_itunes_date'] ); ?>&nbsp;</dd>
-            <dt>iTunes U (Public) URL: </dt>
-            <dd><?php echo (!empty($this->data['Podcast']['itunes_u_url'])) ? $this->data['Podcast']['itunes_u_url'] : 'n/a' ; ?>&nbsp;</dd>
-            <dt>iTunes U (Public) Artwork File: </dt>
-            <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
-            <dt>iTunes U (Public)</dt>
-            <dt>&nbsp;&nbsp;&nbsp;SD RSS Link: </dt>
-            <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?></a>&nbsp;</dd>
-            <dt>&nbsp;&nbsp;&nbsp;HD RSS Link: </dt>
-            <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?></a>&nbsp;</dd>
             <dt>iTunes U (Private)</dt>
             <dt>&nbsp;&nbsp;&nbsp;Watermarked RSS Link: </dt>
             <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?></a>&nbsp;</dd>
-
+            
+            <!-- Public site fields -->
+            <?php if( $this->Permission->isItunesUser() ) : ?>
+       	     <dt>OpenLearn ePub: </dt>
+       	     <dd><img src="/img<?php echo ( $this->data['Podcast']['openlearn_epub'] == 'Y' ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="openlearn status" />&nbsp;(for specialized purpose only)</dd>
+       	     <dt>iTunes U (Public) Categories</dt>
+      	      <dd>
+      	          <?php 
+      	          foreach( $this->data['iTuneCategories'] as $itunesu_category ) :
+      	              echo $itunesu_category['code_title'].'. ';
+      	          endforeach; 
+      	          ?>
+      	          &nbsp;
+      	      </dd>                                 
+      	      <dt>iTunes U (Public) Publish Date: </dt>
+      	      <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['publish_itunes_date'] ); ?>&nbsp;</dd>
+      	      <dt>iTunes U (Public) Updated Date: </dt>
+      	      <dd><?php echo $this->Time->getPrettyLongDate( $this->data['Podcast']['update_itunes_date'] ); ?>&nbsp;</dd>
+      	      <dt>iTunes U (Public) URL: </dt>
+      	      <dd><?php echo (!empty($this->data['Podcast']['itunes_u_url'])) ? $this->data['Podcast']['itunes_u_url'] : 'n/a' ; ?>&nbsp;</dd>
+      	      <dt>iTunes U (Public) Artwork File: </dt>
+      	      <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
+      	      <dt>iTunes U (Public)</dt>
+      	      <dt>&nbsp;&nbsp;&nbsp;SD RSS Link: </dt>
+      	      <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?></a>&nbsp;</dd>
+      	      <dt>&nbsp;&nbsp;&nbsp;HD RSS Link: </dt>
+      	      <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?></a>&nbsp;</dd>
+        	<?php endif; ?>
         </dl>    
 	</div>
 	<div class="action_buttons track_save_cancel">

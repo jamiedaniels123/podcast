@@ -1,7 +1,41 @@
 <div id="FormPodcastItunesContainer" <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?> class="float_left two_columnn">
 
-<div class="collection_input"><!--artwork-->
 
+
+    <div class="select">
+        <label for="PodcastItunesuSite">iTunes Site</label>
+        <select name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">
+            <option value="Private" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PRIVATE' ? 'selected="selected"' : ''; ?>>Private</option>
+            <option value="Public" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PUBLIC' ? 'selected="selected"' : ''; ?>>Public</option>
+        </select>
+        <?php echo $this->Form->error('Podcast.itunes_site'); ?>
+    </div>
+
+    <div class="text">
+        <label for="PodcastItunesUUrl">iTunes U URL</label>
+        <input type="hidden" value="" id="PodcastItunesUUrl_" name="data[Podcast][itunes_u_url]">
+        <input type="text" size="60" id="PodcastItunesUUrl" name="data[Podcast][itunes_u_url]" value="<?php echo $this->data['Podcast']['itunes_u_url']; ?>">
+        <?php echo $this->Form->error('Podcast.itunes_u_url'); ?>
+    </div>
+    <div class="text">
+        <label for="PodcastCourseCode">Course Code</label>
+        <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
+        <?php echo $this->Form->error('Podcast.course_code'); ?>
+    </div>
+    <div class="select">
+        <label for="PodcastCourseType">Course Type</label>
+        <select name="data[Podcast][course_type]" id="PodcastCourseType">
+            <?php foreach( $course_types as $course_type ) : ?>
+                <option value="<?php echo $course_type; ?>" <?php echo strtoupper( $this->data['Podcast']['course_type'] ) == $course_type ? 'selected="selected"' : ''; ?>><?php echo $course_type; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <?php echo $this->Form->error('Podcast.course_type'); ?>
+    </div>
+
+    
+    <!-- for public site only -->
+    <?php if( $this->Permission->isItunesUser() ) : ?>
+    <div class="collection_input"><!--artwork-->
 	<div class="file">
         <div class="image">
             <div class="float_right text_right">
@@ -56,26 +90,7 @@
     
     <div class="collection_input"><!--meta-->
     
-    <div class="text">
-        <label for="PodcastItunesUUrl">iTunes U URL</label>
-        <input type="hidden" value="" id="PodcastItunesUUrl_" name="data[Podcast][itunes_u_url]">
-        <input type="text" size="60" id="PodcastItunesUUrl" name="data[Podcast][itunes_u_url]" value="<?php echo $this->data['Podcast']['itunes_u_url']; ?>">
-        <?php echo $this->Form->error('Podcast.itunes_u_url'); ?>
-    </div>
-    <div class="text">
-        <label for="PodcastCourseCode">Course Code</label>
-        <input type="text" size="60" id="PodcastCourseCode" value="<?php echo $this->data['Podcast']['course_code']; ?>" name="data[Podcast][course_code]">
-        <?php echo $this->Form->error('Podcast.course_code'); ?>
-    </div>
-    <div class="select">
-        <label for="PodcastCourseType">Course Type</label>
-        <select name="data[Podcast][course_type]" id="PodcastCourseType">
-            <?php foreach( $course_types as $course_type ) : ?>
-                <option value="<?php echo $course_type; ?>" <?php echo strtoupper( $this->data['Podcast']['course_type'] ) == $course_type ? 'selected="selected"' : ''; ?>><?php echo $course_type; ?></option>
-            <?php endforeach; ?>
-        </select>
-        <?php echo $this->Form->error('Podcast.course_type'); ?>
-    </div>
+
    <div class="text">
         <label for="PodcastPublishItunesDate">iTunes U Publish Date</label>
         <input type="hidden" value="" id="PodcastPublishItunesDate_" name="data[Podcast][publish_itunes_date]">
@@ -94,17 +109,10 @@
         <input type="checkbox" id="PodcastOpenlearnEpub" value="Y" <?php echo $this->data['Podcast']['openlearn_epub'] == 'Y' ? 'checked="checked"' : ''; ?> name="data[Podcast][openlearn_epub]">
         <?php echo $this->Form->error('Podcast.openlearn_epub'); ?>
     </div>
-    <div class="select">
-        <label for="PodcastItunesuSite">iTunes Site</label>
-        <select name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">
-            <option value="Private" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PRIVATE' ? 'selected="selected"' : ''; ?>>Private</option>
-            <option value="Public" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PUBLIC' ? 'selected="selected"' : ''; ?>>Public</option>
-        </select>
-        <?php echo $this->Form->error('Podcast.itunes_site'); ?>
-    </div>
+
     
     </div><!--/end of meta-->
-    
+    <?php endif; ?>
 
     
 
