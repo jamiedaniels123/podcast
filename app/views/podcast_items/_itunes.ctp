@@ -12,6 +12,8 @@
          -->
         <dt>Explicit: </dt>
         <dd><?php echo $this->data['PodcastItem']['explicit']; ?>&nbsp;</dd>
+        
+        <!-- Commented out as not requoired at the moment.
         <dt>Rights Issues: </dt>
         <dd><?php echo $this->data['PodcastItem']['rights_issues']; ?>&nbsp;</dd>
         <dt>Rights Approved: </dt>
@@ -20,6 +22,7 @@
         <dd><?php echo $this->data['PodcastItem']['archive_details']; ?>&nbsp;</dd>  
         <dt>Music Details: </dt>
         <dd><?php echo $this->data['PodcastItem']['music_details']; ?>&nbsp;</dd>  
+         -->
     </dl>
     </div>
 </div>

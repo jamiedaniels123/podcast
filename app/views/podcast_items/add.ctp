@@ -1,7 +1,7 @@
 <?php echo $this->element('tabs'); ?>
 <div class="float_left content">
     <p>
-        You can upload files up to 1Gb in size. <?php echo ucfirst( MEDIA ); ?> will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
+        You can upload files up to 10Gb in size. <?php echo ucfirst( MEDIA ); ?> will automatically be converted, as necessary, into MP3 (audio) or M4V (video).
         Please ensure your filenames end with the correct extension. See below for supported formats.
     </p>
     <?php require(WWW_ROOT."upload/call_fc.php"); ?>

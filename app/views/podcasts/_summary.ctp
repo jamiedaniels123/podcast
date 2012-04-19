@@ -41,7 +41,7 @@
                 <dd><img src="/img<?php echo ( $this->data['Podcast']['intranet_only'] == YES ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="private status" /></dd>
                 <dt>Preferred Node</dt>
                 <dd><?php echo $this->data['PreferredNode']['title']; ?>&nbsp;</dd>
-                <dt>Nodes</dt>
+                <dt>podcast.open.ac.uk categories</dt>
                 <dd>
                     <?php 
                     foreach( $this->data['Nodes'] as $node ) :

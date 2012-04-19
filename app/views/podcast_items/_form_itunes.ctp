@@ -22,23 +22,23 @@
    End of ePub fields --> 
    
        
-    <fieldset  style="border:0;margin:0;padding:0;">
-        <legend style="padding-left:0.6em;">Explicit</legend>
+
         
-        <div class="input"><!--explicit-->
-            <div class="radio">
-                <input type="radio" value="yes" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'yes' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+         <div class="input"><!--explicit-->
+         <label for="data[PodcastItem][explicit]">Explicit</label>
+            <select name="data[PodcastItem][explicit]">
+                <option value="yes" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'yes' ? 'selected="true"' : '';?> name="data[PodcastItem][explicit]">
                 <label for="PodcastItemExplicit">Yes</label>
-                <input type="radio" value="no" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'no' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+                <option value="no" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'no' ? 'selected="true"' : '';?> name="data[PodcastItem][explicit]">
                 <label for="PodcastItemExplicit">No</label>
-                <input type="radio" value="clean" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'clean' ? 'checked="checked"' : '';?> name="data[PodcastItem][explicit]">
+                <option value="clean" id="PodcastItemExplicit" <?php echo $this->data['PodcastItem']['explicit'] == 'clean' ? 'selected="true"' : '';?> name="data[PodcastItem][explicit]">
                 <label for="PodcastItemExplicit">Clean</label>
-            </div>
-        </div><!--/end of explicit-->
-        
-    </fieldset>
-    <div class="input"><!--Rights-->
+            </select>
+        </div><!--/end of explicit-->       
+
     
+        <div class="input"><!--Rights-->
+		<!-- Commented out as not requoired at the moment.
         <div class="text">
             <label for="PodcastItemRightsIssues">Rights Issues</label>
             <input size="60" type="text" id="PodcastItemRightsIssues" name="data[PodcastItem][rights_issues]" value="<?php echo $this->data['PodcastItem']['rights_issues']; ?>">
@@ -60,7 +60,8 @@
             <input size="60" type="text" id="PodcastItemRightsApproved" name="data[PodcastItem][music_details]" value="<?php echo $this->data['PodcastItem']['music_details']; ?>">
             <?php echo $this->Form->error('PodcastItem.music_details'); ?>
         </div>
-    
+		-->
     </div><!--/end of rights-->
+   
     
 </div>

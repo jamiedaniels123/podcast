@@ -97,8 +97,8 @@
     <div class="select">
         <label for="PodcastItunesuSite">iTunes Site</label>
         <select name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">
+            <option value="Private" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PRIVATE' ? 'selected="selected"' : ''; ?>>Private</option>
             <option value="Public" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PUBLIC' ? 'selected="selected"' : ''; ?>>Public</option>
-            <option value="Private" <?php echo strtoupper( $this->data['Podcast']['itunesu_site'] ) == 'PRIVATE' ? 'selected="selected"' : ''; ?>>Private</option>            
         </select>
         <?php echo $this->Form->error('Podcast.itunes_site'); ?>
     </div>

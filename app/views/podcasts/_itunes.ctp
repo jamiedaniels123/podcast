@@ -42,12 +42,12 @@
             <dd><?php echo $this->Attachment->getArtworkLink( $this->data['Podcast']['custom_id'], $this->data['Podcast']['artwork_file'] ); ?>&nbsp;</dd>                
             <dt>iTunes U (Public)</dt>
             <dt>&nbsp;&nbsp;&nbsp;SD RSS Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?>&nbsp;</dd>
+            <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/ipod-all/rss2.xml'; ?></a>&nbsp;</dd>
             <dt>&nbsp;&nbsp;&nbsp;HD RSS Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?>&nbsp;</dd>
+            <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/desktop-all/rss2.xml'; ?></a>&nbsp;</dd>
             <dt>iTunes U (Private)</dt>
             <dt>&nbsp;&nbsp;&nbsp;Watermarked RSS Link: </dt>
-            <dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?>&nbsp;</dd>
+            <dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/wm/rss2.xml'; ?></a>&nbsp;</dd>
 
         </dl>    
 	</div>

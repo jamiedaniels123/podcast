@@ -12,9 +12,9 @@
 				<th class="icon-col">Media Available</th>
 				<th class="icon-col">Track Published (RSS)</th>
 				<th class="">Publish Date (RSS)</th>
-				<!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED<th class="icon-col">Podcast.open.ac.uk</th> -->                                                     
-				<th class="icon-col">iTunes U public site</th>
-				<th class="icon-col">YouTube</th>
+				<?php if( $this->Permission->isYoutubeUser() ) : ?>
+					<th class="icon-col">YouTube</th>
+				<?php 	endif; ?>
 				</tr>
 			</thead>
 			<tbody>
@@ -38,15 +38,15 @@
 				<td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['PodcastItem']['processed_state'] ); ?></td>	
 				<td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
 				<td><?php echo $this->Time->getPrettyLongDateTime( $podcast_item['PodcastItem']['publication_date'] ); ?></td>
-				<!-- COMMENTED OUT TEMPORARILY AS RENAMED published to published on podcast.open, REMOVE THIS LINE IF ITS DECIDED ITS NOT NEEDED <td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td> -->
-				<td  class="icon-col"><img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'itunes' ); ?>" class="icon"></td>
+<?php if( $this->Permission->isYoutubeUser() ) : ?>
 				<td  class="icon-col">
-<?php 		if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
+	<?php	if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
 				<img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'youtube' ); ?>" class="icon">
-<?php 		else : ?>
+	<?php	else : ?>
 				<img src="/img/icon-16-youtube-unavailable.png" alt="Not available" />
-<?php 		endif; ?>
+	<?php	endif; ?>
 				</td>
+<?php 	endif; ?>
 				</tr>
 <?php 	endif; ?>
 <?php endforeach; ?>
