@@ -60,7 +60,7 @@
                 &nbsp;
             	</dd>
 							<dt>RSS Link: </dt>
-							<dd><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/rss2.xml'; ?>&nbsp;</dd>
+							<dd><span class="rss_nobg"></span><a href="<?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/rss2.xml'; ?>"><?php echo DEFAULT_MEDIA_URL.FEEDS.$this->data['Podcast']['custom_id'].'/rss2.xml'; ?></a>&nbsp;</dd>
 			<?php endif; ?>
         </dl>
     </div>

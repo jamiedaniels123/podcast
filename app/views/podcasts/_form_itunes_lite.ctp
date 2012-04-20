@@ -1,7 +1,7 @@
 <div id="FormPodcastItunesContainer"
 <?php echo isSet($edit_mode) == false ? 'style="display:none"' : ''; ?>>
 	<!-- fields only for both private and public sites -->
-	<div class="input select">
+	<div class="select">
 		<label for="PodcastItunesuSite">iTunes Site</label> <select
 			name="data[Podcast][itunesu_site]" id="PodcastItunesuSite">
 			<option value="Private"
@@ -11,14 +11,14 @@
 		</select>
 		<?php echo $this->Form->error('Podcast.itunes_site'); ?>
 	</div>
-	<div class="input text">
+	<div class="text">
 		<label for="PodcastCourseCode">Course Code</label> <input type="text"
 			size="60" id="PodcastCourseCode"
 			value="<?php echo $this->data['Podcast']['course_code']; ?>"
 			name="data[Podcast][course_code]">
 		<?php echo $this->Form->error('Podcast.course_code'); ?>
 	</div>
-	<div class="input select">
+	<div class="select">
 		<label for="PodcastCourseType">Course Type</label> <select
 			name="data[Podcast][course_type]" id="PodcastCourseType">
 			<?php foreach( $course_types as $course_type ) : ?>
@@ -36,7 +36,7 @@
 
 	<!-- fields only for public site -->
 	<?php if( $this->Permission->isItunesUser() ) : ?>
-	<div class="input file">
+	<div class="file">
 		<div class="image thumbnail wrapper">
 			<div class="float_right text_right">
 				<img
@@ -63,14 +63,14 @@
 			<div class="clear"></div>
 		</div>
 	</div>
-	<div class="input text">
+	<div class="text">
 		<label for="PodcastImageLlCopyright">Copyright/credit</label> <input
 			type="text" size="60" id="PodcastImageLlCopyright"
 			name="data[Podcast][image_ll_copyright]"
 			value="<?php echo $this->data['Podcast']['image_ll_copyright']; ?>">
 		<?php echo $this->Form->error('Podcast.image_ll_copyright'); ?>
 	</div>
-	<div class="input file">
+	<div class="file">
 		<div class="image thumbnail wrapper">
 			<div class="float_right text_right">
 				<img
@@ -97,14 +97,14 @@
 			<div class="clear"></div>
 		</div>
 	</div>
-	<div class="input text">
+	<div class="text">
 		<label for="PodcastImageWideCopyright">Copyright/credit</label> <input
 			type="text" size="60" id="PodcastImageWideCopyright"
 			name="data[Podcast][image_wide_copyright]"
 			value="<?php echo $this->data['Podcast']['image_wide_copyright']; ?>">
 		<?php echo $this->Form->error('Podcast.image_wide_copyright'); ?>
 	</div>
-	<div class="input file">
+	<div class="file">
 		<label for="PodcastNewArtworkFile">Artwork File</label> <input
 			type="file" id="PodcastNewArtworkFile"
 			name="data[Podcast][new_artwork_file]"> <input type="hidden"
@@ -112,14 +112,14 @@
 			value="<?php echo $this->data['Podcast']['artwork_file']; ?>">
 		<?php echo $this->Form->error('Podcast.artwork_file'); ?>
 	</div>
-	<div class="input text">
+	<div class="text">
 		<label for="PodcastAuthor">Author</label> <input type="text" size="60"
 			id="PodcastAuthor"
 			value="<?php echo $this->data['Podcast']['author']; ?>"
 			name="data[Podcast][author]">
 		<?php echo $this->Form->error('Podcast.author'); ?>
 	</div>
-	<div class="input select">
+	<div class="select">
 		<label for="PodcastExplicit">Explicit</label> <select
 			name="data[Podcast][explicit]" id="PodcastExplicit">
 			<option value="clean">Clean</option>
@@ -128,7 +128,7 @@
 	</div>
 
 
-	<div class="input checkbox">
+	<div class="checkbox">
 		<label for="PodcastOpenlearnEpub">Open Learn ePub</label> <input
 			type="hidden" value="N" id="PodcastOpenlearnEpub_"
 			name="data[Podcast][openlearn_epub]"> <input type="checkbox"
@@ -141,7 +141,7 @@
 	<div class="clear"></div>
 	<div class="wrapper" id="ituneu_categories_container">
 		<div class="float_left">
-			<div class="input select">
+			<div class="select">
 				<label for="iTuneCategories">Podcast iTunes U Categories</label> <input
 					type="hidden" name="data[iTuneCategories]" value=""
 					id="iTuneCategories_" /> <select name="data[iTuneCategories][]"
@@ -166,7 +166,7 @@
 			</div>
 		</div>
 		<div class="float_left">
-			<div class="input select">
+			<div class="select">
 				<label for="PodcastAlliTuneCategories">All iTunes U Categories</label>
 				<input type="hidden" name="data[Podcast][PodcastAlliTuneCategories]"
 					value="" id="PodcastAlliTuneCategories_" /> <select
