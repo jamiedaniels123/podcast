@@ -118,14 +118,18 @@ class PodcastItem extends AppModel {
 		/*
 		 * @name : createFromUrlVariables
 		 * @description : Called from the ADD method directly after a successful filechucker upload
-		 * @updated : 25th May 2011
-		 * @by : Charles Jackson
+		 * @updated : 22nd April 2012
+		 * @by : Ben Hawkridge
 		 */
 		function createFromUrlVariables( $params = array(), $podcast_id = null ) {
 		
 			$this->data['PodcastItem']['podcast_id'] = $podcast_id;
 			$this->data['PodcastItem']['original_filename'] = $params['url']['f1name'];
-			$this->data['PodcastItem']['title'] = substr( $params['url']['f1name'], 0, strpos( $params['url']['f1name'], '.' ) );		
+			// BH 20120422	Fixed issue with old code which set title up to first period encountered when filename might
+			//							include periods. New code uses pathinfo function to derive filename without extension and then
+			//							as an added touch converts all underscores (_) to spaces
+			$filename_noext = pathinfo($params['url']['f1name'], PATHINFO_FILENAME);
+			$this->data['PodcastItem']['title'] = str_replace("_", " ", $filename_noext);		
 			$this->data['PodcastItem']['published_flag'] = 'N';
 			$this->data['PodcastItem']['processed_state'] = 2;
 			//$this->data['PodcastItem']['publication_date'] = date();
