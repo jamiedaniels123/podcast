@@ -461,13 +461,16 @@ class PodcastItemsController extends AppController {
 
 					$this->data = $this->PodcastItem->get( $this->PodcastItem->getLastInsertId() );
 
+					// Capture the new name by setting an updated filename appending the database ID number to the start of 
+					// the filename to ensure it is unique.
+					// BH 20120422	moved this before moving the uploaded file so that the derived 'filename' can be set to lowercase as this is the
+					//							prefered format for filenames, and insures consistency between flavour generated files which the PcP part of the
+					//							transcoding cluster generates as lower case.
+					$this->data['PodcastItem']['filename'] = strtolower($this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['original_filename']);
+
 					// Move from the default file chucker upload folder into a specific custom_id folder and rename it
 					// appending the database ID number to the start of the filename to ensure it is unique.
 					if( $this->Folder->moveFileChuckerUpload( $this->data ) ) {
-
-					// Capture the new name by setting an updated filename appending the database ID number to the start of 
-					// the filename to ensure it is unique.
-					$this->data['PodcastItem']['filename'] = $this->data['PodcastItem']['id'] . '_' . $this->data['PodcastItem']['original_filename'];
 
 					// Capture the ID3 information
 					$getId3_information = $this->Getid3->extract( FILE_REPOSITORY . $this->data['Podcast']['custom_id'] . '/' . $this->data['PodcastItem']['filename'] );

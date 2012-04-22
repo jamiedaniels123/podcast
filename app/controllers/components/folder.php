@@ -62,14 +62,18 @@ class FolderComponent extends Object {
     /*
      * @name : moveFileChuckerUpload
      * @description : Move a file uploaded via fileChucker into the specified folder.
-     * @updated : 1st June 2011
-     * @by : Charles Jackson
+     * @updated : 22nd April 2012
+     * @by : Ben Hawkridge
      */
     function moveFileChuckerUpload( $data = array() ) {
 
         $this->create( $data['Podcast']['custom_id'] );
         
-        if( $this->moveFile( $data['PodcastItem']['original_filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['id'].'_'.$data['PodcastItem']['original_filename'] ) ) {
+        // BH 20120422	altered to use 'filename' rather than original_filename, but does mean that the function assumes that
+        //							'filename' has been set.  This allows the naming convention to be set in one place rather than both
+        //							here and somewhere else.
+        
+        if( $this->moveFile( $data['PodcastItem']['original_filename'], $data['Podcast']['custom_id'].'/'.$data['PodcastItem']['filename'] ) ) {
 
             unlink( FILE_REPOSITORY.$data['PodcastItem']['original_filename'] );
             return true;
