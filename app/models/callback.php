@@ -6,7 +6,24 @@ class Callback extends AppModel {
 	var $useTable = false;
 	var $data = array();
 	var $json = null;
-	var $commands = array('transcode-media','transcode-media-and-deliver','transfer-file-to-media-server','transfer-folder-to-media-server','delete-file-on-media-server','delete-folder-on-media-server','update-file-metadata','update-folder-metadata','update-list-of-files-metadata','set-permissions-folder','check-file-exists','check-folder-exists','status-encoder','status-media','deliver-without-transcoding','youtube-file-upload','youtube-file-update','copy-folder-on-media-server');
+	var $commands = array('transcode-media',
+												'transcode-media-and-deliver',
+												'transfer-file-to-media-server',
+												'transfer-folder-to-media-server',
+												'delete-file-on-media-server',
+												'delete-folder-on-media-server',
+												'update-file-metadata',
+												'update-folder-metadata',
+												'update-list-of-files-metadata',
+												'set-permissions-folder',
+												'check-file-exists',
+												'check-folder-exists',
+												'status-encoder',
+												'status-media',
+												'deliver-without-transcoding',
+												'youtube-file-upload',
+												'youtube-file-update',
+												'copy-folder-on-media-server');
 
 	/*
 	 * @name : setData
