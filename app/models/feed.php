@@ -459,7 +459,7 @@ class Feed extends AppModel {
 			if ( !empty($this->podcast_item['shortcode'] ) ) {
 				$item['atom:link']['attrib']['rel'] = 'alternate';
 				$item['atom:link']['attrib']['type'] = 'text/html';
-				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/'.$this->podcast_item_media_folder.'/#!'.$this->podcast_item['shortcode'];
+				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/#!'.$this->podcast_item['shortcode'];
 				$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			}
 			

@@ -56,7 +56,7 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
-		DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-dev.open.ac.uk/');
+		DEFINE('DEFAULT_PLAYER_URL', 'http://player-dev.open.edu/');
 		break;
 	case 'podcast-admin-acc.open.ac.uk':	
 		DEFINE('SERVER_ENV', 'ACCT');
