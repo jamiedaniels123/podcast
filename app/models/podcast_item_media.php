@@ -125,10 +125,16 @@ class PodcastItemMedia extends AppModel {
 		// changed for example. .flv will become .mov and update the track level record. 
 		if( strtolower( $row['flavour'] ) == 'default' ) {
 			
-			$this->data['PodcastItem']['filename'] == $row['destination_filename'];
+			// BH 20120426 - disabled next line as appears to do nothing, note the '=='
+			//$this->data['PodcastItem']['filename'] == $row['destination_filename'];
 			
-			if( !isSet( $this->data['PodcastItem'] ) || empty( $this->data['PodcastItem'] ) )
+			if( !isSet( $this->data['PodcastItem'] ) || empty( $this->data['PodcastItem'] ) ) {
 				$this->data['PodcastItem']['filename'] = $row['destination_filename'];
+				// BH 20120426 - added setting the duration in the podcastItem record
+				$this->data['PodcastItem']['duration'] = $row['duration'];
+			} else {
+				// BH 20120426 - TODO: could do with handling this 'error' condition better
+			}
 		}
 
 		$this->data['PodcastItemMedia']['media_type'] = $row['flavour'];
