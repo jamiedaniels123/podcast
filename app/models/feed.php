@@ -453,13 +453,19 @@ class Feed extends AppModel {
 
 		if ($isplayerxml) {
 
+			// BH 20120426 - the use of $this->podcast_item_media_folder in some places could be considered unnecessary for player.xml since at present
+			//							 player.xml is only generated for the 'default' flavour which is in the root of the podcast, however this may change in
+			//							 future so is include in case it is needed.
+			//							 IMPORTANT: $this->podcast_item_media_folder includes a leading '/' so even if we are creating the default flavour it 
+			//               will be set to '/'.
+			
 			// shortcode
 			// Example: <atom:link rel="alternate" type="text/html" title="Permalink for Student views of OU" href="http://podcast.open.ac.uk/pod/student-experiences/#!db6cc60d6b" />
 			// NOTE: This link is /#!{shortcode}  - includes '/' - compared with 'oup:longlink' below
 			if ( !empty($this->podcast_item['shortcode'] ) ) {
 				$item['atom:link']['attrib']['rel'] = 'alternate';
 				$item['atom:link']['attrib']['type'] = 'text/html';
-				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/#!'.$this->podcast_item['shortcode'];
+				$item['atom:link']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].$this->podcast_item_media_folder.'#!'.$this->podcast_item['shortcode'];
 				$item['atom:link']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			}
 			
@@ -469,7 +475,9 @@ class Feed extends AppModel {
 			if ( !empty($this->podcast_item['shortcode'] ) ) {
 				$item['atom:linklong']['attrib']['rel'] = 'oup:longlink';
 				$item['atom:linklong']['attrib']['type'] = 'text/html';
-				$item['atom:linklong']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].'/'.$this->podcast_item_media_folder.'#!'.$this->podcast_item['shortcode'];
+				// trim '/' of the media_folder as this version of the link does not include a '/' before the #! 
+				$trimmed_media_folder = (strlen($this->podcast_item_media_folder) > 1) ? substr($this->podcast_item_media_folder,1) : "";
+				$item['atom:linklong']['attrib']['href'] = 'http://podcast.open.ac.uk/pod/'.$this->data['Podcast']['custom_id'].$trimmed_media_folder.'#!'.$this->podcast_item['shortcode'];
 				$item['atom:linklong']['attrib']['title'] = 'Permalink for '.$this->podcast_item['title'];
 			}
 			
