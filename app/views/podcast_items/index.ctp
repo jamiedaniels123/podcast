@@ -10,6 +10,7 @@
 				<th class="thumbnail">Poster Image</th>
 				<th class="collection-title">Track Title</th>
 				<th class="icon-col">Media Available</th>
+				<th class="icon-col">Duration (H:M:S)</th>
 				<th class="icon-col">Track Published (RSS)</th>
 				<th class="">Publish Date (RSS)</th>
 				<?php if( $this->Permission->isYoutubeUser() ) : ?>
@@ -36,10 +37,11 @@
 				</td>
 				<td  class="collection-title"><a href="/podcast_items/edit/<?php echo $podcast_item['PodcastItem']['id']; ?>" class="podcast_item_update" data-id="<?php echo $podcast_item['PodcastItem']['id']; ?>"><?php echo strlen( $podcast_item['PodcastItem']['title'] ) ? $podcast_item['PodcastItem']['title'] : 'Untitled '.MEDIA; ?></a></td>
 				<td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['PodcastItem']['processed_state'] ); ?></td>	
+				<td class="icon-col"><?php echo $this->Time->getTimeSMPTE( $podcast_item['PodcastItem']['duration'] ); ?></td>
 				<td class="icon-col available"><img src="/img<?php echo $this->Object->isPublished( $podcast_item['PodcastItem']['published_flag'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" class="icon" /></td>
 				<td><?php echo $this->Time->getPrettyLongDateTime( $podcast_item['PodcastItem']['publication_date'] ); ?></td>
 <?php if( $this->Permission->isYoutubeUser() ) : ?>
-				<td  class="icon-col">
+				<td class="icon-col">
 	<?php	if( $this->Object->intendedForYoutube( $this->data['Podcast'] ) && $this->Object->hasYoutubeFlavour( $podcast_item ) ) : ?>
 				<img src="/img/<?php echo $this->Object->getApprovalStatus( $podcast_item['PodcastItem'], 'youtube' ); ?>" class="icon">
 	<?php	else : ?>
