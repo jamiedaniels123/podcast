@@ -150,9 +150,9 @@ class AttachmentHelper extends AppHelper {
 			//$media_folder=$this->feed->find('media_folder');
 			//error_log("views/helpers/attachment > getMediaLink | this->feed->media_folder = ".$media_folder);
 			
-			if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080' ) ) ) {
+			if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080','image' ) ) ) {
 				$media['media_type'] = null;
-			} elseif( in_array( $media['media_type'], array('wm-default','wm-240','wm-270','wm-360','wm-480','wm-540','wm-720','wm-1080' ) ) ) {
+			} elseif( in_array( $media['media_type'], array('wm-default','wm-240','wm-270','wm-360','wm-480','wm-540','wm-720','wm-1080','image-wm' ) ) ) {
 				$media['media_type'] = 'wm/';
 			} elseif( $media['media_type'] == 'iphonecellular' ) {
 				$media['media_type'] = 'iphone/';
