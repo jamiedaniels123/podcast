@@ -21,22 +21,23 @@
 <script type="text/javascript" src="/includes/headers-footers/ou-header.js"></script>
 		
     <?php
-	    echo $this->Javascript->link('jquery.js');
-        echo $this->Javascript->link('jquery-ui.js');
-        echo $this->Javascript->link('jquery-form.js');
-        echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
-        echo $this->Javascript->link('jquery.cookie.js');
-        echo $this->Javascript->link('application.js');
-        echo $this->Html->meta('icon');
-        echo $this->Html->meta('rss', '/podcasts/rss.rss');
-        echo $this->Html->css('cake.generic');
-        echo $this->Html->css('jquery-ui');
-        echo $this->Html->css('podcast-server');
-        echo $this->Html->css('ou-header');
-		echo $this->Html->css('type');
-		echo $this->Html->css('interface');
-		echo $this->Html->css('items_interface');
-        echo $scripts_for_layout;
+    echo $this->Javascript->link('/js/jquery.js');
+    echo $this->Javascript->link('/js/jquery-ui.js');
+    echo $this->Javascript->link('/js/jquery-form.js');
+    echo $this->Javascript->link('/cgi-bin/filechucker.cgi?js');
+    echo $this->Javascript->link('/js/jquery.cookie.js');
+    echo $this->Javascript->link('/js/application.js');
+    echo $this->Html->meta('icon');
+    echo $this->Html->meta('rss', '/podcasts/rss.rss');
+    echo $this->Html->css('/css/cake.generic');
+    echo $this->Html->css('/css/jquery-ui');
+    echo $this->Html->css('/css/podcast-server');
+    echo $this->Html->css('/css/ou-header');
+    // BH 20120503 disabled as there doesn't appear to be a type.css file and it is causing CakePHP to then load index.php due to rewrite rules
+    //    echo $this->Html->css('/css/type');  
+    echo $this->Html->css('/css/interface');
+    echo $this->Html->css('/css/items_interface');
+    echo $scripts_for_layout;
     ?>
     
     <!--[if IE]>
