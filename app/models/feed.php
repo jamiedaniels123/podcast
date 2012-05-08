@@ -50,6 +50,10 @@ class Feed extends AppModel {
 			'wm' 							=> '',
 			'epub' 						=> ''
 	);
+	
+	/*
+	// BH 20120508 Moved to AppModel to simplify maintenance of array and make it available to all models
+	
 	var $media_folder = array(
 			'3gp' => '3gp/', 									// iTunes U (Public) - 3gp video only
 			'audio-mp3' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
@@ -87,7 +91,8 @@ class Feed extends AppModel {
 			'wm-720' => 'wm/',
 			'wm-1080' => 'wm/'
 	);
-
+	*/
+	
 	var $mime_types = array(
 			'mp3' => 'audio/mpeg',
 			'm4a' => 'audio/x-m4a',

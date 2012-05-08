@@ -31,7 +31,7 @@ class PodcastItemsController extends AppController {
 
 	/*
 	 * @name : index
-	 * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
+	 * @description : Displays a paginated list of all podcasts that are owned by the current user.
 	 * @name : Charles Jackson
 	 * @by : 16th May 2011
 	 */
@@ -50,7 +50,7 @@ class PodcastItemsController extends AppController {
 
 	/*
 	 * @name : add
-	 * @desscription : Renders filechucker.cgi enabling a peep to upload item media.
+	 * @description : Renders filechucker.cgi enabling a peep to upload item media.
 	 * @todo : Move this code to the 'add' method. Change of functionality mid project.
 	 * @updated : 13th May 2011
 	 * @by : Charles Jackson
@@ -79,7 +79,7 @@ class PodcastItemsController extends AppController {
 	
     /*
      * @name : edit
-     * @desscription : Displays a form that enables a peep to edit an existing row on the podcast_items table.
+     * @description : Displays a form that enables a peep to edit an existing row on the podcast_items table.
      * @updated : 19th May 2011
      * @by : Charles Jackson
      */
@@ -634,103 +634,135 @@ class PodcastItemsController extends AppController {
 		return true;
 	}
 	
-    /*
-     * @name : delete
-     * @desscription : Enables a user to delete an individual item of media assuming they have permission.
-     * @todo : Very inefficient, making an API call for every deletion. Should be refactored. 
-     * @name : Charles Jackson
-     * @by : 5th May 2011
-     */
-    function delete( $id = null ) {
-
-        $this->autoRender = false;
-
-        // This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
-        // when somebody is deleting an individual podcast_item we pass into an array and loop through as is the data
-        // was posted.
-        if( $id )
-            $this->data['PodcastItem']['Checkbox'][$id] = true;
-
-        foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
-
-        	$this->data = $this->PodcastItem->get( $key );
-        	        		
-    	    // If we did not find the podcast media then redirect to the referer.
-	        if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
+		/*
+		 * @name : delete
+		 * @description : Enables a user to delete an individual item of media assuming they have permission.
+		 * @todo : Very inefficient, making an API call for every deletion. Should be refactored. 
+		 * @todo : The 'isPublished' logic is not really right as the iTunes and YouTube flags are little used
+		 *				 or even accessable by end users.  The use by the new podcast-admin needs to be checked prior
+		 *				 prior to removal of this conditional test.
+		 * @todo : Allow __generateRSSFeeds() to select 'player.xml' as a special 'flavour' as at present to refresh
+		 *				 it one has to select the 'default' flavour.  This would save a little time in cases when deleting
+		 *				 unpublished tracks, which would probably occur often when Collection has been upgraded to podcast.
+		 * @todo : Does not (soft) delete poster images and most likely does not handle deleting transcripts correctly
+		 *				 (the flavour maybe deleted but not the podcast_item entry).  Closed Caption files should be ok as
+		 *				 they are treated as a flavour.
+		 * @updated : 8th May 2012
+		 * @by : Ben Hawkridge
+		 */
+		function delete( $id = null ) {
+			
+			$this->autoRender = false;
+			
+			// This method is used for individual deletes and deletions via the form posted checkbox selection. Hence
+			// when somebody is deleting an individual podcast_item we pass into an array and loop through as is the data
+			// was posted.
+			if( $id )
+				$this->data['PodcastItem']['Checkbox'][$id] = true;
+			
+			$update_default_rss = false;  // true = default (actually player.xml) flavour needs updating
+			$update_all_rss = false; 			// true = all rss flavour feeds need updating as track was published
+			
+			foreach( $this->data['PodcastItem']['Checkbox'] as $key => $value ) {
 				
-				if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) {
-
-					$media_for_deletion = $this->PodcastItem->listAssociatedMedia( $this->data, null, '.' );
-					
-					if( $media_for_deletion )
-						$this->Api->renameFileMediaServer( $media_for_deletion );
-	
-					// Soft delete the podcast
-					$this->data['PodcastItem']['deleted'] = true;
-					$this->PodcastItem->set( $this->data );
-					$this->PodcastItem->save();
-	
-					if( $this->__generateRSSFeeds( $this->data['Podcast']['id'] ) == false ) {
+				$this->data = $this->PodcastItem->get( $key );
 						
-						$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been deleted but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
-					} else {
+				// If we did not find the podcast media then redirect to the referer.
+				if( !empty( $this->data ) && $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 
-						$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+					if( $this->Object->isPublished( $this->data['PodcastItem'] ) == false ) {
+						// BH 20120508 'Object->isPublished' checks to see if the iTunes U (itunes_flag) or Youtube (youtube_flag)
+						//						 flags are set for this track and stops deletion if they are.  These flags are not readily
+						//						 changable in the current version of Podcast admin (compared to old) and it's possible they
+						//						 will be depreciated in time due to not really been used other than by super-admins in a few
+						//						 select instances.
+						// error_log("podcast_items_controller > delete | this->data['PodcastItem']['published_flag'] = ".$this->data['PodcastItem']['published_flag']);
+						if ($this->data['PodcastItem']['published_flag'] == 'Y') {
+							// need to update all RSS feeds as track is published
+							$update_all_rss = true;
+						} else {
+							// only player.xml needs updating, at present this can only only be done by requesting that the default
+							// flavour be updated.
+							$update_default_rss = true;						
+						}
+						// The listAssociatedMedia() method returns an array suitable for passing to API that lists
+						// all flavours related to this track that need deleting, however these will be 'soft' deleted
+						// by renaming the files with a period in the front thus making them 'invisible'.  To actually
+						// delete the files this is done via the Super-admin method admin_delete().
+						$media_for_deletion = $this->PodcastItem->listAssociatedMedia( $this->data, null, '.' );
+
+						if( $media_for_deletion )
+							$this->Api->renameFileMediaServer( $media_for_deletion );
+
+						// Soft delete the podcast - record remains so could be restored as files are only 'hidden'.
+						$this->data['PodcastItem']['deleted'] = true;
+						$this->PodcastItem->set( $this->data );
+						$this->PodcastItem->save();
+
+					} else {
+						// BH 20120508 As detailed above this restriction may change in future if the flags are depreciated unless
+						//						 some other UI is invoked to allow users to set them, however their use is very minimal within
+						//						 the old Podcast administration.
+						$this->Session->setFlash('Cannot delete '.MEDIA.' that is published for either iTunes or YouTube.', 'default', array( 'class' => 'error' ) );
+						break;
 					}
-					
-		        } else {
-				
-					$this->Session->setFlash('Cannot delete '.MEDIA.' that is published.', 'default', array( 'class' => 'error' ) );
-					break;
 				}
 			}
-        }
-
-        $this->redirect( array('admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
-    }
+			
+			// BH 20120508 we only need to update RSS feeds if any tracks have actually been deleted.  If all tracks were unpublished then
+			// 						 only 'player.xml' needs to be refreshed, which at present means the default flavour as well.
+			if ($update_default_rss || $update_all_rss) {
+				$flavour = ($update_all_rss == false) ? 'default' : null ;			
+				// error_log("podcast_items_controller > delete | flavour = ".$flavour);
+				if( $this->__generateRSSFeeds( $this->data['Podcast']['id'], $flavour ) == false ) {				
+					$this->Session->setFlash( ucfirst( MEDIA ).'(s) has been deleted but we were unable to refresh the RSS feeds. If the problem persists please contact an administrator', 'default', array( 'class' => 'alert' ) );
+				} else {						
+					$this->Session->setFlash('We successfully deleted your '.MEDIA.'.', 'default', array( 'class' => 'success' ) );
+				}
+			}
+			
+			$this->redirect( array('admin' => false, 'controller' => 'podcast_items', 'action' => 'index', $this->data['Podcast']['id'].'#tracks' ) );
+		}
 
     
-    /*
-     * @name : delete_attachment
-     * @desscription : Enables a user to delete an associated image of a row on the podcast_items table.
-     * @name : Charles Jackson
-     * @by : 27th June 2011
-     */
-    	function delete_attachment( $attachment, $id ) {
-		
-        $this->autoRender = false;
-
-        $this->data = $this->PodcastItem->get( $id );
-		
-        // If we did not find the podcast media then redirect to the referer.
-        if( !empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
+		/*
+		 * @name : delete_attachment
+		 * @description : Enables a user to delete an associated image of a row on the podcast_items table.
+		 * @name : Charles Jackson
+		 * @by : 27th June 2011
+		 */
+		function delete_attachment( $attachment, $id ) {
 			
-			// We unset the publication date field because the default value of 0000-00-00 00:00:00 will a produce model validation error.
-			unset( $this->data['PodcastItem']['publication_date'] ); 
+			$this->autoRender = false;
 			
-			$this->data['PodcastItem'][$attachment.'_filename'] = null;
-			$this->PodcastItem->set( $this->data );
+			$this->data = $this->PodcastItem->get( $id );
 			
-			if( $this->PodcastItem->save() ) {
+			// If we did not find the podcast media then redirect to the referer.
+			if( !empty( $this->data ) || $this->Permission->toUpdate( $this->data['Podcast'] ) ) {
 				
-				if( $this->Api->deleteFileOnMediaServer( 
-					array(
+				// We unset the publication date field because the default value of 0000-00-00 00:00:00 will a produce model validation error.
+				unset( $this->data['PodcastItem']['publication_date'] ); 
+				
+				$this->data['PodcastItem'][$attachment.'_filename'] = null;
+				$this->PodcastItem->set( $this->data );
+				
+				if( $this->PodcastItem->save() ) {
+					if( $this->Api->deleteFileOnMediaServer( 
+							array(
 							'destination_path' => $this->data['Podcast']['custom_id'].'/',  
 							'destination_filename' => $this->data['PodcastItem'][$attachment.'_filename'],  
-						)
-					) 
-				) {
-
-					$this->Session->setFlash('The '.MEDIA.' attachment has been deleted.', 'default', array( 'class' => 'success' ) );
-			        $this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
-			        exit;	
+							)) ) {
+						
+						$this->Session->setFlash('The '.MEDIA.' attachment has been deleted.', 'default', array( 'class' => 'success' ) );
+						$this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
+						exit;	
+					}
 				}
 			}
-        }
-        
-		$this->Session->setFlash('There has been a problem deleting the '.MEDIA.' attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );		
-	    $this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
-    }
+			
+			$this->Session->setFlash('There has been a problem deleting the '.MEDIA.' attachment. If the problem persists please contact an administrator.', 'default', array( 'class' => 'error' ) );
+			$this->redirect( array( 'action' => 'edit', $this->data['PodcastItem']['id'] ) );
+		}
 
     /*
      * ADMIN FUNCTIONALITY
@@ -740,7 +772,7 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : admin_index
-     * @desscription : Displays a paginated list of all podcasts that are owned by the current user.
+     * @description : Displays a paginated list of all podcasts that are owned by the current user.
      * @name : Charles Jackson
      * @by : 16th May 2011
      */
@@ -760,7 +792,7 @@ class PodcastItemsController extends AppController {
 
     /*
      * @name : admin_delete
-     * @desscription : Enables an administrator to perform a hard delete on a podcast and the associated media.
+     * @description : Enables an administrator to perform a hard delete on a podcast and the associated media.
      * @name : Charles Jackson
      * @by : 5th May 2011
      */

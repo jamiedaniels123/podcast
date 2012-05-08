@@ -20,10 +20,15 @@ class FeedsController extends AppController {
 
     /*
      * @name : add
-     * @description : Creates the various flavours of RSS feed. It then captures the output and writes
-     * content to a flat file ready to be moved across to the media server.
-     * @updated : 16th June 2011
-     * @by : Charles Jackson
+     * @description : Creates the various flavours of RSS feed. It then captures the output and writes content
+     * 								to a flat file ready to be moved across to the media server.
+		 * @todo : Add support to allow the 'player.xml' only flavour to be created/updated as there are several cases
+		 *				 where this is the 'flavour' that actually needs updating, for example any Collection which hasn't
+		 *				 been upgraded to a podcast will not use any of the RSS flavours and only use player.xml for embedding
+		 *				 videos.  In addition newly uploaded tracks will often not be set to published so as the flavours are
+		 *				 added to the server it is unncessary to create all the RSS feeds unless the track has been published.
+     * @updated : 8th May 2012
+     * @by : Ben Hawkridge
      */
 		function add( $id = null, $passed_flavour = null ) {
 			
@@ -35,8 +40,10 @@ class FeedsController extends AppController {
 			
 			// If we are calling this method using "requestAction" as opposed to a redirect then we must take the
 			// ID from $this->params array. See model function for indepth explanation.
-			if( $this->Feed->beingCalledAsMethod( $this->params ) )
+			if( $this->Feed->beingCalledAsMethod( $this->params ) ) {
 				$id = $this->params['id'];
+				$passed_flavour = $this->params['passed_flavour'];
+			}
 			
 			// This method is used for individual rss generation and via the form posted checkbox selection. Hence
 			// when somebody is generating an individual rss feed we pass into an array and loop through as is the data
@@ -44,7 +51,9 @@ class FeedsController extends AppController {
 			if( $id )
 				$this->data['Podcast']['Checkbox'][$id] = true;
 			
-			error_log("feeds_controller > add | this->data['Podcast']['Checkbox'] = ".serialize($this->data['Podcast']['Checkbox']));
+			//error_log("feeds_controller > add | this->data['Podcast']['Checkbox'] = ".serialize($this->data['Podcast']['Checkbox']));
+			//error_log("feeds_controller > add | id = ".$id);
+			//error_log("feeds_controller > add | passed_flavour = ".$passed_flavour);
 			
 			foreach( $this->data['Podcast']['Checkbox'] as $key => $value ) {
 

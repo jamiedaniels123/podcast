@@ -3,6 +3,48 @@ class AppModel extends Model {
 
 	var $errors = array();
 	
+	// BH 20120508 Moved from feed.php (model) to here so is available to all models, it also makes it easier to maintain
+	var $media_folder = array(
+			'3gp' => '3gp/', 									// iTunes U (Public) - 3gp video only
+			'audio-mp3' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'audio-m4a' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'audio-m4b' => 'audio/',					// iTunes U (Public) - audio only (contains both MP3 and AAC - both m4a and m4b - latter audiobooks)
+			'desktop' => 'desktop/',					// iTunes U (Public) - desktop quality (640 wide) video only
+			'desktop-all' => 'desktop-all/',  // iTunes U (Public) - desktop quality (640 wide) video AND audio
+			'hd' => 'hd/',										// iTunes U (Public) - 720p HD video only
+			'hd-1080' => 'hd-1080/',					// iTunes U (Public) - 1080p HD video only
+			'iphone' => 'iphone/',						// iTunes U (Public) - iPhone (wifi) video only (H264 baseline encoded)
+			'iphonecellular' => 'iphone/',		// iTunes U (Public) - iPhone 3gp (Edge) video only (H264 encoding)
+			'ipod' => 'ipod/',								// iTunes U (Public) - iPod video only (H264 baseline encoded)
+			'ipod-all' => 'ipod-all/',				// iTunes U (Public) - iPod video AND audio
+			'large' => 'large/',							// iTunes U (Public) - video only (native video dimensions)
+			'transcript' => 'transcript/',		// transcripts of corresponding track entry (for audio and video tracks only)
+			'youtube' => 'youtube/',					// YouTube - encoded for uploading to YouTube, has different trailer
+			'extra' => 'extra/',
+			'cc-scc' => 'closed-captions/',
+			'cc-dfxp' => 'closed-captions/',
+			'epub' => 'epub/',
+			'default' => null,
+			'240' => null,
+			'270' => null,
+			'360' => null,
+			'480' => null,
+			'540' => null,
+			'720' => null,
+			'1080' => null,
+			'image' => null,
+			'image-wm' => 'wm/',
+			'wm-default' => 'wm/',
+			'wm-240' => 'wm/',
+			'wm-270' => 'wm/',
+			'wm-360' => 'wm/',
+			'wm-480' => 'wm/',
+			'wm-540' => 'wm/',
+			'wm-720' => 'wm/',
+			'wm-1080' => 'wm/'
+	);
+
+	
     /*
      * @name : removeDuplicates
      * @description : Compares two arrays and removes any duplicate elements from the first parameter

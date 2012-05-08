@@ -205,53 +205,60 @@ class PodcastItem extends AppModel {
 	/*
 	 * @name : listAssociatedMedia
 	 * @description : Build an array of media files that can by passed to the API.
-	 * @updated : 21st June 2011
-	 * @by : Charles Jackson
+	 * @todo : The hanlding of transcripts needs checking as it maybe already pulled out as a medua_type in
+	 *				 the 'for' loop.  Also the setting of the deletion flag in transcript section seems a bit odd, needs
+	 *				 investigating to check significance.
+	 * @updated : 8th May 2012
+	 * @by : Ben Hawkridge
 	 */
 	function listAssociatedMedia( $data = array(), $source_prefix = null, $destination_prefix = null ) {
 	
 		$media_files = array();
 		
 		// Loop through the media and append to an array
-        foreach( $data['PodcastMedia'] as $media ) {
-        	
-			if( strtolower( $media['media_type'] ) == 'default' ) {
-				
+		foreach( $data['PodcastMedia'] as $media ) {
+		
+			/*
+			// BH 20120508 No longer needed as this assumed all flavours were stored in subfolders named after the media_type
+			//						 which is incorrect. Instead actual media_folders locations are defined in the common AppModel variable
+			//						 $this->media_folder['media_type']
+			
+			if( strtolower( $media['media_type'] ) == 'default' ) {			
 				$media['media_type'] = null;
-				
 			} else {
-				
 				$media['media_type'] = $media['media_type'].'/';
 			}
-			
-        	$media_files[] = array( 
-				'source_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
-				'destination_path' => $data['Podcast']['custom_id'].'/'.$media['media_type'],
+			*/
+			$media_files[] = array( 
+				'source_path' => $data['Podcast']['custom_id'].'/'.$this->media_folder[$media['media_type']],
+				'destination_path' => $data['Podcast']['custom_id'].'/'.$this->media_folder[$media['media_type']],
 				'source_filename' => $source_prefix.$media['filename'],
 				'destination_filename' => $destination_prefix.$media['filename'],
-        		'podcast_item_id' => $media['podcast_item'],
-        		'podcast_item_media_id' => $media['id']
+				'podcast_item_id' => $media['podcast_item'],
+				'podcast_item_media_id' => $media['id']
 			);
-        }
-			
+		}
+		
 		// Grab the transcript if it exists and append to array
 		if( is_array( $data['Transcript'] ) && !empty( $data['Transcript']['id'] ) ) {
 			
 			$media_files[] = array( 
-				'source_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
-				'destination_path' => $data['Podcast']['custom_id'].'/'.$data['Transcript']['media_type'].'/',
+				'source_path' => $data['Podcast']['custom_id'].'/'.$this->media_folder[$data['Transcript']['media_type']].'/',
+				'destination_path' => $data['Podcast']['custom_id'].'/'.$this->media_folder[$data['Transcript']['media_type']].'/',
 				'source_filename' => $source_prefix.$data['Transcript']['filename'],
 				'destination_filename' => $destination_prefix.$data['PodcastMedia']['filename'],
-        		'podcast_item_id' => $media['podcast_item'],
-        		'podcast_item_media_id' => $media['id'],
+				'podcast_item_id' => $media['podcast_item'],
+				'podcast_item_media_id' => $media['id'],
 				'podcast_item_deletion' => 1
 			);
 		}
-		
-		if( count( $media_files ) )
+	
+		if( count( $media_files ) ) {
+			// error_log("models > podcast_items > listAssociatedMedia() | ".serialize($media_files));
 			return $media_files;		
-			
-		return false;
+		} else {
+			return false;
+		}
 	}
 	
 	/*
