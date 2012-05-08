@@ -49,6 +49,7 @@
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
+error_log("bootstrap | started | REQUEST_URI = ".$_SERVER['REQUEST_URI']);
 
 switch ($_SERVER['SERVER_NAME']){
 	case 'podcast-admin-dev.open.ac.uk':
@@ -56,7 +57,8 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('DOMAIN_NAME', 'podcast-api-dev.open.ac.uk' );
 		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
-		DEFINE('DEFAULT_PLAYER_URL', 'http://player-dev.open.edu/');
+		DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-dev.open.ac.uk/');
+		//DEFINE('DEFAULT_PLAYER_URL', 'http://player-dev.open.edu/');
 		break;
 	case 'podcast-admin-acc.open.ac.uk':	
 		DEFINE('SERVER_ENV', 'ACCT');
@@ -88,34 +90,37 @@ DEFINE('SECURE_APPLICATION_URL', 'https://'.$_SERVER['SERVER_NAME']);
 // Capture the SAMS details here.
 if( isSet( $_SESSION['Auth.User.id'] ) == false ) {
 
-    if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
+	if( isSet( $_SERVER['LOCAL_SAMS_USER'] ) ) {
+		error_log("bootstrap | LOCAL_SAMS_USER");
 
-        DEFINE('SAMS_EMAIL', 'cj3998@openmail.open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', 'cj3998' );
-        DEFINE('SAMS_NAME', 'Charles Jackson' );
+		DEFINE('SAMS_EMAIL', 'cj3998@openmail.open.ac.uk' );
+		DEFINE('SAMS_OUCU_ID', 'cj3998' );
+		DEFINE('SAMS_NAME', 'Charles Jackson' );
 
 	} elseif( isSet( $_SERVER['PETES_SAMS_USER'] ) ) {
+		error_log("bootstrap | PETES_SAMS_USER");
 
-        DEFINE('SAMS_EMAIL', $_SERVER['PETES_SAMS_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['PETES_SAMS_USER'] );
-        DEFINE('SAMS_NAME', 'Peter Devine' );
+		DEFINE('SAMS_EMAIL', $_SERVER['PETES_SAMS_USER'].'@open.ac.uk' );
+		DEFINE('SAMS_OUCU_ID', $_SERVER['PETES_SAMS_USER'] );
+		DEFINE('SAMS_NAME', 'Peter Devine' );
 
-    } elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
+	} elseif( isSet( $_SERVER['REMOTE_USER'] ) ) {
+		error_log("bootstrap | REMOTE_USER");
 
-        DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
-        DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
-		
+		DEFINE('SAMS_EMAIL', $_SERVER['REMOTE_USER'].'@open.ac.uk' );
+		DEFINE('SAMS_OUCU_ID', $_SERVER['REMOTE_USER'] );
 		if( !empty( $_COOKIE['HS7BDF'] ) ) {
-			
-        	DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
-			
-		} else {
-			
+			DEFINE('SAMS_NAME', $_COOKIE['HS7BDF'] );
+		} else {	
 			DEFINE('SAMS_NAME','Unknown User');
 		}
-
-    }
+	} else {
+		error_log("bootstrap | no REMOTE_USER set");
+		DEFINE('SAMS_OUCU_ID', '' );
+	}
 }
+
+error_log("bootstrap | SAMS_OUCU_ID = ".SAMS_OUCU_ID);
 
 DEFINE('SAMS_LOGOUT_PAGE', 'https://msds.open.ac.uk/signon/samsoff.aspx');
 DEFINE('PUBLIC_ITUNEU_PODCAST', 1 );
