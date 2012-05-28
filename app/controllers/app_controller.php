@@ -218,7 +218,8 @@ class AppController extends Controller {
 	
 		if( (int)$id ) {
 			// Generate the RSS Feeds by calling the "/feeds/add/*ID*" URL.
-			return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $id, 'flavour' => $flavour ) );
+			error_log("app_controller > __generateRSSFeeds() | flavour = ".$flavour);
+			return $this->requestAction( array('controller' => 'feeds', 'action' => 'add'), array('id' => $id, 'passed_flavour' => $flavour ) );
 			//return true;
 		} else {
 			return false;
