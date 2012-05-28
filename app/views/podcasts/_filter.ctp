@@ -19,6 +19,5 @@
     	<h3>Search: </h3><input type="text" title="Enter your search here" id="PodcastSearch" name="data[Podcast][search]" class="input_greeting" value="<?php echo $search_criteria; ?>" />
         <button id="filter_button" type="submit" class="button white" ><img src="/img/icon-16-link.png" alt="Search" width="16" height="16" class="icon" />Search</button>
     </div>
-
      
 </form>

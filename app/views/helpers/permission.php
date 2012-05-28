@@ -236,8 +236,7 @@ class PermissionHelper extends AppHelper {
     }
         
     
-    function toUpdate( $data = array() ) {
-
+  function toUpdate( $data = array() ) {
 
 		if( isSet( $data['Podcast']['owner_id'] ) && $this->isOwner( $data['Podcast']['owner_id'] ) )
 			return true;
@@ -261,7 +260,7 @@ class PermissionHelper extends AppHelper {
 	}
 
 
-    function toView( $data = array() ) {
+  function toView( $data = array() ) {
 
 		if( $this->iTunesPrivileges( $data['Podcast'] ) )
 			return true;

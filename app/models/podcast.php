@@ -1,19 +1,21 @@
 <?php
 class Podcast extends AppModel {
-	
 
-    const AVAILABLE = 9;
-    
-    var $name = 'Podcast';
+
+	const AVAILABLE = 9;
+
+	var $name = 'Podcast';
 	var $order = 'Podcast.id DESC';
-	
+
 	// Possible fix to the bug whereas you are unable to sort by media count.
 	// Research "VirtualFields" and add the column to the pagination array ( top of the controller)
-	/*var $virtualFields = array(
-     'media_count' => 'count(PodcastItems.id)'
-     ); */
+	/*
+		var $virtualFields = array(
+		'media_count' => 'count(PodcastItems.id)'
+		);
+	*/
 
-	
+
     var $validate = array(
 
         'title' => array(
@@ -83,21 +85,21 @@ class Podcast extends AppModel {
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for publish iTunnesU date.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for publish iTunes U date.'
             )
         ),
         'update_itunes_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for update iTunesU date.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD for update iTunes U date.'
             )
         ),
         'target_itunesu_date' => array(
             'Rule1' => array(
                 'rule' => 'date',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD target iTunesU date.'
+                'message' => 'If entered, you must provide a valid date in the format YYYY/MM/DD target iTunes U date.'
             )
         ),
         'production_date' => array(
@@ -125,7 +127,7 @@ class Podcast extends AppModel {
             'Rule1' => array(
                 'rule' => 'url',
                 'allowEmpty' => true,
-                'message' => 'If entered, you must provide a valid web address for the iTunesU URL.'
+                'message' => 'If entered, you must provide a valid web address for the iTunes U URL.'
             )
         ),
         'youtube_series_playlist_link' => array(
@@ -282,7 +284,7 @@ class Podcast extends AppModel {
 
     /*
      * @name : privateUntilPublishedMedia
-     * @description : A podcast must remain private untill it has associated published media. This method is
+     * @description : A podcast must remain private until it has associated published media. This method is
      * called by the validation array and returns a count of published media.
      * @updated : 27th May 2011
      * @by : Charles Jackson
@@ -624,6 +626,66 @@ class Podcast extends AppModel {
        $this->recursive = -1;
 
         $list = array();
+        $conditions = $this->buildConditions( $user_id );
+        $conditions = $this->buildFilters( $podcast, $conditions );
+
+        $data = $this->find('all',array(
+            'fields' => array(
+                'DISTINCT(Podcast.id)',
+                ),
+            'conditions'=> $conditions,
+            'joins' => array(
+                array(
+                    'table' => 'users',
+                    'alias' => 'Owner',
+                    'type' => 'INNER',
+                    'conditions' => array(
+	                        	'Podcast.owner_id = Owner.id'
+                        )
+                    ),
+                array(
+                    'table'=>'user_podcasts',
+                    'alias'=>'UserPodcasts',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserPodcasts.podcast_id = Podcast.id'
+                        )
+                    ),
+                array(
+                    'table'=>'user_group_podcasts',
+                    'alias'=>'UserGroupPodcasts',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserGroupPodcasts.podcast_id = Podcast.id'
+                        )
+                    ),
+                array(
+                    'table'=>'user_user_groups',
+                    'alias'=>'UserUserGroups',
+                    'type'=>'LEFT',
+                    'conditions'=>array(
+                        'UserUserGroups.user_group_id = UserGroupPodcasts.user_group_id'
+                        )
+                    )
+                ),
+            'order'=>array('Podcast.id DESC')
+            )
+        );
+
+        // Create a simple array of ID numbers.
+        foreach( $data as $podcast ) {
+
+            $list[] = $podcast['Podcast']['id'];
+        }
+
+        return $list;
+     }
+
+     function getUserPodcasts_old( $user_id = null, $podcast = null ) {
+
+       $this->recursive = -1;
+
+        $list = array();
         $conditions = $this->buildConditions(  $user_id );
         $conditions = $this->buildFilters( $podcast, $conditions );
 
@@ -799,68 +861,68 @@ class Podcast extends AppModel {
      * @updated : 8th July 2011
      * @by : Charles Jackson
      */
-    function buildiTunesFilters( $filter = null ) {
-    	    	
-        switch( strtolower( $filter ) ) {
-            case 'all':
-	            return array('OR' => array(
-	                array(
-	                    'Podcast.consider_for_itunesu' => true
-	                    ),
-	                array(
-	                    'Podcast.intended_itunesu_flag' => 'Y'
-	                    ),
-	                array(
-	                    'Podcast.publish_itunes_u' => 'Y'
-	                    )
-                    ),
-                    'Podcast.deleted' => 0
-	            );
-                break;
-            case 'consideration':
-                return array( 
+function buildiTunesFilters( $filter = null ) {
+
+	switch( strtolower( $filter ) ) {
+		case 'all':
+			return array('OR' => array(
+					array(
+						'Podcast.consider_for_itunesu' => true
+						),
+					array(
+						'Podcast.intended_itunesu_flag' => 'Y'
+						),
+					array(
+						'Podcast.publish_itunes_u' => 'Y'
+						)
+					),
+					'Podcast.deleted' => 0
+				);
+			break;
+		case 'consideration':
+			return array( 
 					'Podcast.consider_for_itunesu' => true,
 					'Podcast.intended_itunesu_flag != ' => 'Y',
-                	'Podcast.publish_itunes_u != ' => 'Y',
-	                'Podcast.deleted' => 0 
-                );
-                break;
-			case 'intended':
-                return array( 
+					'Podcast.publish_itunes_u != ' => 'Y',
+					'Podcast.deleted' => 0 
+				);
+			break;
+		case 'intended':
+			return array( 
 					'Podcast.intended_itunesu_flag' => 'Y',
-                	'Podcast.publish_itunes_u != ' => 'Y',
-	                'Podcast.deleted' => 0 
-                );
-                break;
-            case 'openlearn':
-            	return array('OR' => array(
+					'Podcast.publish_itunes_u != ' => 'Y',
+					'Podcast.deleted' => 0 
+				);
+			break;
+		case 'openlearn':
+			return array('OR' => array(
 					array(
-		                'Podcast.publish_itunes_u' => 'Y',
-		                'Podcast.openlearn_epub' => 'Y',
-		                'Podcast.deleted' => 0
+						'Podcast.publish_itunes_u' => 'Y',
+						'Podcast.openlearn_epub' => 'Y',
+						'Podcast.deleted' => 0
 						),
 					array(
-		                'Podcast.intended_itunesu_flag' => 'Y',
-		                'Podcast.openlearn_epub' => 'Y',
-		                'Podcast.deleted' => 0
+						'Podcast.intended_itunesu_flag' => 'Y',
+						'Podcast.openlearn_epub' => 'Y',
+						'Podcast.deleted' => 0
 						),
 					array(
-		                'Podcast.intended_itunesu_flag' => 'Y',
-		                'Podcast.openlearn_epub' => 'Y',
-		                'Podcast.deleted' => 0
+						'Podcast.intended_itunesu_flag' => 'Y',
+						'Podcast.openlearn_epub' => 'Y',
+						'Podcast.deleted' => 0
 						),
 					)
-            	);
-                break;
-            case 'published':
-            default :
-            	return array(
-	                'Podcast.publish_itunes_u' => 'Y',
-	                'Podcast.deleted' => 0
-            	);
-                break;
-        }
-     }
+				);
+			break;
+		case 'published':
+		default :
+			return array(
+					'Podcast.publish_itunes_u' => 'Y',
+					'Podcast.deleted' => 0
+				);
+			break;
+	}
+}
 
     /*
      * @name : buildYoutubeFilters

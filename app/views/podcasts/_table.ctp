@@ -22,14 +22,15 @@
         <th class="explicit" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'explicit'); ?>><?php echo $this->Paginator->sort('Explicit');?></th>
         <th class="contact_name" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'contact_name'); ?>><?php echo $this->Paginator->sort('Contact Name','contact_name');?></th>
         <th class="contact_email" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'contact_email'); ?>><?php echo $this->Paginator->sort('Contact Email','contact_email');?></th>
-        <th class="itunes_u_url" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunesu_url'); ?>><?php echo $this->Paginator->sort('ItunesU Url','itunes_u_url');?></th>                
-		<th class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>><?php echo $this->Paginator->sort('Syndicated','podcast_flag');?></th>        
-		<th class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>><?php echo $this->Paginator->sort('Consider iTunesU','consider_for_itunes');?></th>        
-		<th class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>><?php echo $this->Paginator->sort('Intended iTunesU','intended_itunesu_flag');?></th>
-		<th class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>><?php echo $this->Paginator->sort('iTunesU Public site Published','publish_itunes_u');?></th>
-		<th class="consider_for_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_youtube'); ?>><?php echo $this->Paginator->sort('Consider Youtube','consider_for_youtube');?></th>        
-		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('Intended Youtube','intended_youtube_flag');?></th>
-		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('Youtube Published','publish_youtube');?></th>
+        <th class="itunes_u_url" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunesu_url'); ?>><?php echo $this->Paginator->sort('iTunes U Url','itunes_u_url');?></th>                
+		<th class="podcast_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'podcast_flag'); ?>><?php echo $this->Paginator->sort('Podcast','podcast_flag');?></th>        
+		<th class="consider_for_itunes" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_itunes'); ?>><?php echo $this->Paginator->sort('Consider iTunes U','consider_for_itunes');?></th>        
+		<th class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>><?php echo $this->Paginator->sort('iTunes U Collection','intended_itunesu_flag');?></th>
+		<th class="itunesu_site" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunesu_site'); ?>>iTunes U Site</th>
+		<th class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>><?php echo $this->Paginator->sort('Published iTunes U','publish_itunes_u');?></th>
+		<th class="consider_for_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'consider_for_youtube'); ?>><?php echo $this->Paginator->sort('Consider YouTube','consider_for_youtube');?></th>        
+		<th class="intended_youtube_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_youtube_flag'); ?>><?php echo $this->Paginator->sort('YouTube Collection','intended_youtube_flag');?></th>
+		<th class="publish_youtube" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_youtube'); ?>><?php echo $this->Paginator->sort('YouTube Published','publish_youtube');?></th>
 		<th class="openlearn_epub" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'openlearn_epub'); ?>><?php echo $this->Paginator->sort('Open Learn','openlearn_epub');?></th>
     </tr>
     <?php

@@ -121,7 +121,7 @@
 <!--INsert-->
     <div class="collection_input"><!--option transfers itunes u-->
     
-            <div class="wrapper" id="ituneu_categories_container">
+        <div class="wrapper" id="ituneu_categories_container">
         	<div class="float_left_list">
            		<div class="select">
                 
