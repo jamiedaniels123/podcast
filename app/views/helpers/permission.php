@@ -135,21 +135,37 @@ class PermissionHelper extends AppHelper {
 
     /*
      * @name : isItunesUser
-     * @description : Checks the value held in session and returns a bool
-     * @updated : 25th May 2011
-     * @by : Charles Jackson
+     * @description : Checks the value held in session and returns a bool if EITHER the public or private iTunes U flags are set
+     * @updated : 9th May 2012
+     * @by : ben Hawkridge
      */
     function isItunesUser() {
 
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES )
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES || strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES )
             return true;
 
         return false;
     }
 
     /*
+     * @name : isItunesPublicUser
+     * @description : Returns a bool depending upon whether the user is an iTunes U Public user.
+     * @updated : 9th May 2012
+     * @by : Ben Hawkridge
+     */
+    
+    function isItunesPublicUser() {
+		
+		$this->autoRender = false;
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES )
+            return true;
+
+        return false;
+    }
+     
+    /*
      * @name : isItunesPrivateUser
-     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @description : Returns a bool depending upon whether the user is an iTunes U Private user.
      * @updated : 12th April 2012
      * @by : Ben Hawkridge
      */
@@ -157,7 +173,7 @@ class PermissionHelper extends AppHelper {
     function isItunesPrivateUser() {
 		
 		$this->autoRender = false;
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES )
             return true;
 
         return false;
@@ -198,8 +214,8 @@ class PermissionHelper extends AppHelper {
      * @by : Charles Jackson
      */
     function isAdminRouting( $params = array() ) {
+       if (!isset($params['action'])) error_log("PermissionHelper > isAdminRouting | params = ".serialize($params));
 
-    	
         if( substr( $params['action'], 0, 6 ) == 'admin_' )
             return true;
         

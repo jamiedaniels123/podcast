@@ -6,16 +6,16 @@ class UsersController extends AppController {
 
     var $paginate = array( 'limit' => 20, 'page' => 1, 'order' => array( 'User.full_name' => 'ASC' ) );
 
-    /*
-     * @name : beforeFilter
-     * @description : The following methods can be accessed without logging in.
-     * @updated : 2nd June 2010
-     */
-    function beforeFilter() {
-        
-        $this->Auth->allow( 'register', 'login', 'home', 'apply', 'isItunesUser' );
-        parent::beforeFilter();
-    }
+		/*
+		 * @name : beforeFilter
+		 * @description : The following methods can be accessed without logging in.
+		 * @updated : 2nd June 2010
+		 */
+		function beforeFilter() {
+
+			$this->Auth->allow( 'register', 'login', 'home', 'apply', 'isItunesUser' );
+			parent::beforeFilter();
+		}
 
     /*
      * @name : beforeRender
@@ -24,9 +24,9 @@ class UsersController extends AppController {
      */
     function beforeRender() {
         
-        $this->errors = $this->User->invalidFields();
-        $this->set('errors', $this->errors );
-        parent::beforeRender();
+      $this->errors = $this->User->invalidFields();
+      $this->set('errors', $this->errors );
+      parent::beforeRender();
     }
 
     /*
@@ -437,13 +437,29 @@ class UsersController extends AppController {
      */
     function itunesuser() {
 		
-		$this->autoRender = false;
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
-            return true;
+			$this->autoRender = false;
+      if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+      	return true;
 
-        return false;
+      return false;
     }	 
 
+    /*
+     * @name : isItunesPublicUser
+     * @description : Returns a bool depending upon whether the user is an itunes user.
+     * @updated : 1st May 2012
+     * @by : Ben Hawkridge
+     */
+    
+    function isItunesPublicUser() {
+			// BH 20120501	this function identical to itunesuser() but better reflects the fact that the
+			//							flag is for Public site users as against private site.
+			$this->autoRender = false;
+      if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
+      	return true;
+
+      return false;
+    }	 
     /*
      * @name : isItunesPrivateUser
      * @description : Returns a bool depending upon whether the user is an itunes user.
@@ -453,11 +469,11 @@ class UsersController extends AppController {
     
     function isItunesPrivateUser() {
 		
-		$this->autoRender = false;
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
-            return true;
+			$this->autoRender = false;
+      if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' )
+      	return true;
 
-        return false;
+      return false;
     }	 
 		
 

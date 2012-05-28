@@ -263,6 +263,51 @@ class PermissionComponent extends Object {
     	return false;
     }
 
+    /*
+     * @name : isItunesUser
+     * @description : Checks the value held in session and returns a bool if EITHER the public or private iTunes U flags are set
+     * @updated : 9th May 2012
+     * @by : Ben Hawkridge
+     */
+    function isItunesUser() {
+ 
+        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES || strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES )
+            return true;
+
+        return false;
+    }
+
+		/*
+		 * @name : isItunesPublicUser
+		 * @description : Returns a bool depending upon whether the user is an iTunes U Public site user.
+		 * @updated : 1st May 2012
+		 * @by : Ben Hawkridge
+		 */
+		function isItunesPublicUser() {
+		
+			if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		/*
+		 * @name : isItunesPrivateUser
+		 * @description : Returns a bool depending upon whether the user is an iTunes U Private site user.
+		 * @updated : 1st May 2012
+		 * @by : Ben Hawkridge
+		 */
+		function isItunesPrivateUser() {
+		
+			if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+
 
 	// DEPRECIATED - TO BE DELETED WHEN 1111% CERTAIN  ( 25th August 2011 - Charles Jackson )
 	
@@ -287,21 +332,6 @@ class PermissionComponent extends Object {
 		return false;
 	}   */ 	
 	
-    /*
-     * @name : isItunesUser
-     * @description : Returns a bool depending upon whether the user is an itunes user.
-     * @updated : 20th May 2011
-     * @by : Charles Jackson
-     */
-    function isItunesUser() {
-
-        if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' )
-            return true;
-
-        return false;
-
-    }
-
     /*
      * @name : isYoutubeUser
      * @description : Returns a bool depending upon whether the user is a youtube user.

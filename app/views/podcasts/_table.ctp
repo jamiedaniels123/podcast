@@ -70,11 +70,11 @@
                         <?php echo $podcast['Podcast']['image_wide_copyright']; ?>
                     </td>                        
                     <td class="title" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'title'); ?>>
-						<?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
-
-	                        <a href="/admin/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/sharing#sharing"><?php echo $podcast['Podcast']['title']; ?></a>                        <?php else : ?>
-	                        <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/summary#summary"><?php echo $podcast['Podcast']['title']; ?></a>
-						<?php endif; ?>
+                      <?php if( $this->Permission->isAdminRouting( $this->params ) ) : ?>
+                      <a href="/admin/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/sharing#sharing"><?php echo $podcast['Podcast']['title']; ?></a>
+                      <?php else : ?>
+                      <a href="/podcasts/edit/<?php echo $podcast['Podcast']['id']; ?>/summary#summary"><?php echo $podcast['Podcast']['title']; ?></a>
+                      <?php endif; ?>
                     </td>
                     <td class="copyright" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'copyright'); ?>>
                         <?php echo $podcast['Podcast']['copyright']; ?>
@@ -124,6 +124,9 @@
                     </td>
                     <td class="intended_itunesu_flag" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'intended_itunesu_flag'); ?>>
                         <img src="/img<?php echo $this->Object->intendedForItunes( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="intended for itunes" />
+                    </td>
+                    <td class="itunesu_site" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'itunesu_site'); ?>>
+                        <?php if ($podcast['Podcast']['intended_itunesu_flag'] == 'Y') { echo ucfirst($podcast['Podcast']['itunesu_site']);} else { echo "-"; }; ?>
                     </td>
                     <td class="publish_itunes_u" <?php echo $this->Miscellaneous->columnVisible($active_columns, 'publish_itunes_u'); ?>>
                         <img src="/img<?php echo $this->Object->itunesPublished( $podcast['Podcast'] ) ? CORRECT_IMAGE : INCORRECT_IMAGE; ?>" title="itunes published" />

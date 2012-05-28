@@ -33,14 +33,14 @@
         <ul>
             <!-- <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/podcasts" class="button">You own <?php echo count( $this->data['Podcasts'] ); ?> collections.</a></li>
             <li style="display:block;line-height: 22px; background-image: url(/img/information.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/user_groups" class="button">You are a member of <?php echo count( $this->data['UserGroups'] ); ?> user groups.</a></li> -->
-			<?php if( $this->Permission->isItunesUser() ) : ?>
-	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-itunes.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/itunes/podcasts" class="button">Itunes collections</a></li>
+			<?php if( $this->Permission->isItunesUser() && $this->Permission->isAdministrator() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-itunes.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/itunes/podcasts" class="button">iTunes U Collections</a></li>
     		<?php endif; ?>
-			<?php if( $this->Permission->isYoutubeUser() ) : ?>
-	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/youtube/podcasts" class="button">Youtube collections</a></li>
+			<?php if( $this->Permission->isYoutubeUser() && $this->Permission->isAdministrator() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/youtube/podcasts" class="button">YouTube Collections</a></li>
 			<?php endif; ?>	            
-			<?php if( $this->Permission->isVleUser() ) : ?>
-	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/vle/podcasts" class="button">Vle collections</a></li>
+			<?php if( $this->Permission->isVleUser() && $this->Permission->isAdministrator() ) : ?>
+	            <li style="display:block;line-height: 22px; background-image: url(/img/icon-16-youtube.png);background-repeat: no-repeat;background-position: 0px 4px;padding-left: 22px;"><a href="/vle/podcasts" class="button">VLE collections</a></li>
 			<?php endif; ?>	            
 
         </ul>

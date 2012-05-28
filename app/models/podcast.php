@@ -707,12 +707,18 @@ class Podcast extends AppModel {
 	                        	'Podcast.owner_id = Owner.id'
                         		),
 	                        array(
+	                        	'Owner.iTunesU_private' => 'Y',
+	                        	'Podcast.intended_itunesu_flag' => 'N',
+	                        	'Podcast.owner_id = Owner.id'
+                        		),
+	                        array(
 	                        	'Owner.YouTube' => 'Y',
 	                        	'Podcast.intended_youtube_flag' => 'N',
 	                        	'Podcast.owner_id = Owner.id'
                         		),                        		
 	                        array(
 	                        	'Owner.iTunesU' => 'N',
+	                        	'Owner.iTunesU_private' => 'N',
 	                        	'Owner.YouTube' => 'N',
 	                        	'Podcast.owner_id = Owner.id'
                         		)
@@ -780,9 +786,23 @@ class Podcast extends AppModel {
                     )
                 )
             ),
+            array('OR' => array(
+                array(
+                  	'Owner.iTunesU' => 'N',
+                  	'Owner.iTunesU_private' => 'N',
+                  	'Owner.YouTube' => 'N'
+                    ),
+                array(
+                    'UserUserGroups.user_id' => $user_id
+                    ),
+                array(
+                    'Podcast.owner_id' => $user_id
+                    )
+                )
+            ),
             'Podcast.deleted' => 0
         );
-        
+                
         return $conditions;
     }
 

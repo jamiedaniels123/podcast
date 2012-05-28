@@ -112,15 +112,29 @@ class AppController extends Controller {
 		return $active_columns;
 	}
 		
-	/*
-	 * @name : isItunesUser
-	 * @description : Returns a bool depending upon whether the user is an itunes user.
-	 * @updated : 20th May 2011
-	 * @by : Charles Jackson
-	 */
-	function isItunesUser() {
+  /*
+   * @name : isItunesUser
+   * @description : Checks the value held in session and returns a bool if EITHER the public or private iTunes U flags are set
+   * @updated : 16th May 2012
+   * @by : Ben Hawkridge
+   */
+  function isItunesUser() {
 
-		if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == 'Y' ) {
+      if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES || strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES )
+          return true;
+
+      return false;
+  }
+
+	/*
+	 * @name : isItunesPublicUser
+	 * @description : Returns a bool depending upon whether the user is an iTunes U Public site user.
+	 * @updated : 16th May 2012
+	 * @by : Ben Hawkridge
+	 */
+	function isItunesPublicUser() {
+	
+		if( strtoupper( $this->Session->read('Auth.User.iTunesU') ) == YES ) {
 			return true;
 		} else {
 			return false;
@@ -129,15 +143,13 @@ class AppController extends Controller {
 	
 	/*
 	 * @name : isItunesPrivateUser
-	 * @description : Returns a bool depending upon whether the user is an itunes user.
-	 * @updated : 12th April 2012
+	 * @description : Returns a bool depending upon whether the user is an iTunes U Private site user.
+	 * @updated : 16th May 2012
 	 * @by : Ben Hawkridge
 	 */
-	
 	function isItunesPrivateUser() {
-
-		$this->autoRender = false;
-		if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == 'Y' ) {
+	
+		if( strtoupper( $this->Session->read('Auth.User.iTunesU_private') ) == YES ) {
 			return true;
 		} else {
 			return false;
