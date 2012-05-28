@@ -68,14 +68,18 @@ class User extends AppModel {
      * @description : Standard model constructor, we are currently using it to define a virtual field of full_name.
      * We define in the constructor so we are able to use an alias such as "Member" as well as "User" as defined in related
      * model associations/joins.
-     * @updated : 11th May 2011
-     * @by : Charles Jackson
+     * @updated : 2nd May 2012
+     * @by : Ben Hawkridge
      */
     function __construct($id = false, $table = null, $ds = null) {
 
             parent::__construct($id, $table, $ds);
 
             $this->virtualFields['full_name'] = sprintf('CONCAT(%s.firstname, " ", %s.lastname)', $this->alias, $this->alias);
+            // BH 20120502 	added new virtual field to provide the oucu in the User session data.  This is needed because the field 'oucu'
+            // 							is mapped onto the Auth.User.username and password which aren't provided in the session data, though there
+            // 							maybe a way to do this.  However this provides an alternative approach.
+            $this->virtualFields['sams_oucu'] = sprintf('%s.oucu', $this->alias);
     }
 
     /*

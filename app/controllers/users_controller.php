@@ -38,11 +38,16 @@ class UsersController extends AppController {
     function login() {
 
         // Check to see if they are already logged in and redirect if true
-        if( $this->Session->check('Auth.User.id') ) {
+				error_log("UsersController > login | Auth.User.sams_oucu = ".$this->Session->read('Auth.User.sams_oucu')." | SAMOUCU = ".SAMS_OUCU_ID);
+        //if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.Oucu') == SAMS_OUCU_ID) {
+        if( $this->Session->check('Auth.User.id')) {
             $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard' ) );
             exit;
         }
 
+				// BH 20120501 Destroy any existing session
+	      //$this->Session->destroy('Auth');
+	      
         // If the user is logged into SAMS but not currently logged into the application attempt
         // to find them  using the apache environment varibles else redirect to the registration form.
         if( $this->Session->check('Auth.User.id') == false ) {
@@ -84,16 +89,20 @@ class UsersController extends AppController {
 
                 // We have found them on the application using their SAMS details. Create a session then redirect.
                 $this->Auth->fields = array('username' => 'oucu', 'password' => 'oucu');
+                error_log("UsersController > login | this->Auth->fields = ".serialize($this->Auth->fields));
+                error_log("UsersController > login | this->data = ".serialize($this->data));
+                error_log("UsersController > login | _SESSION = ".serialize($_SESSION));
                 if( $this->Auth->login( $this->data ) ) {
-
+              		  error_log("UsersController > login (afer this->Auth->login( this->data SUCCESS) | _SESSION = ".serialize($_SESSION));
                     $this->Session->setFlash('You have successfully logged in.', 'default', array( 'class' => 'success' ) );
                     $this->redirect( array( 'admin' => false, 'controller' => 'users', 'action' => 'dashboard') );
 
                 } else {
-
+              		  error_log("UsersController > login (afer this->Auth->login( this->data FAILED) | _SESSION = ".serialize($_SESSION));
                     $this->Session->setFlash('We are sorry but something has gone wrong and we have been unable to log you in. Please contact an administrator.', 'default', array('class' => 'error' ) );
                     $this->cakeError( 'error404', array( array( 'url' => '/' ) ) );
                 }
+
             }
         }
     }

@@ -20,9 +20,24 @@ class AppController extends Controller {
 	 * @by : Charles Jackson
 	 */
 	function beforeFilter() {
-		
+
+  	/*if ($this->Session->read('Auth.User.oucu') != SAMS_OUCU_ID) {
+      $this->Session->destroy('Auth');
+      $this->redirect( SAMS_LOGOUT_PAGE );
+      exit;
+	  }
+	  */
+		error_log("AppController > beforeFilter | Auth.User.sams_oucu = ".$this->Session->read('Auth.User.sams_oucu')." | SAMOUCU = ".SAMS_OUCU_ID);
 		$this->alert = false;
-		
+/*
+		error_log("AppController > beforeFilter | isAdminRouting = ".$this->isAdminRouting());
+		error_log("AppController > beforeFilter | isAdministrator = ".$this->isAdministrator());
+		error_log("AppController > beforeFilter | isItunesRouting = ".$this->isItunesRouting());
+		error_log("AppController > beforeFilter | isItunesUser = ".$this->isItunesUser());
+		error_log("AppController > beforeFilter | isYoutubeRouting = ".$this->isYoutubeRouting());
+		error_log("AppController > beforeFilter | isYoutubeUser = ".$this->isYoutubeUser());
+*/
+  		
 		if( $this->RequestHandler->isAjax() == false ) {	
 			// If the current user is attempting to view an admin, youtube or itunes specific method ensure they have permission else
 			// redirect to a 404 page and create a row on the notifications table alerting admin to the attempt.
