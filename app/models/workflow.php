@@ -264,7 +264,7 @@ class Workflow extends AppModel {
 				
 				$this->aspect_ratio_float = ( $this->video_height / $this->video_width );
 				
-				if( $this->aspect_ratio_float < 0.6 ) {
+				if( $this->aspect_ratio_float < 0.70 ) {
 					
 					$this->aspect_ratio = WIDE_SCREEN;
 					$this->aspect_ratio_float = WIDE_SCREEN_FLOAT;
