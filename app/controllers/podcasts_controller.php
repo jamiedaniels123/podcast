@@ -1218,15 +1218,18 @@ class PodcastsController extends AppController {
 			$level0itunesnodes = $Category->query("SELECT * FROM categories WHERE parent_id=0");
 			$categories = array();
 			foreach($level0itunesnodes as $parentcat){
-				array_push($categories[$parentcat['categories']['id']], $parentcat['categories']['category']);
+				//array_push($categories[$parentcat['categories']['id']], $parentcat['categories']['category']);
 				$categories[$parentcat['categories']['id']]=$parentcat['categories']['category'];
 				$level1itunesnodes = $Category->query("SELECT * FROM categories WHERE parent_id=".$parentcat['categories']['id']."");
 				array_push($nodes, $parentcat['categories']['category']);
 				foreach($level1itunesnodes as $childcat){
-					array_push($categories[$childcat['categories']['id']], '-'.$childcat['categories']['category']);
+					//array_push($categories[$childcat['categories']['id']], '-'.$childcat['categories']['category']);
 					$categories[$childcat['categories']['id']]='-'.$childcat['categories']['category'];
 				}
 			}
+			$categories = $Category->removeDuplicates( $categories, $this->data, 'Categories' );
+
+
 			$this->set('categories', $categories );
 
 
@@ -1238,18 +1241,18 @@ class PodcastsController extends AppController {
 			$itunesu_categories = array();
 			foreach($level0itunesunodes as $category){
 				if($category['itunesu_categories']['level']==0){
-					array_push($itunesu_categories[$category['itunesu_categories']['code']], $category['itunesu_categories']['code_title']);	
+					//array_push($itunesu_categories[$category['itunesu_categories']['code']], $category['itunesu_categories']['code_title']);	
 					$itunesu_categories[$category['itunesu_categories']['code']] = $category['itunesu_categories']['code_title'];
 				}
-				else{
-					error_log("controllers/podcasts_controller > _setPodcastFormOptions | category['itunesu_categories']['level'] =".$category['itunesu_categories']['level']);
-					
-					array_push($itunesu_categories[$category['itunesu_categories']['code']], '-'.$category['itunesu_categories']['code_title']);
+				else{					
+					//array_push($itunesu_categories[$category['itunesu_categories']['code']], '-'.$category['itunesu_categories']['code_title']);
 					$itunesu_categories[$category['itunesu_categories']['code']] = '-'.$category['itunesu_categories']['code_title'];
 				}
 				
 			}
-			//$itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
+			//error_log("controllers/podcasts_controller > _setPodcastFormOptions | itunesu_categories =".serialize($itunesu_categories));
+
+			$itunesu_categories = $ItunesuCategory->removeDuplicates( $itunesu_categories, $this->data, 'iTuneCategories' );
 
 			$this->set('itunes_categories', $itunesu_categories );
 
