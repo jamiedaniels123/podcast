@@ -140,16 +140,15 @@ class AttachmentHelper extends AppHelper {
     /*
      * @name : getMediaLink
      * @description : 
-     * @updated : 19th July 2011
-     * @by : Charles Jackson
+     * todo : re-code to use the $media_folder defined in the app_model otherwise future changes in the $media_folder may not get
+     *				reflected in the code here.
+     * @updated : 18th April 2012
+     * @by : Ben Hawkridge
      */
     function getMediaLink( $custom_id = null, $media = array() ) {
-			
-			// BH 20120412 - trying to pull in the model 'feed' to use the media_folder lookup array for directories, but doesn't seem to work!
-			//$this->loadModel('feed');
-			//$media_folder=$this->feed->find('media_folder');
-			//error_log("views/helpers/attachment > getMediaLink | this->feed->media_folder = ".$media_folder);
-			
+    
+    	// BH 20120508 : code below needs to be replaced to use the $media_folder defined in app_model, this might require passing into function
+						
 			if( in_array( $media['media_type'], array('default','240','270','360','480','540','720','1080','image' ) ) ) {
 				$media['media_type'] = null;
 			} elseif( in_array( $media['media_type'], array('wm-default','wm-240','wm-270','wm-360','wm-480','wm-540','wm-720','wm-1080','image-wm' ) ) ) {
