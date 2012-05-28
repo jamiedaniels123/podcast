@@ -32,7 +32,7 @@ class CallbacksController extends AppController {
 		$this->Callback->setData( file_get_contents("php://input") );
 		$user = ClassRegistry::init( 'User' );
 		$notification = ClassRegistry::init('Notification');
-		$this->emailTemplates->__sendCallbackErrorEmail( array(), $this->Callback->data, 'Callback Alert' );
+		//$this->emailTemplates->__sendCallbackErrorEmail( array(), $this->Callback->data, 'Callback Alert' );
 		
 		// Is it a valid command
 		if ( $this->Callback->understand() ) {
@@ -72,7 +72,7 @@ class CallbacksController extends AppController {
 					$podcastItemMedia = ClassRegistry::init('PodcastItemMedia');
 				
 				foreach( $this->Callback->data['data'] as $row ) {
-					$this->emailTemplates->__sendCallbackErrorEmail( array(), strtolower($this->getExtension($row['destination_filename'])), 'MP3 injection' );
+					//$this->emailTemplates->__sendCallbackErrorEmail( array(), strtolower($this->getExtension($row['destination_filename'])), 'MP3 injection' );
 					if( ( $row['status'] == YES ) && strtolower($this->getExtension($row['destination_filename'])) == 'mp3') {
 						// Use the data passed to the callback plus the recently retrieved meta data and send a call to the Api.						
 					//	if( $podcastItem->needsInjection( $row['podcast_item_id'] ) ) {
