@@ -170,6 +170,70 @@
     </div><!--/end of option transfers itunes u-->
     <div class="clear"></div>
     
+
+    <div class="collection_input"><!--presentations-->
+    
+        <div class="wrapper" id="ituneu_categories_container">
+        	<div class="float_left_list">
+           		<div class="select">
+                
+                        <label for="iTuneCategories">Presentations (iTunes U Private site):</label>
+                        <input type="hidden" name="data[Presentations]" value="" id="Presentations_" />
+                        <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="Presentations">
+                            <?php if( isSet( $this->data['Presentations'] ) && is_array( $this->data['Presentations'] ) ) : ?>
+                                <?php foreach( $this->data['Presentations'] as $category ) : ?>
+                                    <option value="<?php echo $category['id']; ?>"><?php echo $category['code_title']; ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                        <?php echo $this->Form->error('Podcast.iTuneCategories'); ?>
+
+                
+                        <div class="multiple-button">
+                        	<div class="move2 float_right" data-source="Presentations" data-target="PodcastPresentations"><img src="/img/multiple-button-right.png" alt="Move right" class="icon" /></div>
+                        </div>
+                        <div class="clear"></div>
+                
+                
+            	</div><!--/select-->
+        	</div><!--/float_left-->
+            
+            <div class="float_left_list">
+                <div class="select">
+    
+
+                        <input type="hidden" name="data[Podcast][PodcastPresentations]" value="" id="PodcastAlliTuneCategories_" />
+                        <!-- year selector -->
+
+                        <select name='presYear' size='6' style='width: 80px;'><option value='10'>10</option><option value='11'>11</option><option value='12'>12</option><option value='13'>13</option><option value='14'>14</option><option value='15'>15</option><option value='16'>16</option><option value='17'>17</option><option value='18'>18</option><option value='19'>19</option></select>
+                    
+                        <div class="multiple-button">
+                            <div class="move2 float_left_list" data-source="PodcastPresentations" data-target="iPresentations"><img src="/img/multiple-button-left.png" alt="Move left" class="icon" /></div>
+                        </div>
+                        <div class="clear"></div>
+                    
+                </div><!--/select-->
+
+        	</div><!--/float_left-->
+            
+            <div class="float_left_list">
+                <div class="select">
+
+            </div><!--/float_left-->
+
+                        <!-- month selector -->
+                        <select name='presMonth' size='6' style='width: 80px;'><option value='A'>A</option><option value='B'>B</option><option value='C'>C</option><option value='D'>D</option><option value='E'>E</option><option value='F'>F</option><option value='G'>G</option><option value='H'>H</option><option value='I'>I</option><option value='J'>J</option><option value='K'>K</option></select>
+                    
+                        <div class="clear"></div>
+                    
+                </div><!--/select-->
+
+            </div><!--/float_left-->
+
+            </div><div class="clear"></div>
+
+    </div><!--/end of option transfers itunes u-->
+    <div class="clear"></div>
 <!--/insert-->
 
 

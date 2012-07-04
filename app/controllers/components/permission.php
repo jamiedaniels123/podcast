@@ -235,6 +235,21 @@ class PermissionComponent extends Object {
         return count( $this->errors );
     }
     
+		/*
+		* @name : isAdministrator
+		* @description : Returns a bool. (Function duplicated from App_controller)
+		* @updated : 19th June 2012
+		* @by : Ben Hawkridge
+		*/
+		function isAdministrator() {
+		
+			if( $this->Session->check('Auth.User.id') && $this->Session->read('Auth.User.administrator') == true ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
     /*
      * @name : youTubePrivileges
      * @description : 

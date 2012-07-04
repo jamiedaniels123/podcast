@@ -93,6 +93,22 @@ jQuery(document).ready(function($) {
         });
     });
 
+    // Presentation year/month triple selectors
+    jQuery('.move2').live('click', function() {
+
+        var source1 = jQuery(this).attr('data-source1');
+        var source2 = jQuery(this).attr('data-source2');
+        var target = jQuery(this).attr('data-target');
+
+        jQuery("#"+source1+" option:selected").each(function()
+        {
+            v = source1.value + source2.value;
+            h = source1.innerHTML + source2.innerHTML;
+            jQuery("#"+target).append('<option value="'+v+'">' + h + '</option>');
+            // jQuery(this).remove();
+        });
+    });
+
     // When a user submits a form that contains multiple select boxes as described above this routine
     // will capture the choices before the form is actually submitted.
     jQuery('.auto_select_and_submit').live('click', function(e) {

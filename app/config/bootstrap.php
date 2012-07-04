@@ -59,6 +59,8 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
 		//DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-dev.open.ac.uk/');
 		DEFINE('DEFAULT_PLAYER_URL', 'http://player-dev.open.edu/');
+		DEFINE('DEFAULT_PLAYER_PATH', 'embed/');
+		//DEFINE('DEFAULT_PLAYER_PATH', 'ouplayer/embed/pod/');  // OU Media Player framework
 		break;
 	case 'podcast-admin-acc.open.ac.uk':	
 		DEFINE('SERVER_ENV', 'ACCT');
@@ -66,6 +68,8 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-acc.open.ac.uk/');
 		DEFINE('DEFAULT_PLAYER_URL', 'http://media-podcast-acc.open.ac.uk/');
+		DEFINE('DEFAULT_PLAYER_PATH', 'embed/');
+		//DEFINE('DEFAULT_PLAYER_PATH', 'ouplayer/embed/pod/');
 		break;
 	case 'podcast-admin.open.ac.uk':
 		DEFINE('SERVER_ENV', 'LIVE');
@@ -73,12 +77,17 @@ switch ($_SERVER['SERVER_NAME']){
 		DEFINE('ADMIN_API', 'http://podcast-api-acc.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast.open.ac.uk/');
 		DEFINE('DEFAULT_PLAYER_URL', 'http://player.open.edu/');
+		DEFINE('DEFAULT_PLAYER_PATH', 'embed/');
+		//DEFINE('DEFAULT_PLAYER_PATH', 'ouplayer/embed/pod/');
 		break;
 	case 'local.podcast.com':
 		DEFINE('SERVER_ENV', 'DEV');
 		DEFINE('DOMAIN_NAME', 'local.podcast.com' );
 		DEFINE('ADMIN_API', 'http://podcast-api-dev.open.ac.uk/');
 		DEFINE('DEFAULT_MEDIA_URL', 'http://media-podcast-dev.open.ac.uk/');
+		DEFINE('DEFAULT_PLAYER_URL', 'http://player-dev.open.edu/');
+		DEFINE('DEFAULT_PLAYER_PATH', 'embed/');
+		//DEFINE('DEFAULT_PLAYER_PATH', 'ouplayer/embed/pod/');
 		break;
 	default:
 		die('ERROR: Unknown server.  Check app/config/bootstrap.php');
@@ -162,7 +171,7 @@ DEFINE('YES', 'Y');
 DEFINE('NO', 'N');
 
 DEFINE('REGISTER_BY_OUCU', false );
-DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Admin Server <b.hawkridge@open.ac.uk>' );
+DEFINE('DEFAULT_EMAIL_ADDRESS', 'Podcast Service Administrators <podcast-admin@open.ac.uk>' );
 
 DEFINE('WIDE_SCREEN_FLOAT', '0.5625');
 DEFINE('STANDARD_SCREEN_FLOAT', '0.75');

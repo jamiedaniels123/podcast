@@ -22,6 +22,8 @@
 /**
  * Use the DS to separate the directories in other defines
  */
+ error_log("index.php | started");
+ 
 	if (!defined('DS')) {
 		define('DS', DIRECTORY_SEPARATOR);
 	}

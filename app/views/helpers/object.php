@@ -315,6 +315,24 @@ class ObjectHelper extends AppHelper {
 	}
 	
 	/*
+	 * @name : getMediaFlavours
+	 * @description : Checks to see if flavour of given media exists and returns the processState
+	 * 								
+	 * @updated : 19th June 2012
+	 * @by : Ben Hawkridge
+	 */
+	function getMediaFlavours( $object = array()) {
+
+		$mediaFlavours = array();
+		
+		foreach ($object as $row) {
+			$mediaFlavours[$row['media_type']] = array('filename' => $row['filename'], 'processed_state' => $row['processed_state']);
+		}
+
+		return $mediaFlavours;
+	}
+	
+	/*
 	 * @name : hasYoutubeFlavour
 	 * @description : Checks to see if a youtube flavour of media exists
 	 * @updated : 11th August 2011
