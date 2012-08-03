@@ -36,12 +36,12 @@ legend h3 {
 	display:block;
 	position: absolute;
 	font-style:normal;
-	margin: 18px 0px 20px 64px;
-	
+	margin: 18px 0px 20px 62px;
+	color:#333;
 	}
 	
 @-moz-document url-prefix() {
-    legend h3 { left:5px; } /*Corrects an error in FF placement of page legend*/
+    /*legend h3 { left:5px; } Corrects an error in FF placement of page legend*/
 	}
 
 
@@ -49,11 +49,12 @@ legend h3 {
 	display:block;
 	position:absolute;
 	margin: 5px 0px 0 64px;
-	padding:20px 5px 0 0px;
+	padding:20px 0px 0 0px;
+	color:#418DB1;
 	}
 	
 @-moz-document url-prefix() {
-    .leader { margin-left: 68px; } /*Corrects an error in FF placement of page leader*/
+    /*.leader { margin-left: 68px; } Corrects an error in FF placement of page leader*/
 	}
 
 .collection-top {margin: 3em 0 0 0; width: 100%; padding:0;}
@@ -63,7 +64,7 @@ legend h3 {
 
 .clear {clear:both;}
 
-h3 a {text-decoration: none; font-weight:bold;}
+h3 a {text-decoration: none; /*font-weight:bold;*/}
 h3 a:hover {text-decoration: underline;}
 
 .icon {margin:0px 5px 2px 2px;padding-bottom:1px;vertical-align:middle;}
@@ -364,14 +365,15 @@ fieldset#podcast_media .icon-col {
 	}
 
 .tip-text	{
-	margin: 5px 0 0 0;
+	margin: 5px 0 0 190px;
 	width: 575px;
-	text-align:right;
+	text-align:left;
 	display:block;
 	color: #4492B0;
 	font-style:italic;
 	font-size:85%;
 	}
+	
 
 .tip	{
 	margin: 5px 0 0 0;
@@ -431,7 +433,7 @@ fieldset#podcast_media .icon-col {
 	}
 
 #filefields	{
-	background: none repeat scroll 0 0 #eff8fc;
+	background: none repeat scroll 0 0 #eff8fc; /*removed by Peter 19 July 2012*/
     border-radius: 4px 4px 4px 4px;
     margin: 0 0 0 0px;
     padding: 0.5em 0 0.5em 30px;
@@ -586,4 +588,3 @@ margin-top:25px;
 }
 
 /* Embed code sizes end */
-	

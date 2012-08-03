@@ -2,6 +2,14 @@ div.tabs > div > {
 	height: 150px;	
 }
 
+div.collection_wrapper .content  {	
+    /*border: 1px dotted #660033;*/
+	margin: 0px;
+    background:rgb(166,227,255) url(/img/collection-background.png) 0px -50px repeat-x;
+	padding: 15px;	
+}
+	
+
 a.tab_link {
    	background: url(/img/collection-tab-background-unselected.png) repeat-x 0 0 rgb(245,250,252)!important;
     background: rgb(245,250,252);
@@ -27,4 +35,51 @@ div.action_buttons ul li{
 	height:20px;
 	}
 	
+.leader	{
+	margin:20px 0 0 72px;
+	width:90%;
+	}
+	
+#filter_button .button	{
+	border:0;
+	margin:0;
+	padding:0;
+	}
 
+form input, form textarea, select, input[type=file], input[type=radio], input[type=text], input[type=checkbox] {
+	/* display: inline; inline display must not be set or will hide submit buttons in IE 5x mac */
+	width:auto;      /* set width of form elements to auto-size, otherwise watch for wrap on resize */	
+	background: #fff;
+	border:1px solid #333;
+	padding: 0.2em 0.5em;
+	color: #1a1a1a;
+	font-family: Tahoma,"Lucida Grande",Arial,Helvetica,sans-serif;
+	font-size: 100%;
+}
+
+form .input-filter select	{
+	width:175px;
+	margin:0 0 0 10px;
+	padding:0.2em 0.5em -3px 0.5em;
+	}
+	
+ul.item-tab-zone li.active	{
+	color:red;
+	}
+
+.item-tab-zone .active a	{
+	color: #D8D9DA;
+	}
+	
+form div {
+	margin-bottom: 0.6em;
+	/*padding: 0 .5em;*/
+	vertical-align:middle;
+	width: auto;
+}	
+
+.icon {
+    margin: 0;
+    padding-bottom: 1px;
+    vertical-align: middle;
+}

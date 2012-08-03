@@ -26,6 +26,7 @@
 				<th class="">Publish Date (RSS)</th>
 				<?php if( $this->Permission->isYoutubeUser() ) : ?>
 					<th class="icon-col">YouTube</th>
+                    <th class="icon-col"></th>
 				<?php 	endif; ?>
 				</tr>
 			</thead>

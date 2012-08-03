@@ -138,5 +138,5 @@ div.tabs *:target {
 	}
 	
 .fieldrequired {
-	border:red 1px solid!important;	
+	/*border:#F19300 1px solid!important;Peter Devine - 110712	*/ 
 }

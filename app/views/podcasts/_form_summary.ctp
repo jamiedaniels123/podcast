@@ -12,35 +12,50 @@
   <?php if( isSet( $this->data['Podcast']['id'] ) && (int)$this->data['Podcast']['id'] ) : ?>
     <div class="link">
     <?php if( $this->Object->syndicated( $this->data['Podcast']['syndicated'] ) == false ) : ?>
-      <a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="sharing - ownership" class="icon" />Upgrade this <?php echo PODCAST; ?></a>
-      <p>(Upgrading is only needed if you want to generate RSS feeds for your collection, publish it on the Podcast.open.ac.uk site or publish to the OU on iTunes U sites)</p>
+      
+      
+      
+      <a href="/" id="PodcastFlagLink" class="button white juggle" data-target="data[Podcast][podcast_flag]"><img src="/img/icon-16-open.png" alt="Upgrade this collection" class="icon" /><span>Upgrade this <?php echo PODCAST; ?></span></a>
+      
+      
+      
+      
+      <p>Upgrading is only needed if you want to generate RSS feeds for your collection, publish it on the Podcast.open.ac.uk site or publish to the OU on iTunes U sites</p>
+      
+      
+      
+      
     <?php endif; ?>
       <input type="hidden" id="PodcastPodcastFlag" value="<?php echo trim( $this->data['Podcast']['podcast_flag'] );?>" name="data[Podcast][podcast_flag]">
     </div>
     <div class="clear"></div>
 
     <div id="PodcastSyndicationContainer" class="podcast_container" style="display:none;"> <!-- start of syndication container -->
-      <div class="textarea">
+      
+      
+      <div class="textarea collection_input">
         <label for="summary">Summary <span class="required">(Required)</span></label>
         <input type="hidden" value="" id="PodcastSummary_" name="data[Podcast][summary]">
         <textarea id="PodcastSummary" rows="6" cols="100" name="data[Podcast][summary]" class="fieldrequired"><?php echo $this->data['Podcast']['summary']; ?></textarea>
         <span class="tip-text">4000 characters max. No HTML allowed</span>
         <?php echo $this->Form->error('Podcast.summary'); ?>
       </div>
+      
       <div class="file">
         <div class="image thumbnail wrapper">
           <div class="float_right text_right">
             <img src="<?php echo $this->Attachment->getMediaImage( $this->data['Podcast']['image'], $this->data['Podcast']['custom_id'], RESIZED_IMAGE_EXTENSION ); ?>" title="thumbnail image" />
           <?php if( !empty( $this->data['Podcast']['image'] ) ) : ?>
-            <div class="clear"></div>
-            <a class="button orange" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><span>Delete</span></a>
+         	<a class="button orange" href="/podcasts/delete_image/image/<?php echo $this->data['Podcast']['id']; ?>" title="delete collection image" onclick="return confirm('Are you sure you wish to delete the Collection image?')"><span>Delete</span></a>
           <?php endif; ?>
           </div>
-          <div >
+          
+          
+          <div class="collection_input">
             <label for="PodcastNewImage">Image</label>
             <input type="file" size="100" id="PodcastNewImage" name="data[Podcast][new_image]">
             <input type="hidden" id="PodcastImage" name="data[Podcast][image]" value="<?php echo $this->data['Podcast']['image']; ?>">
-            <span class="tip-text">JPG or GIF only. PNGs not yet supported! 100 pixel square</span>
+            <span class="tip-text">JPG only. PNGs not yet supported! 100 pixel square</span>
           </div>
           <?php echo $this->Form->error('Podcast.image'); ?>
           <div class="clear"></div>
@@ -116,17 +131,21 @@
         </div>
         <div class="checkbox">
           <input type="hidden" value="N" id="PodcastPrivate_" name="data[Podcast][private]">
+          
           <label for="PodcastPrivate">Private</label>
           <input type="checkbox" id="PodcastPrivate" value="Y" <?php echo $this->data['Podcast']['private'] == 'Y' ? 'checked="checked"' : '';?> name="data[Podcast][private]">
           <br />
           <?php echo $this->Form->error('Podcast.private'); ?>
         </div>
+        
         <div class="checkbox">
           <input type="hidden" value="N" id="PodcastIntranetOnly_" name="data[Podcast][intranet_only]">
+           <label for="PodcastIntranetOnly">Intranet (SAMS) only</label>
           <input type="checkbox" id="PodcastIntranetOnly" value="Y" <?php echo $this->data['Podcast']['intranet_only'] == 'Y' ? 'checked="checked"' : '';?>  name="data[Podcast][intranet_only]">
-          <label for="PodcastIntranetOnly">Intranet (SAMS) only</label><br />
+         <br />
           <?php echo $this->Form->error('Podcast.intranet_only'); ?>
         </div>
+        
         <div class="clear"></div>
       </div><!--/end of collection_input: copyright and privacy-->
 

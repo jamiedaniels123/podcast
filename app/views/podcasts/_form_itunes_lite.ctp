@@ -19,7 +19,7 @@
 		<?php echo $this->Form->error('Podcast.course_code'); ?>
 	</div>
 	<div class="select">
-		<label for="PodcastCourseType">Course Type</label> <select
+		<label for="PodcastCourseType">Course Level</label> <select
 			name="data[Podcast][course_type]" id="PodcastCourseType">
 			<?php foreach( $course_types as $course_type ) : ?>
 			<option value="<?php echo $course_type; ?>"

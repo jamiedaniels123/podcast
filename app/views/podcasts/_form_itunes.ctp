@@ -177,7 +177,7 @@
         	<div class="float_left_list">
            		<div class="select">
                 
-                        <label for="iTuneCategories">Presentations (iTunes U Private site):</label>
+                        <label for="iTuneCategories">Presentations (iTunes U Students' site):</label>
                         <input type="hidden" name="data[Presentations]" value="" id="Presentations_" />
                         <select name="data[iTuneCategories][]" class="selected" multiple="multiple" id="Presentations">
                             <?php if( isSet( $this->data['Presentations'] ) && is_array( $this->data['Presentations'] ) ) : ?>

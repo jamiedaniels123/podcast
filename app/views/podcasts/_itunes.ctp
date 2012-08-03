@@ -71,12 +71,12 @@
 	<?php else : ?>
     <!-- Regular collection - display upgrade option -->
 		<?php if( $this->Permission->isItunesPublicUser() && $this->Permission->isItunesPrivateUser() ) : ?>
-    <p>Upgrade this <?php echo ucfirst( PODCAST ); ?> for use in either the iTunes U <b>Public</b> or <b>Private</b> site.</p></br>
+    <p>Upgrade this <?php echo ucfirst( PODCAST ); ?> for use in either the iTunes U <b>Public</b> or <b>Students'</b> site.</p></br>
 		<?php elseif( $this->Permission->isItunesPublicUser() ) : ?>
     <p>Upgrade this <?php echo ucfirst( PODCAST ); ?> for use in the iTunes U <b>Public</b> site.</p></br>
-    <p class="tip">If you need to create an iTunes U Private site <?php echo ucfirst( PODCAST ); ?> you will need your permissions upgraded.</p>
+    <p class="tip">If you need to create an iTunes U Students' site <?php echo ucfirst( PODCAST ); ?> you will need your permissions upgraded.</p>
 		<?php elseif( $this->Permission->isItunesPrivateUser() ) : ?>
-    <p>Upgrade this <?php echo ucfirst( PODCAST ); ?> for use in the iTunes U <b>Private</b> site.</p></br>
+    <p>Upgrade this <?php echo ucfirst( PODCAST ); ?> for use in the iTunes U <b>Students'</b> site.</p></br>
     <p class="tip">If you need to create an iTunes U Public site <?php echo ucfirst( PODCAST ); ?> you will need your permissions upgraded.</p>
 		<?php elseif ( $this->Permission->toUpdate( $this->data ) ) : ?>
     <p>You can send a request to the iTunes U team for the inclusion of this <?php echo ucfirst( PODCAST ); ?> in the iTunes U Public site.</p>

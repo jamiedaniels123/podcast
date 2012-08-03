@@ -3,7 +3,7 @@
 	<div class="text">
 		<label for="PodcastItunesuSite">iTunes Site</label>
 		<span>Private</span>
-		<span class="tip-text">You can only change site if you have access permissions</br>to both Public and Private iTunes U sites.</span>
+		<span class="tip-text">You can only change site if you have access permissions</br>to both Public and Students' iTunes U sites.</span>
 	</div>
 
 	<div class="text">
@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="select">
-		<label for="PodcastCourseType">Course Type</label>
+		<label for="PodcastCourseType">Course Level</label>
 		<select name="data[Podcast][course_type]" id="PodcastCourseType">
 			<?php foreach( $course_types as $course_type ) : ?>
 			<option value="<?php echo $course_type; ?>" <?php echo strtoupper( $this->data['Podcast']['course_type'] ) == strtoupper($course_type) ? 'selected="selected"' : ''; ?>><?php echo $course_type; ?></option>
