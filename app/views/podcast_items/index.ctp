@@ -70,22 +70,30 @@
 		<?php	if (isset($mediaFlavours['ipod-all']['processed_state']) && $this->Permission->isItunesPublicUser()) : ?>
 					<td class="icon-col available"><?php echo $this->Object->getProcessedState( $mediaFlavours['ipod-all']['processed_state'] ); ?></td>
 		<?php	else : ?>
-					<td class="icon-col available">n/a</td>
+		<?php	if($this->Permission->isItunesPublicUser()) : ?>
+						<td class="icon-col available">n/a</td>
+		<?php	endif; ?>
 		<?php	endif;
 					if (isset($mediaFlavours['desktop-all']['processed_state']) && $this->Permission->isItunesPublicUser()) : ?>
 					<td class="icon-col available"><?php echo $this->Object->getProcessedState( $mediaFlavours['desktop-all']['processed_state'] ); ?></td>
 		<?php	else : ?>
-					<td class="icon-col available">n/a</td>
+		<?php	if($this->Permission->isItunesPublicUser()) : ?>
+						<td class="icon-col available">n/a</td>
+		<?php	endif; ?>
 		<?php	endif;
 					if (isset($mediaFlavours['wm-default']['processed_state']) && $this->Permission->isItunesPrivateUser()) : ?>
 					<td class="icon-col available"><?php echo $this->Object->getProcessedState( $mediaFlavours['wm-default']['processed_state'] ); ?></td>
 		<?php	else : ?>
-					<td class="icon-col available">n/a</td>
+		<?php	if($this->Permission->isItunesPrivateUser()) : ?>
+						<td class="icon-col available">n/a</td>
+		<?php	endif; ?>
 		<?php	endif;
 					if (isset($mediaFlavours['youtube']['processed_state']) && $this->Permission->isYoutubeUser()) : ?>
 					<td class="icon-col available"><?php echo $this->Object->getProcessedState( $mediaFlavours['youtube']['processed_state'] ); ?></td>
 		<?php	else : ?>
-					<td class="icon-col available">n/a</td>
+		<?php	if($this->Permission->isYoutubeUser()) : ?>
+						<td class="icon-col available">n/a</td>
+		<?php	endif; ?>
 		<?php	endif; ?>	
 	<?php	else : ?>	
 				<td class="icon-col available"><?php echo $this->Object->getProcessedState( $podcast_item['PodcastItem']['processed_state'] ); ?></td>
